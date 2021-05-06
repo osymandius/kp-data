@@ -1,0 +1,38 @@
+script: script.R
+
+artefacts:
+  - data:
+      description: 2021 spectrum file pulled from ADR
+      filenames:
+        - spectrum_file.zip
+  # - data:
+  #     description: 2021 ANC data pulled from ADR
+  #     filenames:
+  #       - anc_testing_2021.csv
+  # - data:
+  #     description: 2021 ART data pulled from ADR
+  #     filenames:
+  #       - art_number_2021.csv
+  - data:
+      description: data pull metadata
+      filenames:
+        - adr_model_inputs_log.csv
+
+displayname: Pull spectrum and programme files from 2021 inputs to UNAIDS estimates country shells in ADR
+
+global_resources:
+  resources/org_iso_mapping.csv: org_iso_mapping.csv
+
+parameters:
+  iso3:
+    default: ~
+
+packages:
+  - httr
+  - jsonlite
+  - dplyr
+  - ckanr
+  - naomi.utils
+  - readr
+
+

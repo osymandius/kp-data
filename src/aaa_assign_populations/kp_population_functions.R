@@ -7,7 +7,7 @@ extract_kp_worldpop <- function(areas, iso3,
                `25` = "Y025_029", `30` = "Y030_034", `35` = "Y035_039",
                `40` = "Y040_044", `45` = "Y045_049"
                )
-  wp_sexes <- c(m = "male", f = "female")
+  wp_sexes <- c(m = "male", f = "female") 
   grid <- expand.grid(iso3 = iso3, year = years, wp_age = names(wp_ages), 
                       wp_sex = names(wp_sexes), stringsAsFactors = FALSE)
   pop_list <- do.call(Map, c(f = naomi.utils:::worldpop_extract_one, areas = list(list(areas)), 
@@ -20,8 +20,9 @@ extract_kp_worldpop <- function(areas, iso3,
   # pop <- pop %>% dplyr::left_join(dplyr::select(sf::st_drop_geometry(areas), 
                                                 # area_id, area_name), by = "area_id")
   pop <- dplyr::count(pop, area_id, source, calendar_quarter, 
-                      sex, age_group, wt = population, name = "population")
+                      sex, source, wt = population, name = "population")
   # pop$asfr <- NA_real_
+  pop$age_group <- "Y015_049"
   # validate_naomi_population(pop, areas, unique(areas$area_level))
   pop
 }

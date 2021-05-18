@@ -28,6 +28,8 @@ merge_cities <- merge_cities %>%
   left_join(urban_boundaries) %>%
   select(-idx) %>%
   rename(iso3 = ISO3, area_name = NAME) %>%
-  mutate(area_name = tolower(area_name))
+  mutate(area_name = tolower(area_name)) %>%
+  distinct(iso3, area_name, geometry) %>%
+  st_as_sf
 
 write_sf(merge_cities, "src/aaa_assign_populations/merge_cities.geojson")

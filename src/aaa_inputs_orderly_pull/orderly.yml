@@ -25,8 +25,9 @@ packages:
 parameters:
   iso3:
     default: ~
-  pop_source:
-    default: ~
+
+global_resources:
+  resources/org_iso_mapping.csv: org_iso_mapping.csv
 
 ## To add a new country to this task, add it to the dependency below and
 ## ensure the imported file is named 'depends/<iso3>_areas.geojson'
@@ -212,10 +213,10 @@ depends:
     id: latest
     use:
       depends/civ_population.csv: civ_population.csv
-  cod_data_population:
+  cod_data_population-local:
     id: latest
     use:
-      depends/cod_population_gpw_80pl_adjusted.csv: cod_population_gpw_80pl_adjusted.csv
+      depends/cod_population_local.csv: cod_population_local.csv
   cmr_data_population:
     id: latest
     use:

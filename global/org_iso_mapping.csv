@@ -1,40 +1,40 @@
-organisation,country,iso3
-angola,Angola,AGO
-benin,Benin,BEN
-botswana,Botswana,BWA
-burkina-faso,Burkina Faso,BFA
-burundi,Burundi,BDI
-cabo-verde,Cabo Verde,CPV
-cameroon,Cameroon,CMR
-republique-centrafricaine,Central African Republic,CAF
-chad,Chad,TCD
-congo,Congo,COG
-republique-democratique-du-congo,"Congo, The Democratic Republic of the",COD
-cote-d-ivoire,C����,CIV
-guinea-ecuatorial,Equatorial Guinea,GNQ
-eswatini,Eswatini,SWZ
-ethiopia,Ethiopia,ETH
-gabon,Gabon,GAB
-gambia,Gambia,GMB
-ghana,Ghana,GHA
-guinee,Guinea,GIN
-haiti,Haiti,HTI
-kenya-moh,Kenya,KEN
-lesotho,Lesotho,LSO
-liberia,Liberia,LBR
-malawi-moh,Malawi,MWI
-mali,Mali,MLI
-mauritania,Mauritania,MRT
-mozambique,Mozambique,MOZ
-namibia,Namibia,NAM
-niger,Niger,NER
-nigeria,Nigeria,NGA
-rwanda,Rwanda,RWA
-sao-tome,Sao Tome and Principe,STP
-senegal,Senegal,SEN
-sierra-leone,Sierra Leone,SLE
-tanzania,"Tanzania, United Republic of",TZA
-togo,Togo,TGO
-uganda,Uganda,UGA
-zambia-moh,Zambia,ZMB
-zimbabwe,Zimbabwe,ZWE
+organisation,country,iso3,pop_data_source
+angola,Angola,AGO,orderly
+burundi,Burundi,BDI,orderly
+benin,Benin,BEN,gpw
+burkina-faso,Burkina Faso,BFA,gpw
+botswana,Botswana,BWA,orderly
+republique-centrafricaine,Central African Republic,CAF,worldpop
+cote-d-ivoire,C����,CIV,orderly
+cameroon,Cameroon,CMR,orderly
+republique-democratique-du-congo,"Congo, The Democratic Republic of the",COD,orderly
+congo,Congo,COG,worldpop
+cabo-verde,Cabo Verde,CPV,
+ethiopia,Ethiopia,ETH,gpw
+gabon,Gabon,GAB,worldpop
+ghana,Ghana,GHA,worldpop
+guinee,Guinea,GIN,worldpop
+gambia,Gambia,GMB,orderly 
+guinea-ecuatorial,Equatorial Guinea,GNQ,
+haiti,Haiti,HTI,worldpop
+kenya-moh,Kenya,KEN,orderly
+liberia,Liberia,LBR,worldpop
+lesotho,Lesotho,LSO,orderly
+mali,Mali,MLI,worldpop
+mozambique,Mozambique,MOZ,orderly
+mauritania,Mauritania,MRT,
+malawi-moh,Malawi,MWI,orderly
+namibia,Namibia,NAM,gpw
+niger,Niger,NER,worldpop
+nigeria,Nigeria,NGA,orderly
+rwanda,Rwanda,RWA,orderly
+senegal,Senegal,SEN,worldpop
+sierra-leone,Sierra Leone,SLE,worldpop
+sao-tome,Sao Tome and Principe,STP,worldpop
+eswatini,Eswatini,SWZ,orderly
+chad,Chad,TCD,worldpop
+togo,Togo,TGO,orderly
+tanzania,"Tanzania, United Republic of",TZA,orderly
+uganda,Uganda,UGA,orderly
+zambia-moh,Zambia,ZMB,orderly
+zimbabwe,Zimbabwe,ZWE,orderly

@@ -9,6 +9,10 @@ artefacts:
       description: Population size estimates with population prevalence
       filenames:
         - pse_prevalence.csv
+  - data:
+      description: Error warnings for bad matches
+      filenames:
+        - bad_match_error.csv
 
 parameters:
   iso3:

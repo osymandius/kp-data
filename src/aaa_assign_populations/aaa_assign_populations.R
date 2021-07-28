@@ -34,7 +34,12 @@ areas <- read_sf("depends/naomi_areas.geojson")%>%
 population <- read_csv("depends/interpolated_population.csv")
 # spectrum <- extract_pjnz_naomi("depends/spectrum_file.zip")
 merge_cities <- read_sf("merge_cities.geojson")
-pse <- read.csv("pse.csv")
+
+sharepoint <- spud::sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
+
+pse_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations", "pse.csv")
+pse <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = pse_path)
+pse <- read_csv(pse)
 
 population <- population %>%
   left_join(get_age_groups() %>% select(age_group, age_group_sort_order)) %>%

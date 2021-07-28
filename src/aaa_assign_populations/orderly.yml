@@ -25,6 +25,7 @@ packages:
   - tidyr
   - stringr
   - sf
+  - spud
 
 sources:
   - kp_population_functions.R

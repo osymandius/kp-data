@@ -1,4 +1,4 @@
-script: script.R
+script: aaa_assign_populations.R
 
 artefacts:
   # - data:

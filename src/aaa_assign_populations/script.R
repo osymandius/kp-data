@@ -2,60 +2,57 @@ iso3_c <- iso3
 
 areas <- read_sf("depends/naomi_areas.geojson")%>%
   mutate(iso3 = iso3_c)
-population <- read_csv("depends/naomi_population.csv")
-spectrum <- extract_pjnz_naomi("depends/spectrum_file.zip")
+population <- read_csv("depends/interpolated_population.csv")
+# spectrum <- extract_pjnz_naomi("depends/spectrum_file.zip")
 merge_cities <- read_sf("merge_cities.geojson")
 pse <- read.csv("pse.csv")
 
 population <- population %>%
   left_join(get_age_groups() %>% select(age_group, age_group_sort_order)) %>%
   filter(age_group_sort_order %in% 16:22) %>%
-  group_by(area_id, area_name, calendar_quarter, sex) %>%
+  group_by(area_id, year, sex) %>%
   summarise(population = sum(population)) %>%
-  mutate(age_group = "Y015_049",
-         source = "Naomi") %>%
-  ungroup() %>%
-  separate(calendar_quarter, remove=FALSE, sep = c(2,6), into=c(NA, "year", NA), convert = TRUE) %>%
-  filter(year == floor(median(year)))
-
-naomi_pop_year <- unique(population$year)
-
-if(unique(spectrum$spectrum_region_code)) {
-  spectrum <- spectrum %>%
-    left_join(areas %>% 
-                filter(area_level == 1) %>%
-                select(spectrum_region_code, area_id, area_level) %>% 
-                st_drop_geometry()
-    )
-  
-  working_level <- 1
-  stop("Subnational file!!")
-} else {
-  spectrum <- spectrum %>%
-    left_join(areas %>% 
-                filter(area_level == 0) %>%
-                select(spectrum_region_code, area_id, area_level) %>% 
-                st_drop_geometry()
-    )
-  working_level <- 0
-}
-
-spectrum <- spectrum %>%
-  filter(age %in% 15:49) %>%
-  group_by(area_id, area_level, sex, year) %>%
-  summarise(population = sum(totpop)) %>%
-  group_by(area_id, sex) %>%
   mutate(age_group = "Y015_049") %>%
   ungroup()
 
-spectrum_population_change <- spectrum %>%
-  mutate(change = population/population[year==2010],
-         source = "WorldPop") %>%
-  bind_rows(
-    spectrum %>%
-      mutate(change = population/population[year==naomi_pop_year],
-             source = "Naomi")
-  )
+# naomi_pop_year <- unique(population$year)
+# 
+# if(unique(spectrum$spectrum_region_code)) {
+#   spectrum <- spectrum %>%
+#     left_join(areas %>% 
+#                 filter(area_level == 1) %>%
+#                 select(spectrum_region_code, area_id, area_level) %>% 
+#                 st_drop_geometry()
+#     )
+#   
+#   working_level <- 1
+#   stop("Subnational file!!")
+# } else {
+#   spectrum <- spectrum %>%
+#     left_join(areas %>% 
+#                 filter(area_level == 0) %>%
+#                 select(spectrum_region_code, area_id, area_level) %>% 
+#                 st_drop_geometry()
+#     )
+#   working_level <- 0
+# }
+# 
+# spectrum <- spectrum %>%
+#   filter(age %in% 15:49) %>%
+#   group_by(area_id, area_level, sex, year) %>%
+#   summarise(population = sum(totpop)) %>%
+#   group_by(area_id, sex) %>%
+#   mutate(age_group = "Y015_049") %>%
+#   ungroup()
+# 
+# spectrum_population_change <- spectrum %>%
+#   mutate(change = population/population[year==2010],
+#          source = "WorldPop") %>%
+#   bind_rows(
+#     spectrum %>%
+#       mutate(change = population/population[year==naomi_pop_year],
+#              source = "Naomi")
+#   )
 
 
 cities_areas <- merge_cities %>%
@@ -157,11 +154,22 @@ if(nrow(pop_search)) {
     ) %>% 
     st_drop_geometry()
   
-  merged_populations <- pop_search_res %>%
-    select(area_id, sex, population) %>%
+  pop_search_res <- pop_search_res %>%
+    separate(calendar_quarter, remove=FALSE, sep = c(2,6), into=c(NA, "year", NA), convert = TRUE) %>%
+    select(area_id, year, sex, age_group, population)
+    
+  merged_populations <- crossing(area_id = pop_search_res$area_id,
+             year = 2000:2020,
+             age_group = "Y015_049",
+             sex = c("female", "male")) %>%
+    left_join(pop_search_res) %>%
+    group_by(area_id, sex) %>%
+    mutate(population = log(population),
+           population = zoo::na.approx(population, na.rm=FALSE),
+           population = exp(population)) %>%
     bind_rows(
       population %>%
-        select(area_id, sex, population)
+        select(area_id, year, sex, age_group, population)
     )
   
 } else {
@@ -173,7 +181,7 @@ if(nrow(pop_search)) {
     mutate(source = "Naomi")
   
   merged_populations <- population %>%
-    select(area_id, sex, population)
+    select(area_id, year, sex, age_group, population)
   
 }
 
@@ -182,21 +190,21 @@ if(nrow(pop_search)) {
 ## Aggregate Naomi populations
 
 
-extrapolated_populations <- crossing(extrapolate_id,
-                                     sex = c("female", "male"),
-                                     year = 1970:2025
-) %>%
-  left_join(spectrum_population_change %>% select(year, sex, source, change)) %>%
-  left_join(merged_populations) %>%
-  mutate(population = population*change) %>%
-  group_by(area_id, sex, year) %>%
-  summarise(population = sum(population)) %>%
-  ungroup
+# extrapolated_populations <- crossing(extrapolate_id,
+#                                      sex = c("female", "male"),
+#                                      year = 1970:2025
+# ) %>%
+#   left_join(spectrum_population_change %>% select(year, sex, source, change)) %>%
+#   left_join(merged_populations) %>%
+#   mutate(population = population*change) %>%
+#   group_by(area_id, sex, year) %>%
+#   summarise(population = sum(population)) %>%
+#   ungroup
 
-extrapolated_populations <- extrapolated_populations %>%
+merged_populations <- merged_populations %>%
   bind_rows(
-    extrapolated_populations %>%
-      group_by(area_id, year) %>%
+    merged_populations %>%
+      group_by(area_id, year, age_group) %>%
       summarise(population = sum(population)) %>%
       mutate(sex = "both") %>%
       ungroup()
@@ -211,7 +219,7 @@ row_populations <- pop_search %>%
     kp %in% c("FSW", "SW") ~ "female"
   )) %>%
   type.convert() %>%
-  left_join(extrapolated_populations) %>%
+  left_join(merged_populations) %>%
   group_by(row_id) %>%
   summarise(population = sum(population))
 

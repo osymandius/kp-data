@@ -22,6 +22,8 @@ packages:
   - naomi
   - readr
   - dplyr
+  - tidyr
+  - stringr
   - sf
 
 sources:
@@ -36,9 +38,8 @@ depends:
     id: latest(parameter:iso3 == iso3)
     use:
       depends/naomi_areas.geojson: naomi_areas.geojson
-      depends/naomi_population.csv: naomi_population.csv
 
-  aaa_spectrum_adr_pull:
+  aaa_scale_pop:
     id: latest(parameter:iso3 == iso3)
     use:
-      depends/spectrum_file.zip: spectrum_file.zip
+      depends/interpolated_population.csv: interpolated_population.csv

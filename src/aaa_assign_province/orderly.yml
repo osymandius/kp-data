@@ -1,0 +1,37 @@
+script: aaa_assign_province.R
+
+artefacts:
+  # - data:
+  #     description: Extrapolated population denominators over time
+  #     filenames:
+  #       - extrapolated_populations.csv
+  - data:
+      description: Prevalence entries assigned to Naomi area_id
+      filenames:
+        - prev_assigned_province.csv
+  - data:
+      description: Error warnings for bad matches
+      filenames:
+        - bad_match_error.csv
+
+parameters:
+  iso3:
+    default: ~
+
+packages:
+  # - naomi
+  - readr
+  - dplyr
+  - tidyr
+  - stringr
+  - sf
+  - spud
+
+resources:
+  - merge_cities.geojson
+
+depends:
+  aaa_inputs_orderly_pull:
+    id: latest(parameter:iso3 == iso3)
+    use:
+      depends/naomi_areas.geojson: naomi_areas.geojson

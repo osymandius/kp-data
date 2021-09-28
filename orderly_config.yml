@@ -4,7 +4,7 @@ remote:
     args:
       url: https://imperiallondon.sharepoint.com
       site: HIVInferenceGroup-WP
-      path: Shared Documents/orderly/naomi-data-orderly
+      path: Shared Documents/orderly/kp-data
   fertility:
     driver: orderly.sharepoint::orderly_remote_sharepoint
     args:

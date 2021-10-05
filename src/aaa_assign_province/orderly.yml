@@ -10,9 +10,17 @@ artefacts:
       filenames:
         - prev_assigned_province.csv
   - data:
-      description: Error warnings for bad matches
+      description: Prevalence error warnings for bad matches
       filenames:
-        - bad_match_error.csv
+        - prev_bad_match_error.csv
+  - data:
+      description: ART coverage entries assigned to Naomi area_id
+      filenames:
+        - art_assigned_province.csv
+  - data:
+      description: ART coverage error warnings for bad matches
+      filenames:
+        - art_bad_match_error.csv
 
 parameters:
   iso3:
@@ -26,6 +34,7 @@ packages:
   - stringr
   - sf
   - spud
+  - countrycode
 
 resources:
   - merge_cities.geojson

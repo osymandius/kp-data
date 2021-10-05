@@ -119,7 +119,7 @@ best_matches <- min_dist %>%
   ungroup
 
 level_check <- min_dist %>%
-  filter(dist==0, n()>1) %>%
+  filter(dist==0, n()>1, !is.na(area_id)) %>%
   count(idx, area_level) %>%
   filter(n() == 1)
 
@@ -127,16 +127,16 @@ if(nrow(level_check)) {
   best_matches <- best_matches %>%
   bind_rows(
     min_dist %>%
-      filter(dist==0, n()>1) %>%
+      filter(dist==0, n()>1, !is.na(area_id)) %>%
       filter(idx %in% level_check$idx),
     min_dist %>%
-      filter(dist==0, n()>1) %>%
+      filter(dist==0, n()>1, !is.na(area_id)) %>%
       filter(!idx %in% level_check$idx) %>%
       filter(area_level == max(area_level))
   ) %>%
   ungroup
   
-  warning("\nSeveral identical names matches were found. Check.\n")
+  warning("\nArea name matched several Naomi area IDs. The finest area level has been chosen\nThis is likely a district sharing the same name as its province. Check.\n")
   
 }
 
@@ -260,9 +260,10 @@ row_populations <- pop_search %>%
 pse <- pse %>%
   filter(iso3 == iso3_c) %>%
   left_join(row_populations) %>%
-  filter(!is.na(population)) %>%
-  select(iso3, kp, area_name, year, pse_lower, pse, pse_upper, population) %>%
-  mutate(pse_prevalence = pse/population)
+  # filter(!is.na(population)) %>%
+  mutate(pse_prevalence = pse/population) %>%
+  select(iso3, kp, area_name, year, pse_lower, pse, pse_upper, pse_prevalence, population, everything())
+  
 
 write_csv(pse, "pse_prevalence.csv")
 write_csv(bad_match_error, "bad_match_error.csv")

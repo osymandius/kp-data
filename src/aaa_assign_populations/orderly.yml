@@ -31,7 +31,6 @@ sources:
   - kp_population_functions.R
 
 resources:
-  - pse.csv
   - merge_cities.geojson
 
 depends:

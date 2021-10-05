@@ -26,3 +26,12 @@ remote:
 
 global_resources:
   global
+  
+fields:
+  requester:
+    required: false
+  author:
+    required: false
+
+vault:
+  addr: https://vault.dide.ic.ac.uk:8200

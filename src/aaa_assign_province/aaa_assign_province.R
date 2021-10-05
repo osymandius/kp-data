@@ -11,92 +11,127 @@ areas <- read_sf("depends/naomi_areas.geojson")%>%
 merge_cities <- read_sf("merge_cities.geojson") %>%
   filter(iso3 == iso3_c)
 
+merge_cities <- merge_cities %>%         
+  filter(!tolower(area_name) %in% tolower(areas$area_name)) %>%
+  st_make_valid()
+
+cities_areas <- merge_cities %>%
+  st_join(areas %>% filter(area_level == 1) %>% select(area_id) %>% st_make_valid(), largest=TRUE) %>%
+  bind_rows(areas)
+  
 sharepoint <- spud::sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
 
 prev_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations", "prev.csv")
 prev <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = prev_path)
-prev <- read_csv(prev)
+prev <- read_csv(prev) %>%
+  rename(value = prev) %>%
+  mutate(iso3 = countrycode(country.name, "country.name", "iso3c"))
 
-cities_areas <- merge_cities %>%
-  bind_rows(areas)
+art_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations", "art.csv")
+art <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = art_path)
+art <- read_csv(art) %>%
+  rename(value = art_coverage) %>%
+  mutate(iso3 = countrycode(country.name, "country.name", "iso3c"))
 
-prev <- prev %>%
-  mutate(row_id = row_number())
+dat <- list("prev" = prev, "art" = art)
 
-min_dist <- prev %>%
-  select(iso3, area_name, year, kp, row_id) %>%
-  filter(!str_detect(area_name, "\\,|\\;|\\&|\\+\\/")) %>%
-  mutate(area_name = tolower(area_name)) %>%
-  rename(given_area = area_name) %>%
-  left_join(cities_areas, by="iso3") %>%
-  mutate(dist = stringdist::stringdist(given_area, tolower(area_name))) %>%
-  group_by(row_id) %>%
-  filter(dist == min(dist))
+out <- lapply(dat, function(x) {
 
-best_matches <- min_dist %>%
-  filter(n() == 1, dist<3) %>%
-  ungroup
-
-level_check <- min_dist %>%
-  filter(dist==0, n()>1) %>%
-  count(row_id, area_level) %>%
-  filter(n() == 1)
-
-if(nrow(level_check)) {
-  best_matches <- best_matches %>%
-    bind_rows(
-      min_dist %>%
-        filter(dist==0, n()>1) %>%
-        filter(row_id %in% level_check$row_id),
-      min_dist %>%
-        filter(dist==0, n()>1) %>%
-        filter(!row_id %in% level_check$row_id) %>%
-        filter(area_level == max(area_level))
-    ) %>%
+  # cities_areas <- merge_cities %>%
+  #   bind_rows(areas)
+  
+  x <- x %>%
+    mutate(row_id = row_number()) %>%
+    filter(iso3 == iso3_c)
+  
+  min_dist <- x %>%
+    select(iso3, area_name, year, kp, row_id) %>%
+    filter(!str_detect(area_name, "\\,|\\;|\\&|\\+\\/")) %>%
+    mutate(area_name = tolower(area_name)) %>%
+    rename(given_area = area_name) %>%
+    left_join(cities_areas, by="iso3") %>%
+    mutate(dist = stringdist::stringdist(given_area, tolower(area_name))) %>%
+    group_by(row_id) %>%
+    filter(dist == min(dist))
+  
+  best_matches <- min_dist %>%
+    filter(n() == 1, dist<3) %>%
     ungroup
   
-  warning("\nSeveral identical names matches were found. Check.\n")
+  level_check <- min_dist %>%
+    filter(dist==0, n()>1, !is.na(area_id)) %>%
+    count(row_id, area_id, area_level) %>%
+    filter(n() == 1)
   
-}
-
-bad_match <- min_dist %>%
-  filter(dist>=3)
-
-if (nrow(bad_match)) {
-  bad_match_error <- bad_match %>%
-    ungroup %>%
-    mutate(iso3 = iso3_c) %>%
-    select(iso3, given_area, attempted_match = area_name, attempted_area_id = area_id, string_distance = dist)
+  if(nrow(level_check)) {
+    best_matches <- best_matches %>%
+      bind_rows(
+        min_dist %>%
+          filter(dist==0, n()>1, !is.na(area_id)) %>%
+          filter(row_id %in% level_check$row_id),
+        min_dist %>%
+          filter(dist==0, n()>1, !is.na(area_id)) %>%
+          filter(!row_id %in% level_check$row_id) %>%
+          filter(area_level == max(area_level))
+      ) %>%
+      ungroup
+    
+    warning("\nArea name matched several Naomi area IDs. The finest area level has been chosen\nThis is likely a district sharing the same name as its province. Check.\n")
+    
+  }
   
-  warning("\nString match is bad:\n", 
-          paste0(utils::capture.output(bad_match_error), collapse = "\n"))
+  
+  bad_match <- min_dist %>%
+    filter(dist>=3)
+  
+  if (nrow(bad_match)) {
+    bad_match_error <- bad_match %>%
+      ungroup %>%
+      mutate(iso3 = iso3_c) %>%
+      select(iso3, given_area, attempted_match = area_name, attempted_area_id = area_id, string_distance = dist)
+    
+    warning("\nString match is bad:\n", 
+            paste0(utils::capture.output(bad_match_error), collapse = "\n"))
+    
+    
+  } else {
+    bad_match_error <- data.frame(iso3 = iso3_c, x = "No bad matches")
+  }
   
   
-} else {
-  bad_match_error <- data.frame(iso3 = iso3_c, x = "No bad matches")
-}
+  
+  best_matches <- best_matches %>%
+    select(row_id, area_id, area_level, geometry) %>%
+    mutate(area_level = case_when(
+      str_detect(area_id, "_1_") ~ as.integer(1),
+      TRUE ~ as.integer(area_level)
+    ))
+  
+  naomi_to_admin1 <- best_matches %>%
+    filter(area_level >1) %>%
+    st_as_sf() %>%
+    st_make_valid() %>%
+    select(-area_id) %>%
+    st_join(areas %>% filter(area_level == 1) %>% select(area_id) %>% st_make_valid(), largest=TRUE)
+  
+  assigned_province <- best_matches %>%
+    filter(!row_id %in% naomi_to_admin1$row_id) %>%
+    bind_rows(naomi_to_admin1) %>%
+    select(row_id, area_id)
+  
+  x <- x %>%
+    left_join(assigned_province) %>%
+    select(row_id, kp, year, area_id, value) %>%
+    filter(!is.na(area_id))
+  
+  out <- list("assigned_province" = x, "bad_match_error" = bad_match_error)
+  
+  
 
-write_csv(bad_match_error, "bad_match_error.csv")
+})
 
-assigned_province <- best_matches %>%
-  filter(is.na(area_id)) %>%
-  st_as_sf %>%
-  st_make_valid() %>%
-  select(row_id, geometry) %>%
-  st_join(areas %>% st_make_valid() %>% mutate(area = as.numeric(st_area(geometry)))) %>%
-  filter(area_level == 1) %>%
-  filter(area == min(area)) %>%
-  select(row_id, area_id) %>%
-  st_drop_geometry()
+write_csv(out$prev$bad_match_error, "prev_bad_match_error.csv")
+write.csv(out$prev$assigned_province, "prev_assigned_province.csv")
 
-best_matches <- best_matches %>%
-  filter(!is.na(area_id)) %>%
-  select(row_id, area_id) %>%
-  bind_rows(assigned_province)
-
-prev <- prev %>%
-  left_join(best_matches) %>%
-  select(row_id, kp, year, area_id, prev) %>%
-  filter(!is.na(area_id))
-
-write.csv(prev, "prev_assigned_province.csv")
+write_csv(out$art$bad_match_error, "art_bad_match_error.csv")
+write.csv(out$art$assigned_province, "art_assigned_province.csv")

@@ -1,0 +1,54 @@
+script: aaa_extrapolate_naomi.R
+
+artefacts:
+  # - data:
+  #     description: Extrapolated population denominators over time
+  #     filenames:
+  #       - extrapolated_populations.csv
+  - data:
+      description: Naomi prevalence and ART extrapolated through time
+      filenames:
+        - extrapolated_naomi.csv
+  - data:
+      description: Matched admin1 prevalence for KP prevalence data
+      filenames:
+        - anonymised_prev.csv
+  - data:
+      description: Matched admin1 ART coverage for KP ART data
+      filenames:
+        - anonymised_art.csv
+
+parameters:
+  iso3:
+    default: ~
+
+packages:
+  - naomi
+  - readr
+  - dplyr
+  - tidyr
+  - stringr
+  - sf
+  - spud
+
+global_resources:
+  resources/iso_mapping_fit.csv: iso_mapping_fit.csv
+
+depends:
+  aaa_inputs_orderly_pull:
+    id: latest(parameter:iso3 == iso3)
+    use:
+      depends/naomi_areas.geojson: naomi_areas.geojson
+  aaa_inputs_adr_pull:
+    id: latest(parameter:iso3 == iso3)
+    use:
+      depends/spectrum_file.zip: spectrum_file.zip
+  aaa_outputs_adr_pull:
+    id: latest(parameter:iso3 == iso3)
+    use:
+      depends/naomi_output.zip: naomi_output.zip
+  aaa_assign_province:
+    id: latest(parameter:iso3 == iso3)
+    use:
+      depends/prev_assigned_province.csv: prev_assigned_province.csv
+      depends/art_assigned_province.csv: art_assigned_province.csv

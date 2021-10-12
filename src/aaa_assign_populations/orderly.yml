@@ -26,6 +26,7 @@ packages:
   - stringr
   - sf
   - spud
+  - countrycode
 
 sources:
   - kp_population_functions.R

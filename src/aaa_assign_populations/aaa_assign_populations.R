@@ -1,5 +1,6 @@
 extract_kp_worldpop <- function(areas, iso3, 
                                 years = c(2000, 2005, 2010, 2015, 2020)) {
+                                # years = c(2015)) {
   stopifnot(inherits(areas, "sf"))
   stopifnot(grepl("^[A-Z]{3}$", iso3))
   stopifnot(years %in% 2000:2020)
@@ -8,6 +9,7 @@ extract_kp_worldpop <- function(areas, iso3,
                `40` = "Y040_044", `45` = "Y045_049"
   )
   wp_sexes <- c(m = "male", f = "female")
+  # wp_sexes <- c(f = "female")
   grid <- expand.grid(iso3 = iso3, year = years, wp_age = names(wp_ages), 
                       wp_sex = names(wp_sexes), stringsAsFactors = FALSE)
   pop_list <- do.call(Map, c(f = naomi.utils:::worldpop_extract_one, areas = list(list(areas)), 
@@ -20,9 +22,9 @@ extract_kp_worldpop <- function(areas, iso3,
   # pop <- pop %>% dplyr::left_join(dplyr::select(sf::st_drop_geometry(areas), 
   # area_id, area_name), by = "area_id")
   pop <- dplyr::count(pop, area_id, source, calendar_quarter, 
-                      sex, source, wt = population, name = "population")
+                      sex, age_group, wt = population, name = "population")
   # pop$asfr <- NA_real_
-  pop$age_group <- "Y015_049"
+  # pop$age_group <- "Y015_049"
   # validate_naomi_population(pop, areas, unique(areas$area_level))
   pop
 }
@@ -93,7 +95,8 @@ cities_areas <- merge_cities %>%
   bind_rows(areas)
 
 pse <- pse %>%
-  mutate(row_id = row_number())
+  mutate(row_id = row_number(),
+         iso3 = countrycode(country.name, "country.name", "iso3c"))
 
 pse_areas <- pse %>%
   select(iso3, area_name, year, kp, row_id) %>%
@@ -261,8 +264,9 @@ pse <- pse %>%
   filter(iso3 == iso3_c) %>%
   left_join(row_populations) %>%
   # filter(!is.na(population)) %>%
-  mutate(pse_prevalence = pse/population) %>%
-  select(iso3, kp, area_name, year, pse_lower, pse, pse_upper, pse_prevalence, population, everything())
+  mutate(population_proportion = pse/population) %>%
+  select(country.name, surveillance_type, indicator, method, kp, sex, age_group, area_name, province, year, pse_lower, pse, pse_upper, prop_lower, population_proportion, prop_upper, sample, ref) %>%
+  arrange(country.name, kp, year)
   
 
 write_csv(pse, "pse_prevalence.csv")

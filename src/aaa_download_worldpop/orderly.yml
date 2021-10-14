@@ -1,0 +1,41 @@
+script: aaa_download_worldpop.R
+
+artefacts:
+  # - data:
+  #     description: Extrapolated population denominators over time
+  #     filenames:
+  #       - extrapolated_populations.csv
+  - data:
+      description: City populations from constrained WorldPop raster
+      filenames:
+        - interpolated_city_population.csv
+
+parameters:
+  iso3:
+    default: ~
+
+packages:
+  - naomi
+  - raster
+  - exactextractr
+  - readr
+  - dplyr
+  - tidyr
+  - stringr
+  - sf
+  - spud
+  - countrycode
+
+resources:
+  - merge_cities.geojson
+
+depends:
+  aaa_inputs_orderly_pull:
+    id: latest(parameter:iso3 == iso3)
+    use:
+      depends/naomi_areas.geojson: naomi_areas.geojson
+
+  aaa_scale_pop:
+    id: latest(parameter:iso3 == iso3)
+    use:
+      depends/interpolated_population.csv: interpolated_population.csv

@@ -44,3 +44,8 @@ depends:
     id: latest(parameter:iso3 == iso3)
     use:
       depends/interpolated_population.csv: interpolated_population.csv
+  
+  aaa_download_worldpop:
+    id: latest(parameter:iso3 == iso3)
+    use:
+      depends/interpolated_city_population.csv: interpolated_city_population.csv

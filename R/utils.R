@@ -1,4 +1,5 @@
 library(tidyverse)
+library(orderly)
 
 iso3_vec <- c("BDI", "BEN", "BFA", "CIV", "CMR", "COD", "COG", "GMB", "KEN", "LSO", "MLI", "MOZ", "MWI", "NGA", "SLE", "SWZ", "TCD", "TGO", "ZWE", "AGO", "ETH", "GAB", "GHA", "GIN", "LBR", "NAM", "NER", "RWA", "SEN", "TZA", "UGA", "ZMB")
 
@@ -34,13 +35,13 @@ lapply(iso3_vec, function(x){
 areas <- read_sf("~/Documents/GitHub/fertility_orderly/archive/tza_data_areas/20201130-150758-409ee8ac/tza_areas.geojson")
 
 possibly_pull <- purrr::possibly(.f = orderly_pull_archive, otherwise = NA)
-map(c("CMR", "MWI", 
-      "SLE", "TGO","GAB", "SEN"), ~possibly_pull("aaa_outputs_adr_pull", id = paste0('latest(parameter:iso3 == "', .x, '")'), remote = "naomi_2021"))
+map(iso3_vec, ~possibly_pull("aaa_outputs_adr_pull", id = paste0('latest(parameter:iso3 == "', .x, '")'), remote = "naomi_2021"))
+map(iso3_vec, ~possibly_pull("aaa_extrapolate_naomi", id = paste0('latest(parameter:iso3 == "', .x, '")'), remote = "fertility"))
 
 names(suc) <- iso3_vec
 
 possibly_run <- purrr::possibly(.f = orderly_run, otherwise = NULL)
-id_list <- map(iso3_vec, ~possibly_run("aaa_assign_province", parameters = data.frame(iso3 = .x)))
+id_list <- map(iso3_vec, ~possibly_run("aaa_extrapolate_naomi", parameters = data.frame(iso3 = .x)))
 id_list <- map(iso3_vec, ~possibly_run("aaa_assign_province", parameters = data.frame(iso3 = .x)))
 id_list <- map(c("CMR", "COD", 
                  "LSO", "MWI", 
@@ -63,7 +64,7 @@ lapply(id_list %>%
 lapply(id_list %>%
          compact() %>%
          unlist,
-       function(x) {orderly_push_archive("aaa_model_selection", id=x, remote="fertility")})
+       function(x) {orderly_push_archive("aaa_assign_province", id=x)})
 
 dat %>%
   bind_rows() %>%
@@ -71,11 +72,11 @@ dat %>%
   write_csv("~/Dropbox/Work Streams/2021/Key populations/Guidance/anonymised_prev_matched.csv")
 
 id <- lapply(iso3_vec, function(x){
-  orderly::orderly_search(name = "aaa_assign_populations", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
+  orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
 })
 
 names(id) <- iso3_vec
-
+id <- id_list
 id <- id %>%unlist()
 id <- id[!is.na(id)]
 

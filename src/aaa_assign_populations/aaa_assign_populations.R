@@ -35,7 +35,7 @@ areas <- read_sf("depends/naomi_areas.geojson")%>%
   mutate(iso3 = iso3_c)
 
 population <- read_csv("depends/interpolated_population.csv") %>%
-  left_join(areas %>% select(area_id, area_name) %>% st_drop_geometry()) %>%
+  left_join(areas %>% dplyr::select(area_id, area_name) %>% st_drop_geometry()) %>%
   mutate(area_name = str_to_sentence(area_name))
 
 naomi_names <- unique(population$area_name)
@@ -48,7 +48,7 @@ city_population <- read_csv("depends/interpolated_city_population.csv") %>%
 
 sharepoint <- spud::sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
 
-pse_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations", "pse.csv")
+pse_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations", "pse_surveillance_only.csv")
 pse <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = pse_path)
 pse <- read_csv(pse)
 

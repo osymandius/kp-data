@@ -1,0 +1,23 @@
+iso3,given_name,attempted_match,attempted_area_id,string_distance
+ZAF,south africa (national level),South africa,ZAF,17
+ZAF,northern province,Northern cape,ZAF_1_NC,7
+ZAF,buffalo city,Buffalo city mm,ZAF_2_BUF,3
+ZAF,cape town and durban,Cape town mm,ZAF_2_CPT,10
+ZAF,johannesburg metro,Johannesburg mm,ZAF_2_JHB,4
+ZAF,cape town metro,Cape town mm,ZAF_2_CPT,4
+ZAF,durban metro,Durban,ZAF_city_91,6
+ZAF,mafikeng,Madibong,ZAF_city_199,3
+ZAF,mafikeng,Maropeng,ZAF_city_205,3
+ZAF,polokwane,Kolofane,ZAF_city_168,3
+ZAF,south africa (national level),South africa,ZAF,17
+ZAF,south africa (national level),South africa,ZAF,17
+ZAF,pretoria,George,ZAF_city_123,5
+ZAF,pretoria,Greytown,ZAF_city_128,5
+ZAF,pretoria,Hendrina,ZAF_city_137,5
+ZAF,pretoria,Patensie,ZAF_city_243,5
+ZAF,pretoria,Peddie,ZAF_city_245,5
+ZAF,pretoria,Pella,ZAF_city_246,5
+ZAF,pretoria,Pongola,ZAF_city_253,5
+ZAF,pretoria,Prieska,ZAF_city_261,5
+ZAF,south africa (national level),South africa,ZAF,17
+ZAF,northern province,Northern cape,ZAF_1_NC,7

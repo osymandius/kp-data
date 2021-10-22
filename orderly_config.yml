@@ -35,3 +35,6 @@ fields:
 
 vault:
   addr: https://vault.dide.ic.ac.uk:8200
+
+tags:
+  surveillance_only

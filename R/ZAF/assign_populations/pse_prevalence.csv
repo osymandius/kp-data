@@ -1,0 +1,58 @@
+country.name,surveillance_type,indicator,method,kp,sex,age_group,area_name,province,year,pse_lower,pse,pse_upper,prop_lower,population_proportion,prop_upper,sample,ref
+South Africa,NA,Population size estimate,RDS,FSW,female,NA,Johannesburg,NA,2013,5000,7697,10895,NA,0.0010135647282867965,NA,NA,UCSF (2015): South Africa Health Monitoring Study (SAHMS)
+South Africa,NA,Population size estimate,RDS,FSW,female,NA,Durban,NA,2013,4000,9323,10000,NA,0.0038119686275759376,NA,NA,UCSF (2015): South Africa Health Monitoring Study (SAHMS)
+South Africa,NA,Population size estimate,RDS,FSW,female,NA,Cape Town,NA,2013,NA,6500,NA,NA,0.002539522155114101,NA,NA,UCSF (2015): South Africa Health Monitoring Study (SAHMS)
+South Africa,NA,Population size estimate,NA,FSW,female,NA,South Africa,NA,2013,120986,137641,240857,NA,0.009304120988769411,NA,NA,NA
+South Africa,NA,Population size estimate,NA,FSW,female,NA,Western Cape,NA,2013,13670,15699,35328,NA,0.00901190904723638,NA,NA,NA
+South Africa,NA,Population size estimate,NA,FSW,female,NA,Eastern Cape,NA,2013,11410,13408,15989,NA,0.007860215419610505,NA,NA,NA
+South Africa,NA,Population size estimate,NA,FSW,female,NA,Northern Cape,NA,2013,4318,4988,5108,NA,0.01598554568720526,NA,NA,NA
+South Africa,NA,Population size estimate,NA,FSW,female,NA,Free State,NA,2013,8357,10046,11299,NA,0.01335203975730273,NA,NA,NA
+South Africa,NA,Population size estimate,NA,FSW,female,NA,KwaZulu-Natal,NA,2013,19335,22480,42994,NA,0.007786232007205181,NA,NA,NA
+South Africa,NA,Population size estimate,NA,FSW,female,NA,North West,NA,2013,12292,13911,14667,NA,0.014882918261484399,NA,NA,NA
+South Africa,NA,Population size estimate,NA,FSW,female,NA,Gauteng,NA,2013,28696,29733,86376,NA,0.007776940380622004,NA,NA,NA
+South Africa,NA,Population size estimate,NA,FSW,female,NA,Mpumalanga,NA,2013,11758,14112,15130,NA,0.012268157572336012,NA,NA,NA
+South Africa,NA,Population size estimate,NA,FSW,female,NA,Northern Province,NA,2013,11150,13263,14059,NA,NA,NA,NA,NA
+South Africa,NA,Population size estimate,"Wisdom of the crowds, mapping, focus discussions and interviews",FSW,female,NA,South Africa,NA,2013,NA,262500,NA,NA,0.017744216908856886,NA,NA,NA
+South Africa,NA,Population size estimate,NA,FSW,female,NA,Cape Town,NA,2013,NA,7500,NA,NA,0.0029302178712855014,NA,NA,NA
+South Africa,NA,Population size estimate,NA,FSW,female,NA,Beaufort West,NA,2013,NA,170,NA,NA,0.00916918604406731,NA,NA,NA
+South Africa,NA,Population size estimate,NA,FSW,female,NA,Bloemfontein,NA,2013,NA,720,NA,NA,0.002663254632958465,NA,NA,NA
+South Africa,NA,Population size estimate,NA,FSW,female,NA,Buffalo City mm,NA,2013,NA,500,NA,NA,0.0022124684748992844,NA,NA,NA
+South Africa,NA,Population size estimate,NA,FSW,female,NA,Durban,NA,2013,NA,6300,NA,NA,0.002575930746940728,NA,NA,NA
+South Africa,NA,Population size estimate,NA,FSW,female,NA,Johannesburg,NA,2013,NA,11000,NA,NA,0.0014485139679296822,NA,NA,NA
+South Africa,NA,Population size estimate,NA,FSW,female,NA,Kimberley,NA,2013,NA,370,NA,NA,0.002821484163274992,NA,NA,NA
+South Africa,NA,Population size estimate,NA,FSW,female,NA,Musina,NA,2013,NA,500,NA,NA,0.01623472059679211,NA,NA,NA
+South Africa,NA,Population size estimate,NA,FSW,female,NA,Pongola,NA,2013,NA,500,NA,NA,0.03208093933613393,NA,NA,NA
+South Africa,NA,Population size estimate,NA,FSW,female,NA,Rustenburg,NA,2013,NA,1530,NA,NA,0.006347343023241319,NA,NA,NA
+South Africa,NA,Population size estimate,NA,FSW,female,NA,Thohoyandou,NA,2013,NA,130,NA,NA,6.284807419587356e-4,NA,NA,NA
+South Africa,NA,Population size estimate,NA,FSW,female,NA,Witbank,NA,2013,NA,500,NA,NA,0.0026772704491256536,NA,NA,NA
+South Africa,NA,Population size estimate,NA,FSW,female,NA,Johannesburg,NA,2013,NA,NA,NA,NA,NA,NA,NA,NA
+South Africa,NA,Population size estimate,"Wisdom of the Crowds, service multiplier, unique object multiplier",FSW,female,NA,"Johannesburg, Cape Town, Durban",NA,2014,NA,23500,NA,NA,0.0018677624974598433,NA,NA,NA
+South Africa,NA,Population size estimate,NA,FSW,female,NA,Cape Town,NA,2014,NA,6500,NA,NA,0.0024813997615496797,NA,NA,NA
+South Africa,NA,Population size estimate,NA,FSW,female,NA,Durban,NA,2014,NA,9323,NA,NA,0.003786172336126077,NA,NA,NA
+South Africa,NA,Population size estimate,NA,FSW,female,NA,Johannesburg,NA,2014,NA,7697,NA,NA,0.00102626270916506,NA,NA,NA
+South Africa,NA,Population size estimate,"Multiplier, wisdom of the crowds, Delphi and extrapolation",FSW,female,NA,South Africa,NA,2017,NA,112400,NA,NA,0.007242774420935161,NA,NA,IBBS
+South Africa,NA,Population size estimate,NA,FSW,female,NA,Limpopo,NA,2017,NA,11837,NA,NA,0.007855338633534758,NA,NA,NA
+South Africa,NA,Population size estimate,"The methods included in the current population size exercise were: (i) the unique object, event and service multipliers, (ii) successive sampling PSE (SS-PSE), and (iii) a synthesis of the methods using the Anchored Multiplier.  The Anchored Multiplier is a novel Bayesian approach, which synthesizes the PSE produced by multipliers coupled to a prior estimate to arrive at a single consensus estimate and a 95% credible interval",FSW,female,NA,"Johannesburg mm, Cape Town mm, Durban",NA,2018,NA,24000,NA,NA,0.004428642820642176,NA,NA,"Behavioral Surveillance Survey (Respondent driven sampling in 3 mmpolitan cities - Johannesburg, Durban and Cape Town)"
+South Africa,NA,Population size estimate,NA,FSW,female,NA,Cape Town,NA,2018,NA,6678,NA,NA,0.0023341558142895118,NA,NA,NA
+South Africa,NA,Population size estimate,NA,FSW,female,NA,Durban,NA,2018,NA,9304,NA,NA,0.003698219513745051,NA,NA,NA
+South Africa,NA,Population size estimate,NA,FSW,female,NA,Johannesburg,NA,2018,NA,7981,NA,NA,0.0011238184660388936,NA,NA,NA
+South Africa,NA,Population size estimate,"Unique object, event and service multipliers, SS-PSE, and a synthesis of the methods using the Anchored Multiplier",MSM,male,NA,"Cape Town, Johannesburg, Mafikeng, Polokwane, Bloemfontein, Port Elizabeth",NA,2016,NA,85800,NA,NA,0.005180891054261478,NA,NA,BBS for MSM
+South Africa,NA,Population size estimate,NA,MSM,male,NA,Cape Town,NA,2016,NA,29901,NA,NA,0.010812090040631953,NA,NA,NA
+South Africa,NA,Population size estimate,NA,MSM,male,NA,Port Elizabeth,NA,2016,NA,5654,NA,NA,0.008589744571558222,NA,NA,NA
+South Africa,NA,Population size estimate,NA,MSM,male,NA,Bloemfontein,NA,2016,NA,3655,NA,NA,0.012179193022163587,NA,NA,NA
+South Africa,NA,Population size estimate,NA,MSM,male,NA,Johannesburg,NA,2016,NA,37549,NA,NA,0.0029250572371036644,NA,NA,NA
+South Africa,NA,Population size estimate,"Multiplier, wisdom of the crowds, Delphi and extrapolation",MSM,male,NA,South Africa,NA,2017,NA,299000,NA,NA,0.019168399086298617,NA,NA,IBBS
+South Africa,NA,Population size estimate,NA,MSM,male,NA,Limpopo,NA,2017,NA,22358,NA,NA,0.01659290474075245,NA,NA,NA
+South Africa,NA,Population size estimate,NA,PWID,female,NA,South Africa,NA,2015,31489,32946,34402,NA,0.0010828019071984934,NA,NA,NA
+South Africa,NA,Population size estimate,NA,PWID,male,NA,South Africa,NA,2015,41374,42755,44135,NA,0.0014051841055749282,NA,NA,NA
+South Africa,NA,Population size estimate,NA,PWID,NA,NA,Cape Town,NA,2017,NA,909,NA,NA,1.6167191433670886e-4,NA,NA,NA
+South Africa,NA,Population size estimate,NA,PWID,NA,NA,Tshwane mm,NA,2017,NA,2027,NA,NA,9.545436715361676e-4,NA,NA,NA
+South Africa,NA,Population size estimate,NA,TG,NA,NA,Western Cape,NA,2013,NA,628,NA,NA,3.604993236298138e-4,NA,NA,NA
+South Africa,NA,Population size estimate,NA,TG,NA,NA,Eastern Cape,NA,2013,NA,536,NA,NA,3.14221022144334e-4,NA,NA,NA
+South Africa,NA,Population size estimate,NA,TG,NA,NA,Northern Cape,NA,2013,NA,200,NA,NA,6.409601318045412e-4,NA,NA,NA
+South Africa,NA,Population size estimate,NA,TG,NA,NA,Free State,NA,2013,NA,402,NA,NA,5.342942447178675e-4,NA,NA,NA
+South Africa,NA,Population size estimate,NA,TG,NA,NA,KwaZulu-Natal,NA,2013,NA,899,NA,NA,3.113800077614527e-4,NA,NA,NA
+South Africa,NA,Population size estimate,NA,TG,NA,NA,North West,NA,2013,NA,556,NA,NA,5.94845989029209e-4,NA,NA,NA
+South Africa,NA,Population size estimate,NA,TG,NA,NA,Gauteng,NA,2013,NA,1189,NA,NA,3.1099391627348614e-4,NA,NA,NA
+South Africa,NA,Population size estimate,NA,TG,NA,NA,Mpumalanga,NA,2013,NA,564,NA,NA,4.903090186222725e-4,NA,NA,NA
+South Africa,NA,Population size estimate,NA,TG,NA,NA,Northern Cape,NA,2013,NA,531,NA,NA,0.0017017491499410572,NA,NA,NA

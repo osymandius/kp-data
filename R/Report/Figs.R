@@ -6,7 +6,7 @@ region <- read.csv("~/Documents/GitHub/fertility_orderly/global/region.csv") %>%
 
 iso3_vec <- c("BDI", "BWA", "BEN", "BFA", "CIV", "CMR", "COD", "COG", "GMB", "KEN", "LSO", "MLI", "MOZ", "MWI", "NGA", "SLE", "SWZ", "TCD", "TGO", "ZWE", "AGO", "ETH", "GAB", "GHA", "GIN", "LBR", "NAM", "NER", "RWA", "SEN", "TZA", "UGA", "ZMB")
 
-###### Subnational/national from data
+###### Subnational/national PSE from data ########
 
 pse_raw <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/pse_surveillance_only.csv", na="")
 
@@ -25,10 +25,11 @@ pse_raw %>%
   mutate(prop = 1-sum(n[has_age])/sum(n))
     
 pse_raw %>%
-  group_by(kp) %>%
+  filter(kp == "TG") %>%
+  group_by(kp, iso3) %>%
   count()
 
-########### UNAIDS nationally adequate size estimates
+########### UNAIDS nationally adequate size estimates #####
 
 unaids_nat_adequate_pse <- read_csv("~/Dropbox/Work Streams/2021/Key populations/Data consolidation/UNAIDS/nationally_adequate_pse.csv", na = "")
 
@@ -86,7 +87,7 @@ unaids_nat_adequate_pse %>%
   moz.utils::standard_theme() +
   theme(panel.border = element_rect(fill=NA, color="black"))
 
-###### MSM proportion from data
+###### MSM proportion from data #####
 
 pse_dat %>%
   bind_rows() %>%
@@ -128,7 +129,7 @@ pse_dat %>%
   labs(x=element_blank(), y="MSM population proportion")
 
 
-######## RESULTS  ########
+######## PSE results  ########
 
 pse_out <- pse_out %>%
   left_join(pse_dat %>%
@@ -161,3 +162,6 @@ pse_dat %>%
     labs(x=element_blank(), y="Population proportion", color = "Informed by:") +
     moz.utils::standard_theme() +
     theme(axis.text.x = element_text(size=10))
+
+############# Prevalence ############
+

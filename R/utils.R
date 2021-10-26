@@ -3,7 +3,7 @@ library(orderly)
 
 iso3_vec <- c("BDI", "BWA", "BEN", "BFA", "CIV", "CMR", "COD", "COG", "GMB", "KEN", "LSO", "MLI", "MOZ", "MWI", "NGA", "SLE", "SWZ", "TCD", "TGO", "ZWE", "AGO", "ETH", "GAB", "GHA", "GIN", "LBR", "NAM", "NER", "RWA", "SEN", "TZA", "UGA", "ZMB")
 
-id <- orderly_batch("aaa_assign_populations", parameters = data.frame(iso3 = iso3_vec))
+id <- orderly_batch("aaa_assign_province", parameters = data.frame(iso3 = iso3_vec))
 
 lapply(id_list[c(8:33)] %>% compact(), orderly_commit)
 

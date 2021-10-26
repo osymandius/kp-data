@@ -1,6 +1,7 @@
 library(INLA)
 library(tidyverse)
 library(countrycode)
+library(sf)
 
 ssa_names <- c("Angola", "Botswana", "Eswatini", "Ethiopia", "Kenya", "Lesotho",  "Malawi", "Mozambique", "Namibia", "Rwanda", "South Africa", "South Sudan", "Uganda", "United Republic of Tanzania", "Zambia", "Zimbabwe", "Benin", "Burkina Faso", "Burundi", "Cameroon", "Central African Republic", "Chad", "Congo", "Côte d'Ivoire", "Democratic Republic of the Congo", "Equatorial Guinea", "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Liberia", "Mali", "Niger", "Nigeria", "Senegal", "Sierra Leone", "Togo")
 ssa_iso3 <- countrycode(ssa_names, "country.name", "iso3c")
@@ -23,8 +24,8 @@ geographies <- geographies %>%
   select(iso3, area_name, id.iso3) %>%
   st_make_valid()
 
-nb <- spdep::poly2nb(geographies)
-spdep::nb2INLA("national_level_adj.adj", nb)
+# nb <- spdep::poly2nb(geographies)
+# spdep::nb2INLA("national_level_adj.adj", nb)
 
 get_mod_results_test <- function(mod, inla_df, var) {
   
@@ -61,7 +62,7 @@ get_mod_results_test <- function(mod, inla_df, var) {
 region <- read.csv("~/Documents/GitHub/fertility_orderly/global/region.csv") %>%
   mutate(iso3 = toupper(iso3))
 
-iso3_vec <- c("BDI", "BEN", "BFA", "CIV", "CMR", "COD", "COG", "GMB", "KEN", "LSO", "MLI", "MOZ", "MWI", "NGA", "SLE", "SWZ", "TCD", "TGO", "ZWE", "AGO", "ETH", "GAB", "GHA", "GIN", "LBR", "NAM", "NER", "RWA", "SEN", "TZA", "UGA", "ZMB")
+iso3_vec <- c("BDI", "BWA", "BEN", "BFA", "CIV", "CMR", "COD", "COG", "GMB", "KEN", "LSO", "MLI", "MOZ", "MWI", "NGA", "SLE", "SWZ", "TCD", "TGO", "ZWE", "AGO", "ETH", "GAB", "GHA", "GIN", "LBR", "NAM", "NER", "RWA", "SEN", "TZA", "UGA", "ZMB")
 
 id <- lapply(iso3_vec, function(x){
   orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
@@ -89,6 +90,8 @@ prev_df <- prev_dat %>%
          id.region = group_indices(., region)
   )
 
+formula <- log_kp_prev ~ log_gen_prev + region
+
 prev_inla <- crossing(log_gen_prev = log(seq(0.01, 0.4, 0.01)),
                       region = c("WCA", "ESA")) %>%
   bind_rows(prev_df %>%
@@ -96,124 +99,219 @@ prev_inla <- crossing(log_gen_prev = log(seq(0.01, 0.4, 0.01)),
               ungroup) %>%
   mutate(idx = row_number())
 
-
-formula <- log_kp_prev ~ log_gen_prev + region
-
 fit <- INLA::inla(formula,
                          data = prev_inla,
                          family = "gaussian", 
-                         control.compute = list(config = TRUE),
+                         control.compute = list(config = TRUE, waic = TRUE),
                   control.predictor=list(compute=TRUE),
                   verbose = TRUE)
 
+#' Without region fixed effect
+#' Watanabe-Akaike information criterion (WAIC) ...: 768.41
+#' Effective number of parameters .................: 3.23
+
+#' With region fixed effect
+#' Watanabe-Akaike information criterion (WAIC) ...: 749.98
+#' Effective number of parameters .................: 4.31
+
 fitted_val <- get_mod_results_test(fit, prev_inla, "iso3")
 
-fitted_val <- fitted_val %>%
+fsw_prev_out <- fitted_val %>%
   mutate(gen_prev = exp(log_gen_prev))
 
-p1 <- prev_inla %>%
-  filter(!is.na(iso3)) %>%
+#####
+
+formula <- log_kp_prev ~ log_gen_prev
+
+prev_inla <- crossing(log_gen_prev = log(seq(0.01, 0.4, 0.01))) %>%
+  bind_rows(prev_df %>%
+              filter(kp == "MSM") %>%
+              ungroup) %>%
+  mutate(idx = row_number())
+
+fit <- INLA::inla(formula,
+                  data = prev_inla,
+                  family = "gaussian", 
+                  control.compute = list(config = TRUE, waic = TRUE),
+                  control.predictor=list(compute=TRUE),
+                  verbose = TRUE)
+
+#' With region fixed effect
+#' Watanabe-Akaike information criterion (WAIC) ...: 849.31
+#' Effective number of parameters .................: 3.29
+
+fitted_val <- get_mod_results_test(fit, prev_inla, "iso3")
+
+msm_prev_out <- fitted_val %>%
+  mutate(gen_prev = exp(log_gen_prev))
+
+######
+
+prev_inla <- crossing(log_gen_prev = log(seq(0.01, 0.4, 0.01))) %>%
+  bind_rows(prev_df %>%
+              filter(kp == "PWID") %>%
+              ungroup) %>%
+  mutate(idx = row_number())
+
+fit <- INLA::inla(formula,
+                  data = prev_inla,
+                  family = "gaussian", 
+                  control.compute = list(config = TRUE, waic = TRUE),
+                  control.predictor=list(compute=TRUE),
+                  verbose = TRUE)
+
+#' With region fixed effect
+#' Watanabe-Akaike information criterion (WAIC) ...: 205.16
+#' Effective number of parameters .................: 4.08
+
+fitted_val <- get_mod_results_test(fit, prev_inla, "iso3")
+
+pwid_prev_out <- fitted_val %>%
+  mutate(gen_prev = exp(log_gen_prev))
+
+prev_out <- bind_rows(
+    msm_prev_out %>% mutate(kp = "MSM"),
+    pwid_prev_out %>% mutate(kp = "PWID")
+  )
+
+p1 <- prev_df %>%
+  filter(!is.na(iso3), kp %in% c("FSW")) %>%
   ggplot(aes(x=log_gen_prev, y=log_kp_prev)) +
-    geom_line(data = fitted_val, aes(color = region, x=log_gen_prev, y=median), size=1) +
-    geom_ribbon(data = fitted_val, aes(fill = region, x=log_gen_prev, ymin = lower, ymax=upper), alpha=0.3) + 
-    geom_point(aes(color=region)) +
-    geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
-    moz.utils::standard_theme() +
+  geom_point(aes(color=region), alpha = 0.3) +
+  geom_line(data = fsw_prev_out %>% mutate(kp = "FSW"), aes(x=log_gen_prev, y=median, color=region), size=1) +
+  geom_ribbon(data = fsw_prev_out %>% mutate(kp = "FSW"), aes(x=log_gen_prev, ymin = lower, ymax=upper, fill=region), alpha=0.3) + 
+  geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
+  moz.utils::standard_theme() +
   scale_color_manual(values = wesanderson::wes_palette("Zissou1")[c(1,4)]) +
   scale_fill_manual(values = wesanderson::wes_palette("Zissou1")[c(1,4)]) +
-    labs(y = "Log FSW HIV prevalence", x = "Log general population HIV prevalence") +
-    theme(panel.border = element_rect(fill=NA, color="black"))
-    # lims(x=c(0,1), y=c(0,1))
+  labs(y = "Log KP HIV prevalence", x = element_blank())+
+  theme(panel.border = element_rect(fill=NA, color="black"),
+        legend.position = "none") +
+  facet_wrap(~kp, ncol=1)
+# lims(x=c(0,1), y=c(0,1))
 
-p2 <- prev_inla %>%
-  filter(!is.na(iso3)) %>%
-  ggplot(aes(x=provincial_value, y=value)) +
-  geom_line(data = fitted_val, aes(color = region, x=gen_prev, y=exp(median)), size=1) +
-  geom_ribbon(data = fitted_val, aes(fill = region, x=gen_prev, ymin = exp(lower), ymax=exp(upper)), alpha=0.3) + 
-  geom_point(aes(color=region)) +
+p2 <- prev_df %>%
+  filter(!is.na(iso3), kp %in% c("FSW")) %>%
+  ggplot(aes(x=provincial_value, y=value, group=region)) +
+  geom_point(aes(color=region), alpha = 0.3) +
+  geom_line(data = fsw_prev_out %>% mutate(kp = "FSW"), aes(x=gen_prev, y=exp(median), color=region), size=1) +
+  geom_ribbon(data = fsw_prev_out %>% mutate(kp = "FSW"), aes(x=gen_prev, ymin = exp(lower), ymax=exp(upper), fill=region), alpha=0.3) + 
   geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
   scale_x_continuous(labels = scales::label_percent(), limits = c(0,1)) +
   scale_y_continuous(labels = scales::label_percent(), limits = c(0,1)) +
   moz.utils::standard_theme() +
   scale_color_manual(values = wesanderson::wes_palette("Zissou1")[c(1,4)]) +
   scale_fill_manual(values = wesanderson::wes_palette("Zissou1")[c(1,4)]) +
-  labs(y = "FSW HIV prevalence", x = "General population HIV prevalence") +
-  theme(panel.border = element_rect(fill=NA, color="black"))
+  labs(y = "KP HIV prevalence", x = element_blank())+
+  theme(panel.border = element_rect(fill=NA, color="black"),
+        legend.position = "none") +
+  facet_wrap(~kp, ncol=1)
 
-ggpubr::ggarrange(p1, p2, common.legend = TRUE, legend = "bottom")
-
-formula <- log_kp_prev ~ log_gen_prev + f(study_idx, model = "iid")
-
-fit_re <- INLA::inla(formula,
-                  data = prev_inla,
-                  family = "gaussian", 
-                  control.compute = list(config = TRUE),
-                  control.predictor=list(compute=TRUE),
-                  verbose = TRUE)
-
-fitted_val <- get_mod_results_test(fit_re, prev_inla)
-
-fitted_val <- fitted_val %>%
-  mutate(gen_prev = exp(log_gen_prev))
-
-p3 <- prev_inla %>%
-  filter(!is.na(iso3)) %>%
+p3 <- prev_df %>%
+  filter(!is.na(iso3), kp %in% c("MSM", "PWID")) %>%
   ggplot(aes(x=log_gen_prev, y=log_kp_prev)) +
-  geom_line(data = fitted_val, aes(x=log_gen_prev, y=median)) +
-  geom_ribbon(data = fitted_val, aes(x=log_gen_prev, ymin = lower, ymax=upper), alpha=0.3) + 
-  geom_point() +
-  labs(title = "PWID - log + re")
-# lims(x=c(0,1), y=c(0,1))
+    geom_point(alpha = 0.3) +
+    geom_line(data = prev_out %>% mutate(region = "SSA"), aes(color=region, x=log_gen_prev, y=median), size=1) +
+    geom_ribbon(data = prev_out %>% mutate(region = "SSA"), aes(x=log_gen_prev, ymin = lower, ymax=upper), alpha=0.3) + 
+    geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
+    moz.utils::standard_theme() +
+  scale_color_manual(values = "black") +
+  # scale_fill_manual(values = wesanderson::wes_palette("Zissou1")[c(1,4)]) +
+    labs(y = "Log KP HIV prevalence", x = "Log general population HIV prevalence") +
+    theme(panel.border = element_rect(fill=NA, color="black"),
+          legend.position = "none") +
+    facet_wrap(~kp, ncol=1)
+    # lims(x=c(0,1), y=c(0,1))
 
-p4 <- prev_inla %>%
-  filter(!is.na(iso3)) %>%
+p4 <- prev_df %>%
+  filter(!is.na(iso3), kp %in% c("MSM", "PWID")) %>%
   ggplot(aes(x=provincial_value, y=value)) +
-  geom_line(data = fitted_val, aes(x=gen_prev, y=exp(median))) +
-  geom_ribbon(data = fitted_val, aes(x=gen_prev, ymin = exp(lower), ymax=exp(upper)), alpha=0.3) + 
-  geom_point() +
-  lims(x=c(0,1), y=c(0,1)) +
-  labs(title = "PWID - natural + re")
+  geom_point(alpha = 0.3) +
+  geom_line(data = prev_out %>% mutate(region = "SSA"), aes(color=region, x=gen_prev, y=exp(median)), size=1) +
+  geom_ribbon(data = prev_out %>% mutate(region = "SSA"), aes(x=gen_prev, ymin = exp(lower), ymax=exp(upper)), alpha=0.3) + 
+  geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
+  scale_x_continuous(labels = scales::label_percent(), limits = c(0,1)) +
+  scale_y_continuous(labels = scales::label_percent(), limits = c(0,1)) +
+  moz.utils::standard_theme() +
+  scale_color_manual(values = "black") +
+  # scale_fill_manual(values = wesanderson::wes_palette("Zissou1")[c(1,4)]) +
+  labs(y = "KP HIV prevalence", x = "General population HIV prevalence") +
+  theme(panel.border = element_rect(fill=NA, color="black"),
+        legend.position = "none") +
+  facet_wrap(~kp, ncol=1)
 
-ggpubr::ggarrange(p1, p2, p3, p4, nrow=2, ncol=2)
+leg <- ggpubr::get_legend(data.frame(x=1, y=1, region = c("SSA", "WCA", "ESA")) %>%
+  ggplot(aes(x=x, y=y,color=region)) +
+    geom_line(size=1) +
+  scale_color_manual(values = c(wesanderson::wes_palette("Zissou1")[c(1)], "black", wesanderson::wes_palette("Zissou1")[c(4)]))+
+  moz.utils::standard_theme() +
+    labs(color = "Region")
+)
+
+prev_plot_a <- ggpubr::ggarrange(p1, p2, nrow=1)
+prev_plot_b <- ggpubr::ggarrange(p3, p4, nrow=1)
+ggpubr::ggarrange(prev_plot_a, prev_plot_b, ncol=1, heights = c(1.1,2), legend.grob = leg, legend = "bottom")
+
+mod <- lm(log_kp_prev ~ log_gen_prev, data = prev_inla %>% filter(!is.na(iso3)))
+summary(mod)
+
+mod.res = resid(mod) 
+# formula <- log_kp_prev ~ log_gen_prev + f(study_idx, model = "iid")
+# 
+# fit_re <- INLA::inla(formula,
+#                   data = prev_inla,
+#                   family = "gaussian", 
+#                   control.compute = list(config = TRUE),
+#                   control.predictor=list(compute=TRUE),
+#                   verbose = TRUE)
+# 
+# fitted_val <- get_mod_results_test(fit_re, prev_inla)
+# 
+# fitted_val <- fitted_val %>%
+#   mutate(gen_prev = exp(log_gen_prev))
+# 
+# p3 <- prev_inla %>%
+#   filter(!is.na(iso3)) %>%
+#   ggplot(aes(x=log_gen_prev, y=log_kp_prev)) +
+#   geom_line(data = fitted_val, aes(x=log_gen_prev, y=median)) +
+#   geom_ribbon(data = fitted_val, aes(x=log_gen_prev, ymin = lower, ymax=upper), alpha=0.3) + 
+#   geom_point() +
+#   labs(title = "PWID - log + re")
+# # lims(x=c(0,1), y=c(0,1))
+# 
+# p4 <- prev_inla %>%
+#   filter(!is.na(iso3)) %>%
+#   ggplot(aes(x=provincial_value, y=value)) +
+#   geom_line(data = fitted_val, aes(x=gen_prev, y=exp(median))) +
+#   geom_ribbon(data = fitted_val, aes(x=gen_prev, ymin = exp(lower), ymax=exp(upper)), alpha=0.3) + 
+#   geom_point() +
+#   lims(x=c(0,1), y=c(0,1)) +
+#   labs(title = "PWID - natural + re")
+# 
+# ggpubr::ggarrange(p1, p2, p3, p4, nrow=2, ncol=2)
 
 ############## PSE
 # 
-# iso3_vec <- c("BDI", "BEN", "BFA", "CIV", "CMR", "COD", "COG", "GMB", "KEN", "LSO", "MLI", "MOZ", "MWI", "NGA", "SLE", "SWZ", "TCD", "TGO", "ZWE", "AGO", "ETH", "GAB", "GHA", "GIN", "LBR", "NAM", "NER", "RWA", "SEN", "TZA", "UGA", "ZMB")
-# 
-# id <- lapply(iso3_vec, function(x){
-#   orderly::orderly_search(name = "aaa_assign_populations", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
-# })
-# 
-# names(id) <- iso3_vec
-# 
-# pse_dat <- lapply(file.path("archive/aaa_assign_populations/", id[!is.na(id)], "pse_prevalence.csv"),
-#                    read.csv)
-# names(pse_dat) <- names(id[!is.na(id)])
-
 iso3_vec <- c("BDI", "BWA", "BEN", "BFA", "CIV", "CMR", "COD", "COG", "GMB", "KEN", "LSO", "MLI", "MOZ", "MWI", "NGA", "SLE", "SWZ", "TCD", "TGO", "ZWE", "AGO", "ETH", "GAB", "GHA", "GIN", "LBR", "NAM", "NER", "RWA", "SEN", "TZA", "UGA", "ZMB")
+# 
+id <- lapply(iso3_vec, function(x){
+  orderly::orderly_search(name = "aaa_assign_populations", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
+})
 
-id_list <- c("20211022-112822-2cb0fa3c", "20211022-112828-d0164db8",
-"20211022-112833-df576642", "20211022-112837-e15d4616",
-"20211022-112841-d929b325", "20211022-112846-46edfd12",
-"20211022-112851-3f9298f6", "20211022-112857-27050c20",
-"20211022-112900-e6f92845", "20211022-112904-a27e46f0",
-"20211022-112908-34813536", "20211022-112912-bfbd8323",
-"20211022-112916-414e2aa5", "20211022-112920-6ccaeafc",
-"20211022-112927-0d3f5734", "20211022-112932-61e5f6a9",
-"20211022-112935-cdbf35a0", "20211022-112939-8478980b",
-"20211022-112943-13965da7", "20211022-112946-b6770ab1",
-"20211022-112950-afc454b9", "20211022-112954-81d1dcac",
-"20211022-112958-b819bede", "20211022-113002-755b0ade",
-"20211022-113006-7a42aadc", "20211022-113009-f90d5089",
-"20211022-113013-66175700", "20211022-113016-a13d592a",
-"20211022-113020-47be1b90", "20211022-113024-3f7be26a",
-"20211022-113028-afe1d2cc", "20211022-113032-a39bbaa6",
-"20211022-113036-8119112b")
+names(id) <- iso3_vec
 
-pse_dat <- lapply(file.path("draft/aaa_assign_populations/", id_list, "pse_prevalence.csv"),
-                  read.csv)
+pse_dat <- lapply(file.path("archive/aaa_assign_populations/", id[!is.na(id)], "pse_prevalence.csv"),
+                   read.csv)
+names(pse_dat) <- names(id[!is.na(id)])
 
-names(pse_dat) <- iso3_vec
+# iso3_vec <- c("BDI", "BWA", "BEN", "BFA", "CIV", "CMR", "COD", "COG", "GMB", "KEN", "LSO", "MLI", "MOZ", "MWI", "NGA", "SLE", "SWZ", "TCD", "TGO", "ZWE", "AGO", "ETH", "GAB", "GHA", "GIN", "LBR", "NAM", "NER", "RWA", "SEN", "TZA", "UGA", "ZMB")
+# 
+# id_list <- list.files("draft/aaa_assign_populations/")
+# 
+# pse_dat <- lapply(file.path("draft/aaa_assign_populations", id_list, "pse_prevalence.csv"),
+#                   read.csv)
+# 
+# names(pse_dat) <- iso3_vec
 
 pse_dat <- pse_dat %>%
   bind_rows(.id = "iso3") %>%
@@ -326,6 +424,9 @@ pse_out <- fsw_val %>%
   mutate(area_name = countrycode(iso3, "iso3c", "country.name")) %>%
   select(iso3, area_name, kp, lower:upper)
 
+pse_out <- read_csv("R/pse_out_surveillance_only.csv")
+# write.csv(pse_out, "R/pse_out_surveillance_only.csv")
+
 pse_out %>%
   # filter(source == "Surveillance only") %>%
   left_join(pse_dat %>%
@@ -364,7 +465,7 @@ pse_out %>%
   count()
   summarise(median = 100*median(median))
   
-  pse_out %>%
+reg_med <- pse_out %>%
     filter(source == "Surveillance only") %>%
     left_join(region) %>%
     left_join(pse_dat %>%
@@ -374,3 +475,33 @@ pse_out %>%
     mutate(has_data = ifelse(is.na(has_data), "No data", "Data")) %>%
     group_by(kp, region, has_data) %>%
     count()
+
+reg_med %>% bind_rows(
+  reg_med %>%
+    ungroup() %>%
+    group_by(kp, has_data) %>%
+    summarise(n = sum(n)) %>%
+    mutate(region = "SSA") 
+) %>%
+  mutate(region = factor(region, levels = c("SSA", "ESA", "WCA"))) %>%
+  arrange(kp, region) %>%
+  group_by(kp, region) %>%
+  summarise(ratio = n[has_data == "Data"]/(n[has_data == "Data"] + n[has_data == "No data"]))
+
+
+pse_out %>%
+  filter(source == "Surveillance only") %>%
+  left_join(region) %>%
+  group_by(kp, region) %>%
+  summarise(tibble(x = 100*quantile(median, c(0.25, 0.5, 0.75)), q = c(0.25, 0.5, 0.75))) %>%
+  bind_rows(
+    pse_out %>%
+      filter(source == "Surveillance only") %>%
+      left_join(region) %>%
+      group_by(kp) %>%
+      summarise(tibble(x = 100*quantile(median, c(0.25, 0.5, 0.75)), q = c(0.25, 0.5, 0.75))) %>%
+      mutate(region = "SSA")
+  ) %>%
+  mutate(region = factor(region, levels = c("SSA", "ESA", "WCA"))) %>%
+  arrange(kp, region) %>%
+  View()

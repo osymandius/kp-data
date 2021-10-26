@@ -25,13 +25,15 @@ prev_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents
 prev <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = prev_path)
 prev <- read_csv(prev) %>%
   rename(value = prev) %>%
-  mutate(iso3 = countrycode(country.name, "country.name", "iso3c"))
+  mutate(iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
+  distinct(kp, area_name, year, value, .keep_all = TRUE)
 
 art_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations", "art.csv")
 art <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = art_path)
 art <- read_csv(art) %>%
   rename(value = art_coverage) %>%
-  mutate(iso3 = countrycode(country.name, "country.name", "iso3c"))
+  mutate(iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
+  distinct(kp, area_name, year, value, .keep_all = TRUE)
 
 dat <- list("prev" = prev, "art" = art)
 

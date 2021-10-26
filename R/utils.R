@@ -1,11 +1,11 @@
 library(tidyverse)
 library(orderly)
 
-iso3_vec <- c("BDI", "BEN", "BFA", "CIV", "CMR", "COD", "COG", "GMB", "KEN", "LSO", "MLI", "MOZ", "MWI", "NGA", "SLE", "SWZ", "TCD", "TGO", "ZWE", "AGO", "ETH", "GAB", "GHA", "GIN", "LBR", "NAM", "NER", "RWA", "SEN", "TZA", "UGA", "ZMB")
+iso3_vec <- c("BDI", "BWA", "BEN", "BFA", "CIV", "CMR", "COD", "COG", "GMB", "KEN", "LSO", "MLI", "MOZ", "MWI", "NGA", "SLE", "SWZ", "TCD", "TGO", "ZWE", "AGO", "ETH", "GAB", "GHA", "GIN", "LBR", "NAM", "NER", "RWA", "SEN", "TZA", "UGA", "ZMB")
 
-id <- orderly_batch("aaa_assign_province", parameters = data.frame(iso3 = iso3_vec))
+id <- orderly_batch("aaa_assign_populations", parameters = data.frame(iso3 = iso3_vec))
 
-lapply(id, orderly_commit)
+lapply(id_list[c(8:33)] %>% compact(), orderly_commit)
 
 df <- lapply(file.path("draft/aaa_assign_province", id, "prev_assigned_province.csv"), read.csv) %>%
   lapply(function(x) {
@@ -28,21 +28,22 @@ df %>%
   filter(is.na(x)) %>%
   select(-x) %>% View()
 
-lapply(iso3_vec, function(x){
-  orderly::orderly_pull_archive("aaa_outputs_adr_pull", id = paste0('latest(parameter:iso3 == "', x, '")'), remote = "naomi_2021")
+lapply("GNB", function(x){
+  orderly::orderly_pull_archive("aaa_scale_pop", id = paste0('latest(parameter:iso3 == "', x, '")'), remote = "fertility")
 })
 
 areas <- read_sf("~/Documents/GitHub/fertility_orderly/archive/tza_data_areas/20201130-150758-409ee8ac/tza_areas.geojson")
 
 possibly_pull <- purrr::possibly(.f = orderly_pull_archive, otherwise = NA)
-map(iso3_vec, ~possibly_pull("aaa_outputs_adr_pull", id = paste0('latest(parameter:iso3 == "', .x, '")'), remote = "naomi_2021"))
+map("BWA", ~possibly_pull("aaa_scale_pop", id = paste0('latest(parameter:iso3 == "', .x, '")'), remote = "fertility"))
 map(iso3_vec, ~possibly_pull("aaa_extrapolate_naomi", id = paste0('latest(parameter:iso3 == "', .x, '")'), remote = "fertility"))
 
 names(suc) <- iso3_vec
 
 possibly_run <- purrr::possibly(.f = orderly_run, otherwise = NULL)
-id_list <- map(iso3_vec, ~possibly_run("aaa_extrapolate_naomi", parameters = data.frame(iso3 = .x)))
 id_list <- map(iso3_vec, ~possibly_run("aaa_assign_province", parameters = data.frame(iso3 = .x)))
+id_list <- map(iso3_vec, ~possibly_run("aaa_extrapolate_naomi", parameters = data.frame(iso3 = .x)))
+id_list <- map("BWA", ~possibly_run("aaa_assign_province", parameters = data.frame(iso3 = .x)))
 id_list <- map(c("CMR", "COD", 
                  "LSO", "MWI", 
                  "SLE", "TGO", 
@@ -51,20 +52,19 @@ id_list <- map(c("CMR", "COD",
 
 names(id_list) <- iso3_vec
 
-orderly_run("aaa_extrapolate_naomi", parameters = data.frame(iso3 = "KEN"))
+orderly_run("aaa_assign_populations", parameters = data.frame(iso3 = "BWA"), tags = "surveillance_only")
 
 orderly_develop_start("aaa_outputs_adr_pull", parameters = data.frame(iso3 = "SEN"))
 setwd("src/aaa_extrapolate_naomi/")
 
 lapply(id_list %>%
-  compact() %>%
-  unlist,
+  compact(),
   orderly_commit)
 
-lapply(id_list %>%
+lapply(id %>%
          compact() %>%
          unlist,
-       function(x) {orderly_push_archive("aaa_assign_province", id=x)})
+       function(x) {orderly_push_archive("aaa_download_worldpop", id=x)})
 
 dat %>%
   bind_rows() %>%
@@ -72,7 +72,7 @@ dat %>%
   write_csv("~/Dropbox/Work Streams/2021/Key populations/Guidance/anonymised_prev_matched.csv")
 
 id <- lapply(iso3_vec, function(x){
-  orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
+  orderly::orderly_search(name = "aaa_download_worldpop", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
 })
 
 names(id) <- iso3_vec

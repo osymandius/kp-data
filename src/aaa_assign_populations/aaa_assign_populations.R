@@ -76,6 +76,7 @@ population <- population %>%
 #   bind_rows(areas)
 
 pse <- pse %>%
+  distinct(kp, area_name, year, pse, .keep_all=TRUE) %>%
   mutate(row_id = row_number(),
          iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
   filter(iso3 == iso3_c)

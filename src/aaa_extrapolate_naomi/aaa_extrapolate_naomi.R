@@ -17,7 +17,7 @@ filtered_indicators <- indicators %>%
   filter(sex != "both",
          area_level <= admin1_lvl,
          indicator %in% c("prevalence", "art_coverage", "population"),
-         age_group_label %in% c("15+", "15-49", "15-24", "20-24", "25-49"),
+         age_group_label %in% c("15+", "15-49", "15-24", "20-24", "25-29", "25-49"),
          calendar_quarter == time_point)
 
 spectrum_ratio <- spectrum %>%
@@ -43,6 +43,7 @@ df <- spectrum_ratio %>%
   select(area_level:area_name,
          sex:indicator,
          age_group_label,
+         age_group,
          lower, mean, upper)
 
 out <- lapply(dat, function(x) {
@@ -52,8 +53,10 @@ out <- lapply(dat, function(x) {
       mutate(sex = case_when(
         kp %in% c("FSW", "SW", "TGW", "TG") ~ "female",
         kp %in% c("MSM", "PWID", "TGM") ~ "male"
-      )) %>%
-      left_join(df %>% filter(age_group_label == "15-49")) %>%
+        ),
+        age_group = ifelse(is.na(age_group) | !age_group %in% unique(filtered_indicators$age_group), "Y015_049", as.character(age_group))
+      ) %>%
+      left_join(df) %>%
       mutate(ratio = value/mean) %>%
       select(year, kp, value, mean, ratio) %>%
       rename(provincial_value = mean)

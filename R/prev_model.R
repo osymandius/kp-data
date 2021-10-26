@@ -256,39 +256,138 @@ mod <- lm(log_kp_prev ~ log_gen_prev, data = prev_inla %>% filter(!is.na(iso3)))
 summary(mod)
 
 mod.res = resid(mod) 
-# formula <- log_kp_prev ~ log_gen_prev + f(study_idx, model = "iid")
-# 
-# fit_re <- INLA::inla(formula,
-#                   data = prev_inla,
-#                   family = "gaussian", 
-#                   control.compute = list(config = TRUE),
-#                   control.predictor=list(compute=TRUE),
-#                   verbose = TRUE)
-# 
-# fitted_val <- get_mod_results_test(fit_re, prev_inla)
-# 
-# fitted_val <- fitted_val %>%
-#   mutate(gen_prev = exp(log_gen_prev))
-# 
-# p3 <- prev_inla %>%
-#   filter(!is.na(iso3)) %>%
-#   ggplot(aes(x=log_gen_prev, y=log_kp_prev)) +
-#   geom_line(data = fitted_val, aes(x=log_gen_prev, y=median)) +
-#   geom_ribbon(data = fitted_val, aes(x=log_gen_prev, ymin = lower, ymax=upper), alpha=0.3) + 
-#   geom_point() +
-#   labs(title = "PWID - log + re")
-# # lims(x=c(0,1), y=c(0,1))
-# 
-# p4 <- prev_inla %>%
-#   filter(!is.na(iso3)) %>%
-#   ggplot(aes(x=provincial_value, y=value)) +
-#   geom_line(data = fitted_val, aes(x=gen_prev, y=exp(median))) +
-#   geom_ribbon(data = fitted_val, aes(x=gen_prev, ymin = exp(lower), ymax=exp(upper)), alpha=0.3) + 
-#   geom_point() +
-#   lims(x=c(0,1), y=c(0,1)) +
-#   labs(title = "PWID - natural + re")
-# 
-# ggpubr::ggarrange(p1, p2, p3, p4, nrow=2, ncol=2)
+
+############## ART Coverage ############
+
+art_dat <- lapply(file.path("archive/aaa_extrapolate_naomi", id[!is.na(id)], "anonymised_art.csv"),
+                   read.csv)
+
+names(art_dat) <- names(id[!is.na(id)])
+
+art_df <- art_dat %>%
+  bind_rows(.id = "iso3") %>%
+  left_join(region %>% select(region, iso3)) %>%
+  filter(value != 0) %>%
+  select(iso3, region, year, kp, value, provincial_value) %>%
+  group_by(iso3, year, kp) %>%
+  mutate(study_idx = cur_group_id()) %>%
+  ungroup %>%
+  mutate(
+    log_kp_art = log(value),
+    log_gen_art = log(provincial_value),
+    log_gen_art2 = log_gen_art,
+    id.region = group_indices(., region)
+  )
+
+formula <- log_kp_art ~ log_gen_art
+
+art_inla <- crossing(log_gen_art = log(seq(0.2, 1, 0.01)),
+                      region = c("WCA", "ESA")) %>%
+  bind_rows(art_df %>%
+              filter(kp == "FSW") %>%
+              ungroup) %>%
+  mutate(idx = row_number())
+
+fit <- INLA::inla(formula,
+                  data = art_inla,
+                  family = "gaussian", 
+                  control.compute = list(config = TRUE, waic = TRUE),
+                  control.predictor=list(compute=TRUE),
+                  verbose = TRUE)
+
+fitted_val <- get_mod_results_test(fit, art_inla, "iso3")
+
+fsw_art_out <- fitted_val %>%
+  mutate(gen_art = exp(log_gen_art))
+
+#####
+
+art_inla <- crossing(log_gen_art = log(seq(0.2, 1, 0.01))) %>%
+  bind_rows(art_df %>%
+              filter(kp == "MSM") %>%
+              ungroup) %>%
+  mutate(idx = row_number())
+
+fit <- INLA::inla(formula,
+                  data = art_inla,
+                  family = "gaussian", 
+                  control.compute = list(config = TRUE, waic = TRUE),
+                  control.predictor=list(compute=TRUE),
+                  verbose = TRUE)
+
+#' With region fixed effect
+#' Watanabe-Akaike information criterion (WAIC) ...: 849.31
+#' Effective number of parameters .................: 3.29
+
+fitted_val <- get_mod_results_test(fit, art_inla, "iso3")
+
+msm_art_out <- fitted_val %>%
+  mutate(gen_art = exp(log_gen_art))
+
+######
+
+art_inla <- crossing(log_gen_art = log(seq(0.2, 1, 0.01))) %>%
+  bind_rows(art_df %>%
+              filter(kp == "PWID") %>%
+              ungroup) %>%
+  mutate(idx = row_number())
+
+fit <- INLA::inla(formula,
+                  data = art_inla,
+                  family = "gaussian", 
+                  control.compute = list(config = TRUE, waic = TRUE),
+                  control.predictor=list(compute=TRUE),
+                  verbose = TRUE)
+
+#' With region fixed effect
+#' Watanabe-Akaike information criterion (WAIC) ...: 205.16
+#' Effective number of parameters .................: 4.08
+
+fitted_val <- get_mod_results_test(fit, art_inla, "iso3")
+
+pwid_art_out <- fitted_val %>%
+  mutate(gen_art = exp(log_gen_art))
+
+art_out <- bind_rows(
+  fsw_art_out %>% mutate(kp = "FSW"),
+  msm_art_out %>% mutate(kp = "MSM"),
+  pwid_art_out %>% mutate(kp = "PWID")
+)
+
+p5 <- art_df %>%
+  filter(!is.na(iso3), kp %in% c("FSW", "MSM", "PWID")) %>%
+  ggplot(aes(x=log_gen_art, y=log_kp_art)) +
+  geom_point(alpha = 0.3) +
+  geom_line(data = art_out %>% mutate(region = "SSA"), aes(color=region, x=log_gen_art, y=median), size=1) +
+  geom_ribbon(data = art_out %>% mutate(region = "SSA"), aes(x=log_gen_art, ymin = lower, ymax=upper), alpha=0.3) + 
+  geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
+  moz.utils::standard_theme() +
+  scale_color_manual(values = "black") +
+  # scale_fill_manual(values = wesanderson::wes_palette("Zissou1")[c(1,4)]) +
+  labs(y = "Log KP ART coverage", x = "Log general population ART coverage") +
+  theme(panel.border = element_rect(fill=NA, color="black"),
+        legend.position = "none") +
+  facet_wrap(~kp, ncol=1)
+# lims(x=c(0,1), y=c(0,1))
+
+p6 <- art_df %>%
+  filter(!is.na(iso3), kp %in% c("FSW", "MSM", "PWID")) %>%
+  ggplot(aes(x=provincial_value, y=value)) +
+  geom_point(alpha = 0.3) +
+  geom_line(data = art_out %>% mutate(region = "SSA"), aes(color=region, x=gen_art, y=exp(median)), size=1) +
+  geom_ribbon(data = art_out %>% mutate(region = "SSA"), aes(x=gen_art, ymin = exp(lower), ymax=exp(upper)), alpha=0.3) + 
+  geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
+  scale_x_continuous(labels = scales::label_percent(), limits = c(0,1)) +
+  scale_y_continuous(labels = scales::label_percent(), limits = c(0,1)) +
+  moz.utils::standard_theme() +
+  scale_color_manual(values = "black") +
+  # scale_fill_manual(values = wesanderson::wes_palette("Zissou1")[c(1,4)]) +
+  labs(y = "KP ART coverage", x = "General population ART coverage") +
+  theme(panel.border = element_rect(fill=NA, color="black"),
+        legend.position = "none") +
+  facet_wrap(~kp, ncol=1)
+
+ggpubr::ggarrange(p5, p6, ncol=2)
 
 ############## PSE
 # 

@@ -42,7 +42,20 @@ names(suc) <- iso3_vec
 
 possibly_run <- purrr::possibly(.f = orderly_run, otherwise = NULL)
 id_list <- map(iso3_vec, ~possibly_run("aaa_assign_province", parameters = data.frame(iso3 = .x)))
+
+lapply(id_list %>%
+         compact(),
+       orderly_commit)
+
+
 id_list <- map(iso3_vec, ~possibly_run("aaa_extrapolate_naomi", parameters = data.frame(iso3 = .x)))
+
+lapply(id_list %>%
+         compact(),
+       orderly_commit)
+
+lapply(id_list %>% compact(), function(x) {orderly_push_archive("aaa_extrapolate_naomi", id=x)})
+
 id_list <- map("BWA", ~possibly_run("aaa_assign_province", parameters = data.frame(iso3 = .x)))
 id_list <- map(c("CMR", "COD", 
                  "LSO", "MWI", 
@@ -52,10 +65,10 @@ id_list <- map(c("CMR", "COD",
 
 names(id_list) <- iso3_vec
 
-orderly_run("aaa_assign_populations", parameters = data.frame(iso3 = "BWA"), tags = "surveillance_only")
+orderly_run("aaa_assign_province", parameters = data.frame(iso3 = "ZWE"))
 
-orderly_develop_start("aaa_outputs_adr_pull", parameters = data.frame(iso3 = "SEN"))
-setwd("src/aaa_extrapolate_naomi/")
+orderly_develop_start("aaa_assign_province", parameters = data.frame(iso3 = "SEN"))
+setwd("src/aaa_assign_province/")
 
 lapply(id_list %>%
   compact(),

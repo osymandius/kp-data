@@ -3,21 +3,17 @@ library(orderly)
 
 iso3_vec <- c("BDI", "BWA", "BEN", "BFA", "CIV", "CMR", "COD", "COG", "GMB", "KEN", "LSO", "MLI", "MOZ", "MWI", "NGA", "SLE", "SWZ", "TCD", "TGO", "ZWE", "AGO", "ETH", "GAB", "GHA", "GIN", "LBR", "NAM", "NER", "RWA", "SEN", "TZA", "UGA", "ZMB")
 
-id <- orderly_batch("aaa_assign_province", parameters = data.frame(iso3 = iso3_vec))
+id <- orderly_batch("aaa_assign_populations", parameters = data.frame(iso3 = iso3_vec))
+lapply(id, orderly_commit)
+
+possibly_run <- purrr::possibly(.f = orderly_run, otherwise = NULL)
+id <- map(iso3_vec, ~possibly_run("aaa_extrapolate_naomi", parameters = data.frame(iso3 = .x)))
+lapply(id %>% compact(), orderly_commit)
 
 lapply(id_list[c(8:33)] %>% compact(), orderly_commit)
 
-df <- lapply(file.path("draft/aaa_assign_province", id, "prev_assigned_province.csv"), read.csv) %>%
-  lapply(function(x) {
-    if(nrow(x))
-      x
-    else
-      NULL
-  }) %>%
-  purrr::compact()
-
-orderly_develop_start("aaa_assign_province", parameters = data.frame(iso3 = "SLE"))
-setwd("src/aaa_assign_province")
+orderly_develop_start("aaa_extrapolate_naomi", parameters = data.frame(iso3 = "SLE"))
+setwd("src/aaa_extrapolate_naomi")
 
 df %>%
   bind_rows() %>%
@@ -35,13 +31,13 @@ lapply("GNB", function(x){
 areas <- read_sf("~/Documents/GitHub/fertility_orderly/archive/tza_data_areas/20201130-150758-409ee8ac/tza_areas.geojson")
 
 possibly_pull <- purrr::possibly(.f = orderly_pull_archive, otherwise = NA)
-map("BWA", ~possibly_pull("aaa_scale_pop", id = paste0('latest(parameter:iso3 == "', .x, '")'), remote = "fertility"))
+map("CMR", ~possibly_pull("aaa_outputs_adr_pull", id = paste0('latest(parameter:iso3 == "', .x, '")')))
 map(iso3_vec, ~possibly_pull("aaa_extrapolate_naomi", id = paste0('latest(parameter:iso3 == "', .x, '")'), remote = "fertility"))
 
 names(suc) <- iso3_vec
 
 possibly_run <- purrr::possibly(.f = orderly_run, otherwise = NULL)
-id_list <- map(iso3_vec, ~possibly_run("aaa_assign_province", parameters = data.frame(iso3 = .x)))
+id_list <- map(iso3_vec, ~possibly_run("aaa_extrapolate_naomi", parameters = data.frame(iso3 = .x)))
 
 lapply(id_list %>%
          compact(),
@@ -65,7 +61,7 @@ id_list <- map(c("CMR", "COD",
 
 names(id_list) <- iso3_vec
 
-orderly_run("aaa_assign_province", parameters = data.frame(iso3 = "ZWE"))
+orderly_run("aaa_extrapolate_naomi", parameters = data.frame(iso3 = "ZWE"))
 
 orderly_develop_start("aaa_assign_province", parameters = data.frame(iso3 = "SEN"))
 setwd("src/aaa_assign_province/")
@@ -84,8 +80,8 @@ dat %>%
   select(-X) %>%
   write_csv("~/Dropbox/Work Streams/2021/Key populations/Guidance/anonymised_prev_matched.csv")
 
-id <- lapply(iso3_vec, function(x){
-  orderly::orderly_search(name = "aaa_download_worldpop", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
+id <- lapply("MOZ", function(x){
+  orderly::orderly_search(name = "aaa_assign_populations", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
 })
 
 names(id) <- iso3_vec
@@ -135,7 +131,7 @@ int <- pse_dat %>%
 max(int$idx)
 max(int$n)
 
-prev_dat <- lapply(file.path("archive/aaa_extrapolate_naomi", id, "anonymised_prev.csv"),
+prev_dat <- lapply(file.path("archive/aaa_extrapolate_naomi", id_list %>% compact(), "anonymised_prev.csv"),
        read.csv)
 
 prev_dat %>%
@@ -159,7 +155,7 @@ dat <- lapply(file.path("archive/aaa_extrapolate_naomi", id, "extrapolated_naomi
               read.csv) %>%
   bind_rows()
 
-lapply(iso3_vec, function(x){
+lapply("MOZ", function(x){
   orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
 })
 
@@ -167,15 +163,18 @@ lapply("MOZ", function(x){
   orderly::orderly_search(name = "aaa_assign_province", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
 })
 
-lapply("MOZ", function(x){
+id <- lapply(iso3_vec, function(x){
   orderly::orderly_search(name = "aaa_assign_populations", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
 })
 
-orderly::orderly_run("aaa_assign_populations", data.frame(iso3 = "TCD"))
+pse_dat <- lapply(file.path("archive/aaa_assign_populations", id, "pse_prevalence.csv"),
+                   read.csv)
 
-id_list %>%
-  keep(~is.null(.x))
-
-orderly_develop_start("aaa_assign_province", parameters = data.frame(iso3 = "BDI"))
-setwd("src/aaa_assign_province")
-
+pse_dat %>%
+  bind_rows() %>%
+  mutate(jitter_year = year + sample(-50:50, n(), replace = TRUE)/100,
+         population_proportion = pse/population,
+         color = "SSA") %>%
+  select(kp, year, jitter_year, population_proportion, color) %>%
+  filter(!is.na(population_proportion), population_proportion != 0) %>%
+  write_csv("~/Dropbox/Work Streams/2021/Key populations/Guidance/anonymised_pse.csv")

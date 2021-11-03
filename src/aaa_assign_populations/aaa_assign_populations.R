@@ -52,6 +52,30 @@ pse_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/
 pse <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = pse_path)
 pse <- read_csv(pse)
 
+gf_pse_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations", "pse_gf_flib.csv")
+gf_pse <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = gf_pse_path)
+gf_pse <- read_csv(gf_pse)
+
+pse <- pse %>%
+  mutate(iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
+  filter(iso3 == iso3_c) %>%
+  rename(notes = method)
+
+gf_pse <- gf_pse %>%
+  mutate(iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
+  filter(iso3 == iso3_c)
+
+# gf_pse %>%
+#   bind_rows(pse) %>%
+#   group_by(kp, area_name, year, pse) %>%
+#   filter(n() > 1) %>%
+#   group_by(ref, .add=TRUE) %>%
+#   mutate(n = row_number()) %>%
+#   bind_rows(data.frame(year = 2001, ref = NA, area_name = "Cotonou", kp = "FSW", pse = 1750)) %>%
+#   arrange(pse) %>%
+#   
+#   View()
+
 population <- population %>%
   bind_rows(city_population) %>%
   left_join(get_age_groups() %>% select(age_group, age_group_sort_order)) %>%
@@ -76,7 +100,8 @@ population <- population %>%
 #   bind_rows(areas)
 
 pse <- pse %>%
-  distinct(kp, area_name, year, pse, .keep_all=TRUE) %>%
+  bind_rows(gf_pse) %>%
+  distinct(kp, area_name, year, pse, pse_lower, pse_upper, .keep_all=TRUE) %>%
   mutate(row_id = row_number(),
          iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
   filter(iso3 == iso3_c)
@@ -159,8 +184,11 @@ if(nrow(pse)) {
     filter(iso3 == iso3_c) %>%
     left_join(row_populations) %>%
     # filter(!is.na(population)) %>%
-    mutate(population_proportion = pse/population) %>%
-    select(country.name, surveillance_type, indicator, method, kp, sex, age_group, area_name, province, year, pse_lower, pse, pse_upper, prop_lower, population_proportion, prop_upper, sample, ref) %>%
+    # rename(notes = method) %>%
+    mutate(population_proportion = NA,
+           method = NA,
+           link = NA) %>%
+    select(country.name, surveillance_type, indicator, method, kp, sex, age_group, area_name, province, year, pse_lower, pse, pse_upper, population, prop_lower, population_proportion, prop_upper, sample, notes, ref, link) %>%
     arrange(country.name, kp, year)
   
   
@@ -174,7 +202,7 @@ if(nrow(pse)) {
 }
 
 
-write_csv(pse, "pse_prevalence.csv")
+write_csv(pse, "pse_prevalence.csv", na = "")
 write_csv(bad_match_error, "bad_match_error.csv")
 
 # pop_search <- best_matches %>%

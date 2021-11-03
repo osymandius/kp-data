@@ -6,6 +6,9 @@ region <- read.csv("~/Documents/GitHub/fertility_orderly/global/region.csv") %>%
 
 iso3_vec <- c("BDI", "BWA", "BEN", "BFA", "CIV", "CMR", "COD", "COG", "GMB", "KEN", "LSO", "MLI", "MOZ", "MWI", "NGA", "SLE", "SWZ", "TCD", "TGO", "ZWE", "AGO", "ETH", "GAB", "GHA", "GIN", "LBR", "NAM", "NER", "RWA", "SEN", "TZA", "UGA", "ZMB")
 
+pse_out <- read_csv("R/Model/pse_out_surveillance_only.csv")
+pse_dat <- read_csv("R/Model/pse_surveillance_data.csv")
+
 ###### Subnational/national PSE from data ########
 
 pse_raw <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/pse_surveillance_only.csv", na="")
@@ -131,30 +134,75 @@ pse_dat %>%
 
 ######## PSE results  ########
 
+pse_out <- read_csv("R/Model/pse_out_surveillance_only.csv")
+pse_dat <- read_csv("R/Model/pse_surveillance_data.csv")
+
+# pse_dat <- pse_dat %>%
+#   left_join(region) %>%
+#   bind_rows(
+#     pse_dat %>%
+#       left_join(region) %>%
+#       mutate(
+#         iso3 = case_when(
+#           str_detect(four_region, "Central") ~ "CA",
+#           str_detect(four_region, "Eastern") ~ "EA",
+#           str_detect(four_region, "Western") ~ "WA",
+#           str_detect(four_region, "Southern") ~ "SA"
+#         ),
+#         four_region = paste0(str_sub(four_region, 0, 4), "aa")
+#       )
+#   ) %>% arrange(four_region)
+
 pse_out <- pse_out %>%
   left_join(pse_dat %>%
               select(iso3, kp) %>%
               distinct() %>%
               mutate(has_data = 1)) %>%
-  mutate(has_data = ifelse(is.na(has_data), "No data", "Data"))
+  mutate(has_data = ifelse(is.na(has_data), 0, 1),
+         has_data = factor(has_data, labels = c("No data", "Data")))
+
+# regional_pse <- pse_out %>%
+#   left_join(region) %>%
+#   group_by(four_region, kp) %>%
+#   summarise(name = c("lower", "median", "upper"), value = quantile(median, c(0.25, 0.5, 0.75))) %>%
+#   pivot_wider(names_from = name, values_from = value) %>%
+#   mutate(
+#     iso3 = case_when(
+#       str_detect(four_region, "Central") ~ "CA",
+#       str_detect(four_region, "Eastern") ~ "EA",
+#       str_detect(four_region, "Western") ~ "WA",
+#       str_detect(four_region, "Southern") ~ "SA"
+#     ),
+#     four_region = paste0(str_sub(four_region, 0, 4), "aa"),
+#     has_data = "Data"
+# 
+#   ) %>% arrange(kp)
+
+iso3_sort <- pse_out %>%
+  distinct(iso3) %>%
+  left_join(region) %>%
+  arrange(four_region) %>%
+  mutate(iso3_idx = as.numeric(fct_inorder(iso3)))
 
 pse_out <- pse_out %>%
-  mutate(iso3_idx = as.numeric(factor(iso3)),
-         xmin = iso3_idx - 0.48,
-         xmax = iso3_idx + 0.48)
+  left_join(iso3_sort) %>%
+  mutate(xmin = iso3_idx - 0.48,
+         xmax = iso3_idx + 0.48,
+         background_col = ifelse(is.na(area_name), 1, 0))
 
+foo <- pse_dat %>%
+  left_join(pse_out %>% select(iso3, iso3_idx) %>% distinct()) %>%
+  left_join(region) %>%
+  mutate(is_national = factor(is_national, labels = c("No", "Yes")))
 
 pse_dat %>%
   filter(kp != "TG") %>%
-  mutate(area_name = countrycode(iso3, "iso3c", "country.name")) %>%
-  # filter(population_proportion < 0.1) %>%
-  ggplot(aes(x=factor(iso3))) +
+  ggplot(aes(x=iso3)) +
     geom_jitter(aes(y=population_proportion), alpha=0.3) +
-    # ungeviz::geom_hpline(data=pse_out, aes(y=median, color=factor(has_data)), size=1) +
-    geom_segment(data=pse_out, aes(x = xmin, xend = xmax, y = median, yend = median, color=has_data), size=1) +
-    geom_rect(data=pse_out, aes(xmin = xmin, xmax = xmax, ymin = lower, ymax = upper, fill=has_data), alpha=0.3, show.legend = FALSE) +
+    geom_segment(data=pse_out, aes(x = xmin, xend = xmax, y = median, yend = median), size=1) +
+    geom_rect(data=pse_out, aes(xmin = xmin, xmax = xmax, ymin = lower, ymax = upper), alpha=0.3, show.legend = FALSE) +
     geom_hline(data = data.frame(yintercept = 0.01, kp = "MSM", iso3 = c("AGO", "ZWE")), linetype = 3, aes(yintercept = yintercept), color="red") +
-    facet_wrap(~kp, nrow=3, scales="free") +
+    facet_wrap(~kp, nrow=3, scales = "free") +
     scale_color_manual(values = wesanderson::wes_palette("Zissou1")[c(1,4)]) +
     scale_fill_manual(values = wesanderson::wes_palette("Zissou1")[c(1,4)]) +
     # scale_y_continuous(labels = scales::label_percent()) +
@@ -163,5 +211,93 @@ pse_dat %>%
     moz.utils::standard_theme() +
     theme(axis.text.x = element_text(size=10))
 
+pse_out %>%
+  ggplot() +
+    geom_segment(aes(x = xmin, xend = xmax, y = median, yend = median, color=has_data), size=1) +
+    geom_rect(aes(xmin = xmin, xmax = xmax, ymin = lower, ymax = upper, fill=has_data), alpha=0.3, show.legend = FALSE) +
+    geom_jitter(data = foo %>% filter(kp != "TG"), aes(x=iso3_idx, y=population_proportion, shape=is_national, size = is_national, alpha=is_national), width = 0.4) +
+    geom_hline(data = data.frame(yintercept = 0.01, kp = "MSM", iso3 = c("AGO", "ZWE")), linetype = 3, aes(yintercept = yintercept), color="red") +
+    scale_color_manual(values = c(wesanderson::wes_palette("Zissou1")[c(4,1)])) +
+    scale_fill_manual(values = wesanderson::wes_palette("Zissou1")[c(4,1)])  +
+    scale_alpha_manual(values = c(0.3, 0.5), guide = "none") +
+    scale_size_manual(values = c(1.5,2), guide = "none") +
+    scale_x_continuous(breaks = 1:38, labels = iso3_sort$iso3) +
+    # scale_x_discrete(drop=FALSE, labels = pse_out$iso3) +
+    # facet_wrap(~kp, nrow=3, scales="free") +
+    facet_grid(kp ~ four_region, scales="free", space = "free") +
+    scale_y_log10(breaks = scales::log_breaks(), labels = scales::label_percent(accuracy = 0.001)) + 
+    labs(x=element_blank(), y="Population proportion", color = "Informed by:", shape = "Data reported\nas national") +
+    moz.utils::standard_theme() +
+    theme(axis.text.x = element_text(size=10),
+          panel.background = element_rect(fill=NA, color="black"))
+
 ############# Prevalence ############
 
+###### Subnational/national prev from data ########
+
+prev_raw <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/prev.csv", na="NA")
+prev_res <- read_csv("R/Model/prev_out.csv")
+prev_df <- read_csv("R/Model/prev_surveillance_data.csv")
+
+prev_raw <- prev_raw %>%
+  mutate(
+    iso3 = countrycode(country.name, "country.name", "iso3c"),
+    is_national = ifelse(country.name == area_name, 1, 0),
+    has_age = ifelse(!is.na(age_group), 1, 0)) %>%
+  filter(iso3 %in% c(iso3_vec, "ZAF"), !is.na(area_name)) %>%
+  distinct(kp, area_name, year, prev, .keep_all=TRUE) %>%
+  left_join(region)
+
+prev_raw %>% filter(is.na(is_national))
+
+prev_raw %>%
+  filter(str_detect(kp, "TG")) %>%
+  distinct(region, iso3) %>%
+  group_by(region) %>%
+  mutate(n=n())
+
+prev_raw %>%
+  group_by(kp,region) %>%
+  count(is_national) %>%
+  mutate(prop = 1-sum(n[is_national])/sum(n))
+
+prev_raw %>%
+  filter(kp == "TG") %>%
+  group_by(kp, iso3) %>%
+  count()
+
+###
+
+convert_logis_labels <- function(x) {
+  paste0(round(plogis(x)*100), "%")
+}
+
+p1 <- prev_res %>%
+  ggplot(aes(x=logit_gen_prev, y=logit_fit)) +
+  geom_line(size=1) +
+  geom_ribbon(aes(ymin = logit_lower, ymax=logit_upper), alpha=0.3) +
+  geom_point(data = prev_df %>% filter(kp %in% c("MSM", "PWID", "FSW")), aes(y=logit_kp_prev), alpha = 0.3) +
+  geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
+  scale_y_continuous(labels = convert_logis_labels) +
+  scale_x_continuous(labels = convert_logis_labels) +
+  moz.utils::standard_theme() +
+  labs(y = "Logit KP HIV prevalence", x = "Logit general population HIV prevalence")+
+  theme(panel.border = element_rect(fill=NA, color="black"),
+        legend.position = "none") +
+  facet_wrap(~kp, ncol=1)
+
+p2 <- prev_res %>%
+  ggplot(aes(x=provincial_value, y=fit)) +
+  geom_line(size=1) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha=0.3) +
+  geom_point(data = prev_df %>% filter(kp %in% c("MSM", "PWID", "FSW")), aes(y=value), alpha = 0.3) +
+  geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
+  moz.utils::standard_theme() +
+  scale_x_continuous(labels = scales::label_percent(), limits = c(0,0.5)) +
+  scale_y_continuous(labels = scales::label_percent(), limits = c(0,1)) +
+  labs(y = "KP HIV prevalence", x = "General population HIV prevalence")+
+  theme(panel.border = element_rect(fill=NA, color="black"),
+        legend.position = "none") +
+  facet_wrap(~kp, ncol=1)
+
+ggpubr::ggarrange(p1, p2, ncol=2)

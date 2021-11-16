@@ -1,6 +1,11 @@
 indicators <- read_output_package("depends/naomi_output.zip")$indicators
 spectrum <- extract_pjnz_naomi("depends/spectrum_file.zip")
 
+indicators <- read_output_package("~/Downloads/MOZ_naomi-output_20211110-1459.zip")
+
+indicators <- add_output_labels(indicators) %>%
+  dplyr::left_join(indicators$meta_age_group, by = c("age_group", "age_group_label"))
+
 prev <- read.csv("depends/prev_assigned_province.csv") %>%
   mutate(indicator = "HIV prevalence")
 art <- read.csv("depends/art_assigned_province.csv") %>%
@@ -14,14 +19,23 @@ admin1_lvl <- lvl_map$admin1_level[lvl_map$iso3 == iso3]
 time_point <- unique(indicators$calendar_quarter)[2]
   
 filtered_indicators <- indicators %>%
-  filter(sex != "both",
-         area_level <= admin1_lvl,
+  filter(area_level <= admin1_lvl,
          indicator %in% c("prevalence", "art_coverage", "population"),
          age_group_label %in% c("15+", "15-49", "15-24", "20-24", "25-29", "25-49", "15-64"),
          calendar_quarter == time_point)
 
+spectrum <- spectrum %>%
+  filter(age %in% 15:49, year > 1999)
+
 spectrum_ratio <- spectrum %>%
-  filter(age %in% 15:49, year > 1999) %>%
+  bind_rows(
+    spectrum %>%
+      group_by(year) %>%
+      summarise(hivpop = sum(hivpop),
+                totpop = sum(totpop),
+                artpop = sum(artpop)) %>%
+      mutate(sex = "both")
+  ) %>%
   group_by(sex, year) %>%
   summarise(prevalence = sum(hivpop)/sum(totpop),
             art_coverage = sum(artpop)/sum(hivpop),
@@ -52,7 +66,8 @@ out <- lapply(dat, function(x) {
     anonymised_dat <- x %>%
       mutate(sex = case_when(
         kp %in% c("FSW", "SW", "TGW", "TG") ~ "female",
-        kp %in% c("MSM", "PWID", "TGM") ~ "male"
+        kp %in% c("MSM", "TGM") ~ "male",
+        kp == "PWID" ~ "both"
         ),
         age_group = ifelse(is.na(age_group) | !age_group %in% unique(filtered_indicators$age_group), "Y015_049", as.character(age_group))
       ) %>%

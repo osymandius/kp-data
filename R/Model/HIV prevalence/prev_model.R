@@ -2,6 +2,7 @@ library(INLA)
 library(tidyverse)
 library(countrycode)
 library(sf)
+library(lme4)
 
 ssa_names <- c("Angola", "Botswana", "Eswatini", "Ethiopia", "Kenya", "Lesotho",  "Malawi", "Mozambique", "Namibia", "Rwanda", "South Africa", "South Sudan", "Uganda", "United Republic of Tanzania", "Zambia", "Zimbabwe", "Benin", "Burkina Faso", "Burundi", "Cameroon", "Central African Republic", "Chad", "Congo", "Côte d'Ivoire", "Democratic Republic of the Congo", "Equatorial Guinea", "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Liberia", "Mali", "Niger", "Nigeria", "Senegal", "Sierra Leone", "Togo")
 ssa_iso3 <- countrycode(ssa_names, "country.name", "iso3c")
@@ -61,7 +62,29 @@ prev_df <- prev_dat %>%
          logit_gen_prev2 = logit_gen_prev,
          positive = round(value * denominator),
          negative = round(denominator - positive)
-  )
+  ) %>%
+  group_by(year, kp, iso3) %>%
+  mutate(idx = cur_group_id())
+
+# prev_df <- prev_df %>%
+#   filter(kp == "FSW")
+# 
+# df_natural <- data.frame(provincial_value = seq(0.01, 0.4,0.01))
+# df_logit <- data.frame(logit_gen_prev = logit(seq(0.01, 0.4, 0.01)))
+# 
+# formula <- cbind(positive, negative) ~ logit_gen_prev + (1|idx)
+# mod <- glmer(formula, family = "binomial", data = prev_df)
+# 
+# df_logit <- data.frame(logit_gen_prev = logit(seq(0.01, 0.4, 0.01)), idx =99999)
+# 
+# df_natural %>%
+#   cbind(invlogit(merTools::predictInterval(mod, newdata = df_logit))) %>%
+#   rename(lower = lwr,
+#          upper = upr) %>%
+#   
+#   mutate(source = "binomial + iid",
+#          kp = "FSW")
+
 
 prev_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   
@@ -70,7 +93,7 @@ prev_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   
   ## Prediction data frames
   df_natural <- data.frame(provincial_value = seq(0.01, 0.4,0.01))
-  df_logit <- data.frame(logit_gen_prev = logit(seq(0.01, 0.4, 0.01)))
+  df_logit <- data.frame(logit_gen_prev = logit(c(seq(0.005, 0.01, 0.001), seq(0.01, 0.4, 0.01))))
   
   ## Quasibinomial model formula using positives and negatives [same result using the ART coverage and the weight argument in glm()]
   formula <- cbind(positive, negative) ~ logit_gen_prev
@@ -86,9 +109,25 @@ prev_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
       lower = plogis(logit_lower),
       upper = plogis(logit_upper),
       fit = plogis(logit_fit),
-      kp = kp_id
+      kp = kp_id,
+      source = "quasibinomial"
     ) %>%
     cbind(df_natural)
+  
+  formula <- cbind(positive, negative) ~ logit_gen_prev + (1|idx)
+  mod <- glmer(formula, family = "binomial", data = prev_df)
+  
+  df_logit <- data.frame(logit_gen_prev = logit(seq(0.01, 0.4, 0.01)), idx =99999)
+  
+  br_dat <- df_natural %>%
+    cbind(invlogit(merTools::predictInterval(mod, newdata = df_logit))) %>%
+    rename(lower = lwr,
+           upper = upr) %>%
+
+    mutate(source = "binomial + iid",
+           kp = kp_id)
+  
+  bind_rows(qb_dat, br_dat)
 })
 
 names(prev_res) <- c("FSW", "MSM", "PWID")
@@ -101,8 +140,8 @@ convert_logis_labels <- function(x) {
 
 p1 <- prev_res %>%
   ggplot(aes(x=logit_gen_prev, y=logit_fit)) +
-  geom_line(size=1) +
-  geom_ribbon(aes(ymin = logit_lower, ymax=logit_upper), alpha=0.3) +
+  geom_line(size=1, color=source) +
+  geom_ribbon(aes(ymin = logit_lower, ymax=logit_upper, fill=source), alpha=0.3) +
   geom_point(data = prev_df %>% filter(kp %in% c("MSM", "PWID", "FSW")), aes(y=logit_kp_prev), alpha = 0.3) +
   geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
   scale_y_continuous(labels = convert_logis_labels) +
@@ -113,20 +152,20 @@ p1 <- prev_res %>%
         legend.position = "none") +
   facet_wrap(~kp, ncol=1)
 
-p2 <- prev_res %>%
+prev_res %>%
   ggplot(aes(x=provincial_value, y=fit)) +
-  geom_line(size=1) +
-  geom_ribbon(aes(ymin = lower, ymax = upper), alpha=0.3) +
+  geom_line(size=1, aes(color=source)) +
+  geom_ribbon(aes(ymin = lower, ymax = upper, fill=source), alpha=0.3) +
   geom_point(data = prev_df %>% filter(kp %in% c("MSM", "PWID", "FSW")), aes(y=value), alpha = 0.3) +
   geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
   moz.utils::standard_theme() +
   scale_x_continuous(labels = scales::label_percent(), limits = c(0,0.5)) +
   scale_y_continuous(labels = scales::label_percent(), limits = c(0,1)) +
   labs(y = "KP HIV prevalence", x = "General population HIV prevalence")+
-  theme(panel.border = element_rect(fill=NA, color="black"),
-        legend.position = "none") +
-  facet_wrap(~kp, ncol=1)
+  theme(panel.border = element_rect(fill=NA, color="black")) +
+  facet_wrap(~kp, ncol=3)
 
+p2
 ggpubr::ggarrange(p1, p2, ncol=2)
 
 # prev_df %>%
@@ -212,3 +251,73 @@ mod <- lm(log_kp_prev ~ log_gen_prev, data = prev_inla %>% filter(!is.na(iso3)))
 summary(mod)
 
 mod.res = resid(mod) 
+
+#########################
+
+prev_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
+  
+  prev_df <- prev_df %>%
+    filter(kp == kp_id)
+  
+  prev_inla <- crossing(df_logit,
+                        region = c("WCA", "ESA"))%>%
+    mutate(denominator = 100) %>%
+    bind_rows(prev_df %>%
+                ungroup) %>%
+    select(logit_gen_prev, positive, negative, region, denominator, idx)
+  
+  prev_formula <- positive ~ logit_gen_prev + region + f(idx, model = "iid")
+  
+  prev_fit <- INLA::inla(prev_formula,
+                         data = prev_inla,
+                         family = "binomial", 
+                         Ntrials = denominator,
+                         control.compute = list(config = TRUE),
+                         control.predictor=list(compute=TRUE),
+                         verbose = TRUE)
+  
+  fitted_val <- get_mod_results_test(prev_fit, prev_inla, "positive")
+  
+  res <- fitted_val %>%
+    rename(logit_lower = lower,
+           logit_fit = median,
+           logit_upper = upper
+    ) %>%
+    mutate(lower = invlogit(logit_lower),
+           upper = invlogit(logit_upper),
+           fit = invlogit(logit_fit),
+           provincial_value = invlogit(logit_gen_prev),
+           kp = kp_id)
+})
+
+prev_res %>%
+  bind_rows() %>%
+  ggplot(aes(x=logit_gen_prev, y=logit_fit)) +
+  # geom_line(size=1) +
+  # geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper), alpha=0.3) +
+  geom_line(size=1, aes(color = region)) +
+  geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper, fill = region), alpha=0.3) +
+  geom_point(data = prev_df %>% filter(kp %in% c("MSM", "PWID", "FSW")), aes(y=logit_kp_prev, color=region), alpha = 0.3) +
+  geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
+  moz.utils::standard_theme() +
+  # scale_x_continuous(labels = scales::label_percent(), limits = c(0,0.5)) +
+  # scale_y_continuous(labels = scales::label_percent(), limits = c(0,1)) +
+  scale_y_continuous(labels = convert_logis_labels) +
+  scale_x_continuous(labels = convert_logis_labels) +
+  labs(y = "KP HIV prevalence", x = "General population HIV prevalence")+
+  theme(panel.border = element_rect(fill=NA, color="black")) +
+  facet_wrap(~kp, ncol=3)
+
+prev_res %>%
+  bind_rows() %>%
+  ggplot(aes(x=provincial_value, y=fit)) +
+  geom_line(size=1) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha=0.3) +
+  geom_point(data = prev_df %>% filter(kp %in% c("MSM", "PWID", "FSW")), aes(y=value), alpha = 0.3) +
+  geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
+  moz.utils::standard_theme() +
+  scale_x_continuous(labels = scales::label_percent(), limits = c(0,0.5)) +
+  scale_y_continuous(labels = scales::label_percent(), limits = c(0,1)) +
+  labs(y = "KP HIV prevalence", x = "General population HIV prevalence")+
+  theme(panel.border = element_rect(fill=NA, color="black")) +
+  facet_wrap(~kp, ncol=3)

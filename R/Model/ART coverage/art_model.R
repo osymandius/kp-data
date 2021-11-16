@@ -41,11 +41,6 @@ id <- lapply(iso3_vec, function(x){
 
 names(id) <- iso3_vec
 
-prev_dat <- lapply(file.path("archive/aaa_extrapolate_naomi", id[!is.na(id)], "anonymised_prev.csv"),
-                   read.csv)
-
-
-
 ############## ART Coverage ############
 
 art_dat <- lapply(file.path("archive/aaa_extrapolate_naomi", id[!is.na(id)], "anonymised_art.csv"),
@@ -64,7 +59,9 @@ art_df <- art_dat %>%
          logit_gen_art2 = logit_gen_art,
          positive = round(value * denominator),
          negative = round(denominator - positive)
-  )
+  ) %>%
+  group_by(year, kp, iso3) %>%
+  mutate(idx = cur_group_id())
 
 
 art_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
@@ -82,34 +79,106 @@ art_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   
   ## Predict on both the natural and link [logit] scale
   qb_dat <-  df_natural %>%
-    mutate(fit = predict.glm(mod, newdata = df_logit, type = "response"),
-           type = "natural") %>%
-    bind_rows(df_logit %>% cbind(
-      fit = predict.glm(mod, newdata = df_logit, type = "link"),
-      type = "logit"
-    )) %>%
-    mutate(source = "quasibinomial",
+    cbind(df_logit) %>%
+    mutate(logit_fit = predict.glm(mod, newdata = df_logit, type = "link", se.fit = TRUE)$fit,
+           se = predict.glm(mod, newdata = df_logit, type = "link", se.fit = TRUE)$se.fit,
+           logit_lower = logit_fit - 1.96*se,
+           logit_upper = logit_fit + 1.96*se,
+           lower = invlogit(logit_lower),
+           upper = invlogit(logit_upper),
+           fit = invlogit(logit_fit),
+           source = "quasibinomial",
            kp = kp_id)
   
+  # df_logit_r <- crossing(logit_gen_art = logit(seq(0.25, 0.99, 0.01)),
+  #                      region = c("WCA", "ESA"))
+  # df_natural_r <- crossing(provincial_value = seq(0.25, 0.99, 0.01),
+  #                        region = c("WCA", "ESA"))
+  # 
+  # formula <- cbind(positive, negative) ~ logit_gen_art + (1|idx)
+  # mod <- glmer(formula, family = "binomial", data = art_df)
+  # 
+  # br_dat <-  df_natural %>%
+  #   mutate(fit = predict(mod, newdata = df_logit, type = "response", re.form=NA),
+  #          type = "natural") %>%
+  #   # bind_rows(df_logit %>% cbind(
+  #   #   fit = predict.glm(mod, newdata = df_logit, type = "link"),
+  #   #   type = "logit"
+  #   # )) %>%
+  #   mutate(source = "binomial + iid",
+  #          kp = kp_id)
+  # 
+  # formula <- logit_kp_art ~ logit_gen_art
+  # mod <- MASS::rlm(formula, data = art_df, weights = denominator)
+  # 
+  # rob_dat <-  df_natural %>%
+  #   mutate(fit = invlogit(predict.glm(mod, newdata = df_logit, type = "response")),
+  #          type = "natural") %>%
+  #   # bind_rows(df_logit %>% cbind(
+  #   #   fit = predict.glm(mod, newdata = df_logit, type = "link"),
+  #   #   type = "logit"
+  #   # )) %>%
+  #   mutate(source = "robust",
+  #          kp = kp_id)
+  # 
+  # 
+  # ## Logit linear model
+  # formula <- logit_kp_art ~ logit_gen_art
+  # mod <- glm(formula, family = "gaussian", data = art_df)
+  # 
+  # logit_dat <- df_natural %>%
+  #   mutate(fit = invlogit(predict.glm(mod, newdata = df_logit, type = "response")),
+  #          type = "natural") %>%
+  #   # bind_rows(df_logit %>% cbind(
+  #   #   fit = predict.glm(mod, newdata = df_logit, type = "link"),
+  #   #   type = "logit"
+  #   # )) %>%
+  #   mutate(source = "logit linear",
+  #          kp = kp_id)
+  # 
+  # qb_dat %>%
+  #   bind_rows(logit_dat) %>%
+  #   bind_rows(br_dat) %>%
+  #   bind_rows(rob_dat)
   
-  ## Logit linear model
-  formula <- logit_kp_art ~ logit_gen_art
-  mod <- glm(formula, family = "gaussian", data = art_df)
   
-  logit_dat <- df_natural %>%
-    mutate(fit = invlogit(predict.glm(mod, newdata = df_logit, type = "response")),
-           type = "natural") %>%
-    bind_rows(df_logit %>% cbind(
-      fit = predict.glm(mod, newdata = df_logit, type = "link"),
-      type = "logit"
-    )) %>%
-    mutate(source = "logit linear",
+  
+  
+})
+
+art_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
+  
+  art_df <- art_df %>%
+    filter(kp == kp_id)
+  
+  art_inla <- df_logit %>%
+    mutate(denominator = 100) %>%
+    bind_rows(art_df %>%
+                ungroup) %>%
+    select(logit_gen_art, positive, negative, denominator, idx)
+  
+  art_formula <- positive ~ logit_gen_art + f(idx, model = "iid")
+  
+  art_fit <- INLA::inla(art_formula,
+                         data = art_inla,
+                         family = "binomial", 
+                         Ntrials = denominator,
+                         control.compute = list(config = TRUE),
+                         control.predictor=list(compute=TRUE),
+                         verbose = TRUE)
+  
+  fitted_val <- get_mod_results_test(art_fit, art_inla, "positive")
+  
+  res <- fitted_val %>%
+    rename(logit_lower = lower,
+           logit_fit = median,
+           logit_upper = upper
+    ) %>%
+    mutate(lower = invlogit(logit_lower),
+           upper = invlogit(logit_upper),
+           fit = invlogit(logit_fit),
+           provincial_value = invlogit(logit_gen_art),
            kp = kp_id)
-  
-  qb_dat %>%
-    bind_rows(logit_dat)
-  
-  
 })
 
 names(art_res) <- c("FSW", "MSM", "PWID")
@@ -120,7 +189,7 @@ art_res <- art_res %>%
 p1 <- art_res %>%
   filter(type == "natural") %>%
   ggplot(aes(x=provincial_value, y=fit)) +
-  geom_point(data = filter(art_df, kp %in% c("FSW", "MSM", "PWID")), aes(y=value, size=denominator), alpha = 0.3) +
+  geom_point(data = filter(art_df, kp %in% c("FSW", "MSM", "PWID")), aes(y=value, size=log(denominator)), alpha = 0.3) +
   geom_line(aes(color=source), size=1) +
   geom_abline(aes(intercept = 0, slope =1), linetype = 3) +
   scale_y_continuous(labels = scales::label_percent()) +
@@ -128,6 +197,8 @@ p1 <- art_res %>%
   
   labs(y="KP ART coverage", x = "Genpop ART coverage") +
   facet_wrap(~kp)
+
+p1
 
 p2 <- art_res %>%
   filter(type == "logit") %>%
@@ -140,3 +211,36 @@ p2 <- art_res %>%
   facet_wrap(~kp)
 
 ggpubr::ggarrange(p1, p2, nrow=2, common.legend = TRUE, legend = "bottom")
+p1
+
+#####
+
+art_res %>%
+  bind_rows() %>%
+  ggplot(aes(x=logit_gen_art, y=logit_fit)) +
+  geom_line(size=1) +
+  geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper), alpha=0.3) +
+  geom_point(data = art_df %>% filter(kp %in% c("MSM", "PWID", "FSW")), aes(y=logit_kp_art), alpha = 0.3) +
+  geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
+  moz.utils::standard_theme() +
+  # scale_x_continuous(labels = scales::label_percent(), limits = c(0,0.5)) +
+  # scale_y_continuous(labels = scales::label_percent(), limits = c(0,1)) +
+  scale_y_continuous(labels = convert_logis_labels) +
+  scale_x_continuous(labels = convert_logis_labels) +
+  labs(y = "KP HIV artalence", x = "General population HIV artalence")+
+  theme(panel.border = element_rect(fill=NA, color="black")) +
+  facet_wrap(~kp, ncol=3)
+
+art_res %>%
+  bind_rows() %>%
+  ggplot(aes(x=provincial_value, y=fit)) +
+  geom_line(size=1) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha=0.3) +
+  geom_point(data = art_df %>% filter(kp %in% c("MSM", "PWID", "FSW")), aes(y=value), alpha = 0.3) +
+  geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
+  moz.utils::standard_theme() +
+  scale_x_continuous(labels = scales::label_percent(), limits = c(0,1)) +
+  scale_y_continuous(labels = scales::label_percent(), limits = c(0,1)) +
+  labs(y = "KP HIV artalence", x = "General population HIV artalence")+
+  theme(panel.border = element_rect(fill=NA, color="black")) +
+  facet_wrap(~kp, ncol=3)

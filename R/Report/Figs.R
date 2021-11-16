@@ -90,6 +90,14 @@ unaids_nat_adequate_pse %>%
   moz.utils::standard_theme() +
   theme(panel.border = element_rect(fill=NA, color="black"))
 
+unaids_nat_adequate_pse %>% 
+  filter(year > 2015, kp == "MSM") %>%
+  mutate(under_1 = population_proportion<0.01)
+  count(under_1)
+  
+filter(unaids_nat_adequate_pse, year > 2015, kp == "MSM", population_proportion < 0.05)$population_proportion %>%
+  median
+
 ###### MSM proportion from data #####
 
 pse_dat %>%
@@ -130,6 +138,18 @@ pse_dat %>%
   geom_hline(aes(yintercept = 0.01), color="red", linetype = 2, size=1) +
   moz.utils::standard_theme() +
   labs(x=element_blank(), y="MSM population proportion")
+
+pse_dat %>%
+  bind_rows() %>%
+  filter(kp == "MSM") %>%
+  left_join(region) %>%
+  mutate(under_1 = population_proportion<0.01) %>%
+  group_by(region) %>%
+  count(under_1)
+
+
+
+  
 
 
 ######## PSE results  ########

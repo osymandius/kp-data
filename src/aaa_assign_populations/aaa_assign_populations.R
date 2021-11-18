@@ -48,7 +48,7 @@ city_population <- read_csv("depends/interpolated_city_population.csv") %>%
 
 sharepoint <- spud::sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
 
-pse_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/PSE", "pse_surveillance_only.csv")
+pse_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/PSE", "pse.csv")
 pse <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = pse_path)
 pse <- read_csv(pse)
 
@@ -64,15 +64,6 @@ pse <- pse %>%
 gf_pse <- gf_pse %>%
   mutate(iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
   filter(iso3 == iso3_c)
-
-rob2 <- gf_pse %>%
-  bind_rows(pse) %>%
-  group_by(kp, area_name, year, pse) %>%
-  filter(n() > 1) %>%
-  group_by(ref, .add=TRUE) %>%
-  mutate(n = row_number()) %>%
-  bind_rows(data.frame(year = 2001, ref = NA, area_name = "Cotonou", kp = "FSW", pse = 1750, iso3 = "BEN")) %>%
-  arrange(pse)
 
 population <- population %>%
   bind_rows(city_population) %>%

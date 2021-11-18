@@ -263,15 +263,15 @@ prev_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   prev_df <- prev_df %>%
     filter(kp == kp_id)
   
-  prev_inla <- crossing(df_logit
-                        # region = c("WCA", "ESA")\
+  prev_inla <- crossing(df_logit,
+                        region = c("WCA", "ESA")
                         )%>%
     mutate(denominator = 1) %>%
     bind_rows(prev_df %>%
                 ungroup) %>%
     select(logit_gen_prev, positive, negative, region, denominator, idx)
   
-  prev_formula <- positive ~ logit_gen_prev + f(idx, model = "iid")
+  prev_formula <- positive ~ logit_gen_prev*region + f(idx, model = "iid")
   
   prev_fit <- INLA::inla(prev_formula,
                          data = prev_inla,
@@ -326,41 +326,41 @@ prev_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   
   #########
   
-  prev_formula <- positive ~ logit_gen_prev + f(idx, model = "iid")
-  
-  prev_fit <- INLA::inla(prev_formula,
-                         data = prev_inla,
-                         family = "nbinomial", 
-                         offset = log(denominator),
-                         control.compute = list(config = TRUE),
-                         control.predictor=list(compute=TRUE),
-                         verbose = TRUE)
-  
-  fitted_val <- get_mod_results_test(prev_fit, prev_inla, "positive")
-  
-  res <- res %>%
-    bind_rows(
-      fitted_val %>%
-        rename(log_fit = median,
-               log_lower = lower,
-               log_upper = upper) %>%
-        mutate(
-          lower = exp(log_lower),
-          upper = exp(log_upper),
-          fit = exp(log_fit),
-          provincial_value = invlogit(logit_gen_prev),
-          kp = kp_id,
-          model = "nbinom + iid")
-    )
+  # prev_formula <- positive ~ logit_gen_prev + f(idx, model = "iid")
+  # 
+  # prev_fit <- INLA::inla(prev_formula,
+  #                        data = prev_inla,
+  #                        family = "nbinomial", 
+  #                        offset = log(denominator),
+  #                        control.compute = list(config = TRUE),
+  #                        control.predictor=list(compute=TRUE),
+  #                        verbose = TRUE)
+  # 
+  # fitted_val <- get_mod_results_test(prev_fit, prev_inla, "positive")
+  # 
+  # res <- res %>%
+  #   bind_rows(
+  #     fitted_val %>%
+  #       rename(log_fit = median,
+  #              log_lower = lower,
+  #              log_upper = upper) %>%
+  #       mutate(
+  #         lower = exp(log_lower),
+  #         upper = exp(log_upper),
+  #         fit = exp(log_fit),
+  #         provincial_value = invlogit(logit_gen_prev),
+  #         kp = kp_id,
+  #         model = "nbinom + iid")
+    # )
 })
 
 prev_res %>%
   bind_rows() %>%
   ggplot(aes(x=logit_gen_prev, y=logit_fit)) +
-  geom_line(size=1) +
-  geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper), alpha=0.3) +
-  # geom_line(size=1, aes(color = region)) +
-  # geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper, fill = region), alpha=0.3) +
+  # geom_line(size=1) +
+  # geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper), alpha=0.3) +
+  geom_line(size=1, aes(color = region)) +
+  geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper, fill = region), alpha=0.3) +
   geom_point(data = prev_df %>% filter(kp %in% c("MSM", "PWID", "FSW")), aes(y=logit_kp_prev, color=region), alpha = 0.3) +
   geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
   moz.utils::standard_theme() +

@@ -263,37 +263,68 @@ prev_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   prev_df <- prev_df %>%
     filter(kp == kp_id)
   
-  prev_inla <- crossing(df_logit,
-                        region = c("WCA", "ESA")
+  prev_inla <- crossing(df_logit
+                        # region = c("WCA", "ESA")
                         )%>%
     mutate(denominator = 1) %>%
     bind_rows(prev_df %>%
                 ungroup) %>%
     select(logit_gen_prev, positive, negative, region, denominator, idx)
   
-  prev_formula <- positive ~ logit_gen_prev*region + f(idx, model = "iid")
-  
-  prev_fit <- INLA::inla(prev_formula,
-                         data = prev_inla,
-                         family = "binomial", 
-                         Ntrials = denominator,
-                         control.compute = list(config = TRUE),
-                         control.predictor=list(compute=TRUE),
-                         verbose = TRUE)
-  
-  fitted_val <- get_mod_results_test(prev_fit, prev_inla, "positive")
-  
-  res <- fitted_val %>%
-    rename(logit_lower = lower,
-           logit_fit = median,
-           logit_upper = upper
-    ) %>%
-    mutate(lower = invlogit(logit_lower),
-           upper = invlogit(logit_upper),
-           fit = invlogit(logit_fit),
-           provincial_value = invlogit(logit_gen_prev),
-           kp = kp_id,
-           model = "binomial + iid")
+  # prev_formula <- positive ~ logit_gen_prev + f(idx, model = "iid")
+  # # *region + f(idx, model = "iid")
+  # 
+  # prev_fit <- INLA::inla(prev_formula,
+  #                        data = prev_inla,
+  #                        family = "binomial", 
+  #                        Ntrials = denominator,
+  #                        control.compute = list(config = TRUE),
+  #                        control.predictor=list(compute=TRUE),
+  #                        verbose = TRUE)
+  # 
+  # fitted_val <- get_mod_results_test(prev_fit, prev_inla, "positive")
+  # 
+  # res <- fitted_val %>%
+  #   rename(logit_lower = lower,
+  #          logit_fit = median,
+  #          logit_upper = upper
+  #   ) %>%
+  #   mutate(lower = invlogit(logit_lower),
+  #          upper = invlogit(logit_upper),
+  #          fit = invlogit(logit_fit),
+  #          provincial_value = invlogit(logit_gen_prev),
+  #          kp = kp_id,
+  #          model = "binomial + iid")
+  # 
+  # ############
+  # 
+  # prev_formula <- positive ~ logit_gen_prev + f(idx, model = "iid")
+  # 
+  # prev_fit <- INLA::inla(prev_formula,
+  #                        data = prev_inla,
+  #                        family = "betabinomial", 
+  #                        Ntrials = denominator,
+  #                        # offset = log(denominator),
+  #                        control.compute = list(config = TRUE),
+  #                        control.predictor=list(compute=TRUE),
+  #                        verbose = TRUE)
+  # 
+  # fitted_val <- get_mod_results_test(prev_fit, prev_inla, "positive")
+  # 
+  # res <- res %>%
+  #   bind_rows(
+  #     fitted_val %>%
+  #       rename(logit_fit = median,
+  #              logit_lower = lower,
+  #              logit_upper = upper) %>%
+  #       mutate(
+  #         lower = invlogit(logit_lower),
+  #         upper = invlogit(logit_upper),
+  #         fit = invlogit(logit_fit),
+  #         provincial_value = invlogit(logit_gen_prev),
+  #         kp = kp_id,
+  #              model = "betabinomial + iid")
+  #   )
   
   ############
   
@@ -301,27 +332,29 @@ prev_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   
   prev_fit <- INLA::inla(prev_formula,
                          data = prev_inla,
-                         family = "nbinomial", 
-                         offset = log(denominator),
+                         family = "betabinomial", 
+                         Ntrials = denominator,
+                         # offset = log(denominator),
                          control.compute = list(config = TRUE),
                          control.predictor=list(compute=TRUE),
                          verbose = TRUE)
   
   fitted_val <- get_mod_results_test(prev_fit, prev_inla, "positive")
   
-  res <- res %>%
+  res <- 
+    # res %>%
     bind_rows(
       fitted_val %>%
-        rename(log_fit = median,
-               log_lower = lower,
-               log_upper = upper) %>%
+        rename(logit_fit = median,
+               logit_lower = lower,
+               logit_upper = upper) %>%
         mutate(
-          lower = exp(log_lower),
-               upper = exp(log_upper),
-               fit = exp(log_fit),
-               provincial_value = invlogit(logit_gen_prev),
-               kp = kp_id,
-               model = "nbinom")
+          lower = invlogit(logit_lower),
+          upper = invlogit(logit_upper),
+          fit = invlogit(logit_fit),
+          provincial_value = invlogit(logit_gen_prev),
+          kp = kp_id,
+          model = "betabinomial")
     )
   
   #########
@@ -354,13 +387,14 @@ prev_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
     # )
 })
 
-prev_res %>%
+p1 <- prev_res %>%
   bind_rows() %>%
+  filter(model == "betabinomial") %>%
   ggplot(aes(x=logit_gen_prev, y=logit_fit)) +
-  # geom_line(size=1) +
-  # geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper), alpha=0.3) +
-  geom_line(size=1, aes(color = region)) +
-  geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper, fill = region), alpha=0.3) +
+  geom_line(size=1) +
+  geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper), alpha=0.3) +
+  # geom_line(size=1, aes(color = region)) +
+  # geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper, fill = region), alpha=0.3) +
   geom_point(data = prev_df %>% filter(kp %in% c("MSM", "PWID", "FSW")), aes(y=logit_kp_prev, color=region), alpha = 0.3) +
   geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
   moz.utils::standard_theme() +
@@ -368,13 +402,14 @@ prev_res %>%
   # scale_y_continuous(labels = scales::label_percent(), limits = c(0,1)) +
   scale_y_continuous(labels = convert_logis_labels) +
   scale_x_continuous(labels = convert_logis_labels) +
-  labs(y = "KP HIV prevalence", x = "General population HIV prevalence")+
+  labs(y = "KP HIV prevalence", x = "Total population HIV prevalence")+
   theme(panel.border = element_rect(fill=NA, color="black")) +
-  # facet_wrap(~kp, ncol=3)
-  facet_grid(model~kp)
+  facet_wrap(~kp, ncol=1)
+  # facet_grid(model~kp)
 
-prev_res %>%
+p2 <- prev_res %>%
   bind_rows() %>%
+  filter(model == "betabinomial") %>%
   ggplot(aes(x=provincial_value, y=fit)) +
   geom_line(size=1) +
   geom_ribbon(aes(ymin = lower, ymax = upper), alpha=0.3) +
@@ -385,6 +420,12 @@ prev_res %>%
   moz.utils::standard_theme() +
   scale_x_continuous(labels = scales::label_percent(), limits = c(0,0.5)) +
   scale_y_continuous(labels = scales::label_percent(), limits = c(0,1)) +
-  labs(y = "KP HIV prevalence", x = "General population HIV prevalence")+
+  labs(y = "KP HIV prevalence", x = "Total population HIV prevalence")+
   theme(panel.border = element_rect(fill=NA, color="black")) +
-  facet_grid(model~kp)
+  # facet_grid(model~kp)
+  facet_wrap(~kp, ncol=1)
+
+png(file="~/Dropbox/oli backup/Key populations/Data consolidation paper/Figs/prev_results.png", width=700, height=850)
+ggpubr::ggarrange(p1, p2, nrow=1, common.legend = TRUE, legend = "bottom")
+dev.off()
+

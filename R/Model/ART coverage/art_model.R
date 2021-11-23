@@ -151,13 +151,16 @@ art_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   art_df <- art_df %>%
     filter(kp == kp_id)
   
-  art_inla <- df_logit %>%
-    mutate(denominator = 100) %>%
+  art_inla <- crossing(df_logit
+                        # region = c("WCA", "ESA")
+  )%>%
+    mutate(denominator = 1) %>%
     bind_rows(art_df %>%
                 ungroup) %>%
-    select(logit_gen_art, positive, negative, denominator, idx)
+    select(logit_gen_art, positive, negative, region, denominator, idx)
   
   art_formula <- positive ~ logit_gen_art + f(idx, model = "iid")
+  # *region + f(idx, model = "iid")
   
   art_fit <- INLA::inla(art_formula,
                          data = art_inla,
@@ -178,39 +181,140 @@ art_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
            upper = invlogit(logit_upper),
            fit = invlogit(logit_fit),
            provincial_value = invlogit(logit_gen_art),
-           kp = kp_id)
+           kp = kp_id,
+           model = "binomial + iid")
+  
+  ############
+  
+  art_formula <- positive ~ logit_gen_art + f(idx, model = "iid")
+  
+  art_fit <- INLA::inla(art_formula,
+                         data = art_inla,
+                         family = "betabinomial", 
+                         Ntrials = denominator,
+                         # offset = log(denominator),
+                         control.compute = list(config = TRUE),
+                         control.family = list(link = "logit"),
+                         control.predictor=list(compute=TRUE),
+                         verbose = TRUE)
+  
+  fitted_val <- get_mod_results_test(art_fit, art_inla, "positive")
+  
+  res <- res %>%
+    bind_rows(
+      fitted_val %>%
+        rename(logit_fit = median,
+               logit_lower = lower,
+               logit_upper = upper) %>%
+        mutate(
+          lower = invlogit(logit_lower),
+          upper = invlogit(logit_upper),
+          fit = invlogit(logit_fit),
+          provincial_value = invlogit(logit_gen_art),
+          kp = kp_id,
+          model = "betabinomial + iid")
+    )
+  
+  ############
+  
+  art_formula <- positive ~ logit_gen_art
+  
+  art_fit <- INLA::inla(art_formula,
+                         data = art_inla,
+                         family = "betabinomial", 
+                         Ntrials = denominator,
+                         # offset = log(denominator),
+                         control.compute = list(config = TRUE),
+                         control.family = list(link = "logit"),
+                         control.predictor=list(compute=TRUE),
+                         verbose = TRUE)
+  
+  fitted_val <- get_mod_results_test(art_fit, art_inla, "positive")
+  
+  res <- res %>%
+    bind_rows(
+      fitted_val %>%
+        rename(logit_fit = median,
+               logit_lower = lower,
+               logit_upper = upper) %>%
+        mutate(
+          lower = invlogit(logit_lower),
+          upper = invlogit(logit_upper),
+          fit = invlogit(logit_fit),
+          provincial_value = invlogit(logit_gen_art),
+          kp = kp_id,
+          model = "betabinomial")
+    )
+  
+  #########
+  
+  # prev_formula <- positive ~ logit_gen_prev + f(idx, model = "iid")
+  # 
+  # prev_fit <- INLA::inla(prev_formula,
+  #                        data = prev_inla,
+  #                        family = "nbinomial", 
+  #                        offset = log(denominator),
+  #                        control.compute = list(config = TRUE),
+  #                        control.predictor=list(compute=TRUE),
+  #                        verbose = TRUE)
+  # 
+  # fitted_val <- get_mod_results_test(prev_fit, prev_inla, "positive")
+  # 
+  # res <- res %>%
+  #   bind_rows(
+  #     fitted_val %>%
+  #       rename(log_fit = median,
+  #              log_lower = lower,
+  #              log_upper = upper) %>%
+  #       mutate(
+  #         lower = exp(log_lower),
+  #         upper = exp(log_upper),
+  #         fit = exp(log_fit),
+  #         provincial_value = invlogit(logit_gen_prev),
+  #         kp = kp_id,
+  #         model = "nbinom + iid")
+  # )
 })
 
-names(art_res) <- c("FSW", "MSM", "PWID")
-art_res <- art_res %>%
-  bind_rows(.id = "kp")
-
-
 p1 <- art_res %>%
-  filter(type == "natural") %>%
-  ggplot(aes(x=provincial_value, y=fit)) +
-  geom_point(data = filter(art_df, kp %in% c("FSW", "MSM", "PWID")), aes(y=value, size=log(denominator)), alpha = 0.3) +
-  geom_line(aes(color=source), size=1) +
-  geom_abline(aes(intercept = 0, slope =1), linetype = 3) +
-  scale_y_continuous(labels = scales::label_percent()) +
-  scale_x_continuous(labels = scales::label_percent()) +
-  
-  labs(y="KP ART coverage", x = "Genpop ART coverage") +
-  facet_wrap(~kp)
-
-p1
+  bind_rows() %>%
+  filter(model == "betabinomial + iid") %>%
+  ggplot(aes(x=logit_gen_art, y=logit_fit)) +
+  geom_line(size=1) +
+  geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper), alpha=0.3) +
+  # geom_line(size=1, aes(color = region)) +
+  # geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper, fill = region), alpha=0.3) +
+  geom_point(data = art_df %>% filter(kp %in% c("MSM", "PWID", "FSW")), aes(y=logit_kp_art, color=region), alpha = 0.3) +
+  geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
+  moz.utils::standard_theme() +
+  # scale_x_continuous(labels = scales::label_percent(), limits = c(0,0.5)) +
+  # scale_y_continuous(labels = scales::label_percent(), limits = c(0,1)) +
+  scale_y_continuous(labels = convert_logis_labels) +
+  scale_x_continuous(labels = convert_logis_labels) +
+  labs(y = "KP ART coverage", x = "General population ART coverage")+
+  theme(panel.border = element_rect(fill=NA, color="black")) +
+  facet_wrap(~kp, ncol=1)
+  facet_grid(model~kp)
 
 p2 <- art_res %>%
-  filter(type == "logit") %>%
-  ggplot(aes(x=logit_gen_art, y=fit)) +
-  geom_point(data = filter(art_df, kp %in% c("FSW", "MSM", "PWID")), aes(x=logit(provincial_value), y=logit(value), size=denominator), alpha = 0.3) +
-  geom_line(aes(color=source), size=1) +
-  geom_abline(aes(intercept = 0, slope =1), linetype = 3) +
-  lims(y=c(-5,5)) +
-  labs(y="Logit KP ART coverage", x = "Logit genpop ART coverage") +
-  facet_wrap(~kp)
+  bind_rows() %>%
+  filter(model == "betabinomial + iid") %>%
+  ggplot(aes(x=provincial_value, y=fit)) +
+  geom_line(size=1) +
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha=0.3) +
+  # geom_line(size=1, aes(color=source)) +
+  # geom_ribbon(aes(ymin = lower, ymax = upper, fill=source), alpha=0.3) +
+  geom_point(data = art_df %>% filter(kp %in% c("MSM", "PWID", "FSW")), aes(y=value, color=region), alpha = 0.3) +
+  geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
+  moz.utils::standard_theme() +
+  scale_x_continuous(labels = scales::label_percent(), limits = c(0,1)) +
+  scale_y_continuous(labels = scales::label_percent(), limits = c(0,1)) +
+  labs(y = "KP ART coverage", x = "General population ART coverage")+
+  theme(panel.border = element_rect(fill=NA, color="black")) +
+  facet_wrap(~kp, ncol=1)
+  facet_grid(model~kp)
 
-ggpubr::ggarrange(p1, p2, nrow=2, common.legend = TRUE, legend = "bottom")
+ggpubr::ggarrange(p1, p2, nrow=1, common.legend = TRUE, legend = "bottom")
 p1
 
 #####

@@ -1,17 +1,18 @@
 library(countrycode)
 library(tidyverse)
+library(sf)
 
 region <- read.csv("~/Documents/GitHub/fertility_orderly/global/region.csv") %>%
   mutate(iso3 = toupper(iso3))
 
 iso3_vec <- c("BDI", "BWA", "BEN", "BFA", "CIV", "CMR", "COD", "COG", "GMB", "KEN", "LSO", "MLI", "MOZ", "MWI", "NGA", "SLE", "SWZ", "TCD", "TGO", "ZWE", "AGO", "ETH", "GAB", "GHA", "GIN", "LBR", "NAM", "NER", "RWA", "SEN", "TZA", "UGA", "ZMB")
 
-pse_out <- read_csv("R/Model/pse_out_surveillance_only.csv")
-pse_dat <- read_csv("R/Model/pse_surveillance_data.csv")
+pse_out <- read_csv("R/Model/PSE/pse_out_surveillance_only.csv")
+pse_dat <- read_csv("R/Model/PSE/pse_surveillance_data.csv")
 
 ###### Subnational/national PSE from data ########
 
-pse_raw <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/pse_surveillance_only.csv", na="")
+pse_raw <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_surveillance_only.csv", na="")
 
 pse_raw <- pse_raw %>%
   mutate(
@@ -127,7 +128,7 @@ pse_dat %>%
   facet_wrap(~region) +
   theme(panel.border = element_rect(fill=NA, color="black"))
 
-pse_dat %>%
+msm_pse_proportions <- pse_dat %>%
   bind_rows() %>%
   filter(kp == "MSM") %>%
   # mutate(iso3 = countrycode::countrycode(country.name, "country.name", "iso3c")) %>%
@@ -138,6 +139,10 @@ pse_dat %>%
   geom_hline(aes(yintercept = 0.01), color="red", linetype = 2, size=1) +
   moz.utils::standard_theme() +
   labs(x=element_blank(), y="MSM population proportion")
+
+png(file="~/Dropbox/oli backup/Key populations/Data consolidation paper/Figs/msm_pse_proportions.png", width=250, height=300)
+msm_pse_proportions
+dev.off()
 
 pse_dat %>%
   bind_rows() %>%
@@ -154,8 +159,29 @@ pse_dat %>%
 
 ######## PSE results  ########
 
-pse_out <- read_csv("R/Model/pse_out_surveillance_only.csv")
-pse_dat <- read_csv("R/Model/pse_surveillance_data.csv")
+pse_out <- read_csv("R/Model/PSE/pse_out_surveillance_only.csv")
+pse_dat <- read_csv("R/Model/PSE/pse_surveillance_data.csv")
+
+ssa_names <- c("Angola", "Botswana", "Eswatini", "Ethiopia", "Kenya", "Lesotho",  "Malawi", "Mozambique", "Namibia", "Rwanda", "South Africa", "South Sudan", "Uganda", "United Republic of Tanzania", "Zambia", "Zimbabwe", "Benin", "Burkina Faso", "Burundi", "Cameroon", "Central African Republic", "Chad", "Congo", "Côte d'Ivoire", "Democratic Republic of the Congo", "Equatorial Guinea", "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Liberia", "Mali", "Niger", "Nigeria", "Senegal", "Sierra Leone", "Togo")
+ssa_iso3 <- countrycode(ssa_names, "country.name", "iso3c")
+
+grey <- read_sf("~/Downloads/Longitude_Graticules_and_World_Countries_Boundaries-shp/99bfd9e7-bb42-4728-87b5-07f8c8ac631c2020328-1-1vef4ev.lu5nk.shp") %>%
+  filter(CNTRY_NAME %in% c("Western Sahara", "Mauritania", "Morocco", "Algeria", "Libya", "Tunisia", "Egypt", "Equatorial Guinea", "Somalia", "Djibouti", "Eritrea")) %>%
+  bind_rows(read_sf("~/Downloads/sdn_adm_cbs_nic_ssa_20200831_shp/sdn_admbnda_adm0_cbs_nic_ssa_20200831.shp")) %>%
+  bind_rows(read_sf("~/Downloads/ssd_admbnda_imwg_nbs_shp/ssd_admbnda_adm0_imwg_nbs_20180817.shp")) %>%
+  st_crop(xmin=-180, xmax=180, ymin=-35, ymax=90)
+
+geographies <- read_sf("~/Downloads/Longitude_Graticules_and_World_Countries_Boundaries-shp/99bfd9e7-bb42-4728-87b5-07f8c8ac631c2020328-1-1vef4ev.lu5nk.shp") %>%
+  bind_rows(read_sf("~/Downloads/ssd_admbnda_imwg_nbs_shp/ssd_admbnda_adm0_imwg_nbs_20180817.shp") %>% mutate(CNTRY_NAME = "South Sudan")) %>%
+  mutate(iso3 = countrycode(CNTRY_NAME, "country.name", "iso3c"),
+         area_name = countrycode(iso3, "iso3c", "country.name")) %>%
+  filter(iso3 %in% ssa_iso3)
+
+geographies <- geographies %>%
+  arrange(iso3) %>%
+  mutate(id.iso3 = as.numeric(factor(iso3))) %>%
+  select(iso3, area_name, id.iso3) %>%
+  st_make_valid()
 
 # pse_dat <- pse_dat %>%
 #   left_join(region) %>%
@@ -215,23 +241,50 @@ foo <- pse_dat %>%
   left_join(region) %>%
   mutate(is_national = factor(is_national, labels = c("No", "Yes")))
 
-pse_dat %>%
-  filter(kp != "TG") %>%
-  ggplot(aes(x=iso3)) +
-    geom_jitter(aes(y=population_proportion), alpha=0.3) +
-    geom_segment(data=pse_out, aes(x = xmin, xend = xmax, y = median, yend = median), size=1) +
-    geom_rect(data=pse_out, aes(xmin = xmin, xmax = xmax, ymin = lower, ymax = upper), alpha=0.3, show.legend = FALSE) +
-    geom_hline(data = data.frame(yintercept = 0.01, kp = "MSM", iso3 = c("AGO", "ZWE")), linetype = 3, aes(yintercept = yintercept), color="red") +
-    facet_wrap(~kp, nrow=3, scales = "free") +
-    scale_color_manual(values = wesanderson::wes_palette("Zissou1")[c(1,4)]) +
-    scale_fill_manual(values = wesanderson::wes_palette("Zissou1")[c(1,4)]) +
-    # scale_y_continuous(labels = scales::label_percent()) +
-    scale_y_log10(breaks = scales::log_breaks(), labels = scales::label_percent(accuracy = 0.001)) + 
-    labs(x=element_blank(), y="Population proportion", color = "Informed by:") +
-    moz.utils::standard_theme() +
-    theme(axis.text.x = element_text(size=10))
+# pse_dat %>%
+#   filter(kp != "TG") %>%
+#   ggplot(aes(x=iso3)) +
+#     geom_jitter(aes(y=population_proportion), alpha=0.3) +
+#     geom_segment(data=pse_out, aes(x = xmin, xend = xmax, y = median, yend = median), size=1) +
+#     geom_rect(data=pse_out, aes(xmin = xmin, xmax = xmax, ymin = lower, ymax = upper), alpha=0.3, show.legend = FALSE) +
+#     geom_hline(data = data.frame(yintercept = 0.01, kp = "MSM", iso3 = c("AGO", "ZWE")), linetype = 3, aes(yintercept = yintercept), color="red") +
+#     facet_wrap(~kp, nrow=3, scales = "free") +
+#     scale_color_manual(values = wesanderson::wes_palette("Zissou1")[c(1,4)]) +
+#     scale_fill_manual(values = wesanderson::wes_palette("Zissou1")[c(1,4)]) +
+#     # scale_y_continuous(labels = scales::label_percent()) +
+#     scale_y_log10(breaks = scales::log_breaks(), labels = scales::label_percent(accuracy = 0.001)) + 
+#     labs(x=element_blank(), y="Population proportion", color = "Informed by:") +
+#     moz.utils::standard_theme() +
+#     theme(axis.text.x = element_text(size=10))
 
-pse_out %>%
+pal <- wesanderson::wes_palette("Zissou1", 100, type = "continuous")
+
+pse_maps <- lapply(c("FSW", "MSM", "PWID"), function(x) {
+  
+  pse_out %>%
+    filter(kp == x) %>%
+    left_join(geographies) %>%
+    ggplot() +
+    geom_sf(data = grey, aes(geometry = geometry), fill="darkgrey") +
+    geom_sf(aes(geometry = geometry, fill=median)) +
+    moz.utils::standard_theme() +
+    # viridis::scale_fill_viridis(labels = scales::label_percent()) +
+    scale_fill_gradientn(colours = pal, labels = scales::label_percent()) +
+    labs(fill = "PSE proportion", title = x) +
+    coord_sf(datum = NA) +
+    theme(legend.key.width = unit(1.5, "cm"),
+          plot.title = element_text(hjust = 0.5, face = "bold"))
+  
+})
+
+pse_maps <- ggpubr::ggarrange(pse_maps[[1]], pse_maps[[2]], pse_maps[[3]], nrow=1)
+
+png(file="~/Dropbox/oli backup/Key populations/Data consolidation paper/Figs/pse_maps.png", width=1800, height=800)
+pse_maps
+dev.off()
+
+
+pse_region_data_plot <- pse_out %>%
   ggplot() +
     geom_segment(aes(x = xmin, xend = xmax, y = median, yend = median, color=has_data), size=1) +
     geom_rect(aes(xmin = xmin, xmax = xmax, ymin = lower, ymax = upper, fill=has_data), alpha=0.3, show.legend = FALSE) +
@@ -250,6 +303,10 @@ pse_out %>%
     moz.utils::standard_theme() +
     theme(axis.text.x = element_text(size=10),
           panel.background = element_rect(fill=NA, color="black"))
+
+png(file="~/Dropbox/oli backup/Key populations/Data consolidation paper/Figs/pse_region_data.png", width=1200, height=600)
+pse_region_data_plot
+dev.off()
 
 ############# Prevalence ############
 

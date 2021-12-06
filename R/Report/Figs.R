@@ -5,29 +5,79 @@ library(sf)
 region <- read.csv("~/Documents/GitHub/fertility_orderly/global/region.csv") %>%
   mutate(iso3 = toupper(iso3))
 
-iso3_vec <- c("BDI", "BWA", "BEN", "BFA", "CIV", "CMR", "COD", "COG", "GMB", "KEN", "LSO", "MLI", "MOZ", "MWI", "NGA", "SLE", "SWZ", "TCD", "TGO", "ZWE", "AGO", "ETH", "GAB", "GHA", "GIN", "LBR", "NAM", "NER", "RWA", "SEN", "TZA", "UGA", "ZMB")
+ssa_names <- c("Angola", "Botswana", "Eswatini", "Ethiopia", "Kenya", "Lesotho",  "Malawi", "Mozambique", "Namibia", "Rwanda", "South Africa", "South Sudan", "Uganda", "United Republic of Tanzania", "Zambia", "Zimbabwe", "Benin", "Burkina Faso", "Burundi", "Cameroon", "Central African Republic", "Chad", "Congo", "Côte d'Ivoire", "Democratic Republic of the Congo", "Equatorial Guinea", "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Liberia", "Mali", "Niger", "Nigeria", "Senegal", "Sierra Leone", "Togo")
+ssa_iso3 <- countrycode(ssa_names, "country.name", "iso3c")
 
-pse_out <- read_csv("R/Model/PSE/pse_out_surveillance_only.csv")
-pse_dat <- read_csv("R/Model/PSE/pse_surveillance_data.csv")
+pse_out <- read_csv("R/Model/PSE/deduplicated_pse_estimates.csv")
+pse_dat <- read_csv("R/Model/PSE/deduplicated_pse_data.csv")
 
 ###### Subnational/national PSE from data ########
 
-pse_raw <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_surveillance_only.csv", na="")
+pse_distinct <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/2021_11_28_pse_distinct.csv")
+
+# pse_raw <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/Method comparison/deduplicated_pse_data.csv") %>%
+#   select(-c(iso3, x, population))
+pse_dat <- read_csv("R/Model/PSE/deduplicated_pse_data.csv")
+pse_raw <- read_csv("src/aaa_assign_populations/2021_11_28_deduplicated_pse_data.csv")
+
+pse_raw_merge <- pse_raw %>%
+  mutate(cleaned = 1) %>%
+  select(-sex) %>%
+  filter(!is.na(uid))
+
+pse_raw <- pse_distinct %>%
+  select(uid, sex, age_group) %>%
+  right_join(pse_raw_merge) %>%
+  bind_rows(pse_raw %>% filter(is.na(uid)))
+
+pse_raw %>%
+  group_by(kp, area_name, year, pse, .keep_all=TRUE) %>%
+  filter(n() >1) %>%
+  arrange(kp, area_name, year, pse) %>%
+  View()
 
 pse_raw <- pse_raw %>%
   mutate(
     iso3 = countrycode(country.name, "country.name", "iso3c"),
     is_national = ifelse(country.name == area_name, 1, 0),
-    has_age = ifelse(!is.na(age_group), 1, 0)) %>%
-  filter(iso3 %in% c(iso3_vec, "ZAF")) %>%
+    has_age = ifelse(!is.na(age_group), 1, 0),
+    kp = ifelse(kp == "TGW", "TG", kp)
+    ) %>%
+  # filter(iso3 %in% c(iso3_vec, "ZAF")) %>%
   distinct(kp, area_name, year, pse, .keep_all=TRUE) %>%
   left_join(region)
 
+## HAS AGE DATA
 pse_raw %>%
+  mutate(kp = ifelse(kp == "TGW", "TG", kp)) %>%
   group_by(kp, region) %>%
   count(has_age) %>%
-  mutate(prop = 1-sum(n[has_age])/sum(n))
-    
+  mutate(age_group_recorded = 1-sum(n[has_age])/sum(n)) %>%
+  bind_rows(pse_raw %>%
+              group_by(kp) %>%
+              count(has_age) %>%
+              mutate(age_group_recorded = 1-sum(n[has_age])/sum(n),
+                     region = "SSA")) %>%
+  filter(has_age == 0) %>%
+  mutate(age_group_recorded = ifelse(age_group_recorded == 1, "0%", paste0(round(age_group_recorded*100, 1), "%")))
+
+## Has national data - may remove?
+pse_raw %>%
+  group_by(kp, region) %>%
+  count(is_national) %>%
+  mutate(prop = 1-sum(n[is_national])/sum(n))
+
+## Countries with data
+has_data_df <- crossing(
+  iso3 = ssa_iso3,
+  kp = c("FSW", "MSM", "PWID")
+) %>%
+  left_join(pse_raw %>%
+              distinct(iso3, kp) %>%
+              mutate(has_data = 1)
+  )
+
+
 pse_raw %>%
   filter(kp == "TG") %>%
   group_by(kp, iso3) %>%
@@ -148,14 +198,9 @@ pse_dat %>%
   bind_rows() %>%
   filter(kp == "MSM") %>%
   left_join(region) %>%
-  mutate(under_1 = population_proportion<0.01) %>%
+  mutate(over_1 = population_proportion>=0.01) %>%
   group_by(region) %>%
-  count(under_1)
-
-
-
-  
-
+  count(over_1)
 
 ######## PSE results  ########
 
@@ -288,7 +333,7 @@ pse_region_data_plot <- pse_out %>%
   ggplot() +
     geom_segment(aes(x = xmin, xend = xmax, y = median, yend = median, color=has_data), size=1) +
     geom_rect(aes(xmin = xmin, xmax = xmax, ymin = lower, ymax = upper, fill=has_data), alpha=0.3, show.legend = FALSE) +
-    geom_jitter(data = foo %>% filter(kp != "TG"), aes(x=iso3_idx, y=population_proportion, shape=is_national, size = is_national, alpha=is_national), width = 0.4) +
+    geom_jitter(data = foo %>% filter(!kp %in% c("TG", "TGW", "SW")), aes(x=iso3_idx, y=population_proportion, shape=is_national, size = is_national, alpha=is_national), width = 0.4) +
     geom_hline(data = data.frame(yintercept = 0.01, kp = "MSM", iso3 = c("AGO", "ZWE")), linetype = 3, aes(yintercept = yintercept), color="red") +
     scale_color_manual(values = c(wesanderson::wes_palette("Zissou1")[c(4,1)])) +
     scale_fill_manual(values = wesanderson::wes_palette("Zissou1")[c(4,1)])  +
@@ -321,7 +366,7 @@ prev_raw <- prev_raw %>%
     iso3 = countrycode(country.name, "country.name", "iso3c"),
     is_national = ifelse(country.name == area_name, 1, 0),
     has_age = ifelse(!is.na(age_group), 1, 0)) %>%
-  filter(iso3 %in% c(iso3_vec, "ZAF"), !is.na(area_name)) %>%
+  filter(!is.na(area_name)) %>%
   distinct(kp, area_name, year, prev, .keep_all=TRUE) %>%
   left_join(region)
 

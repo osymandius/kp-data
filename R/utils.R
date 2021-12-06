@@ -1,18 +1,27 @@
 library(tidyverse)
 library(orderly)
+library(countrycode)
+library(purrr)
 
-iso3_vec <- c("BDI", "BWA", "BEN", "BFA", "CIV", "CMR", "COD", "COG", "GMB", "KEN", "LSO", "MLI", "MOZ", "MWI", "NGA", "SLE", "SWZ", "TCD", "TGO", "ZWE", "AGO", "ETH", "GAB", "GHA", "GIN", "LBR", "NAM", "NER", "RWA", "SEN", "TZA", "UGA", "ZMB")
+ssa_names <- c("Angola", "Botswana", "Eswatini", "Ethiopia", "Kenya", "Lesotho",  "Malawi", "Mozambique", "Namibia", "Rwanda", "South Africa", "South Sudan", "Uganda", "United Republic of Tanzania", "Zambia", "Zimbabwe", "Benin", "Burkina Faso", "Burundi", "Cameroon", "Central African Republic", "Chad", "Congo", "Côte d'Ivoire", "Democratic Republic of the Congo", "Equatorial Guinea", "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Liberia", "Mali", "Niger", "Nigeria", "Senegal", "Sierra Leone", "Togo")
+ssa_iso3 <- countrycode(ssa_names, "country.name", "iso3c")
 
-id <- orderly_batch("aaa_assign_populations", parameters = data.frame(iso3 = iso3_vec))
+id <- orderly_batch("aaa_assign_populations", parameters = data.frame(iso3 = ssa_iso3))
+names(id) <- ssa_iso3
 lapply(id, orderly_commit)
+orderly_run("aaa_assign_populations", parameters = data.frame(iso3 = "ZAF"))
+
+lapply(c("BWA", "ZAF"), function(x){
+  orderly::orderly_search(name = "aaa_scale_pop", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
+})
 
 possibly_run <- purrr::possibly(.f = orderly_run, otherwise = NULL)
-id <- map(iso3_vec, ~possibly_run("aaa_extrapolate_naomi", parameters = data.frame(iso3 = .x)))
+id <- map(ssa_iso3, ~possibly_run("aaa_extrapolate_naomi", parameters = data.frame(iso3 = .x)))
+names(id) <- ssa_iso3
 lapply(id %>% compact(), orderly_commit)
+orderly_run("aaa_extrapolate_naomi", parameters = data.frame(iso3 = "ZWE"))
 
-lapply(id_list[c(8:33)] %>% compact(), orderly_commit)
-
-orderly_develop_start("aaa_extrapolate_naomi", parameters = data.frame(iso3 = "SLE"))
+orderly_develop_start("aaa_extrapolate_naomi", parameters = data.frame(iso3 = "ZWE"))
 setwd("src/aaa_extrapolate_naomi")
 
 df %>%
@@ -24,27 +33,30 @@ df %>%
   filter(is.na(x)) %>%
   select(-x) %>% View()
 
-lapply("GNB", function(x){
-  orderly::orderly_pull_archive("aaa_scale_pop", id = paste0('latest(parameter:iso3 == "', x, '")'), remote = "fertility")
+lapply("ZAF", function(x){
+  orderly::orderly_pull_archive("aaa_inputs_orderly_pull", id = paste0('latest(parameter:iso3 == "', x, '")'), remote = "naomi_2021")
 })
+
 
 areas <- read_sf("~/Documents/GitHub/fertility_orderly/archive/tza_data_areas/20201130-150758-409ee8ac/tza_areas.geojson")
 
 possibly_pull <- purrr::possibly(.f = orderly_pull_archive, otherwise = NA)
 map("CMR", ~possibly_pull("aaa_outputs_adr_pull", id = paste0('latest(parameter:iso3 == "', .x, '")')))
-map(iso3_vec, ~possibly_pull("aaa_extrapolate_naomi", id = paste0('latest(parameter:iso3 == "', .x, '")'), remote = "fertility"))
+map(c("KEN", "UGA"), ~possibly_pull("aaa_scale_pop", id = paste0('latest(parameter:iso3 == "', .x, '")'), remote = "fertility"))
+id <- map(ssa_iso3, ~possibly_pull(paste0(.x, "_data_areas"), remote = "naomi_2021"))
 
-names(suc) <- iso3_vec
+names(suc) <- ssa_iso3
 
 possibly_run <- purrr::possibly(.f = orderly_run, otherwise = NULL)
-id_list <- map(iso3_vec, ~possibly_run("aaa_extrapolate_naomi", parameters = data.frame(iso3 = .x)))
+id_list <- map(ssa_iso3, ~possibly_run("aaa_inputs_orderly_pull", parameters = data.frame(iso3 = .x)))
+names(id_list) <- ssa_iso3
 
 lapply(id_list %>%
          compact(),
        orderly_commit)
 
 
-id_list <- map(iso3_vec, ~possibly_run("aaa_extrapolate_naomi", parameters = data.frame(iso3 = .x)))
+id_list <- map(ssa_iso3, ~possibly_run("aaa_extrapolate_naomi", parameters = data.frame(iso3 = .x)))
 
 lapply(id_list %>%
          compact(),
@@ -59,7 +71,7 @@ id_list <- map(c("CMR", "COD",
                  "ETH", "GAB", 
                  "NER", "SEN"), ~possibly_run("aaa_extrapolate_naomi", parameters = data.frame(iso3 = .x)))
 
-names(id_list) <- iso3_vec
+names(id_list) <- ssa_iso3
 
 orderly_run("aaa_extrapolate_naomi", parameters = data.frame(iso3 = "ZWE"))
 
@@ -84,7 +96,7 @@ id <- lapply("MOZ", function(x){
   orderly::orderly_search(name = "aaa_assign_populations", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
 })
 
-names(id) <- iso3_vec
+names(id) <- ssa_iso3
 id <- id_list
 id <- id %>%unlist()
 id <- id[!is.na(id)]
@@ -163,7 +175,7 @@ lapply("MOZ", function(x){
   orderly::orderly_search(name = "aaa_assign_province", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
 })
 
-id <- lapply(iso3_vec, function(x){
+id <- lapply(ssa_iso3, function(x){
   orderly::orderly_search(name = "aaa_assign_populations", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
 })
 

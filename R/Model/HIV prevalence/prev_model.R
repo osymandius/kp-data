@@ -31,15 +31,20 @@ logit <- function(x) {log(x/(1-x))}
 region <- read.csv("~/Documents/GitHub/fertility_orderly/global/region.csv") %>%
   mutate(iso3 = toupper(iso3))
 
-iso3_vec <- c("BDI", "BWA", "BEN", "BFA", "CIV", "CMR", "COD", "COG", "GMB", "KEN", "LSO", "MLI", "MOZ", "MWI", "NGA", "SLE", "SWZ", "TCD", "TGO", "ZWE", "AGO", "ETH", "GAB", "GHA", "GIN", "LBR", "NAM", "NER", "RWA", "SEN", "TZA", "UGA", "ZMB")
+convert_logis_labels <- function(x) {
+  paste0(round(plogis(x)*100), "%")
+}
 
-id <- lapply(iso3_vec, function(x){
+ssa_names <- c("Angola", "Botswana", "Eswatini", "Ethiopia", "Kenya", "Lesotho",  "Malawi", "Mozambique", "Namibia", "Rwanda", "South Africa", "South Sudan", "Uganda", "United Republic of Tanzania", "Zambia", "Zimbabwe", "Benin", "Burkina Faso", "Burundi", "Cameroon", "Central African Republic", "Chad", "Congo", "Côte d'Ivoire", "Democratic Republic of the Congo", "Equatorial Guinea", "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Liberia", "Mali", "Niger", "Nigeria", "Senegal", "Sierra Leone", "Togo")
+ssa_iso3 <- countrycode(ssa_names, "country.name", "iso3c")
+
+id <- lapply(ssa_iso3, function(x){
   orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
 })
 
-names(id) <- iso3_vec
+names(id) <- ssa_iso3
 
-prev_dat <- lapply(file.path("archive/aaa_extrapolate_naomi", id[!is.na(id)], "anonymised_prev.csv"),
+prev_dat <- lapply(file.path("archive/aaa_extrapolate_naomi", id[!is.na(id)], "prev.csv"),
                    read.csv)
 
 names(prev_dat) <- names(id[!is.na(id)])
@@ -134,9 +139,7 @@ names(prev_res) <- c("FSW", "MSM", "PWID")
 prev_res <- prev_res %>%
   bind_rows(.id = "kp")
 
-convert_logis_labels <- function(x) {
-  paste0(round(plogis(x)*100), "%")
-}
+
 
 prev_res %>%
   bind_rows() %>%
@@ -256,7 +259,7 @@ mod.res = resid(mod)
 
 #########################
 
-df_logit <- data.frame(logit_gen_prev = logit(seq(0.01, 0.4, 0.01)), idx =99999)
+df_logit <- data.frame(logit_gen_prev = logit(c(seq(0.005, 0.01, 0.001), seq(0.01, 0.4, 0.01))))
 
 prev_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   
@@ -402,7 +405,7 @@ p1 <- prev_res %>%
   # scale_y_continuous(labels = scales::label_percent(), limits = c(0,1)) +
   scale_y_continuous(labels = convert_logis_labels) +
   scale_x_continuous(labels = convert_logis_labels) +
-  labs(y = "KP HIV prevalence", x = "Total population HIV prevalence")+
+  labs(y = "KP HIV prevalence", x = "Age/sex matched total population HIV prevalence")+
   theme(panel.border = element_rect(fill=NA, color="black")) +
   facet_wrap(~kp, ncol=1)
   # facet_grid(model~kp)
@@ -420,12 +423,20 @@ p2 <- prev_res %>%
   moz.utils::standard_theme() +
   scale_x_continuous(labels = scales::label_percent(), limits = c(0,0.5)) +
   scale_y_continuous(labels = scales::label_percent(), limits = c(0,1)) +
-  labs(y = "KP HIV prevalence", x = "Total population HIV prevalence")+
+  labs(y = "KP HIV prevalence", x = "Age/sex matched total population HIV prevalence")+
   theme(panel.border = element_rect(fill=NA, color="black")) +
   # facet_grid(model~kp)
   facet_wrap(~kp, ncol=1)
 
-png(file="~/Dropbox/oli backup/Key populations/Data consolidation paper/Figs/prev_results.png", width=700, height=850)
+png(file="~/Dropbox/Work Streams/2021/Key populations/Paper/Data consolidation paper/Figs/Prevalence/prev_results.png", width=700, height=850)
 ggpubr::ggarrange(p1, p2, nrow=1, common.legend = TRUE, legend = "bottom")
 dev.off()
 
+prev_res %>%
+  bind_rows() %>%
+  filter(model == "betabinomial",
+         provincial_value %in% c(0.01, 0.3)
+  ) %>%
+  select(provincial_value, fit, kp) %>%
+  mutate(ratio = fit/provincial_value) %>%
+  arrange(provincial_value)

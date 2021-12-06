@@ -64,14 +64,14 @@ check_city <- city_population %>%
   group_by(area_name, year) %>%
   summarise(population = sum(population))
 
-population %>%
-  filter(area_id == iso3_c, year > 1999) %>%
-  group_by(year) %>%
-  summarise(population = sum(population)) %>%
-  mutate(area_name = iso3_c) %>%
-  ggplot(aes(x=year, y=log(population), color=area_name)) + 
-    geom_point(size=1) +
-    geom_line(data = check_city)
+# population %>%
+#   filter(area_id == iso3_c, year > 1999) %>%
+#   group_by(year) %>%
+#   summarise(population = sum(population)) %>%
+#   mutate(area_name = iso3_c) %>%
+#   ggplot(aes(x=year, y=log(population), color=area_name)) + 
+#     geom_point(size=1) +
+#     geom_line(data = check_city)
   
 
 write_csv(city_population, "interpolated_city_population.csv")

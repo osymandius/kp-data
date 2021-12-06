@@ -1,15 +1,17 @@
-indicators <- read_output_package("depends/naomi_output.zip")$indicators
+indicators <- read_output_package("depends/naomi_output.zip")
 spectrum <- extract_pjnz_naomi("depends/spectrum_file.zip")
 
-indicators <- read_output_package("~/Downloads/MOZ_naomi-output_20211110-1459.zip")
+# indicators <- read_output_package("~/Downloads/MOZ_naomi-output_20211110-1459.zip")
 
 indicators <- add_output_labels(indicators) %>%
   dplyr::left_join(indicators$meta_age_group, by = c("age_group", "age_group_label"))
 
 prev <- read.csv("depends/prev_assigned_province.csv") %>%
-  mutate(indicator = "HIV prevalence")
+  mutate(indicator = "HIV prevalence",
+         iso3 = iso3)
 art <- read.csv("depends/art_assigned_province.csv") %>%
-  mutate(indicator = "ART coverage")
+  mutate(indicator = "ART coverage",
+         iso3 = iso3)
 
 dat <- list("prev" = prev, "art" = art)
 
@@ -69,11 +71,12 @@ out <- lapply(dat, function(x) {
         kp %in% c("MSM", "TGM") ~ "male",
         kp == "PWID" ~ "both"
         ),
+        has_age = ifelse(!is.na(age_group), 1, 0),
         age_group = ifelse(is.na(age_group) | !age_group %in% unique(filtered_indicators$age_group), "Y015_049", as.character(age_group))
       ) %>%
       left_join(df) %>%
       mutate(ratio = value/mean) %>%
-      select(year, kp, value, denominator, mean, ratio) %>%
+      select(iso3, year, kp, age_group, has_age, value, denominator, mean, ratio) %>%
       rename(provincial_value = mean)
   } else {
     data.frame(x = character())
@@ -82,5 +85,5 @@ out <- lapply(dat, function(x) {
 })
 
 write.csv(df, "extrapolated_naomi.csv")
-write.csv(out$prev, "anonymised_prev.csv")
-write.csv(out$art, "anonymised_art.csv")
+write.csv(out$prev, "prev.csv")
+write.csv(out$art, "art.csv")

@@ -33,7 +33,12 @@ logit <- function(x) {log(x/(1-x))}
 region <- read.csv("~/Documents/GitHub/fertility_orderly/global/region.csv") %>%
   mutate(iso3 = toupper(iso3))
 
-iso3_vec <- c("BDI", "BWA", "BEN", "BFA", "CIV", "CMR", "COD", "COG", "GMB", "KEN", "LSO", "MLI", "MOZ", "MWI", "NGA", "SLE", "SWZ", "TCD", "TGO", "ZWE", "AGO", "ETH", "GAB", "GHA", "GIN", "LBR", "NAM", "NER", "RWA", "SEN", "TZA", "UGA", "ZMB")
+convert_logis_labels <- function(x) {
+  paste0(round(plogis(x)*100), "%")
+}
+
+ssa_names <- c("Angola", "Botswana", "Eswatini", "Ethiopia", "Kenya", "Lesotho",  "Malawi", "Mozambique", "Namibia", "Rwanda", "South Africa", "South Sudan", "Uganda", "United Republic of Tanzania", "Zambia", "Zimbabwe", "Benin", "Burkina Faso", "Burundi", "Cameroon", "Central African Republic", "Chad", "Congo", "Côte d'Ivoire", "Democratic Republic of the Congo", "Equatorial Guinea", "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Liberia", "Mali", "Niger", "Nigeria", "Senegal", "Sierra Leone", "Togo")
+ssa_iso3 <- countrycode(ssa_names, "country.name", "iso3c")
 
 id <- lapply(iso3_vec, function(x){
   orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
@@ -43,7 +48,7 @@ names(id) <- iso3_vec
 
 ############## ART Coverage ############
 
-art_dat <- lapply(file.path("archive/aaa_extrapolate_naomi", id[!is.na(id)], "anonymised_art.csv"),
+art_dat <- lapply(file.path("archive/aaa_extrapolate_naomi", id[!is.na(id)], "art.csv"),
                   read.csv)
 
 names(art_dat) <- names(id[!is.na(id)])
@@ -51,7 +56,7 @@ names(art_dat) <- names(id[!is.na(id)])
 art_df <- art_dat %>%
   bind_rows(.id = "iso3") %>%
   left_join(region %>% select(region, iso3)) %>%
-  filter(!is.na(denominator), denominator != 0) %>%
+  filter(!is.na(denominator), denominator != 0, denominator < 10000) %>% ## WORK OUT HOW TO USE PROGRAMME DATA
   mutate(value = ifelse(value == 1, 0.99, value),
          value = ifelse(value ==0, 0.01, value),
          logit_kp_art = logit(value),
@@ -63,6 +68,8 @@ art_df <- art_dat %>%
   group_by(year, kp, iso3) %>%
   mutate(idx = cur_group_id())
 
+df_logit <- data.frame(logit_gen_art = logit(seq(0.25, 0.99, 0.01)))
+
 
 art_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   
@@ -71,7 +78,7 @@ art_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   
   ## Prediction data frames
   df_natural <- data.frame(provincial_value = seq(0.25, 0.99,0.01))
-  df_logit <- data.frame(logit_gen_art = logit(seq(0.25, 0.99, 0.01)))
+  
   
   ## Quasibinomial model formula using positives and negatives [same result using the ART coverage and the weight argument in glm()]
   formula <- cbind(positive, negative) ~ logit_gen_art
@@ -159,62 +166,62 @@ art_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
                 ungroup) %>%
     select(logit_gen_art, positive, negative, region, denominator, idx)
   
-  art_formula <- positive ~ logit_gen_art + f(idx, model = "iid")
-  # *region + f(idx, model = "iid")
-  
-  art_fit <- INLA::inla(art_formula,
-                         data = art_inla,
-                         family = "binomial", 
-                         Ntrials = denominator,
-                         control.compute = list(config = TRUE),
-                         control.predictor=list(compute=TRUE),
-                         verbose = TRUE)
-  
-  fitted_val <- get_mod_results_test(art_fit, art_inla, "positive")
-  
-  res <- fitted_val %>%
-    rename(logit_lower = lower,
-           logit_fit = median,
-           logit_upper = upper
-    ) %>%
-    mutate(lower = invlogit(logit_lower),
-           upper = invlogit(logit_upper),
-           fit = invlogit(logit_fit),
-           provincial_value = invlogit(logit_gen_art),
-           kp = kp_id,
-           model = "binomial + iid")
-  
-  ############
-  
-  art_formula <- positive ~ logit_gen_art + f(idx, model = "iid")
-  
-  art_fit <- INLA::inla(art_formula,
-                         data = art_inla,
-                         family = "betabinomial", 
-                         Ntrials = denominator,
-                         # offset = log(denominator),
-                         control.compute = list(config = TRUE),
-                         control.family = list(link = "logit"),
-                         control.predictor=list(compute=TRUE),
-                         verbose = TRUE)
-  
-  fitted_val <- get_mod_results_test(art_fit, art_inla, "positive")
-  
-  res <- res %>%
-    bind_rows(
-      fitted_val %>%
-        rename(logit_fit = median,
-               logit_lower = lower,
-               logit_upper = upper) %>%
-        mutate(
-          lower = invlogit(logit_lower),
-          upper = invlogit(logit_upper),
-          fit = invlogit(logit_fit),
-          provincial_value = invlogit(logit_gen_art),
-          kp = kp_id,
-          model = "betabinomial + iid")
-    )
-  
+  # art_formula <- positive ~ logit_gen_art + f(idx, model = "iid")
+  # # *region + f(idx, model = "iid")
+  # 
+  # art_fit <- INLA::inla(art_formula,
+  #                        data = art_inla,
+  #                        family = "binomial", 
+  #                        Ntrials = denominator,
+  #                        control.compute = list(config = TRUE),
+  #                        control.predictor=list(compute=TRUE),
+  #                        verbose = TRUE)
+  # 
+  # fitted_val <- get_mod_results_test(art_fit, art_inla, "positive")
+  # 
+  # res <- fitted_val %>%
+  #   rename(logit_lower = lower,
+  #          logit_fit = median,
+  #          logit_upper = upper
+  #   ) %>%
+  #   mutate(lower = invlogit(logit_lower),
+  #          upper = invlogit(logit_upper),
+  #          fit = invlogit(logit_fit),
+  #          provincial_value = invlogit(logit_gen_art),
+  #          kp = kp_id,
+  #          model = "binomial + iid")
+  # 
+  # ############
+  # 
+  # art_formula <- positive ~ logit_gen_art + f(idx, model = "iid")
+  # 
+  # art_fit <- INLA::inla(art_formula,
+  #                        data = art_inla,
+  #                        family = "betabinomial", 
+  #                        Ntrials = denominator,
+  #                        # offset = log(denominator),
+  #                        control.compute = list(config = TRUE),
+  #                        control.family = list(link = "logit"),
+  #                        control.predictor=list(compute=TRUE),
+  #                        verbose = TRUE)
+  # 
+  # fitted_val <- get_mod_results_test(art_fit, art_inla, "positive")
+  # 
+  # res <- res %>%
+  #   bind_rows(
+  #     fitted_val %>%
+  #       rename(logit_fit = median,
+  #              logit_lower = lower,
+  #              logit_upper = upper) %>%
+  #       mutate(
+  #         lower = invlogit(logit_lower),
+  #         upper = invlogit(logit_upper),
+  #         fit = invlogit(logit_fit),
+  #         provincial_value = invlogit(logit_gen_art),
+  #         kp = kp_id,
+  #         model = "betabinomial + iid")
+  #   )
+  # 
   ############
   
   art_formula <- positive ~ logit_gen_art
@@ -231,20 +238,21 @@ art_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   
   fitted_val <- get_mod_results_test(art_fit, art_inla, "positive")
   
-  res <- res %>%
-    bind_rows(
-      fitted_val %>%
-        rename(logit_fit = median,
-               logit_lower = lower,
-               logit_upper = upper) %>%
-        mutate(
-          lower = invlogit(logit_lower),
-          upper = invlogit(logit_upper),
-          fit = invlogit(logit_fit),
-          provincial_value = invlogit(logit_gen_art),
-          kp = kp_id,
-          model = "betabinomial")
-    )
+  res <- 
+    # res %>%
+    # bind_rows(
+    fitted_val %>%
+      rename(logit_fit = median,
+             logit_lower = lower,
+             logit_upper = upper) %>%
+      mutate(
+        lower = invlogit(logit_lower),
+        upper = invlogit(logit_upper),
+        fit = invlogit(logit_fit),
+        provincial_value = invlogit(logit_gen_art),
+        kp = kp_id,
+        model = "betabinomial")
+    
   
   #########
   
@@ -278,7 +286,7 @@ art_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
 
 p1 <- art_res %>%
   bind_rows() %>%
-  filter(model == "betabinomial + iid") %>%
+  filter(model == "betabinomial") %>%
   ggplot(aes(x=logit_gen_art, y=logit_fit)) +
   geom_line(size=1) +
   geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper), alpha=0.3) +
@@ -291,14 +299,14 @@ p1 <- art_res %>%
   # scale_y_continuous(labels = scales::label_percent(), limits = c(0,1)) +
   scale_y_continuous(labels = convert_logis_labels) +
   scale_x_continuous(labels = convert_logis_labels) +
-  labs(y = "KP ART coverage", x = "General population ART coverage")+
+  labs(y = "KP ART coverage", x = "Age/sex matched total population ART coverage")+
   theme(panel.border = element_rect(fill=NA, color="black")) +
   facet_wrap(~kp, ncol=1)
-  facet_grid(model~kp)
+  # facet_grid(model~kp)
 
 p2 <- art_res %>%
   bind_rows() %>%
-  filter(model == "betabinomial + iid") %>%
+  filter(model == "betabinomial") %>%
   ggplot(aes(x=provincial_value, y=fit)) +
   geom_line(size=1) +
   geom_ribbon(aes(ymin = lower, ymax = upper), alpha=0.3) +
@@ -309,13 +317,14 @@ p2 <- art_res %>%
   moz.utils::standard_theme() +
   scale_x_continuous(labels = scales::label_percent(), limits = c(0,1)) +
   scale_y_continuous(labels = scales::label_percent(), limits = c(0,1)) +
-  labs(y = "KP ART coverage", x = "General population ART coverage")+
+  labs(y = "KP ART coverage", x = "Age/sex matched total population ART coverage")+
   theme(panel.border = element_rect(fill=NA, color="black")) +
   facet_wrap(~kp, ncol=1)
-  facet_grid(model~kp)
+  # facet_grid(model~kp)
 
+png(file="~/Dropbox/Work Streams/2021/Key populations/Paper/Data consolidation paper/Figs/ART coverage/art_results.png", width=700, height=850)
 ggpubr::ggarrange(p1, p2, nrow=1, common.legend = TRUE, legend = "bottom")
-p1
+dev.off()
 
 #####
 

@@ -34,36 +34,36 @@ iso3_c <- iso3
 areas <- read_sf("depends/naomi_areas.geojson")%>%
   mutate(iso3 = iso3_c)
 
-population <- read_csv("depends/interpolated_population.csv") %>%
+population <- read.csv("depends/interpolated_population.csv") %>%
   left_join(areas %>% dplyr::select(area_id, area_name) %>% st_drop_geometry()) %>%
   mutate(area_name = str_to_sentence(area_name))
 
 naomi_names <- unique(population$area_name)
 
-city_population <- read_csv("depends/interpolated_city_population.csv") %>%
+city_population <- read.csv("depends/interpolated_city_population.csv") %>%
   mutate(area_name = str_to_sentence(area_name)) %>%
   filter(!area_name %in% naomi_names)
 
 # merge_cities <- read_sf("merge_cities.geojson")
 
-sharepoint <- spud::sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
-
-pse_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/PSE", "pse.csv")
-pse <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = pse_path)
-pse <- read_csv(pse)
-
-gf_pse_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/PSE", "pse_gf_flib.csv")
-gf_pse <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = gf_pse_path)
-gf_pse <- read_csv(gf_pse)
-
-pse <- pse %>%
-  mutate(iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
-  filter(iso3 == iso3_c) %>%
-  rename(notes = method)
-
-gf_pse <- gf_pse %>%
-  mutate(iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
-  filter(iso3 == iso3_c)
+# sharepoint <- spud::sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
+# 
+# pse_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/PSE", "pse.csv")
+# pse <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = pse_path)
+# pse <- read_csv(pse)
+# 
+# gf_pse_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/PSE", "pse_gf_flib.csv")
+# gf_pse <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = gf_pse_path)
+# gf_pse <- read_csv(gf_pse)
+# 
+# pse <- pse %>%
+#   mutate(iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
+#   filter(iso3 == iso3_c) %>%
+#   rename(notes = method)
+# 
+# gf_pse <- gf_pse %>%
+#   mutate(iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
+#   filter(iso3 == iso3_c)
 
 population <- population %>%
   bind_rows(city_population) %>%
@@ -88,12 +88,22 @@ population <- population %>%
 # cities_areas <- merge_cities %>%
 #   bind_rows(areas)
 
+pse <- read.csv("2021_12_06_deduplicated_pse_data.csv")
+
+
 pse <- pse %>%
-  bind_rows(gf_pse) %>%
+  # bind_rows(gf_pse) %>%
+  mutate(iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
+  filter(iso3 == iso3_c) %>%
+  select(iso3:pse_upper, uid) %>%
+  mutate(sex = case_when(
+    kp %in% c("FSW", "TG") ~ "female",
+    kp == "MSM" ~ "male",
+    kp == "PWID" ~ "both"
+  )) %>%
   distinct(kp, area_name, year, pse, pse_lower, pse_upper, .keep_all=TRUE) %>%
-  mutate(row_id = row_number(),
-         iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
-  filter(iso3 == iso3_c)
+  mutate(row_id = row_number())
+         # iso3 = countrycode(country.name, "country.name", "iso3c")) 
 
 if(nrow(pse)) {
   
@@ -174,11 +184,11 @@ if(nrow(pse)) {
     left_join(row_populations) %>%
     # filter(!is.na(population)) %>%
     # rename(notes = method) %>%
-    mutate(population_proportion = NA,
-           method = NA,
+    mutate(population_proportion = pse/population,
+           # method = NA,
            link = NA) %>%
-    select(country.name, surveillance_type, indicator, method, kp, sex, age_group, area_name, province, year, pse_lower, pse, pse_upper, population, prop_lower, population_proportion, prop_upper, sample, notes, ref, link) %>%
-    arrange(country.name, kp, year)
+    select(any_of(c("country.name", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "province", "year", "pse_lower", "pse", "pse_upper", "population", "prop_lower", "population_proportion", "prop_upper", "sample", "notes", "ref", "link", "uid")))
+    # arrange(country.name, kp, year)
   
   
   

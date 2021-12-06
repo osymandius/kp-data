@@ -67,41 +67,71 @@ region <- read.csv("~/Documents/GitHub/fertility_orderly/global/region.csv") %>%
 
 ############## PSE
 # 
-iso3_vec <- c("BDI", "BWA", "BEN", "BFA", "CIV", "CMR", "COD", "COG", "GMB", "KEN", "LSO", "MLI", "MOZ", "MWI", "NGA", "SLE", "SWZ", "TCD", "TGO", "ZWE", "AGO", "ETH", "GAB", "GHA", "GIN", "LBR", "NAM", "NER", "RWA", "SEN", "TZA", "UGA", "ZMB")
+ssa_names <- c("Angola", "Botswana", "Eswatini", "Ethiopia", "Kenya", "Lesotho",  "Malawi", "Mozambique", "Namibia", "Rwanda", "South Africa", "South Sudan", "Uganda", "United Republic of Tanzania", "Zambia", "Zimbabwe", "Benin", "Burkina Faso", "Burundi", "Cameroon", "Central African Republic", "Chad", "Congo", "Côte d'Ivoire", "Democratic Republic of the Congo", "Equatorial Guinea", "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Liberia", "Mali", "Niger", "Nigeria", "Senegal", "Sierra Leone", "Togo")
+ssa_iso3 <- countrycode(ssa_names, "country.name", "iso3c")
 # 
-id <- lapply(iso3_vec, function(x){
+id <- lapply(ssa_iso3, function(x){
   orderly::orderly_search(name = "aaa_assign_populations", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
 })
 
-names(id) <- iso3_vec
+names(id) <- ssa_iso3
 
 pse_dat <- lapply(file.path("archive/aaa_assign_populations/", id[!is.na(id)], "pse_prevalence.csv"),
-                   read.csv)
-names(pse_dat) <- names(id[!is.na(id)])
+                   read.csv) %>%
+  bind_rows()
+# names(pse_dat) <- names(id[!is.na(id)])
 
-# iso3_vec <- c("BDI", "BWA", "BEN", "BFA", "CIV", "CMR", "COD", "COG", "GMB", "KEN", "LSO", "MLI", "MOZ", "MWI", "NGA", "SLE", "SWZ", "TCD", "TGO", "ZWE", "AGO", "ETH", "GAB", "GHA", "GIN", "LBR", "NAM", "NER", "RWA", "SEN", "TZA", "UGA", "ZMB")
+# ssa_iso3 <- c("BDI", "BWA", "BEN", "BFA", "CIV", "CMR", "COD", "COG", "GMB", "KEN", "LSO", "MLI", "MOZ", "MWI", "NGA", "SLE", "SWZ", "TCD", "TGO", "ZWE", "AGO", "ETH", "GAB", "GHA", "GIN", "LBR", "NAM", "NER", "RWA", "SEN", "TZA", "UGA", "ZMB")
 # 
 # id_list <- list.files("draft/aaa_assign_populations/")
 # 
 # pse_dat <- lapply(file.path("draft/aaa_assign_populations", id_list, "pse_prevalence.csv"),
 #                   read.csv)
 # 
-# names(pse_dat) <- iso3_vec
+# names(pse_dat) <- ssa_iso3
+
+pse_dat <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/Method comparison/deduplicated_pse_data.csv") %>%
+  mutate(iso3 = countrycode(country.name, "country.name", "iso3c"))
+
+lso_pop_id <- orderly::orderly_search(name = "aaa_scale_pop", query = paste0('latest(parameter:iso3 == "', "LSO", '")'), draft = FALSE)
+
+lso_pop <- read_csv(paste0("archive/aaa_scale_pop/", lso_pop_id, "/interpolated_population.csv")) %>%
+  left_join(read_sf("archive/lso_data_areas/20201211-100113-b6410c57/lso_areas.geojson") %>%
+              st_drop_geometry() %>%
+              select(area_id, area_name, area_level)) %>%
+  filter(area_level == 1) %>%
+  moz.utils::five_year_to_15to49("population")
 
 pse_dat <- pse_dat %>%
-  bind_rows(.id = "iso3") %>%
-  mutate(population_proportion = pse/population) %>%
+  mutate(iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
+  filter(!(iso3 == "LSO" & year == 2018)) %>%
+  bind_rows(
+    pse_dat %>%
+      filter(iso3 == "LSO", year == 2018) %>%
+      select(-population) %>%
+      left_join(lso_pop %>% select(area_name, year, sex, population) %>% ungroup()) %>%
+      mutate(population_proportion = pse/population) %>%
+      select(colnames(pse_dat))
+  )
+
+pse_dat <- pse_dat %>%
+  # bind_rows(.id = "iso3") %>%
+  mutate(population_proportion = pse/population,
+         ) %>%
   filter(population_proportion != 0, !is.na(population_proportion), population_proportion < 1) %>%
-  bind_rows(read.csv("R/ZAF/assign_populations/pse_prevalence.csv") %>% mutate(iso3 = "ZAF")) %>%
+  # bind_rows(read.csv("R/ZAF/assign_populations/deduplicated_pse_proportions.csv") %>% mutate(iso3 = "ZAF")) %>%
   left_join(region %>% select(region, iso3)) %>%
   mutate(
     logit_proportion = logit(population_proportion),
     is_national = ifelse(area_name == country.name, 1, 0)
   ) %>%
-  select(iso3, year, kp, is_national, logit_proportion, population_proportion)
+  select(iso3, year, kp, is_national, logit_proportion, population_proportion) %>%
+  filter(iso3 != "LBR")
 
-# pse_dat <- read.csv("R/Model/pse_surveillance_data.csv")
-# write_csv(pse_dat, "R/Model/pse_surveillance_data.csv")
+# pse_dat <- read.csv("R/Model/PSE/deduplicated_pse_data.csv") %>%
+#   filter(iso3 != "LBR")
+
+# write_csv(pse_dat, "R/Model/PSE/deduplicated_pse_data.csv")
 
 pse_inla <- crossing(iso3 = ssa_iso3) %>%
   bind_rows(pse_dat %>%
@@ -119,11 +149,11 @@ pse_fit <- INLA::inla(pse_formula,
                   control.predictor=list(compute=TRUE),
                   verbose = TRUE)
 
-log_prec_besag_msm <- pse_fit$internal.marginals.hyperpar$`Log precision for id.iso3`
+# log_prec_besag_msm <- pse_fit$internal.marginals.hyperpar$`Log precision for id.iso3`
 
 fitted_val <- get_mod_results_test(pse_fit, pse_inla, "logit_proportion")
 
-invlogit <- function(x) {exp(x)/(1+exp(x))}
+# invlogit <- function(x) {exp(x)/(1+exp(x))}
 
 fsw_val <- fitted_val %>%
   mutate(across(c(lower, median, upper), invlogit))
@@ -191,10 +221,11 @@ pse_out <- fsw_val %>%
     pwid_val %>% mutate(kp = "PWID")
   ) %>%
   mutate(area_name = countrycode(iso3, "iso3c", "country.name")) %>%
-  select(iso3, area_name, kp, lower:upper)
+  select(iso3, area_name, kp, lower:upper) %>%
+  left_join(region)
 
-# pse_out <- read_csv("R/pse_out_surveillance_only.csv")
-# write.csv(pse_out, "R/pse_out_surveillance_only.csv")
+# pse_out <- read_csv("R/Model/PSE/deduplicated_pse_estimates.csv")
+# write.csv(pse_out, "R/Model/PSE/deduplicated_pse_estimates.csv")
 
 pse_out %>%
   # filter(source == "Surveillance only") %>%
@@ -259,18 +290,18 @@ reg_med %>% bind_rows(
 
 
 pse_out %>%
-  filter(source == "Surveillance only") %>%
-  left_join(region) %>%
+  filter(iso3 != "ZAF") %>%
   group_by(kp, region) %>%
   summarise(tibble(x = 100*quantile(median, c(0.25, 0.5, 0.75)), q = c(0.25, 0.5, 0.75))) %>%
   bind_rows(
     pse_out %>%
-      filter(source == "Surveillance only") %>%
-      left_join(region) %>%
       group_by(kp) %>%
       summarise(tibble(x = 100*quantile(median, c(0.25, 0.5, 0.75)), q = c(0.25, 0.5, 0.75))) %>%
       mutate(region = "SSA")
   ) %>%
   mutate(region = factor(region, levels = c("SSA", "ESA", "WCA"))) %>%
   arrange(kp, region) %>%
-  View()
+  pivot_wider(names_from = q, values_from = x)
+
+pse_out %>%
+  filter(iso3 == "ZAF")

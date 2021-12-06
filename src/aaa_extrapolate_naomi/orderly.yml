@@ -12,11 +12,11 @@ artefacts:
   - data:
       description: Matched admin1 prevalence for KP prevalence data
       filenames:
-        - anonymised_prev.csv
+        - prev.csv
   - data:
       description: Matched admin1 ART coverage for KP ART data
       filenames:
-        - anonymised_art.csv
+        - art.csv
 
 parameters:
   iso3:

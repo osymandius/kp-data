@@ -21,11 +21,14 @@ city_population <- read_csv("R/ZAF/download_worldpop/interpolated_city_populatio
 
 # merge_cities <- read_sf("merge_cities.geojson")
 
-sharepoint <- spud::sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
+# sharepoint <- spud::sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
+# 
+# pse_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations", "pse_surveillance_only.csv")
+# pse <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = pse_path)
+# pse <- read_csv(pse)
 
-pse_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations", "pse_surveillance_only.csv")
-pse <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = pse_path)
-pse <- read_csv(pse)
+pse <- read_csv("src/aaa_assign_populations/2021_11_27_mapped_place_pse.csv") %>%
+  bind_rows(read_csv("src/aaa_assign_populations/2021_11_27_checked_and_unknown_pse.csv"))
 
 population <- population %>%
   bind_rows(city_population) %>%
@@ -54,7 +57,14 @@ pse <- pse %>%
   distinct(kp, area_name, year, pse, .keep_all=TRUE) %>%
   mutate(row_id = row_number(),
          iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
-  filter(iso3 == iso3_c)
+  filter(iso3 == iso3_c) %>%
+  select(iso3:pse_upper, uid) %>%
+  mutate(sex = case_when(
+    kp %in% c("FSW", "TG") ~ "female",
+    kp == "MSM" ~ "male",
+    kp == "PWID" ~ "both"
+  ),
+  row_id = row_number())
 
 if(nrow(pse)) {
   
@@ -135,7 +145,7 @@ if(nrow(pse)) {
     left_join(row_populations) %>%
     # filter(!is.na(population)) %>%
     mutate(population_proportion = pse/population) %>%
-    select(country.name, surveillance_type, indicator, method, kp, sex, age_group, area_name, province, year, pse_lower, pse, pse_upper, prop_lower, population_proportion, prop_upper, sample, ref) %>%
+    select(any_of(c("country.name", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "province", "year", "pse_lower", "pse", "pse_upper", "population", "prop_lower", "population_proportion", "prop_upper", "sample", "notes", "ref", "link", "uid"))) %>%
     arrange(country.name, kp, year)
   
   
@@ -149,7 +159,7 @@ if(nrow(pse)) {
 }
 
 
-write_csv(pse, "R/ZAF/assign_populations/pse_prevalence.csv")
+write_csv(pse, "R/ZAF/assign_populations/deduplicated_pse_proportions.csv")
 write_csv(bad_match_error, "R/ZAF/assign_populations/bad_match_error.csv")
 
 # pop_search <- best_matches %>%

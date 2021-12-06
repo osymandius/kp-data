@@ -33,6 +33,10 @@ sources:
 
 resources:
   - merge_cities.geojson
+  - 2021_11_27_mapped_place_pse.csv
+  - 2021_11_27_truly_checked_pse.csv
+  - 2021_11_27_checked_and_unknown_pse.csv
+  - 2021_12_06_deduplicated_pse_data.csv
 
 depends:
   aaa_inputs_orderly_pull:

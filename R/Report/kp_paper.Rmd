@@ -1,0 +1,69 @@
+---
+title: "Estimating key population size, HIV prevalence, and ART coverage for sub-Saharan Africa at the national level"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Background
+
+Female sex workers (FSW), men who have sex with men (MSM), people who inject drugs (PWID), and transgender people (TG) experience disproportionate risk of HIV acquisition and transmission in sub-Saharan Africa (SSA) [1]. Delivering appropriate HIV prevention and treatment programming for these key populations requires estimates of population size, HIV prevalence, and new HIV infections.
+
+Key population surveillance relies on methods underpinned by respondent-driven or network sampling. Surveillance methods to quantify total population HIV burden, for example national household surveys or antenatal clinic data, are unsuitable for key population surveillance due to population size, high mobility or homelessness, non-disclosure of key population status, and societal marginalisation that often excludes key populations from relevant sampling frames. Key population surveillance is often restricted to or disproportionately conducted in urban areas and studies are conducted infrequently. As are result, data are sparse with limited representativeness.
+
+Few countries have longitudinal estimates of population size or HIV prevalence for key populations, and any longitudinal estimates are largely restricted to female sex workers [2]. Where longitudinal estimates exist, they are often noisy or inconsistent due to small sample sizes and convenience sampling methods. Most countries lack data for transgender populations.
+
+Systematic reviews and meta-analyses of population size, HIV prevalence data, or ART coverage that encompass all countries in SSA have been conducted for FSW, MSM, and PWID. Region-level studies are most available for FSW, including of HIV prevalence and the treatment cascade [3], [4]; Stannah et al. produced estimates of the testing and treatment cascade in MSM [5]; and Degenhardt and colleagues conducted systematic reviews in 2007 and 2017 for PWID highlighting both the paucity of PWID surveillance data in SSA and, from the limited data available, increasing prevalence of injecting drug use and HIV prevalence within PWID [6], [7]. The Global.HIV group has developed a database detailing a range of epidemiological, behavioural, and legal indicators for key populations up to 2017, including for transgender people [8], [9]. Whilst several recent studies on transgender populations have been published [10]--[13], insufficient data exist to conduct region-level metaanalyses.
+
+Efforts to consolidate key population surveillance data have also been undertaken by a range of international stakeholders, including the Joint United Nations Program on HIV/AIDS (UNAIDS), the US Centers for Disease Control and Prevention (CDC), the U.S. President's Emergency Plan for AIDS Relief (PEPFAR), and the Global Fund to Fight AIDS, TB, and Malaria (GF) as part of monitoring the state of the epidemic, evaluating programmes, assessing data availability, and to make recommendations on key population data reporting and quality thresholds [14]--[19].
+
+We consolidated and harmonised key population size estimate, HIV prevalence, and ART coverage data from multiple existing databases. We described the availability of data across countries and over time for each key population group and characterised the relationship between key population and total population HIV indicators. We used regression analysis to extrapolate and smooth national level estimates of key population size, HIV prevalence, and ART coverage for all countries in SSA.
+
+## Data
+
+Population size estimate
+(PSE), HIV prevalence, and ART coverage data were extracted from:
+
+-   UNAIDS Global AIDS Monitoring
+
+-   UNAIDS Key Population Atlas
+
+-   Global Fund surveillance database
+
+-   CDC key population database 
+
+Data were excluded from analysis if:
+
+-   Data were duplicated across or within databases; or
+
+-   Information about key population definition, year, or surveillance area were missing; or
+
+-   The surveillance area was non-specific (e.g. 'urban areas' or '5 provinces'); or
+
+-   Estimates were modelled or extrapolated; or
+
+-   Data were severe outliers; or
+
+-   Data could not be confirmed by primary source review
+
+Countries in Eastern and Southern Africa (ESA) were defined as: Angola, Botswana, Eswatini, Ethiopia,
+Kenya, Lesotho, Malawi, Mozambique, Namibia, Rwanda, South Africa, South Sudan, Tanzania, Uganda, Zambia, Zimbabwe
+
+Countres in Western and Central Africa (WCA) were defined as: Benin, Burkina Faso, Burundi, Cameroon,
+Central African Republic, Chad, Congo - Brazzaville, Congo - Kinshasa, Côte d'Ivoire, Equatorial Guinea, Gabon, Gambia, Ghana, Guinea, Guinea-Bissau, Liberia, Mali, Niger, Nigeria, Senegal, Sierra Leone, Togo
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

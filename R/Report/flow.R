@@ -1,5 +1,6 @@
 library(tidyverse)
 library(DiagrammeR)
+library(countrycode)
 
 ssa_names <- c("Angola", "Botswana", "Eswatini", "Ethiopia", "Kenya", "Lesotho",  "Malawi", "Mozambique", "Namibia", "Rwanda", "South Africa", "South Sudan", "Uganda", "United Republic of Tanzania", "Zambia", "Zimbabwe", "Benin", "Burkina Faso", "Burundi", "Cameroon", "Central African Republic", "Chad", "Congo", "Côte d'Ivoire", "Democratic Republic of the Congo", "Equatorial Guinea", "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Liberia", "Mali", "Niger", "Nigeria", "Senegal", "Sierra Leone", "Togo")
 ssa_iso3 <- countrycode(ssa_names, "country.name", "iso3c")
@@ -7,7 +8,7 @@ ssa_iso3 <- countrycode(ssa_names, "country.name", "iso3c")
 collapse <- function(...) {paste0(..., collapse = "\n")}
 
 ### PSE
-{
+
 pse_remove_label <- list()
 
 pse_total_dat <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/2021_11_28_pse_all_data.csv")
@@ -25,7 +26,7 @@ pse_remove_label$duplicates <- nrow(pse_total_dat) - nrow(pse_simple_deduplicati
 
 pse_remove_label$duplicates <- paste0("Duplicated data (n = ", pse_remove_label$duplicates, ")")
 
-surveillance_review_input <- pse_spreadsheet_extract %>%
+pse_surveillance_review_input <- pse_spreadsheet_extract %>%
   mutate(iso3 = countrycode::countrycode(country.name, "country.name", "iso3c"),
          kp = ifelse(kp == "TGW", "TG", kp)) %>%
   filter(is.na(duplicate_of),
@@ -35,7 +36,7 @@ surveillance_review_input <- pse_spreadsheet_extract %>%
   mutate(dataset = "Surveillance review")
 
 pse_inputs <- pse_inputs %>%
-  bind_rows(surveillance_review_input)
+  bind_rows(pse_surveillance_review_input)
 
 pse_inputs <- pse_inputs %>%
   bind_rows(pse_inputs %>%
@@ -65,25 +66,70 @@ pse_inputs_text <- crossing(dataset = pse_inputs$dataset,
 
 pse_inputs_labels <- apply(pse_inputs_text, 1, collapse)
 
+### Clean data
+
+# Remove duplicates
+pse_spreadsheet_extract <- pse_spreadsheet_extract %>%
+  mutate(iso3 = countrycode::countrycode(country.name, "country.name", "iso3c"),
+         data_checked = tolower(data_checked),
+         source_found = tolower(source_found)) %>%
+  filter(is.na(duplicate_of),
+         !is.na(iso3))
+
+#Remove non-specific area names
 pse_remove_label$nonspec <- pse_spreadsheet_extract %>%
   filter(str_detect(area_name, regex("urban|rural|county|counties|districts|state|total", ignore_case = TRUE))) %>%
   nrow()
 
 pse_remove_label$nonspec <- paste0("Unspecific area name (n = ", pse_remove_label$nonspec, ")")
 
+pse_spreadsheet_extract <- pse_spreadsheet_extract %>%
+  filter(!str_detect(area_name, regex("urban|rural|county|counties|districts|state|total", ignore_case = TRUE)))
+
+#Remove extrapolated values
 pse_remove_label$model <- pse_spreadsheet_extract %>%
   filter(str_detect(method, regex("extrapolat", ignore_case = TRUE))) %>%
   nrow()
 
 pse_remove_label$model <- paste0("Extrapolated/modelled data (n = ", pse_remove_label$model, ")")
 
+pse_spreadsheet_extract <- pse_spreadsheet_extract %>%
+  filter(!str_detect(method, regex("extrapolat", ignore_case = TRUE)) | is.na(method))
+
+#Remove non-empirical methods
+pse_remove_label$non_emp <- pse_spreadsheet_extract %>%
+  filter(str_detect(method, regex("enumeration|delphi", ignore_case = TRUE))) %>%
+  nrow()
+
+pse_remove_label$non_emp <- paste0("Non-empirical methods (n = ", pse_remove_label$non_emp, ")")
+
+pse_spreadsheet_extract <- pse_spreadsheet_extract %>%
+  filter(!str_detect(method, regex("enumeration|delphi", ignore_case = TRUE)) | is.na(method))
+
+#Remove outliers
 pse_remove_label$outlier <- NA
+
+#Remove unconfirmed data
 pse_remove_label$unconf <- NA
 
-pse_cleaned_data <- read_csv("src/aaa_assign_populations/2021_12_06_deduplicated_pse_data.csv") %>%
+truly_checked <- pse_spreadsheet_extract %>%
+  filter(data_checked == "yes",
+         year > 2009
+  )
+
+mapped_place <- pse_spreadsheet_extract %>%
+  filter(str_detect(method, "apping|PLACE"),
+         data_checked == "remove",
+         is.na(duplicate_of),
+         !country.name == area_name,
+         year > 2009)
+
+pse_cleaned_data <- bind_rows(truly_checked, mapped_place) %>%
   mutate(kp = ifelse(kp == "TGW", "TG", kp)) %>%
   filter(kp %in% c("FSW", "MSM", "PWID", "TG"))
-  
+
+write_csv(pse_cleaned_data, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/2021_12_06_spreadsheet_cleaned.csv")
+
 pse_cleaned_text <- pse_cleaned_data %>%
   count(kp) %>%
   mutate(n = paste0("n = ", n)) %>%
@@ -94,6 +140,7 @@ pse_cleaned_text <- pse_cleaned_data %>%
   select(name, n, everything())
 
 pse_clean_labels <- collapse(pse_cleaned_text)
+
 
 final_pse_id <- lapply(ssa_iso3, function(x){
   orderly::orderly_search(name = "aaa_assign_populations", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
@@ -193,7 +240,7 @@ prev_remove_label$duplicates <- nrow(prev_total_dat) - nrow(prev_simple_deduplic
 
 prev_remove_label$duplicates <- paste0("Duplicated data (n = ", prev_remove_label$duplicates, ")")
 
-surveillance_review_input <- prev_spreadsheet_extract %>%
+prev_surveillance_review_input <- prev_spreadsheet_extract %>%
   mutate(iso3 = countrycode::countrycode(country.name, "country.name", "iso3c"),
          kp = ifelse(kp %in% c("TGW", "TGM", "TGW/GQ"), "TG", kp)) %>%
   filter(is.na(duplicate_of),
@@ -203,7 +250,7 @@ surveillance_review_input <- prev_spreadsheet_extract %>%
   mutate(dataset = "Surveillance review")
 
 prev_inputs <- prev_inputs %>%
-  bind_rows(surveillance_review_input)
+  bind_rows(prev_surveillance_review_input)
 
 prev_inputs <- prev_inputs %>%
   bind_rows(prev_inputs %>%

@@ -88,8 +88,9 @@ population <- population %>%
 # cities_areas <- merge_cities %>%
 #   bind_rows(areas)
 
-pse <- read.csv("2021_12_06_deduplicated_pse_data.csv")
-
+pse_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/PSE", "2021_12_06_spreadsheet_cleaned.csv")
+pse <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = pse_path)
+pse <- read_csv(pse) 
 
 pse <- pse %>%
   # bind_rows(gf_pse) %>%

@@ -6,33 +6,13 @@ edit_dat <- c(edit_dat,
   lapply(type_convert) %>%
   bind_rows()
 
-lapply(edit_dat, "[", "prop_lower") %>%
-  lapply(str)
-
-# ## Duplicates at this stage
-edit_dat %>%
-  bind_rows() %>%
-  filter(!is.na(duplicate_of)) %>%
-  nrow()
-
-# 
-# ## Non-specific area names
-# edit_dat %>%
-#   bind_rows() %>%
-#   filter(str_detect(area_name, "urban|Urban|county|counties|districts|states|States|cities|Cities|rural|Rural")) %>%
-#            count()
-# 
-# ## Extrapolated
-# edit_dat %>%
-#   bind_rows() %>%
-#   filter(str_detect(method, "xtrapol"),
-#          is.na(duplicate_of)) %>%
-#   count(kp)
-
+write_csv(edit_dat, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/2021_12_6_pse_spreadsheet_extract.csv")
 
 edit_dat <- edit_dat %>%
   bind_rows() %>%
-  mutate(iso3 = countrycode::countrycode(country.name, "country.name", "iso3c")) %>%
+  mutate(iso3 = countrycode::countrycode(country.name, "country.name", "iso3c"),
+         data_checked = tolower(data_checked),
+         source_found = tolower(source_found)) %>%
   filter(is.na(duplicate_of),
          !is.na(iso3))
 
@@ -41,6 +21,9 @@ edit_dat <- edit_dat %>%
 
 edit_dat <- edit_dat %>%
   filter(!str_detect(method, regex("extrapolat", ignore_case = TRUE)) | is.na(method))
+
+edit_dat <- edit_dat %>%
+  filter(!str_detect(method, regex("enumeration|delphi", ignore_case = TRUE)) | is.na(method))
 
 unknown <- edit_dat %>%
   filter(
@@ -56,7 +39,8 @@ truly_checked <- edit_dat %>%
 mapped_place <- edit_dat %>%
   filter(str_detect(method, "apping|PLACE"),
          data_checked == "remove",
-         is.na(duplicate_of))
+         is.na(duplicate_of),
+         !country.name == area_name)
 
 deduplicated_data <- truly_checked %>%
   bind_rows(mapped_place,
@@ -66,7 +50,7 @@ write_csv(mapped_place, "src/aaa_assign_populations/2021_11_27_mapped_place_pse.
 write_csv(truly_checked, "src/aaa_assign_populations/2021_11_27_truly_checked_pse.csv")
 write_csv(checked_and_unknown, "src/aaa_assign_populations/2021_11_27_checked_and_unknown_pse.csv")
 # write_csv(bind_rows(checked_and_unknown, mapped_place), "R/Model/PSE/deduplicated_pse_data.csv")
-write_csv(deduplicated_data, "src/aaa_assign_populations/2021_12_06_deduplicated_pse_data.csv")
+write_csv(deduplicated_data, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/2021_12_06_spreadsheet_cleaned.csv")
 
 ####
 

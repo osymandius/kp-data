@@ -16,10 +16,10 @@ lapply(c("BWA", "ZAF"), function(x){
 })
 
 possibly_run <- purrr::possibly(.f = orderly_run, otherwise = NULL)
-id <- map(ssa_iso3, ~possibly_run("aaa_extrapolate_naomi", parameters = data.frame(iso3 = .x)))
+id <- map(ssa_iso3, ~possibly_run("aaa_assign_populations", parameters = data.frame(iso3 = .x)))
 names(id) <- ssa_iso3
 lapply(id %>% compact(), orderly_commit)
-orderly_run("aaa_extrapolate_naomi", parameters = data.frame(iso3 = "ZWE"))
+orderly_run("aaa_assign_populations", parameters = data.frame(iso3 = "ZWE"))
 
 orderly_develop_start("aaa_extrapolate_naomi", parameters = data.frame(iso3 = "ZWE"))
 setwd("src/aaa_extrapolate_naomi")

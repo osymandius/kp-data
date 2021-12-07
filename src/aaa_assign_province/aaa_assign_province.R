@@ -21,7 +21,7 @@ cities_areas <- merge_cities %>%
   
 sharepoint <- spud::sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
 
-prev_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/HIV prevalence", "2021_11_24_prev_deduplicated.csv")
+prev_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/HIV prevalence", "2021_12_06_prev_clean.csv")
 prev <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = prev_path)
 prev <- read_csv(prev) %>%
   rename(value = prev) %>%

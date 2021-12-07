@@ -1,8 +1,15 @@
-indicators <- read_output_package("depends/naomi_output.zip")
+# indicators <- read_output_package("depends/naomi_output.zip")
 spectrum <- extract_pjnz_naomi("depends/spectrum_file.zip")
 
-# indicators <- read_output_package("~/Downloads/MOZ_naomi-output_20211110-1459.zip")
+list.files(file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Data/Spectrum files/2021 naomi"))
 
+sharepoint <- spud::sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
+folder <- sharepoint$folder(site = Sys.getenv("SHAREPOINT_SITE"), path = "Shared Documents/Data/Spectrum files/2021 naomi")
+path <- grep(iso3, folder$list()$name, value=TRUE, ignore.case = TRUE)
+path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Data/Spectrum files/2021 naomi", path)
+
+indicators <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = path)
+indicators <- read_output_package(indicators)
 indicators <- add_output_labels(indicators) %>%
   dplyr::left_join(indicators$meta_age_group, by = c("age_group", "age_group_label"))
 

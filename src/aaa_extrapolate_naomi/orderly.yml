@@ -43,10 +43,10 @@ depends:
     id: latest(parameter:iso3 == iso3)
     use:
       depends/spectrum_file.zip: spectrum_file.zip
-  aaa_outputs_adr_pull:
-    id: latest(parameter:iso3 == iso3)
-    use:
-      depends/naomi_output.zip: naomi_output.zip
+  # aaa_outputs_adr_pull:
+  #   id: latest(parameter:iso3 == iso3)
+  #   use:
+  #     depends/naomi_output.zip: naomi_output.zip
   aaa_assign_province:
     id: latest(parameter:iso3 == iso3)
     use:

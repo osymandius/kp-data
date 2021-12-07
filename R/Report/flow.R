@@ -141,7 +141,6 @@ pse_cleaned_text <- pse_cleaned_data %>%
 
 pse_clean_labels <- collapse(pse_cleaned_text)
 
-
 final_pse_id <- lapply(ssa_iso3, function(x){
   orderly::orderly_search(name = "aaa_assign_populations", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
 })
@@ -184,21 +183,23 @@ inp_total [label = '@@1-6']
 m1_dedup [label = '@@2-1']
 m2_nonspec [label = '@@2-2']
 m3_model [label = '@@2-3']
-m4_outlier [label = 'Outlier (n=??)']
-m5_unconf [label = 'Unconfirmed (n=??)']
+m4_non_emp [label = '@@2-4']
+m5_outlier [label = 'Outlier (n=??)']
+m6_unconf [label = 'Unconfirmed (n=??)']
 clean [label = '@@3']
 c1_denom [label = '@@2-6']
 final [label = '@@4']
 
 node [shape=none, width=0, height=0, label='']
-  p5 -> clean
-  p6 -> final
+  p6 -> clean
+  p7 -> final
   {rank=same; p1 -> m1_dedup}
   {rank=same; p2 -> m2_nonspec}
   {rank=same; p3 -> m3_model}
-  {rank=same; p4 -> m4_outlier}
-  {rank=same; p5 -> m5_unconf}
-  {rank=same; p6 -> c1_denom}
+  {rank=same; p4 -> m4_non_emp}
+  {rank=same; p5 -> m4_outlier}
+  {rank=same; p6 -> m5_unconf}
+  {rank=same; p7 -> c1_denom}
 
 {inp_gam inp_atlas inp_cdc inp_gf inp_surv} -> inp_total
 
@@ -209,7 +210,8 @@ edge [dir = none]
   p2 -> p3;
   p3 -> p4;
   p4 -> p5;
-  clean -> p6
+  p5 -> p6;
+  clean -> p7
   
  
 
@@ -220,8 +222,40 @@ edge [dir = none]
 [3]: pse_clean_labels
 [4]: pse_final_labels
 ")
-}
+
 ### Prevalence
+
+prev_spreadsheet_extract <- lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/HIV prevalence/Edited/", full.names = TRUE, pattern = "csv"), read_csv, na= "")
+
+prev_spreadsheet_extract <- c(prev_spreadsheet_extract, 
+              lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/HIV prevalence/Edited/", full.names = TRUE, pattern = "xlsx"), readxl::read_xlsx)
+) %>%
+  lapply(type_convert) %>%
+  bind_rows()
+
+prev_spreadsheet_extract <-  prev_spreadsheet_extract %>%
+  mutate(prev = ifelse(prev > 1, prev/100, prev),
+         prev_upper = ifelse(prev_upper > 1, prev_upper/100, prev_upper),
+         prev_lower = ifelse(prev_lower > 1, prev_lower/100, prev_lower),
+         age_group = case_when(
+           age_group %in% c("15-24") ~ "Y015_024",
+           age_group %in% c("18-24", "19-24", "20-24") ~ "Y020_024",
+           age_group %in% c("15+", "18+") ~ "Y015_999",
+           age_group == "25-29" ~ "Y025_029",
+           age_group %in% c("15-17", "15-19") ~ "Y015_019",
+           age_group == "25-34" ~ "Y025_034",
+           age_group == "15-49"   ~ "Y015_049",
+           age_group == "30-34"   ~ "Y030_034",
+           age_group == "35-39"   ~ "Y035_039",
+           age_group %in% c("25-49", "25+")   ~ "Y025_049",
+           age_group %in% c("45+", "50+","40+") ~ "Y050_999",
+           str_detect(age_group, "\\+|\\-") ~ "Y015_049",
+           TRUE ~ age_group
+           
+         )
+  )
+
+write_csv(prev_spreadsheet_extract, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/2021_12_6_prev_spreadsheet_extract.csv")
 
 prev_remove_label <- list()
 
@@ -232,10 +266,9 @@ prev_inputs <- prev_total_dat %>%
   count(dataset, kp) 
 
 prev_simple_deduplication <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/2021_11_24_prev_deduplicated.csv")
-prev_spreadsheet_extract <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/2021_12_6_prev_spreadsheet_extract.csv")
 
 prev_remove_label$duplicates <- nrow(prev_total_dat) - nrow(prev_simple_deduplication) + prev_spreadsheet_extract %>%
-  filter(!is.na(duplicate_of)) %>%
+  filter(!is.na(duplicate_of) | !is.na(is_aggregate)) %>%
   nrow()
 
 prev_remove_label$duplicates <- paste0("Duplicated data (n = ", prev_remove_label$duplicates, ")")
@@ -281,24 +314,43 @@ prev_inputs_text <- crossing(dataset = prev_inputs$dataset,
 
 prev_inputs_labels <- apply(prev_inputs_text, 1, collapse)
 
+## Clean prevalence data
+
+prev_spreadsheet_extract <- prev_spreadsheet_extract %>%
+  mutate(iso3 = countrycode::countrycode(country.name, "country.name", "iso3c")) %>%
+  filter(is.na(duplicate_of),
+         is.na(is_aggregate),
+         !is.na(iso3))
+
+# Remove non-specific area names
 prev_remove_label$nonspec <- prev_spreadsheet_extract %>%
   filter(str_detect(area_name, regex("urban|rural|county|counties|districts|state|total", ignore_case = TRUE))) %>%
   nrow()
 
 prev_remove_label$nonspec <- paste0("Unspecific area name (n = ", prev_remove_label$nonspec, ")")
 
-prev_remove_label$model <- prev_spreadsheet_extract %>%
-  filter(str_detect(method, regex("extrapolat", ignore_case = TRUE))) %>%
-  nrow()
+prev_spreadsheet_extract <- prev_spreadsheet_extract %>%
+  filter(!str_detect(area_name, regex("urban|rural|county|counties|districts|state|total", ignore_case = TRUE)))
 
-prev_remove_label$model <- paste0("Extrapolated/modelled data (n = ", prev_remove_label$model, ")")
-
-prev_remove_label$outlier <- NA
+# Remove outliers
 prev_remove_label$unconf <- NA
 
-prev_cleaned_data <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/2021_12_06_prev_clean.csv") %>%
+prev_checked <- prev_spreadsheet_extract %>%
+  filter(data_checked == "yes",
+         year > 2009
+  )
+
+prev_unknown <- prev_spreadsheet_extract %>%
+  filter(
+    (is.na(data_checked) & source_found == "no")  | (is.na(data_checked) & is.na(source_found)),
+    year > 2009
+  )
+
+prev_cleaned_data <- bind_rows(prev_checked, prev_unknown) %>%
   mutate(kp = ifelse(kp == "TGW", "TG", kp)) %>%
   filter(kp %in% c("FSW", "MSM", "PWID", "TG"))
+
+write_csv(prev_cleaned_data, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/2021_12_06_prev_clean.csv")
 
 prev_cleaned_text <- prev_cleaned_data %>%
   count(kp) %>%

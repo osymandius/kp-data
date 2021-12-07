@@ -1,12 +1,14 @@
-edit_dat <- lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/PSE/Edited/", full.names = TRUE, pattern = "csv"), read_csv, na= "")
+edit_dat <- lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/HIV prevalence/Edited/", full.names = TRUE, pattern = "csv"), read_csv, na= "")
 
 edit_dat <- c(edit_dat, 
-              lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/PSE/Edited/", full.names = TRUE, pattern = "xlsx"), readxl::read_xlsx)
+              lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/HIV prevalence/Edited/", full.names = TRUE, pattern = "xlsx"), readxl::read_xlsx)
               ) %>%
   lapply(type_convert) %>%
   bind_rows()
 
-lapply(edit_dat, "[", "prop_lower") %>%
+write_csv(edit_dat, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/2021_12_6_prev_spreadsheet_extract.csv")
+
+lapply(edit_dat, "[", "prev") %>%
   lapply(str)
 
 # ## Duplicates at this stage
@@ -53,20 +55,32 @@ truly_checked <- edit_dat %>%
          year > 2009
   )
 
-mapped_place <- edit_dat %>%
-  filter(str_detect(method, "apping|PLACE"),
-         data_checked == "remove",
-         is.na(duplicate_of))
-
 deduplicated_data <- truly_checked %>%
-  bind_rows(mapped_place,
-            unknown)
+  bind_rows(unknown)
 
-write_csv(mapped_place, "src/aaa_assign_populations/2021_11_27_mapped_place_pse.csv")
-write_csv(truly_checked, "src/aaa_assign_populations/2021_11_27_truly_checked_pse.csv")
-write_csv(checked_and_unknown, "src/aaa_assign_populations/2021_11_27_checked_and_unknown_pse.csv")
-# write_csv(bind_rows(checked_and_unknown, mapped_place), "R/Model/PSE/deduplicated_pse_data.csv")
-write_csv(deduplicated_data, "src/aaa_assign_populations/2021_12_06_deduplicated_pse_data.csv")
+deduplicated_data <- deduplicated_data %>%
+  mutate(prev = ifelse(prev > 1, prev/100, prev),
+         prev_upper = ifelse(prev_upper > 1, prev_upper/100, prev_upper),
+         prev_lower = ifelse(prev_lower > 1, prev_lower/100, prev_lower),
+         age_group = case_when(
+           age_group %in% c("15-24") ~ "Y015_024",
+           age_group %in% c("18-24", "19-24", "20-24") ~ "Y020_024",
+           age_group %in% c("15+", "18+") ~ "Y015_999",
+           age_group == "25-29" ~ "Y025_029",
+           age_group %in% c("15-17", "15-19") ~ "Y015_019",
+           age_group == "25-34" ~ "Y025_034",
+           age_group == "15-49"   ~ "Y015_049",
+           age_group == "30-34"   ~ "Y030_034",
+           age_group == "35-39"   ~ "Y035_039",
+           age_group %in% c("25-49", "25+")   ~ "Y025_049",
+           age_group %in% c("45+", "50+","40+") ~ "Y050_999",
+           str_detect(age_group, "\\+|\\-") ~ "Y015_049",
+           TRUE ~ age_group
+           
+         )
+         )
+
+write_csv(deduplicated_data, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/2021_12_06_prev_clean.csv")
 
 ####
 

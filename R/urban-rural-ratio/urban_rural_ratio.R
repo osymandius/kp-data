@@ -12,7 +12,7 @@ sampled_district_populations <- ken_population %>%
     area_name %in% c("Kiambu", "Kitui", "Laikipia", "Machakos", "Mombasa")) %>%
   moz.utils::five_year_to_15to49("population")
 
-## 3S-CRC from 2020 PSE NASCOP report
+## 3S-CRC from KEN 2020 PSE NASCOP report
 
 fsw_pse <- data.frame(area_name = c("Kiambu", "Kitui", "Laikipia", "Machakos", "Mombasa"),
                       restype = c("urban", "rural", "rural", "urban", "urban"),
@@ -35,6 +35,45 @@ msm_pse <- data.frame(area_name = c("Kiambu", "Kitui", "Laikipia", "Machakos", "
 pse <- fsw_pse %>% bind_rows(msm_pse)
 
 ##
+
+mwi_population <- read_csv("archive/mwi_data_population/20210214-230158-41c43727/mwi_population_projections18.csv") %>%
+  filter(str_detect(area_id, "_5_"),
+         calendar_quarter == "CY2013Q2",
+         sex == "female") %>%
+  moz.utils::five_year_to_15to49("population")
+
+mwi_pse <- data.frame(area_name = c("Karonga", "Mzuzu City",
+                                    "Kasungu", "Lilongwe City",
+                                    "Mchinji", "Dedza",
+                                    "Mangochi", "Blantyre City",
+                                    "Thyolo", "Mulanje",
+                                    "Mwanza", "Nkhotakota",
+                                    "Nsanje", "Dowa"),
+                      restype = c("border", "city", "commercial_farm", "city", "border",
+                                  "border", "tourist", "city", "commercial_farm", "commercial_farm",
+                                  "border", "commercial_farm", "rural", "rural"),
+                      kp = "FSW",
+                      sex = "female",
+                      pse_upper = c(289, 357, 567, 1830, 400, 112, 213, 1197, 591, 1735, 280, 340, 173, 806),
+                      pse = c(249, 317, 536, 1773, 358, 89, 213, 1130, 554, 965, 203, 297, 153, 592),
+                      pse_lower = c(210, 277, 506, 1716, 317, 67, 213, 1062, 517, 195, 127, 255, 133, 377)
+) %>% left_join(mwi_population %>% select(area_name, population)) %>%
+  mutate(pse_proportion = pse/population,
+         pse_proportion_lower = pse_lower/population,
+         pse_proportion_upper = pse_upper/population)
+  
+mwi_pse %>%  
+  ggplot(aes(x=area_name, y=pse_proportion, fill=restype)) +
+  geom_col(position = position_dodge()) +
+  geom_linerange(aes(ymin = pse_proportion_lower, ymax = pse_proportion_upper)) +
+  scale_y_continuous(labels = scales::label_percent()) +
+  # scale_fill_manual(values =wesanderson::wes_palette("Zissou1")[c(1,4)]) +
+  moz.utils::standard_theme() +
+  labs(x=element_blank(), y="PSE proportion", fill = element_blank()) +
+  facet_wrap(~kp)
+
+
+
 
 pse %>%
   left_join(sampled_district_populations) %>%

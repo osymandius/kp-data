@@ -277,7 +277,7 @@ art_input_count_text <- readRDS("R objects for report/ART coverage/art_input_cou
   mutate(across(c("FSW", "MSM", "PWID", "TG"), ~str_remove(.x, "FSW|MSM|PWID|TG")),
          across(c("FSW", "MSM", "PWID", "TG"), ~str_trim(.x))
   )
-art_final <- rread_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_final.csv")
+art_final <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_final.csv")
 
 art_denom <- art_final %>% 
   mutate(has_denominator = ifelse(!is.na(denominator), 1, 0)) %>% 

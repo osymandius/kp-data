@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2022/dev) (preloaded format=pdflatex 2021.12.10)  14 DEC 2021 11:05
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2022/dev) (preloaded format=pdflatex 2021.12.10)  14 DEC 2021 13:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -509,46 +509,38 @@ LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 1
 (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) [2]
-<~/Dropbox/Work Streams/2021/Key populations/Paper/Data consolidation paper/Fig
-s/PSE/pse_flowchart.png, id=83, 818.05624pt x 1323.94624pt>
-File: ~/Dropbox/Work Streams/2021/Key populations/Paper/Data consolidation pape
-r/Figs/PSE/pse_flowchart.png Graphic file (type png)
-<use ~/Dropbox/Work Streams/2021/Key populations/Paper/Data consolidation paper
-/Figs/PSE/pse_flowchart.png>
-Package pdftex.def Info: ~/Dropbox/Work Streams/2021/Key populations/Paper/Data
- consolidation paper/Figs/PSE/pse_flowchart.png  used on input line 195.
+<R objects for report/PSE/pse_flowchart.png, id=83, 818.05624pt x 1323.94624pt>
+
+File: R objects for report/PSE/pse_flowchart.png Graphic file (type png)
+<use R objects for report/PSE/pse_flowchart.png>
+Package pdftex.def Info: R objects for report/PSE/pse_flowchart.png  used on in
+put line 195.
 (pdftex.def)             Requested size: 290.25597pt x 469.7517pt.
-<~/Dropbox/Work Streams/2021/Key populations/Paper/Data consolidation paper/Fig
-s/Prevalence/prev_flowchart.png, id=85, 813.0375pt x 1233.60875pt>
-File: ~/Dropbox/Work Streams/2021/Key populations/Paper/Data consolidation pape
-r/Figs/Prevalence/prev_flowchart.png Graphic file (type png)
-<use ~/Dropbox/Work Streams/2021/Key populations/Paper/Data consolidation paper
-/Figs/Prevalence/prev_flowchart.png>
-Package pdftex.def Info: ~/Dropbox/Work Streams/2021/Key populations/Paper/Data
- consolidation paper/Figs/Prevalence/prev_flowchart.png  used on input line 195
-.
+<R objects for report/Prevalence/prev_flowchart.png, id=85, 813.0375pt x 1233.6
+0875pt>
+File: R objects for report/Prevalence/prev_flowchart.png Graphic file (type png
+)
+<use R objects for report/Prevalence/prev_flowchart.png>
+Package pdftex.def Info: R objects for report/Prevalence/prev_flowchart.png  us
+ed on input line 195.
 (pdftex.def)             Requested size: 309.60257pt x 469.755pt.
 
 LaTeX Warning: Float too large for page by 24.49998pt on input line 196.
 
-<~/Dropbox/Work Streams/2021/Key populations/Paper/Data consolidation paper/Fig
-s/ART coverage/art_flowchart.png, id=86, 520.94624pt x 1233.60875pt>
-File: ~/Dropbox/Work Streams/2021/Key populations/Paper/Data consolidation pape
-r/Figs/ART coverage/art_flowchart.png Graphic file (type png)
-<use ~/Dropbox/Work Streams/2021/Key populations/Paper/Data consolidation paper
-/Figs/ART coverage/art_flowchart.png>
-Package pdftex.def Info: ~/Dropbox/Work Streams/2021/Key populations/Paper/Data
- consolidation paper/Figs/ART coverage/art_flowchart.png  used on input line 20
-2.
+<R objects for report/ART coverage/art_flowchart.png, id=86, 520.94624pt x 1233
+.60875pt>
+File: R objects for report/ART coverage/art_flowchart.png Graphic file (type pn
+g)
+<use R objects for report/ART coverage/art_flowchart.png>
+Package pdftex.def Info: R objects for report/ART coverage/art_flowchart.png  u
+sed on input line 202.
 (pdftex.def)             Requested size: 198.37497pt x 469.755pt.
 
 LaTeX Warning: Float too large for page by 23.94441pt on input line 207.
 
-[3 </Users/olistevens/Dropbox/Work Streams/2021/Key populations/Paper/Data cons
-olidation paper/Figs/PSE/pse_flowchart.png> </Users/olistevens/Dropbox/Work Str
-eams/2021/Key populations/Paper/Data consolidation paper/Figs/Prevalence/prev_f
-lowchart.png>] [4 </Users/olistevens/Dropbox/Work Streams/2021/Key populations/
-Paper/Data consolidation paper/Figs/ART coverage/art_flowchart.png>]
+[3 <./R objects for report/PSE/pse_flowchart.png> <./R objects for report/Preva
+lence/prev_flowchart.png>] [4 <./R objects for report/ART coverage/art_flowchar
+t.png>]
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <10> on input line 295.
 LaTeX Font Info:    External font `lmex10' loaded for size
@@ -633,12 +625,12 @@ Package rerunfilecheck Info: File `kp_paper.out' has not changed.
  ) 
 Here is how much of TeX's memory you used:
  11294 strings out of 480313
- 182285 string characters out of 5896198
+ 180338 string characters out of 5896198
  474522 words of memory out of 5000000
  28900 multiletter control sequences out of 15000+600000
  455053 words of font info for 68 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 60i,6n,63p,542b,390s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 60i,6n,63p,428b,390s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/Users/olistevens/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.en
 c}{/Users/olistevens/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/
 Users/olistevens/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/
@@ -652,7 +644,7 @@ istevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></Users/oli
 stevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></Users/olis
 tevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></Users/oliste
 vens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb>
-Output written on kp_paper.pdf (16 pages, 1206873 bytes).
+Output written on kp_paper.pdf (16 pages, 1206630 bytes).
 PDF statistics:
  298 PDF objects out of 1000 (max. 8388607)
  236 compressed objects within 3 object streams

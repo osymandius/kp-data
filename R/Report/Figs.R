@@ -283,8 +283,8 @@ pse_out <- pse_out %>%
 
 foo <- pse_dat %>%
   left_join(pse_out %>% select(iso3, iso3_idx) %>% distinct()) %>%
-  left_join(region) %>%
-  mutate(is_national = factor(is_national, labels = c("No", "Yes")))
+  left_join(region)
+  # mutate(is_national = factor(is_national, labels = c("No", "Yes")))
 
 # pse_dat %>%
 #   filter(kp != "TG") %>%
@@ -318,22 +318,22 @@ pse_maps <- lapply(c("FSW", "MSM", "PWID"), function(x) {
     labs(fill = "PSE proportion", title = x) +
     coord_sf(datum = NA) +
     theme(legend.key.width = unit(1.5, "cm"),
-          plot.title = element_text(hjust = 0.5, face = "bold"))
+          plot.title = element_text(hjust = 0.5, face = "bold", size=16))
   
 })
 
 pse_maps <- ggpubr::ggarrange(pse_maps[[1]], pse_maps[[2]], pse_maps[[3]], nrow=1)
 
-png(file="~/Dropbox/oli backup/Key populations/Data consolidation paper/Figs/pse_maps.png", width=1800, height=800)
+png(file="~/Dropbox/Work Streams/2021/Key populations/Paper/Data consolidation paper/Figs/PSE/pse_maps.png", width=1800, height=800)
 pse_maps
 dev.off()
 
 
 pse_region_data_plot <- pse_out %>%
   ggplot() +
+    geom_jitter(data = foo %>% filter(!kp %in% c("TG", "TGW", "SW")), aes(x=iso3_idx, y=population_proportion), alpha = 0.2, width = 0.4) +
     geom_segment(aes(x = xmin, xend = xmax, y = median, yend = median, color=has_data), size=1) +
     geom_rect(aes(xmin = xmin, xmax = xmax, ymin = lower, ymax = upper, fill=has_data), alpha=0.3, show.legend = FALSE) +
-    geom_jitter(data = foo %>% filter(!kp %in% c("TG", "TGW", "SW")), aes(x=iso3_idx, y=population_proportion, shape=is_national, size = is_national, alpha=is_national), width = 0.4) +
     geom_hline(data = data.frame(yintercept = 0.01, kp = "MSM", iso3 = c("AGO", "ZWE")), linetype = 3, aes(yintercept = yintercept), color="red") +
     scale_color_manual(values = c(wesanderson::wes_palette("Zissou1")[c(4,1)])) +
     scale_fill_manual(values = wesanderson::wes_palette("Zissou1")[c(4,1)])  +
@@ -349,7 +349,7 @@ pse_region_data_plot <- pse_out %>%
     theme(axis.text.x = element_text(size=10),
           panel.background = element_rect(fill=NA, color="black"))
 
-png(file="~/Dropbox/oli backup/Key populations/Data consolidation paper/Figs/pse_region_data.png", width=1200, height=600)
+png(file="~/Dropbox/Work Streams/2021/Key populations/Paper/Data consolidation paper/Figs/PSE/pse_region_data.png", width=1200, height=600)
 pse_region_data_plot
 dev.off()
 
@@ -391,7 +391,7 @@ prev_raw %>%
 ###
 
 convert_logis_labels <- function(x) {
-  paste0(round(plogis(x)*100), "%")
+  paste0(round(plogis(x)*100, 1), "%")
 }
 
 p1 <- prev_res %>%

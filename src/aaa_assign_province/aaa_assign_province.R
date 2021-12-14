@@ -28,10 +28,10 @@ prev <- read_csv(prev) %>%
   mutate(iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
   distinct(kp, area_name, year, value, .keep_all = TRUE)
 
-art_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/ART coverage", "2021_11_29_art_deduplicated.csv")
+art_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/ART coverage", "art_clean.csv")
 art <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = art_path)
 art <- read_csv(art) %>%
-  rename(value = art_coverage) %>%
+  rename(value = art) %>%
   mutate(iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
   distinct(kp, area_name, year, value, .keep_all = TRUE) %>%
   left_join(naomi::get_age_groups() %>% select(age_group_label, age_group)) %>%
@@ -125,7 +125,7 @@ out <- lapply(dat, function(x) {
   
   x <- x %>%
     left_join(assigned_province) %>%
-    select(row_id, kp, year, age_group, area_id, value, denominator) %>%
+    select(row_id, kp, year, age_group, area_id, value, denominator, ref) %>%
     filter(!is.na(area_id))
   
   out <- list("assigned_province" = x, "bad_match_error" = bad_match_error)

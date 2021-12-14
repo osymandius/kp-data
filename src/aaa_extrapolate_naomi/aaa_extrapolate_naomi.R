@@ -1,11 +1,16 @@
 # indicators <- read_output_package("depends/naomi_output.zip")
 spectrum <- extract_pjnz_naomi("depends/spectrum_file.zip")
 
-list.files(file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Data/Spectrum files/2021 naomi"))
-
 sharepoint <- spud::sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
 folder <- sharepoint$folder(site = Sys.getenv("SHAREPOINT_SITE"), path = "Shared Documents/Data/Spectrum files/2021 naomi")
 path <- grep(iso3, folder$list()$name, value=TRUE, ignore.case = TRUE)
+
+if(length(path) > 1)
+  stop("More than one Naomi fit found")
+
+if(length(path) == 0)
+  stop("No Naomi fit found")
+
 path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Data/Spectrum files/2021 naomi", path)
 
 indicators <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = path)
@@ -83,7 +88,7 @@ out <- lapply(dat, function(x) {
       ) %>%
       left_join(df) %>%
       mutate(ratio = value/mean) %>%
-      select(iso3, year, kp, age_group, has_age, value, denominator, mean, ratio) %>%
+      select(iso3, year, kp, age_group, has_age, value, denominator, mean, ratio, ref) %>%
       rename(provincial_value = mean)
   } else {
     data.frame(x = character())
@@ -94,3 +99,15 @@ out <- lapply(dat, function(x) {
 write.csv(df, "extrapolated_naomi.csv")
 write.csv(out$prev, "prev.csv")
 write.csv(out$art, "art.csv")
+
+prev_art_sheet <- bind_rows(out$prev, out$art) %>%
+  mutate(country.name = countrycode(iso3_c, "iso3c", "country.name"),
+         surveillance_type = NA,
+         indicator = "Population size estimate",
+         province = NA,
+         prop_lower = NA,
+         prop_upper = NA,
+         sample = NA,
+         age_group = NA,
+         notes = NA,
+         link = NA)

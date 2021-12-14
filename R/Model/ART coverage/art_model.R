@@ -37,21 +37,41 @@ convert_logis_labels <- function(x) {
   paste0(round(plogis(x)*100), "%")
 }
 
-ssa_names <- c("Angola", "Botswana", "Eswatini", "Ethiopia", "Kenya", "Lesotho",  "Malawi", "Mozambique", "Namibia", "Rwanda", "South Africa", "South Sudan", "Uganda", "United Republic of Tanzania", "Zambia", "Zimbabwe", "Benin", "Burkina Faso", "Burundi", "Cameroon", "Central African Republic", "Chad", "Congo", "Côte d'Ivoire", "Democratic Republic of the Congo", "Equatorial Guinea", "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Liberia", "Mali", "Niger", "Nigeria", "Senegal", "Sierra Leone", "Togo")
-ssa_iso3 <- countrycode(ssa_names, "country.name", "iso3c")
-
-id <- lapply(iso3_vec, function(x){
-  orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
-})
-
-names(id) <- iso3_vec
+get_mod_results_test <- function(mod, inla_df, var) {
+  
+  
+  df <- inla_df %>%
+    filter(across(all_of(var), ~!is.na(.x)))
+  
+  print("Sampling..")
+  samples <- inla.posterior.sample(1000, mod)
+  print("Done sampling")
+  contents = mod$misc$configs$contents
+  effect = "Predictor"
+  id.effect = which(contents$tag==effect)
+  ind.effect = contents$start[id.effect]-1 + (1:contents$length[id.effect])
+  
+  ind.effect <- 1:(nrow(inla_df) - nrow(df))
+  
+  samples.effect = lapply(samples, function(x) x$latent[ind.effect])
+  
+  ident <- inla_df[ind.effect, ]
+  
+  qtls <- apply(sapply(samples.effect, cbind), 1, quantile, c(0.025, 0.5, 0.975))
+  
+  samples_ident <- ident %>%
+    mutate(lower = qtls[1,],
+           median = qtls[2,],
+           upper = qtls[3,]
+    )
+  
+  return(samples_ident)
+  
+}
 
 ############## ART Coverage ############
 
-art_dat <- lapply(file.path("archive/aaa_extrapolate_naomi", id[!is.na(id)], "art.csv"),
-                  read.csv)
-
-names(art_dat) <- names(id[!is.na(id)])
+art_dat <- readRDS("R/Report/R objects for report/ART coverage/art_final.rds")
 
 art_df <- art_dat %>%
   bind_rows(.id = "iso3") %>%

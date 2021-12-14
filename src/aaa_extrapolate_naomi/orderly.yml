@@ -39,7 +39,7 @@ depends:
     id: latest(parameter:iso3 == iso3)
     use:
       depends/naomi_areas.geojson: naomi_areas.geojson
-  aaa_inputs_adr_pull:
+  aaa_get_spectrum:
     id: latest(parameter:iso3 == iso3)
     use:
       depends/spectrum_file.zip: spectrum_file.zip

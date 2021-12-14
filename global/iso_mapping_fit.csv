@@ -14,7 +14,8 @@ gabon,Gabon,GAB,worldpop,2,1,0,1
 ghana,Ghana,GHA,worldpop,2,1,1,1
 guinee,Guinea,GIN,worldpop,2,1,0,1
 gambia,Gambia,GMB,orderly ,3,1,1,1
-guinea-ecuatorial,Equatorial Guinea,GNQ,,,,,0
+,Guinea Bissau,GNB,,,1,,
+guinea-ecuatorial,Equatorial Guinea,GNQ,,,1,,0
 kenya-moh,Kenya,KEN,orderly,2,1,1,1
 liberia,Liberia,LBR,worldpop,2,1,0,1
 lesotho,Lesotho,LSO,orderly,2,1,1,1
@@ -25,6 +26,7 @@ namibia,Namibia,NAM,gpw,2,1,0,1
 niger,Niger,NER,worldpop,2,1,0,1
 nigeria,Nigeria,NGA,orderly,3,2,1,1
 rwanda,Rwanda,RWA,orderly,2,1,0,1
+,South Sudan,SSD,,1,1,,
 senegal,Senegal,SEN,worldpop,2,1,1,1
 sierra-leone,Sierra Leone,SLE,worldpop,2,1,1,1
 eswatini,Eswatini,SWZ,orderly,2,1,1,1
@@ -34,3 +36,4 @@ tanzania,"Tanzania, United Republic of",TZA,orderly,3,2,0,1
 uganda,Uganda,UGA,orderly,3,1,0,1
 zambia-moh,Zambia,ZMB,orderly,2,1,0,1
 zimbabwe,Zimbabwe,ZWE,orderly,2,1,1,1
+,South Africa,ZAF,,2,1,,

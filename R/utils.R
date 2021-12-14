@@ -6,6 +6,17 @@ library(purrr)
 ssa_names <- c("Angola", "Botswana", "Eswatini", "Ethiopia", "Kenya", "Lesotho",  "Malawi", "Mozambique", "Namibia", "Rwanda", "South Africa", "South Sudan", "Uganda", "United Republic of Tanzania", "Zambia", "Zimbabwe", "Benin", "Burkina Faso", "Burundi", "Cameroon", "Central African Republic", "Chad", "Congo", "Côte d'Ivoire", "Democratic Republic of the Congo", "Equatorial Guinea", "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Liberia", "Mali", "Niger", "Nigeria", "Senegal", "Sierra Leone", "Togo")
 ssa_iso3 <- countrycode(ssa_names, "country.name", "iso3c")
 
+possibly_run <- purrr::possibly(.f = orderly_run, otherwise = NULL)
+possibly_pull <- purrr::possibly(.f = orderly_pull_archive, otherwise = NA)
+
+map(ssa_iso3, ~possibly_pull(paste0(tolower(.x), "_data_areas"), remote = "naomi_2021"))
+orderly_pull_archive("ssd_data_areas", remote = "fertility")
+
+#######
+map(ssa_iso3, ~possibly_pull("aaa_download_worldpop", id = paste0('latest(parameter:iso3 == "', .x, '")'), recursive = FALSE))
+
+id <- map(ssa_iso3, ~possibly_run("aaa_assign_populations", parameters = data.frame(iso3 = .x)))
+
 id <- orderly_batch("aaa_assign_populations", parameters = data.frame(iso3 = ssa_iso3))
 names(id) <- ssa_iso3
 lapply(id, orderly_commit)
@@ -15,13 +26,13 @@ lapply(c("BWA", "ZAF"), function(x){
   orderly::orderly_search(name = "aaa_scale_pop", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
 })
 
-possibly_run <- purrr::possibly(.f = orderly_run, otherwise = NULL)
+
 id <- map(ssa_iso3, ~possibly_run("aaa_assign_populations", parameters = data.frame(iso3 = .x)))
 names(id) <- ssa_iso3
 lapply(id %>% compact(), orderly_commit)
-orderly_run("aaa_assign_populations", parameters = data.frame(iso3 = "ZWE"))
+orderly_run("aaa_extrapolate_naomi", parameters = data.frame(iso3 = "ZAF"))
 
-orderly_develop_start("aaa_extrapolate_naomi", parameters = data.frame(iso3 = "ZWE"))
+orderly_develop_start("aaa_extrapolate_naomi", parameters = data.frame(iso3 = "ZAF"))
 setwd("src/aaa_extrapolate_naomi")
 
 df %>%
@@ -40,7 +51,7 @@ lapply("ZAF", function(x){
 
 areas <- read_sf("~/Documents/GitHub/fertility_orderly/archive/tza_data_areas/20201130-150758-409ee8ac/tza_areas.geojson")
 
-possibly_pull <- purrr::possibly(.f = orderly_pull_archive, otherwise = NA)
+
 map("CMR", ~possibly_pull("aaa_outputs_adr_pull", id = paste0('latest(parameter:iso3 == "', .x, '")')))
 map(c("KEN", "UGA"), ~possibly_pull("aaa_scale_pop", id = paste0('latest(parameter:iso3 == "', .x, '")'), remote = "fertility"))
 id <- map(ssa_iso3, ~possibly_pull(paste0(.x, "_data_areas"), remote = "naomi_2021"))
@@ -48,7 +59,7 @@ id <- map(ssa_iso3, ~possibly_pull(paste0(.x, "_data_areas"), remote = "naomi_20
 names(suc) <- ssa_iso3
 
 possibly_run <- purrr::possibly(.f = orderly_run, otherwise = NULL)
-id_list <- map(ssa_iso3, ~possibly_run("aaa_inputs_orderly_pull", parameters = data.frame(iso3 = .x)))
+id_list <- map(ssa_iso3, ~possibly_run("aaa_extrapolate_naomi", parameters = data.frame(iso3 = .x)))
 names(id_list) <- ssa_iso3
 
 lapply(id_list %>%
@@ -92,9 +103,17 @@ dat %>%
   select(-X) %>%
   write_csv("~/Dropbox/Work Streams/2021/Key populations/Guidance/anonymised_prev_matched.csv")
 
-id <- lapply("MOZ", function(x){
-  orderly::orderly_search(name = "aaa_assign_populations", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
+lapply(c("aaa_download_worldpop"), function(y) {
+  
+  id <- lapply(ssa_iso3, function(x){
+    orderly::orderly_search(name = y, query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
+  })
+  
+  lapply(id[!is.na(id)], function(x) {orderly_push_archive(y, id=x)})
+  
 })
+
+
 
 names(id) <- ssa_iso3
 id <- id_list

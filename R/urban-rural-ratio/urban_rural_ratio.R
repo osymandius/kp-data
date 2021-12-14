@@ -72,8 +72,39 @@ mwi_pse %>%
   labs(x=element_blank(), y="PSE proportion", fill = element_blank()) +
   facet_wrap(~kp)
 
+### Zimbabwe PSE from Fearon et al. 2020
 
+zwe_pse <- read.csv("R/urban-rural-ratio/zwe_urban_rural.csv")
 
+zwe_areas <- sf::read_sf("archive/zwe_data_areas/20201103-094144-94388ee2/zwe_areas.geojson")
+
+orderly::orderly_search(name = "aaa_download_worldpop", query = paste0('latest(parameter:iso3 == "', "ZWE", '")'), draft = FALSE)
+
+zwe_urban_pop <- read_csv("archive/aaa_download_worldpop/20211014-161041-fc18c44a/interpolated_city_population.csv") %>%
+  moz.utils::five_year_to_15to49("population") %>%
+  filter(sex == "female") %>%
+  mutate(area_name = ifelse(area_name == "Victoria falls", "Vic Falls", area_name))
+
+zwe_pop <- read_csv("archive/zwe_data_population/20201130-162514-ea8350d2/zwe_population_nso.csv") %>%
+  moz.utils::five_year_to_15to49("population") %>%
+  filter(sex == "female") %>%
+  separate(calendar_quarter, into = c(NA, "year", NA), sep = c(2,6)) %>%
+  type_convert()
+
+zwe_pse <- zwe_pse %>%
+  pivot_longer(-c(site:year), names_sep = "\\.", names_to = c("method", "bound")) %>%
+  pivot_wider(names_from = bound, values_from = value) %>%
+  filter(!is.na(pse))
+
+zwe_pse %>%
+  rename(area_name = site) %>%
+  left_join(zwe_urban_pop %>% ungroup %>% select(area_name, year, population)) %>%
+  mutate(pse_proportion = pse/population,
+         pse_proportion_lower = lower/population,
+         pse_proportion_upper = upper/population) %>%
+  ggplot(aes(x=area_name, y=pse_proportion, fill = method)) +
+    geom_col(position = position_dodge()) +
+    facet_wrap(~type, scales = "free_x")
 
 pse %>%
   left_join(sampled_district_populations) %>%

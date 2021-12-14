@@ -1,0 +1,30 @@
+script: script.R
+
+artefacts:
+  - data:
+      description: 2021 spectrum file pulled from ADR
+      filenames:
+        - spectrum_file.zip
+
+displayname: Get Spectrum files from ADR or sharepoint
+
+global_resources:
+  resources/org_iso_mapping.csv: org_iso_mapping.csv
+
+sources:
+  - pjnz_paths.R
+
+parameters:
+  iso3:
+    default: ~
+
+packages:
+  - httr
+  - jsonlite
+  - dplyr
+  - ckanr
+  - naomi.utils
+  - readr
+  - spud
+
+

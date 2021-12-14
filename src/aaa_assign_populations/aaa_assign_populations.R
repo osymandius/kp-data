@@ -40,9 +40,14 @@ population <- read.csv("depends/interpolated_population.csv") %>%
 
 naomi_names <- unique(population$area_name)
 
-city_population <- read.csv("depends/interpolated_city_population.csv") %>%
-  mutate(area_name = str_to_sentence(area_name)) %>%
-  filter(!area_name %in% naomi_names)
+if(iso3 != "SSD") {
+  city_population <- read.csv("depends/interpolated_city_population.csv") %>%
+    mutate(area_name = str_to_sentence(area_name)) %>%
+    filter(!area_name %in% naomi_names)
+} else {
+  city_population <- NULL
+}
+
 
 # merge_cities <- read_sf("merge_cities.geojson")
 
@@ -88,7 +93,7 @@ population <- population %>%
 # cities_areas <- merge_cities %>%
 #   bind_rows(areas)
 
-pse_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/PSE", "2021_12_06_spreadsheet_cleaned.csv")
+pse_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/PSE", "pse_spreadsheet_cleaned.csv")
 pse <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = pse_path)
 pse <- read_csv(pse) 
 
@@ -96,13 +101,13 @@ pse <- pse %>%
   # bind_rows(gf_pse) %>%
   mutate(iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
   filter(iso3 == iso3_c) %>%
-  select(iso3:pse_upper, uid) %>%
+  # select(iso3:pse_upper, uid) %>%
   mutate(sex = case_when(
     kp %in% c("FSW", "TG") ~ "female",
     kp == "MSM" ~ "male",
     kp == "PWID" ~ "both"
   )) %>%
-  distinct(kp, area_name, year, pse, pse_lower, pse_upper, .keep_all=TRUE) %>%
+  # distinct(kp, area_name, year, pse, pse_lower, pse_upper, .keep_all=TRUE) %>%
   mutate(row_id = row_number())
          # iso3 = countrycode(country.name, "country.name", "iso3c")) 
 
@@ -187,8 +192,73 @@ if(nrow(pse)) {
     # rename(notes = method) %>%
     mutate(population_proportion = pse/population,
            # method = NA,
+           country.name = countrycode(iso3_c, "iso3c", "country.name"),
+           surveillance_type = NA,
+           indicator = "Population size estimate",
+           province = NA,
+           prop_lower = NA,
+           prop_upper = NA,
+           sample = NA,
+           age_group = NA,
+           notes = NA,
            link = NA) %>%
-    select(any_of(c("country.name", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "province", "year", "pse_lower", "pse", "pse_upper", "population", "prop_lower", "population_proportion", "prop_upper", "sample", "notes", "ref", "link", "uid")))
+    mutate(
+      method = case_when(
+        method == "" ~ NA_character_,
+        method %in% c("Programmatic mapping", "Hotspot mapping", "PLACE", "Enumeration/mapping", "Mapping", "Mapping and enumeration") ~ "PLACE/Mapping",
+        method %in% c("Unique object", "Unique object multiplier", "Unique Object Multiploer") ~ "Object/event multiplier",
+        method %in% c("Service Multiplier", "Service multiplier", "Multiplier") ~ "Service multiplier",
+        method %in% c("Unique event multiplier", "Unique event", "Event multiplier") ~ "Object/event multiplier",
+        method %in% c("Capture - recapture", "CRC", "2S-CEC") ~ "2S-CRC",
+        method %in% c("Wisdom of Crowds, unique object distribution, social event and successive-sampling methods",
+                      "Service multiplier, Unique Object , Literature SS-PSE(RDS-A), Unique event & Consensus approach-Modified Delphi",
+                      "Mapping, Enumeration and literature review",
+                      "Consensus and mapping",
+                      "Unique object, WODM, service multiplier, social multiplier, 2S-CRC",
+                      "Wisdom of Crowds, unique object multiplier, social events and SS-PSE",
+                      "WODC, unique object, service, social, 2S-CRC",
+                      "Wisdom of the masses and capture-recapture",
+                      "Wisdom of the masses and social multiplier",
+                      "Triangulation of the follow methods unique object multiplier, wisdom of the masses,  capture â€“ recapture  and multiplier",
+                      "Unique Object multiplier et wisdom of the masses, NSUM and capture-recapture",
+                      "Unique object multiplier, Census, Respondent driven sampling survey and service multiplier method",
+                      "Unique object multiplier, social event, wisdom of the masses and NSUM",
+                      "WODC, unique object, service, social",
+                      "Literature review (meta-analysis model for surveys) and Delphi method",
+                      "Literature review (meta-analysis) and Delphi method",
+                      "Literature review and individual interviews",
+                      "Delphi method and consensus",
+                      "Consensus of % adult population and population growth",
+                      "Consensus (service, literature, unique object, mapping, WOTC)",
+                      "Median of unique object, WOTC",
+                      "Median of unique object, WOTC, 2S-CRC",
+                      "Programme data",
+                      "RDS",
+                      "Snowball",
+                      "Triangulation",
+                      "Wisdom of the masses, unique object multiplier and social event"
+                      
+        ) ~ "Multiple methods - mixture",
+        method %in% c("Service multiplier, unique object multiplier,  literature review, RDSAnalyst  SS-PSE Method",
+                      "Unique object multiplier, service multiplier, event multiplier",
+                      "Bayesian synthesis - multiplier and SS-PSE",
+                      "Unique object and special event multiplier",
+                      "Unique object, social, service, 2S-CRC",
+                      "Capture-recapture, unique object multiplier and register multiplier",
+                      "Capture-recapture and NSUM",
+                      "Multiplier, capture-recapture and social event",
+                      "Unique object, event and service multipliers, SS-PSE, and a synthesis of the methods using the Anchored Multiplier",
+                      "Unique object, service multiplier and NSUM",
+                      "Unique object, social, service",
+                      "Consensus (SS-PSE, unique object, multiplier, 1% recommendation)",
+                      "Consensus (SS-PSE, unique object, multiplier)",
+                      "Bayesian synthesis (SS-PSE, literature, something else)"
+                      
+                      
+        ) ~ "Multiple methods - empirical",
+        TRUE ~ method
+      )) %>%
+    select(all_of(c("country.name", "data_checked", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "province", "year", "pse_lower", "pse", "pse_upper", "population", "prop_lower", "population_proportion", "prop_upper", "sample", "notes", "ref", "link")))
     # arrange(country.name, kp, year)
   
   

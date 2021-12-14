@@ -18,7 +18,16 @@ pse_inputs <- pse_total_dat %>%
   count(dataset, kp) 
 
 pse_simple_deduplication <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/2021_11_28_pse_distinct.csv")
-pse_spreadsheet_extract <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/2021_12_6_pse_spreadsheet_extract.csv")
+
+pse_spreadsheet_extract <- lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/PSE/Edited/", full.names = TRUE, pattern = "csv"), read_csv, na= "")
+
+pse_spreadsheet_extract <- c(pse_spreadsheet_extract, 
+              lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/PSE/Edited/", full.names = TRUE, pattern = "xlsx"), readxl::read_xlsx)
+) %>%
+  lapply(type_convert) %>%
+  bind_rows()
+
+write_csv(pse_spreadsheet_extract, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/2021_12_6_pse_spreadsheet_extract.csv")
 
 pse_remove_label$duplicates <- nrow(pse_total_dat) - nrow(pse_simple_deduplication) + pse_spreadsheet_extract %>%
                                                           filter(!is.na(duplicate_of)) %>%
@@ -124,9 +133,18 @@ mapped_place <- pse_spreadsheet_extract %>%
          !country.name == area_name,
          year > 2009)
 
-pse_cleaned_data <- bind_rows(truly_checked, mapped_place) %>%
+unknown <- pse_spreadsheet_extract %>%
+  filter(
+    (is.na(data_checked) & source_found == "no")  | (is.na(data_checked) & is.na(source_found)),
+    year > 2009
+  )
+
+pse_cleaned_data <- bind_rows(truly_checked, mapped_place, unknown) %>%
   mutate(kp = ifelse(kp == "TGW", "TG", kp)) %>%
   filter(kp %in% c("FSW", "MSM", "PWID", "TG"))
+
+pse_cleaned_data <- pse_cleaned_data %>%
+  mutate(area_name = str_replace(area_name, " and", ","))
 
 write_csv(pse_cleaned_data, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/2021_12_06_spreadsheet_cleaned.csv")
 
@@ -141,34 +159,111 @@ pse_cleaned_text <- pse_cleaned_data %>%
 
 pse_clean_labels <- collapse(pse_cleaned_text)
 
-final_pse_id <- lapply(ssa_iso3, function(x){
+pse_id <- lapply(ssa_iso3, function(x){
   orderly::orderly_search(name = "aaa_assign_populations", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
 })
 
-final_pse <- lapply(paste0("archive/aaa_assign_populations/", final_pse_id[!is.na(final_pse_id)], "/pse_prevalence.csv"),
+pse_final <- lapply(paste0("archive/aaa_assign_populations/", pse_id[!is.na(pse_id)], "/pse_prevalence.csv"),
        read_csv) %>%
   bind_rows() %>%
   filter(is.na(x),
          !is.na(population_proportion)
-  )
+  ) %>%
+  mutate(
+    iso3 = countrycode(country.name, "country.name", "iso3c"),
+    method = case_when(
+      method == "" ~ NA_character_,
+      method %in% c("Programmatic mapping", "Hotspot mapping", "PLACE", "Enumeration/mapping", "Mapping", "Mapping and enumeration") ~ "PLACE/Mapping",
+      method %in% c("Unique object", "Unique object multiplier", "Unique Object Multiploer") ~ "Object/event multiplier",
+      method %in% c("Service Multiplier", "Service multiplier", "Multiplier") ~ "Service multiplier",
+      method %in% c("Unique event multiplier", "Unique event", "Event multiplier") ~ "Object/event multiplier",
+      method %in% c("Capture - recapture", "CRC", "2S-CEC") ~ "2S-CRC",
+      method %in% c("Wisdom of Crowds, unique object distribution, social event and successive-sampling methods",
+                    "Service multiplier, Unique Object , Literature SS-PSE(RDS-A), Unique event & Consensus approach-Modified Delphi",
+                    "Mapping, Enumeration and literature review",
+                    "Consensus and mapping",
+                    "Unique object, WODM, service multiplier, social multiplier, 2S-CRC",
+                    "Wisdom of Crowds, unique object multiplier, social events and SS-PSE",
+                    "WODC, unique object, service, social, 2S-CRC",
+                    "Wisdom of the masses and capture-recapture",
+                    "Wisdom of the masses and social multiplier",
+                    "Triangulation of the follow methods unique object multiplier, wisdom of the masses,  capture â€“ recapture  and multiplier",
+                    "Unique Object multiplier et wisdom of the masses, NSUM and capture-recapture",
+                    "Unique object multiplier, Census, Respondent driven sampling survey and service multiplier method",
+                    "Unique object multiplier, social event, wisdom of the masses and NSUM",
+                    "WODC, unique object, service, social",
+                    "Literature review (meta-analysis model for surveys) and Delphi method",
+                    "Literature review (meta-analysis) and Delphi method",
+                    "Literature review and individual interviews",
+                    "Delphi method and consensus",
+                    "Consensus of % adult population and population growth",
+                    "Consensus (service, literature, unique object, mapping, WOTC)",
+                    "Median of unique object, WOTC",
+                    "Median of unique object, WOTC, 2S-CRC",
+                    "Programme data",
+                    "RDS",
+                    "Snowball",
+                    "Triangulation",
+                    "Wisdom of the masses, unique object multiplier and social event"
+                    
+      ) ~ "Multiple methods - mixture",
+      method %in% c("Service multiplier, unique object multiplier,  literature review, RDSAnalyst  SS-PSE Method",
+                    "Unique object multiplier, service multiplier, event multiplier",
+                    "Bayesian synthesis - multiplier and SS-PSE",
+                    "Unique object and special event multiplier",
+                    "Unique object, social, service, 2S-CRC",
+                    "Capture-recapture, unique object multiplier and register multiplier",
+                    "Capture-recapture and NSUM",
+                    "Multiplier, capture-recapture and social event",
+                    "Unique object, event and service multipliers, SS-PSE, and a synthesis of the methods using the Anchored Multiplier",
+                    "Unique object, service multiplier and NSUM",
+                    "Unique object, social, service",
+                    "Consensus (SS-PSE, unique object, multiplier, 1% recommendation)",
+                    "Consensus (SS-PSE, unique object, multiplier)",
+                    "Bayesian synthesis (SS-PSE, literature, something else)"
+                    
+                    
+      ) ~ "Multiple methods - empirical",
+      TRUE ~ method
+    ),
+    simple_method = case_when(
+      method %in% c("2S-CRC", "3S-CRC", "Multiple methods - empirical", "Object/event multiplier", "Service multiplier", "SS-PSE") ~ "empirical",
+      method %in% c("Multiple methods - mixture", "PLACE/Mapping") ~ "nonempirical",
+      TRUE ~ method
+    ))
 
-pse_final_text <- final_pse %>%
+bad_match <- lapply(paste0("archive/aaa_assign_populations/", pse_id[!is.na(pse_id)], "/bad_match_error.csv"),
+       read_csv) %>%
+  bind_rows() %>%
+  distinct(iso3, given_name)
+
+pse_final_text <- pse_final %>%
   mutate(kp = ifelse(kp == "TGW", "TG", kp)) %>%
   filter(kp %in% c("FSW", "MSM", "PWID", "TG")) %>%
   count(kp) %>%
   mutate(n = paste0("n = ", n)) %>%
   pivot_wider(names_from = kp, values_from = n) %>%
   mutate(across(everything(), ~paste0(cur_column(), " ", .x)),
-         n = paste0("(n = ", nrow(final_pse), ")"),
+         n = paste0("(n = ", nrow(pse_final), ")"),
          name = "Final PSE data") %>%
   select(name, n, everything())
 
-pse_remove_label$denom <- nrow(pse_cleaned_data) - nrow(final_pse)
+pse_remove_label$denom <- nrow(pse_cleaned_data) - nrow(pse_final)
 pse_remove_label$denom <- paste0("No population denominator (n = ", pse_remove_label$denom, ")")
 
 pse_final_labels <- collapse(pse_final_text)
 
-grViz("
+saveRDS(list("pse_inputs_labels" = pse_inputs_labels,
+             "pse_remove_label" = pse_remove_label,
+             'pse_clean_labels' = pse_clean_labels,
+             "pse_final_labels" = pse_final_labels),
+        "R/Report/R objects for report/PSE/pse_flow_input.rds")
+
+saveRDS(pse_final_text, "R/Report/R objects for report/PSE/pse_final_count_text.rds")
+saveRDS(pse_final, "R/Report/R objects for report/PSE/pse_final.rds")
+saveRDS(pse_inputs_text, "R/Report/R objects for report/PSE/pse_input_count_text.rds")
+
+pse_flow <- grViz("
 digraph a_nice_graph {
 
 # node definitions with substituted label text
@@ -187,7 +282,7 @@ m4_non_emp [label = '@@2-4']
 m5_outlier [label = 'Outlier (n=??)']
 m6_unconf [label = 'Unconfirmed (n=??)']
 clean [label = '@@3']
-c1_denom [label = '@@2-6']
+c1_denom [label = '@@2-7']
 final [label = '@@4']
 
 node [shape=none, width=0, height=0, label='']
@@ -197,8 +292,8 @@ node [shape=none, width=0, height=0, label='']
   {rank=same; p2 -> m2_nonspec}
   {rank=same; p3 -> m3_model}
   {rank=same; p4 -> m4_non_emp}
-  {rank=same; p5 -> m4_outlier}
-  {rank=same; p6 -> m5_unconf}
+  {rank=same; p5 -> m5_outlier}
+  {rank=same; p6 -> m6_unconf}
   {rank=same; p7 -> c1_denom}
 
 {inp_gam inp_atlas inp_cdc inp_gf inp_surv} -> inp_total
@@ -222,6 +317,14 @@ edge [dir = none]
 [3]: pse_clean_labels
 [4]: pse_final_labels
 ")
+
+
+library(DiagrammeRsvg)
+library(rsvg)
+pse_flow %>%
+  export_svg %>% 
+  charToRaw %>% 
+  rsvg_png("~/Dropbox/Work Streams/2021/Key populations/Paper/Data consolidation paper/Figs/PSE/pse_flowchart.png")
 
 ### Prevalence
 
@@ -363,31 +466,41 @@ prev_cleaned_text <- prev_cleaned_data %>%
 
 prev_clean_labels <- collapse(prev_cleaned_text)
 
-final_prev_id <- lapply(ssa_iso3, function(x){
+prev_id <- lapply(ssa_iso3, function(x){
   orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
 })
 
-final_prev <- lapply(paste0("archive/aaa_extrapolate_naomi/", final_prev_id[!is.na(final_prev_id)], "/prev.csv"),
+prev_final <- lapply(paste0("archive/aaa_extrapolate_naomi/", prev_id[!is.na(prev_id)], "/prev.csv"),
                     function(x) {read_csv(x) %>% select(-`...1`)}) %>%
   bind_rows()
 
-prev_final_text <- final_prev %>%
+prev_final_text <- prev_final %>%
   mutate(kp = ifelse(kp == "TGW", "TG", kp)) %>%
   filter(kp %in% c("FSW", "MSM", "PWID", "TG")) %>%
   count(kp) %>%
   mutate(n = paste0("n = ", n)) %>%
   pivot_wider(names_from = kp, values_from = n) %>%
   mutate(across(everything(), ~paste0(cur_column(), " ", .x)),
-         n = paste0("(n = ", nrow(final_prev), ")"),
-         name = "Final PSE data") %>%
+         n = paste0("(n = ", nrow(prev_final), ")"),
+         name = "Final HIV prevalence data") %>%
   select(name, n, everything())
 
-prev_remove_label$denom <- nrow(prev_cleaned_data) - nrow(final_prev)
-prev_remove_label$denom <- paste0("No population denominator (n = ", prev_remove_label$denom, ")")
+prev_remove_label$denom <- nrow(prev_cleaned_data) - nrow(prev_final)
+prev_remove_label$denom <- paste0("No area match (n = ", prev_remove_label$denom, ")")
 
 prev_final_labels <- collapse(prev_final_text)
 
-grViz("
+saveRDS(list('prev_inputs_labels' = prev_inputs_labels,
+             "prev_remove_label" = prev_remove_label,
+             "prev_clean_labels" = prev_clean_labels,
+             "prev_final_labels" = prev_final_labels),
+        "R/Report/R objects for report/Prevalence/prev_flow_input.rds")
+
+saveRDS(prev_final_text, "R/Report/R objects for report/Prevalence/prev_count_text.rds")
+saveRDS(prev_final, "R/Report/R objects for report/Prevalence/prev_final.rds")
+saveRDS(prev_inputs_text, "R/Report/R objects for report/Prevalence/prev_input_count_text.rds")
+
+prev_flow <- grViz("
 digraph a_nice_graph {
 
 # node definitions with substituted label text
@@ -438,3 +551,238 @@ edge [dir = none]
 [3]: prev_clean_labels
 [4]: prev_final_labels
 ")
+
+prev_flow %>%
+  export_svg %>% 
+  charToRaw %>% 
+  rsvg_png("~/Dropbox/Work Streams/2021/Key populations/Paper/Data consolidation paper/Figs/Prevalence/prev_flowchart.png")
+
+
+#### ART coverage
+
+art_spreadsheet_extract <- lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/ART coverage/Edited/", full.names = TRUE, pattern = "csv"), read_csv, na= "")
+
+art_spreadsheet_extract <- c(art_spreadsheet_extract, 
+                              lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/ART coverage/Edited/", full.names = TRUE, pattern = "xlsx"), readxl::read_xlsx)
+) %>%
+  lapply(type_convert) %>%
+  bind_rows()
+
+art_spreadsheet_extract <-  art_spreadsheet_extract %>%
+  rename(art = art_coverage) %>%
+  mutate(art = ifelse(art > 1, art/100, art),
+         art_upper = ifelse(art_upper > 1, art_upper/100, art_upper),
+         art_lower = ifelse(art_lower > 1, art_lower/100, art_lower),
+         age_group = case_when(
+           age_group %in% c("15-24") ~ "Y015_024",
+           age_group %in% c("18-24", "19-24", "20-24") ~ "Y020_024",
+           age_group %in% c("15+", "18+") ~ "Y015_999",
+           age_group == "25-29" ~ "Y025_029",
+           age_group %in% c("15-17", "15-19") ~ "Y015_019",
+           age_group == "25-34" ~ "Y025_034",
+           age_group == "15-49"   ~ "Y015_049",
+           age_group == "30-34"   ~ "Y030_034",
+           age_group == "35-39"   ~ "Y035_039",
+           age_group %in% c("25-49", "25+")   ~ "Y025_049",
+           age_group %in% c("45+", "50+","40+") ~ "Y050_999",
+           str_detect(age_group, "\\+|\\-") ~ "Y015_049",
+           TRUE ~ age_group
+         )
+  )
+
+write_csv(art_spreadsheet_extract, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_spreadsheet_extract.csv")
+
+art_remove_label <- list()
+
+art_total_dat <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_all_data.csv")
+
+art_inputs <- art_total_dat %>%
+  filter(!dataset %in% c("Goals_Nat", "Optima input")) %>%
+  count(dataset, kp) 
+
+art_simple_deduplication <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_deduplicated.csv")
+
+art_remove_label$duplicates <- nrow(art_total_dat) - nrow(art_simple_deduplication) + art_spreadsheet_extract %>%
+  filter(!is.na(duplicate_of) | !is.na(is_aggregate)) %>%
+  nrow()
+
+art_remove_label$duplicates <- paste0("Duplicated data (n = ", art_remove_label$duplicates, ")")
+
+art_surveillance_review_input <- art_spreadsheet_extract %>%
+  mutate(iso3 = countrycode::countrycode(country.name, "country.name", "iso3c"),
+         kp = ifelse(kp %in% c("TGW", "TGM", "TGW/GQ"), "TG", kp)) %>%
+  filter(is.na(duplicate_of),
+         !is.na(iso3),
+         is.na(uid)) %>%
+  count(kp) %>%
+  mutate(dataset = "Surveillance review")
+
+art_inputs <- art_inputs %>%
+  bind_rows(art_surveillance_review_input)
+
+art_inputs <- art_inputs %>%
+  bind_rows(art_inputs %>%
+              group_by(kp) %>%
+              summarise(n = sum(n)) %>%
+              mutate(dataset = "Total")) %>%
+  filter(kp %in% c("FSW", "MSM", "PWID", "TG"),
+         !dataset %in% c("Goals_Nat", "Optima input"))
+
+art_inputs_total <- art_inputs %>%
+  group_by(dataset) %>%
+  summarise(n = sum(n)) %>%
+  mutate(n = paste0("(n = ", n, ")"))
+
+art_inputs_text <- crossing(dataset = art_inputs$dataset,
+                             kp = c("FSW", "MSM", "PWID", "TG")) %>%
+  left_join(art_inputs) %>%
+  mutate(n = replace_na(n, 0),
+         n = paste0("n = ", n)) %>%
+  pivot_wider(names_from = kp, values_from = n) %>%
+  mutate(across(-dataset, ~paste0(cur_column(), " ", .x))) %>%
+  left_join(art_inputs_total) %>%
+  select(dataset, n, everything()) %>%
+  mutate(dataset = factor(dataset,
+                          levels = c("KP Atlas", "GF", "Surveillance review",  "Total"),
+                          labels = c("UNAIDS KP Atlas", "Global Fund", "Surveillance review", "Total"))) %>%
+  arrange(dataset)
+
+art_inputs_labels <- apply(art_inputs_text, 1, collapse)
+
+## Clean artalence data
+
+art_spreadsheet_extract <- art_spreadsheet_extract %>%
+  mutate(iso3 = countrycode::countrycode(country.name, "country.name", "iso3c")) %>%
+  filter(is.na(duplicate_of),
+         is.na(is_aggregate),
+         !is.na(iso3))
+
+# Remove non-specific area names
+art_remove_label$nonspec <- art_spreadsheet_extract %>%
+  filter(str_detect(area_name, regex("urban|rural|county|counties|districts|state|total", ignore_case = TRUE))) %>%
+  nrow()
+
+art_remove_label$nonspec <- paste0("Unspecific area name (n = ", art_remove_label$nonspec, ")")
+
+art_spreadsheet_extract <- art_spreadsheet_extract %>%
+  filter(!str_detect(area_name, regex("urban|rural|county|counties|districts|state|total", ignore_case = TRUE)))
+
+# Remove outliers
+art_remove_label$unconf <- NA
+
+art_checked <- art_spreadsheet_extract %>%
+  filter(data_checked == "yes",
+         year > 2009
+  )
+
+art_unknown <- art_spreadsheet_extract %>%
+  filter(
+    (is.na(data_checked) & source_found == "no")  | (is.na(data_checked) & is.na(source_found)),
+    year > 2009
+  )
+
+art_cleaned_data <- bind_rows(art_checked, art_unknown) %>%
+  mutate(kp = ifelse(kp == "TGW", "TG", kp)) %>%
+  filter(kp %in% c("FSW", "MSM", "PWID", "TG"))
+
+write_csv(art_cleaned_data, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_clean.csv")
+
+art_cleaned_text <- art_cleaned_data %>%
+  count(kp) %>%
+  mutate(n = paste0("n = ", n)) %>%
+  pivot_wider(names_from = kp, values_from = n) %>%
+  mutate(across(everything(), ~paste0(cur_column(), " ", .x)),
+         n = paste0("(n = ", nrow(art_cleaned_data), ")"),
+         name = "Cleaned ART coverage data") %>%
+  select(name, n, everything())
+
+art_clean_labels <- collapse(art_cleaned_text)
+
+art_id <- lapply(ssa_iso3, function(x){
+  orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
+})
+
+art_final <- lapply(paste0("archive/aaa_extrapolate_naomi/", art_id[!is.na(art_id)], "/art.csv"),
+                     function(x) {read_csv(x) %>% select(-`...1`)}) %>%
+  bind_rows()
+
+art_final_text <- art_final %>%
+  mutate(kp = ifelse(kp == "TGW", "TG", kp)) %>%
+  filter(kp %in% c("FSW", "MSM", "PWID", "TG")) %>%
+  count(kp) %>%
+  mutate(n = paste0("n = ", n)) %>%
+  pivot_wider(names_from = kp, values_from = n) %>%
+  mutate(across(everything(), ~paste0(cur_column(), " ", .x)),
+         n = paste0("(n = ", nrow(art_final), ")"),
+         name = "Final ART coverage data") %>%
+  select(name, n, everything())
+
+art_remove_label$denom <- nrow(art_cleaned_data) - nrow(art_final)
+art_remove_label$denom <- paste0("No area match (n = ", art_remove_label$denom, ")")
+
+art_final_labels <- collapse(art_final_text)
+
+# saveRDS(list('art_inputs_labels' = art_inputs_labels,
+#              "art_remove_label" = art_remove_label,
+#              "art_clean_labels" = art_clean_labels,
+#              "art_final_labels" = art_final_labels),
+#         "R/Report/R objects for report/Prevalence/art_flow_input.rds")
+
+saveRDS(art_final_text, "R/Report/R objects for report/ART coverage/art_count_text.rds")
+saveRDS(art_final, "R/Report/R objects for report/ART coverage/art_final.rds")
+saveRDS(art_inputs_text, "R/Report/R objects for report/ART coverage/art_input_count_text.rds")
+
+art_flow <- grViz("
+digraph a_nice_graph {
+
+# node definitions with substituted label text
+  node [fontname = Helvetica, fontcolor = darkslategray,
+        shape = rectangle, color = darkslategray]
+inp_atlas [label = '@@1-1']
+inp_gf [label = '@@1-2']
+inp_surv [label = '@@1-3']
+inp_total [label = '@@1-4']
+m1_dedup [label = '@@2-1']
+m2_nonspec [label = '@@2-2']
+m3_model [label = '@@2-3']
+m4_outlier [label = 'Outlier (n=??)']
+m5_unconf [label = 'Unconfirmed (n=??)']
+clean [label = '@@3']
+c1_denom [label = '@@2-6']
+final [label = '@@4']
+
+node [shape=none, width=0, height=0, label='']
+  p5 -> clean
+  p6 -> final
+  {rank=same; p1 -> m1_dedup}
+  {rank=same; p2 -> m2_nonspec}
+  {rank=same; p3 -> m3_model}
+  {rank=same; p4 -> m4_outlier}
+  {rank=same; p5 -> m5_unconf}
+  {rank=same; p6 -> c1_denom}
+
+{inp_atlas inp_gf inp_surv} -> inp_total
+
+# edge definitions with the node IDs
+edge [dir = none]
+  inp_total -> p1;
+  p1 -> p2;
+  p2 -> p3;
+  p3 -> p4;
+  p4 -> p5;
+  clean -> p6
+  
+ 
+
+}
+
+[1]: art_inputs_labels
+[2]: unlist(art_remove_label)
+[3]: art_clean_labels
+[4]: art_final_labels
+")
+
+art_flow %>%
+  export_svg %>% 
+  charToRaw %>% 
+  rsvg_png("~/Dropbox/Work Streams/2021/Key populations/Paper/Data consolidation paper/Figs/ART coverage/art_flowchart.png")

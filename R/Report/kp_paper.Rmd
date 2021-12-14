@@ -19,7 +19,7 @@ library(countrycode)
 library(knitr)
 library(sf)
 
-region <- read.csv("~/Documents/GitHub/fertility_orderly/global/region.csv") %>%
+region <- read.csv("R objects for report/region.csv") %>%
   mutate(iso3 = toupper(iso3))
 
 ssa_names <- c("Angola", "Botswana", "Eswatini", "Ethiopia", "Kenya", "Lesotho",  "Malawi", "Mozambique", "Namibia", "Rwanda", "South Africa", "South Sudan", "Uganda", "United Republic of Tanzania", "Zambia", "Zimbabwe", "Benin", "Burkina Faso", "Burundi", "Cameroon", "Central African Republic", "Chad", "Congo", "Côte d'Ivoire", "Democratic Republic of the Congo", "Equatorial Guinea", "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Liberia", "Mali", "Niger", "Nigeria", "Senegal", "Sierra Leone", "Togo")
@@ -82,9 +82,9 @@ Countres in Western and Central Africa (WCA) were defined as: Benin, Burkina Fas
 \blandscape
 
 ```{r echo=FALSE, out.width='50%', fig.show="hold", fig.cap = "Data workflow for population size estimate data (left) and HIV prevalence data (right)"}
-knitr::include_graphics('~/Dropbox/Work Streams/2021/Key populations/Paper/Data consolidation paper/Figs/PSE/pse_flowchart.png')
+knitr::include_graphics('R objects for report/PSE/pse_flowchart.png')
 
-knitr::include_graphics('~/Dropbox/Work Streams/2021/Key populations/Paper/Data consolidation paper/Figs/Prevalence/prev_flowchart.png')
+knitr::include_graphics('R objects for report/Prevalence/prev_flowchart.png')
 
 ```
 
@@ -92,7 +92,7 @@ knitr::include_graphics('~/Dropbox/Work Streams/2021/Key populations/Paper/Data 
 
 ```{r echo=FALSE, out.width='50%', fig.show="hold", fig.cap = "Data workflow for ART coverage data", fig.align="center"}
 
-knitr::include_graphics('~/Dropbox/Work Streams/2021/Key populations/Paper/Data consolidation paper/Figs/ART coverage/art_flowchart.png')
+knitr::include_graphics('R objects for report/ART coverage/art_flowchart.png')
 ```
 
 \elandscape

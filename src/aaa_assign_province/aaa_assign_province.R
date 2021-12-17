@@ -21,19 +21,17 @@ cities_areas <- merge_cities %>%
   
 sharepoint <- spud::sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
 
-prev_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/HIV prevalence", "2021_12_06_prev_clean.csv")
+prev_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/HIV prevalence", "prev_clean.csv")
 prev <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = prev_path)
 prev <- read_csv(prev) %>%
   rename(value = prev) %>%
-  mutate(iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
-  distinct(kp, area_name, year, value, .keep_all = TRUE)
+  mutate(iso3 = countrycode(country.name, "country.name", "iso3c"))
 
 art_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/ART coverage", "art_clean.csv")
 art <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = art_path)
 art <- read_csv(art) %>%
   rename(value = art) %>%
   mutate(iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
-  distinct(kp, area_name, year, value, .keep_all = TRUE) %>%
   left_join(naomi::get_age_groups() %>% select(age_group_label, age_group)) %>%
   select(-age_group_label)
 
@@ -125,7 +123,7 @@ out <- lapply(dat, function(x) {
   
   x <- x %>%
     left_join(assigned_province) %>%
-    select(row_id, kp, year, age_group, area_id, value, denominator, ref) %>%
+    # select(row_id, kp, year, age_group, area_id, value, denominator, ref) %>%
     filter(!is.na(area_id))
   
   out <- list("assigned_province" = x, "bad_match_error" = bad_match_error)

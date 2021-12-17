@@ -12,3 +12,5 @@ orderly_envir.yml
 .DS_Store
 .orderly
 backup
+metadata
+PEPFAR data

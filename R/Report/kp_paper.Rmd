@@ -370,9 +370,9 @@ geographies <- geographies %>%
 
 Population size estimates were estimated at the national level for 38 countries in sub-Saharan Africa for FSW, MSM, and PWID. Data were insufficient to estimate transgender population proportions. Medians of national PSE proportions among adults 15-49 across SSA were:
 
--   $`r pse_iqr[2,2]`$% of women were female sex workers (IQR $`r pse_iqr[1,2]`$-$`r pse_iqr[3,2]`$%);
--   $`r pse_iqr[5,2]`$% of men have sex with men (IQR $`r pse_iqr[4,2]`$-$`r pse_iqr[6,2]`$%);
--   $`r pse_iqr[8,2]`$% of adults injected drugs (IQR $`r pse_iqr[7,2]`$-$`r pse_iqr[9,2]`$%)
+-   $`r pse_iqr[[2,2]]`$% of women were female sex workers (IQR $`r pse_iqr[[1,2]]`$-$`r pse_iqr[[3,2]]`$%);
+-   $`r pse_iqr[[5,2]]`$% of men have sex with men (IQR $`r pse_iqr[[4,2]]`$-$`r pse_iqr[[6,2]]`$%);
+-   $`r pse_iqr[[8,2]]`$% of adults injected drugs (IQR $`r pse_iqr[[7,2]]`$-$`r pse_iqr[[9,2]]`$%)
 
 Regional variation in PSE: FSW similar, MSM +++ in ESA than WCA, PWID +++ in WCA than ESA (but dodgy congo data)
 

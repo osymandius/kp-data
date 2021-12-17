@@ -27,7 +27,7 @@ pse_spreadsheet_extract <- c(pse_spreadsheet_extract,
   lapply(type_convert) %>%
   bind_rows()
 
-write_csv(pse_spreadsheet_extract, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/2021_12_6_pse_spreadsheet_extract.csv")
+write_csv(pse_spreadsheet_extract, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_spreadsheet_extract.csv")
 
 pse_remove_label$duplicates <- nrow(pse_total_dat) - nrow(pse_simple_deduplication) + pse_spreadsheet_extract %>%
                                                           filter(!is.na(duplicate_of)) %>%
@@ -121,23 +121,35 @@ pse_remove_label$outlier <- NA
 #Remove unconfirmed data
 pse_remove_label$unconf <- NA
 
+# pse_spreadsheet_extract %>%
+#   filter(!data_checked %in% c("yes", "remove"),
+#          (is.na(source_found) | source_found == "no"),
+#          year > 2009) %>%
+#   count(iso3, kp, year, ref, data_checked) %>%
+#   arrange(desc(n)) %>%
+#   View()
+
 truly_checked <- pse_spreadsheet_extract %>%
   filter(data_checked == "yes",
          year > 2009
-  )
+  ) %>%
+  mutate(data_checked = "Yes")
 
 mapped_place <- pse_spreadsheet_extract %>%
   filter(str_detect(method, "apping|PLACE"),
          data_checked == "remove",
+         source_found %in% c("yes", "private"),
          is.na(duplicate_of),
          !country.name == area_name,
-         year > 2009)
+         year > 2009) %>%
+  mutate(data_checked = "Yes")
 
 unknown <- pse_spreadsheet_extract %>%
   filter(
     (is.na(data_checked) & source_found == "no")  | (is.na(data_checked) & is.na(source_found)),
     year > 2009
-  )
+  ) %>%
+  mutate(data_checked = "No")
 
 pse_cleaned_data <- bind_rows(truly_checked, mapped_place, unknown) %>%
   mutate(kp = ifelse(kp == "TGW", "TG", kp)) %>%
@@ -146,7 +158,7 @@ pse_cleaned_data <- bind_rows(truly_checked, mapped_place, unknown) %>%
 pse_cleaned_data <- pse_cleaned_data %>%
   mutate(area_name = str_replace(area_name, " and", ","))
 
-write_csv(pse_cleaned_data, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/2021_12_06_spreadsheet_cleaned.csv")
+write_csv(pse_cleaned_data, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_spreadsheet_cleaned.csv")
 
 pse_cleaned_text <- pse_cleaned_data %>%
   count(kp) %>%
@@ -253,14 +265,8 @@ pse_remove_label$denom <- paste0("No population denominator (n = ", pse_remove_l
 
 pse_final_labels <- collapse(pse_final_text)
 
-saveRDS(list("pse_inputs_labels" = pse_inputs_labels,
-             "pse_remove_label" = pse_remove_label,
-             'pse_clean_labels' = pse_clean_labels,
-             "pse_final_labels" = pse_final_labels),
-        "R/Report/R objects for report/PSE/pse_flow_input.rds")
-
 saveRDS(pse_final_text, "R/Report/R objects for report/PSE/pse_final_count_text.rds")
-saveRDS(pse_final, "R/Report/R objects for report/PSE/pse_final.rds")
+write_csv(pse_final, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_final.csv")
 saveRDS(pse_inputs_text, "R/Report/R objects for report/PSE/pse_input_count_text.rds")
 
 pse_flow <- grViz("
@@ -324,7 +330,7 @@ library(rsvg)
 pse_flow %>%
   export_svg %>% 
   charToRaw %>% 
-  rsvg_png("~/Dropbox/Work Streams/2021/Key populations/Paper/Data consolidation paper/Figs/PSE/pse_flowchart.png")
+  rsvg_png("R/Report/R objects for report/PSE/pse_flowchart.png")
 
 ### Prevalence
 
@@ -355,10 +361,12 @@ prev_spreadsheet_extract <-  prev_spreadsheet_extract %>%
            str_detect(age_group, "\\+|\\-") ~ "Y015_049",
            TRUE ~ age_group
            
-         )
+         ),
+         data_checked = tolower(data_checked),
+         source_found = tolower(source_found)
   )
 
-write_csv(prev_spreadsheet_extract, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/2021_12_6_prev_spreadsheet_extract.csv")
+write_csv(prev_spreadsheet_extract, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_spreadsheet_extract.csv")
 
 prev_remove_label <- list()
 
@@ -438,22 +446,46 @@ prev_spreadsheet_extract <- prev_spreadsheet_extract %>%
 # Remove outliers
 prev_remove_label$unconf <- NA
 
+# prev_spreadsheet_extract %>%
+#   filter(!data_checked %in% c("yes", "remove"),
+#          !(data_checked == "no" & iso3 == "ZWE"),
+#          (is.na(source_found) | source_found == "no"),
+#          year > 2009) %>%
+#   count(iso3, kp, year) %>%
+#   arrange(desc(n)) %>%
+#   View(
+#     
+#   )
+#   # arrange(iso3, kp, year, desc(n)) %>%
+#   filter(iso3 != "ZWE", !is.na(ref)) %>%
+#   write_csv("~/Downloads/missing_kp_reports_new.csv")
+
+# prev_spreadsheet_extract %>%
+#   filter(iso3 == "MLI",
+#          !data_checked %in% c("yes", "remove"),
+#          (is.na(source_found) | source_found == "no")) %>%
+#   View(
+#     
+#   )
+
 prev_checked <- prev_spreadsheet_extract %>%
   filter(data_checked == "yes",
          year > 2009
-  )
+  ) %>%
+  mutate(data_checked = "Yes")
 
 prev_unknown <- prev_spreadsheet_extract %>%
   filter(
     (is.na(data_checked) & source_found == "no")  | (is.na(data_checked) & is.na(source_found)),
     year > 2009
-  )
+  ) %>%
+  mutate(data_checked = "No")
 
 prev_cleaned_data <- bind_rows(prev_checked, prev_unknown) %>%
   mutate(kp = ifelse(kp == "TGW", "TG", kp)) %>%
   filter(kp %in% c("FSW", "MSM", "PWID", "TG"))
 
-write_csv(prev_cleaned_data, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/2021_12_06_prev_clean.csv")
+write_csv(prev_cleaned_data, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_clean.csv")
 
 prev_cleaned_text <- prev_cleaned_data %>%
   count(kp) %>%
@@ -471,7 +503,7 @@ prev_id <- lapply(ssa_iso3, function(x){
 })
 
 prev_final <- lapply(paste0("archive/aaa_extrapolate_naomi/", prev_id[!is.na(prev_id)], "/prev.csv"),
-                    function(x) {read_csv(x) %>% select(-`...1`)}) %>%
+                    function(x) {read_csv(x) %>% select(-any_of("...1"))}) %>%
   bind_rows()
 
 prev_final_text <- prev_final %>%
@@ -490,14 +522,8 @@ prev_remove_label$denom <- paste0("No area match (n = ", prev_remove_label$denom
 
 prev_final_labels <- collapse(prev_final_text)
 
-saveRDS(list('prev_inputs_labels' = prev_inputs_labels,
-             "prev_remove_label" = prev_remove_label,
-             "prev_clean_labels" = prev_clean_labels,
-             "prev_final_labels" = prev_final_labels),
-        "R/Report/R objects for report/Prevalence/prev_flow_input.rds")
-
 saveRDS(prev_final_text, "R/Report/R objects for report/Prevalence/prev_count_text.rds")
-saveRDS(prev_final, "R/Report/R objects for report/Prevalence/prev_final.rds")
+write_csv(prev_final, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_final.csv")
 saveRDS(prev_inputs_text, "R/Report/R objects for report/Prevalence/prev_input_count_text.rds")
 
 prev_flow <- grViz("
@@ -555,7 +581,7 @@ edge [dir = none]
 prev_flow %>%
   export_svg %>% 
   charToRaw %>% 
-  rsvg_png("~/Dropbox/Work Streams/2021/Key populations/Paper/Data consolidation paper/Figs/Prevalence/prev_flowchart.png")
+  rsvg_png("R/Report/R objects for report/Prevalence/prev_flowchart.png")
 
 
 #### ART coverage
@@ -587,7 +613,9 @@ art_spreadsheet_extract <-  art_spreadsheet_extract %>%
            age_group %in% c("45+", "50+","40+") ~ "Y050_999",
            str_detect(age_group, "\\+|\\-") ~ "Y015_049",
            TRUE ~ age_group
-         )
+         ),
+         data_checked = tolower(data_checked),
+         source_found = tolower(source_found)
   )
 
 write_csv(art_spreadsheet_extract, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_spreadsheet_extract.csv")
@@ -670,19 +698,34 @@ art_spreadsheet_extract <- art_spreadsheet_extract %>%
 # Remove outliers
 art_remove_label$unconf <- NA
 
+art_spreadsheet_extract %>%
+  filter(!data_checked %in% c("yes", "remove"),
+         (is.na(source_found) | source_found == "no"),
+         year > 2009) %>%
+  count(iso3, kp, year, ref) %>%
+  arrange(desc(n)) %>%
+  View()
+
 art_checked <- art_spreadsheet_extract %>%
   filter(data_checked == "yes",
          year > 2009
-  )
+  ) %>%
+  mutate(data_checked = "Yes")
 
 art_unknown <- art_spreadsheet_extract %>%
   filter(
     (is.na(data_checked) & source_found == "no")  | (is.na(data_checked) & is.na(source_found)),
     year > 2009
-  )
+  ) %>%
+  mutate(data_checked = "No")
 
 art_cleaned_data <- bind_rows(art_checked, art_unknown) %>%
-  mutate(kp = ifelse(kp == "TGW", "TG", kp)) %>%
+  mutate(kp = ifelse(kp == "TGW", "TG", kp),
+         art = ifelse(method == "VLS" & !is.na(method), art/.9, art),
+         art_lower = ifelse(method == "VLS" & !is.na(method), art_lower/.9, art_lower),
+         art_upper = ifelse(method == "VLS" & !is.na(method), art_upper/.9, art_upper),
+         method = ifelse(method == "VLS" & !is.na(method), "Lab", method)
+         ) %>%
   filter(kp %in% c("FSW", "MSM", "PWID", "TG"))
 
 write_csv(art_cleaned_data, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_clean.csv")
@@ -703,7 +746,7 @@ art_id <- lapply(ssa_iso3, function(x){
 })
 
 art_final <- lapply(paste0("archive/aaa_extrapolate_naomi/", art_id[!is.na(art_id)], "/art.csv"),
-                     function(x) {read_csv(x) %>% select(-`...1`)}) %>%
+                     function(x) {read_csv(x) %>% select(-any_of("...1"))}) %>%
   bind_rows()
 
 art_final_text <- art_final %>%
@@ -729,7 +772,7 @@ art_final_labels <- collapse(art_final_text)
 #         "R/Report/R objects for report/Prevalence/art_flow_input.rds")
 
 saveRDS(art_final_text, "R/Report/R objects for report/ART coverage/art_count_text.rds")
-saveRDS(art_final, "R/Report/R objects for report/ART coverage/art_final.rds")
+write_csv(art_final, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_final.csv")
 saveRDS(art_inputs_text, "R/Report/R objects for report/ART coverage/art_input_count_text.rds")
 
 art_flow <- grViz("
@@ -785,4 +828,4 @@ edge [dir = none]
 art_flow %>%
   export_svg %>% 
   charToRaw %>% 
-  rsvg_png("~/Dropbox/Work Streams/2021/Key populations/Paper/Data consolidation paper/Figs/ART coverage/art_flowchart.png")
+  rsvg_png("R/Report/R objects for report/ART coverage/art_flowchart.png")

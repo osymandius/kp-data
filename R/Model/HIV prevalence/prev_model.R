@@ -67,7 +67,7 @@ convert_logis_labels <- function(x) {
   paste0(round(plogis(x)*100, 1), "%")
 }
 
-prev_dat <- readRDS("R/Report/R objects for report/Prevalence/prev_final.rds")
+prev_dat <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_final.csv")
 
 prev_df <- prev_dat %>%
   bind_rows() %>%

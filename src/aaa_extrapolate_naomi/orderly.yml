@@ -17,6 +17,14 @@ artefacts:
       description: Matched admin1 ART coverage for KP ART data
       filenames:
         - art.csv
+  - data:
+      description: HIV prevalence export for KP workbook
+      filenames:
+        - workbook_export_prev.csv
+  - data:
+      description: ART coverage export for KP workbook
+      filenames:
+        - workbook_export_art.csv
 
 parameters:
   iso3:

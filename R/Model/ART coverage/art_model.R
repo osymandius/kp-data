@@ -71,10 +71,10 @@ get_mod_results_test <- function(mod, inla_df, var) {
 
 ############## ART Coverage ############
 
-art_dat <- readRDS("R/Report/R objects for report/ART coverage/art_final.rds")
+art_dat <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_final.csv")
 
 art_df <- art_dat %>%
-  bind_rows(.id = "iso3") %>%
+  bind_rows() %>%
   left_join(region %>% select(region, iso3)) %>%
   filter(!is.na(denominator), denominator != 0, denominator < 10000) %>% ## WORK OUT HOW TO USE PROGRAMME DATA
   mutate(value = ifelse(value == 1, 0.99, value),
@@ -91,87 +91,87 @@ art_df <- art_dat %>%
 df_logit <- data.frame(logit_gen_art = logit(seq(0.25, 0.99, 0.01)))
 
 
-art_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
-  
-  art_df <- art_df %>%
-    filter(kp == kp_id)
-  
-  ## Prediction data frames
-  df_natural <- data.frame(provincial_value = seq(0.25, 0.99,0.01))
-  
-  
-  ## Quasibinomial model formula using positives and negatives [same result using the ART coverage and the weight argument in glm()]
-  formula <- cbind(positive, negative) ~ logit_gen_art
-  mod <- glm(formula, family = "quasibinomial", data = art_df)
-  
-  ## Predict on both the natural and link [logit] scale
-  qb_dat <-  df_natural %>%
-    cbind(df_logit) %>%
-    mutate(logit_fit = predict.glm(mod, newdata = df_logit, type = "link", se.fit = TRUE)$fit,
-           se = predict.glm(mod, newdata = df_logit, type = "link", se.fit = TRUE)$se.fit,
-           logit_lower = logit_fit - 1.96*se,
-           logit_upper = logit_fit + 1.96*se,
-           lower = invlogit(logit_lower),
-           upper = invlogit(logit_upper),
-           fit = invlogit(logit_fit),
-           source = "quasibinomial",
-           kp = kp_id)
-  
-  # df_logit_r <- crossing(logit_gen_art = logit(seq(0.25, 0.99, 0.01)),
-  #                      region = c("WCA", "ESA"))
-  # df_natural_r <- crossing(provincial_value = seq(0.25, 0.99, 0.01),
-  #                        region = c("WCA", "ESA"))
-  # 
-  # formula <- cbind(positive, negative) ~ logit_gen_art + (1|idx)
-  # mod <- glmer(formula, family = "binomial", data = art_df)
-  # 
-  # br_dat <-  df_natural %>%
-  #   mutate(fit = predict(mod, newdata = df_logit, type = "response", re.form=NA),
-  #          type = "natural") %>%
-  #   # bind_rows(df_logit %>% cbind(
-  #   #   fit = predict.glm(mod, newdata = df_logit, type = "link"),
-  #   #   type = "logit"
-  #   # )) %>%
-  #   mutate(source = "binomial + iid",
-  #          kp = kp_id)
-  # 
-  # formula <- logit_kp_art ~ logit_gen_art
-  # mod <- MASS::rlm(formula, data = art_df, weights = denominator)
-  # 
-  # rob_dat <-  df_natural %>%
-  #   mutate(fit = invlogit(predict.glm(mod, newdata = df_logit, type = "response")),
-  #          type = "natural") %>%
-  #   # bind_rows(df_logit %>% cbind(
-  #   #   fit = predict.glm(mod, newdata = df_logit, type = "link"),
-  #   #   type = "logit"
-  #   # )) %>%
-  #   mutate(source = "robust",
-  #          kp = kp_id)
-  # 
-  # 
-  # ## Logit linear model
-  # formula <- logit_kp_art ~ logit_gen_art
-  # mod <- glm(formula, family = "gaussian", data = art_df)
-  # 
-  # logit_dat <- df_natural %>%
-  #   mutate(fit = invlogit(predict.glm(mod, newdata = df_logit, type = "response")),
-  #          type = "natural") %>%
-  #   # bind_rows(df_logit %>% cbind(
-  #   #   fit = predict.glm(mod, newdata = df_logit, type = "link"),
-  #   #   type = "logit"
-  #   # )) %>%
-  #   mutate(source = "logit linear",
-  #          kp = kp_id)
-  # 
-  # qb_dat %>%
-  #   bind_rows(logit_dat) %>%
-  #   bind_rows(br_dat) %>%
-  #   bind_rows(rob_dat)
-  
-  
-  
-  
-})
+# art_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
+#   
+#   art_df <- art_df %>%
+#     filter(kp == kp_id)
+#   
+#   ## Prediction data frames
+#   df_natural <- data.frame(provincial_value = seq(0.25, 0.99,0.01))
+#   
+#   
+#   ## Quasibinomial model formula using positives and negatives [same result using the ART coverage and the weight argument in glm()]
+#   formula <- cbind(positive, negative) ~ logit_gen_art
+#   mod <- glm(formula, family = "quasibinomial", data = art_df)
+#   
+#   ## Predict on both the natural and link [logit] scale
+#   qb_dat <-  df_natural %>%
+#     cbind(df_logit) %>%
+#     mutate(logit_fit = predict.glm(mod, newdata = df_logit, type = "link", se.fit = TRUE)$fit,
+#            se = predict.glm(mod, newdata = df_logit, type = "link", se.fit = TRUE)$se.fit,
+#            logit_lower = logit_fit - 1.96*se,
+#            logit_upper = logit_fit + 1.96*se,
+#            lower = invlogit(logit_lower),
+#            upper = invlogit(logit_upper),
+#            fit = invlogit(logit_fit),
+#            source = "quasibinomial",
+#            kp = kp_id)
+#   
+#   # df_logit_r <- crossing(logit_gen_art = logit(seq(0.25, 0.99, 0.01)),
+#   #                      region = c("WCA", "ESA"))
+#   # df_natural_r <- crossing(provincial_value = seq(0.25, 0.99, 0.01),
+#   #                        region = c("WCA", "ESA"))
+#   # 
+#   # formula <- cbind(positive, negative) ~ logit_gen_art + (1|idx)
+#   # mod <- glmer(formula, family = "binomial", data = art_df)
+#   # 
+#   # br_dat <-  df_natural %>%
+#   #   mutate(fit = predict(mod, newdata = df_logit, type = "response", re.form=NA),
+#   #          type = "natural") %>%
+#   #   # bind_rows(df_logit %>% cbind(
+#   #   #   fit = predict.glm(mod, newdata = df_logit, type = "link"),
+#   #   #   type = "logit"
+#   #   # )) %>%
+#   #   mutate(source = "binomial + iid",
+#   #          kp = kp_id)
+#   # 
+#   # formula <- logit_kp_art ~ logit_gen_art
+#   # mod <- MASS::rlm(formula, data = art_df, weights = denominator)
+#   # 
+#   # rob_dat <-  df_natural %>%
+#   #   mutate(fit = invlogit(predict.glm(mod, newdata = df_logit, type = "response")),
+#   #          type = "natural") %>%
+#   #   # bind_rows(df_logit %>% cbind(
+#   #   #   fit = predict.glm(mod, newdata = df_logit, type = "link"),
+#   #   #   type = "logit"
+#   #   # )) %>%
+#   #   mutate(source = "robust",
+#   #          kp = kp_id)
+#   # 
+#   # 
+#   # ## Logit linear model
+#   # formula <- logit_kp_art ~ logit_gen_art
+#   # mod <- glm(formula, family = "gaussian", data = art_df)
+#   # 
+#   # logit_dat <- df_natural %>%
+#   #   mutate(fit = invlogit(predict.glm(mod, newdata = df_logit, type = "response")),
+#   #          type = "natural") %>%
+#   #   # bind_rows(df_logit %>% cbind(
+#   #   #   fit = predict.glm(mod, newdata = df_logit, type = "link"),
+#   #   #   type = "logit"
+#   #   # )) %>%
+#   #   mutate(source = "logit linear",
+#   #          kp = kp_id)
+#   # 
+#   # qb_dat %>%
+#   #   bind_rows(logit_dat) %>%
+#   #   bind_rows(br_dat) %>%
+#   #   bind_rows(rob_dat)
+#   
+#   
+#   
+#   
+# })
 
 art_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   
@@ -303,6 +303,9 @@ art_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   #         model = "nbinom + iid")
   # )
 })
+
+write.csv(art_res %>%
+  bind_rows(), "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_estimates.csv")
 
 p1 <- art_res %>%
   bind_rows() %>%

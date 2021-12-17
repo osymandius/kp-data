@@ -1,6 +1,8 @@
 # indicators <- read_output_package("depends/naomi_output.zip")
 spectrum <- extract_pjnz_naomi("depends/spectrum_file.zip")
 
+areas <- read_sf("depends/naomi_areas.geojson")
+
 sharepoint <- spud::sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
 folder <- sharepoint$folder(site = Sys.getenv("SHAREPOINT_SITE"), path = "Shared Documents/Data/Spectrum files/2021 naomi")
 path <- grep(iso3, folder$list()$name, value=TRUE, ignore.case = TRUE)
@@ -21,9 +23,19 @@ indicators <- add_output_labels(indicators) %>%
 prev <- read.csv("depends/prev_assigned_province.csv") %>%
   mutate(indicator = "HIV prevalence",
          iso3 = iso3)
+
+if(nrow(prev))
+  prev <- prev %>%
+    left_join(areas %>% select(area_id, province = area_name) %>% st_drop_geometry())
+
 art <- read.csv("depends/art_assigned_province.csv") %>%
   mutate(indicator = "ART coverage",
          iso3 = iso3)
+
+if(nrow(art))
+  art <- art %>%
+    left_join(areas %>% select(area_id, province = area_name) %>% st_drop_geometry())
+
 
 dat <- list("prev" = prev, "art" = art)
 
@@ -86,9 +98,9 @@ out <- lapply(dat, function(x) {
         has_age = ifelse(!is.na(age_group), 1, 0),
         age_group = ifelse(is.na(age_group) | !age_group %in% unique(filtered_indicators$age_group), "Y015_049", as.character(age_group))
       ) %>%
-      left_join(df) %>%
+      left_join(df %>% select(-area_name)) %>%
       mutate(ratio = value/mean) %>%
-      select(iso3, year, kp, age_group, has_age, value, denominator, mean, ratio, ref) %>%
+      # select(iso3, year, kp, age_group, has_age, value, denominator, mean, ratio, ref) %>%
       rename(provincial_value = mean)
   } else {
     data.frame(x = character())
@@ -96,18 +108,82 @@ out <- lapply(dat, function(x) {
   
 })
 
-write.csv(df, "extrapolated_naomi.csv")
-write.csv(out$prev, "prev.csv")
-write.csv(out$art, "art.csv")
+if(nrow(out$prev)) {
+  out_prev_model <- out$prev %>%
+    select(iso3, year, kp, age_group, has_age, value, denominator, provincial_value, ratio, ref)
+} else {
+  out_prev_model <- data.frame(x = character()) 
+}
 
-prev_art_sheet <- bind_rows(out$prev, out$art) %>%
-  mutate(country.name = countrycode(iso3_c, "iso3c", "country.name"),
-         surveillance_type = NA,
-         indicator = "Population size estimate",
-         province = NA,
-         prop_lower = NA,
-         prop_upper = NA,
-         sample = NA,
-         age_group = NA,
-         notes = NA,
-         link = NA)
+if(nrow(out$art)) {
+  out_art_model <- out$art %>%
+    select(iso3, year, kp, age_group, has_age, value, denominator, provincial_value, ratio, ref)
+} else {
+  out_art_model <- data.frame(x = character()) 
+}
+
+write_csv(df, "extrapolated_naomi.csv")
+write_csv(out_prev_model, "prev.csv")
+write_csv(out_art_model, "art.csv")
+
+if(nrow(prev)) {
+  workbook_export_prev <- prev %>%
+    mutate(indicator = "HIV prevalence") %>%
+    rename(prop_lower = prev_lower,
+           prop = value,
+           prop_upper = prev_upper) %>%
+    mutate(
+      surveillance_type = NA,
+      pse_lower = NA,
+      pse = NA,
+      pse_upper = NA,
+      population = NA,
+      sex= case_when(
+        kp %in%  c("FSW", "TG") ~ "female",
+        kp == "MSM" ~ "male",
+        kp == "PWID" ~ "both"
+      ),
+      age_group = NA,
+      notes = NA,
+      link = NA,
+      prop_lower = round(prop_lower, 3),
+      prop = round(prop, 3),
+      prop_upper = round(prop_upper, 3)
+    ) %>%
+    select(all_of(c("country.name", "data_checked", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "province", "year", "pse_lower", "pse", "pse_upper", "population", "prop_lower", "prop", "prop_upper", "denominator", "notes", "ref", "link")))
+} else {
+  workbook_export_prev <- data.frame(x = character()) 
+}
+
+if(nrow(art)) {
+  workbook_export_art <- art %>%
+    mutate(indicator = "ART coverage") %>%
+    rename(prop_lower = art_lower,
+           prop = value,
+           prop_upper = art_upper) %>%
+    mutate(
+      surveillance_type = NA,
+      pse_lower = NA,
+      pse = NA,
+      pse_upper = NA,
+      population = NA,
+      sex= case_when(
+        kp %in%  c("FSW", "TG") ~ "female",
+        kp == "MSM" ~ "male",
+        kp == "PWID" ~ "both"
+      ),
+      age_group = NA,
+      notes = NA,
+      link = NA,
+      prop_lower = round(prop_lower, 3),
+      prop = round(prop, 3),
+      prop_upper = round(prop_upper, 3)
+    ) %>%
+    select(all_of(c("country.name", "data_checked", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "province", "year", "pse_lower", "pse", "pse_upper", "population", "prop_lower", "prop", "prop_upper", "denominator", "notes", "ref", "link")))
+} else {
+  workbook_export_art <- data.frame(x = character()) 
+}
+
+
+write_csv(workbook_export_prev, "workbook_export_prev.csv", na = "")
+write_csv(workbook_export_art, "workbook_export_art.csv", na = "")

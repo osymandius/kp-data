@@ -174,15 +174,24 @@ if(nrow(pse)) {
     bad_match_error <- data.frame(iso3 = iso3_c, x = "No bad matches")
   }
   
+  area_reshape <- spread_areas(areas) %>%
+    select(area_name1, starts_with("area_id")) %>%
+    st_drop_geometry() %>%
+    pivot_longer(-area_name1) %>%
+    select(-name, area_id = value, province = area_name1) %>%
+    distinct(province, area_id) %>%
+    filter(area_id != iso3)
+  
   row_populations <- best_matches %>%
+    left_join(area_reshape) %>%
     mutate(sex = case_when(
       kp %in% c("PWID") ~ "both",
       kp %in% c("MSM", "TGM") ~ "male",
       kp %in% c("FSW", "SW", "TG", "TGW") ~ "female"
     )) %>%
     type_convert() %>%
-    left_join(population %>% type_convert()) %>%
-    group_by(row_id) %>%
+    left_join(population %>% select(area_id, year, sex, population) %>% type_convert()) %>%
+    group_by(row_id, province) %>%
     summarise(population = sum(population))
   
   pse <- pse %>%
@@ -195,7 +204,6 @@ if(nrow(pse)) {
            country.name = countrycode(iso3_c, "iso3c", "country.name"),
            surveillance_type = NA,
            indicator = "Population size estimate",
-           province = NA,
            prop_lower = NA,
            prop_upper = NA,
            sample = NA,

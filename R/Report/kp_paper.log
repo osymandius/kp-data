@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2022/dev) (preloaded format=pdflatex 2021.12.10)  14 DEC 2021 13:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2022/dev) (preloaded format=pdflatex 2021.12.10)  17 DEC 2021 16:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -584,10 +584,10 @@ File: kp_paper_files/figure-latex/unnamed-chunk-10-1.pdf Graphic file (type pdf
 )
 <use kp_paper_files/figure-latex/unnamed-chunk-10-1.pdf>
 Package pdftex.def Info: kp_paper_files/figure-latex/unnamed-chunk-10-1.pdf  us
-ed on input line 482.
+ed on input line 473.
 (pdftex.def)             Requested size: 650.43942pt x 464.59958pt.
 
-LaTeX Warning: Float too large for page by 18.78899pt on input line 483.
+LaTeX Warning: Float too large for page by 18.78899pt on input line 474.
 
 <kp_paper_files/figure-latex/unnamed-chunk-11-1.pdf, id=162, 1156.32pt x 722.7p
 t>
@@ -595,7 +595,7 @@ File: kp_paper_files/figure-latex/unnamed-chunk-11-1.pdf Graphic file (type pdf
 )
 <use kp_paper_files/figure-latex/unnamed-chunk-11-1.pdf>
 Package pdftex.def Info: kp_paper_files/figure-latex/unnamed-chunk-11-1.pdf  us
-ed on input line 488.
+ed on input line 479.
 (pdftex.def)             Requested size: 650.4284pt x 406.51775pt.
 [10 <./kp_paper_files/figure-latex/unnamed-chunk-10-1.pdf>] [11 <./kp_paper_fil
 es/figure-latex/unnamed-chunk-11-1.pdf>]
@@ -605,7 +605,7 @@ File: kp_paper_files/figure-latex/unnamed-chunk-12-1.pdf Graphic file (type pdf
 )
 <use kp_paper_files/figure-latex/unnamed-chunk-12-1.pdf>
 Package pdftex.def Info: kp_paper_files/figure-latex/unnamed-chunk-12-1.pdf  us
-ed on input line 512.
+ed on input line 503.
 (pdftex.def)             Requested size: 469.76045pt x 563.71257pt.
 <kp_paper_files/figure-latex/unnamed-chunk-13-1.pdf, id=193, 722.7pt x 867.24pt
 >
@@ -613,7 +613,7 @@ File: kp_paper_files/figure-latex/unnamed-chunk-13-1.pdf Graphic file (type pdf
 )
 <use kp_paper_files/figure-latex/unnamed-chunk-13-1.pdf>
 Package pdftex.def Info: kp_paper_files/figure-latex/unnamed-chunk-13-1.pdf  us
-ed on input line 519.
+ed on input line 510.
 (pdftex.def)             Requested size: 469.76045pt x 563.71257pt.
 [12
 
@@ -644,7 +644,7 @@ istevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></Users/oli
 stevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></Users/olis
 tevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></Users/oliste
 vens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb>
-Output written on kp_paper.pdf (16 pages, 1206630 bytes).
+Output written on kp_paper.pdf (16 pages, 1218017 bytes).
 PDF statistics:
  298 PDF objects out of 1000 (max. 8388607)
  236 compressed objects within 3 object streams

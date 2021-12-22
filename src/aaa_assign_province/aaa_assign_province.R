@@ -42,18 +42,41 @@ out <- lapply(dat, function(x) {
   # cities_areas <- merge_cities %>%
   #   bind_rows(areas)
   
+  # x <- data.frame(
+  #   iso3 = "BEN",
+  #   area_name = "Alibori, Atacora",
+  #   year = 2010,
+  #   kp = "FSW"
+  # )
+  
   x <- x %>%
     mutate(row_id = row_number()) %>%
     filter(iso3 == iso3_c)
   
+  # min_dist <- x %>%
+  #   select(iso3, area_name, year, kp, row_id) %>%
+  #   # filter(!str_detect(area_name, "\\,|\\;|\\&|\\+\\/")) %>%
+  #   mutate(area_name = tolower(area_name)) %>%
+  #   rename(given_area = area_name) %>%
+  #   left_join(cities_areas, by="iso3") %>%
+  #   mutate(dist = stringdist::stringdist(given_area, tolower(area_name))) %>%
+  #   group_by(row_id) %>%
+  #   filter(dist == min(dist))
+  
   min_dist <- x %>%
     select(iso3, area_name, year, kp, row_id) %>%
-    filter(!str_detect(area_name, "\\,|\\;|\\&|\\+\\/")) %>%
-    mutate(area_name = tolower(area_name)) %>%
+    mutate(area_name = str_replace_all(area_name, "\\,|\\/| and ", "\\;")) %>%
+    distinct() %>%
+    separate(area_name, sep = ";", into = paste0("area_split", 1:20), remove=FALSE) %>%
+    mutate(across(starts_with("area_split"), ~str_trim(.x))) %>%
+    pivot_longer(-c(iso3, area_name, year, row_id, kp)) %>%
+    filter(!is.na(value)) %>%
+    mutate(idx = row_number(),
+           value = tolower(value)) %>%
     rename(given_area = area_name) %>%
     left_join(cities_areas, by="iso3") %>%
-    mutate(dist = stringdist::stringdist(given_area, tolower(area_name))) %>%
-    group_by(row_id) %>%
+    mutate(dist = stringdist::stringdist(value, tolower(area_name))) %>%
+    group_by(idx) %>%
     filter(dist == min(dist))
   
   best_matches <- min_dist %>%
@@ -90,7 +113,7 @@ out <- lapply(dat, function(x) {
     bad_match_error <- bad_match %>%
       ungroup %>%
       mutate(iso3 = iso3_c) %>%
-      select(iso3, given_area, attempted_match = area_name, attempted_area_id = area_id, string_distance = dist)
+      select(iso3, given_area = value, attempted_match = area_name, attempted_area_id = area_id, string_distance = dist)
     
     warning("\nString match is bad:\n", 
             paste0(utils::capture.output(bad_match_error), collapse = "\n"))

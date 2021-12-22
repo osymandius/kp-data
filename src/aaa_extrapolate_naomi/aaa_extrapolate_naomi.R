@@ -90,6 +90,7 @@ out <- lapply(dat, function(x) {
   
   if(nrow(x)) {
     anonymised_dat <- x %>%
+      select(!contains(c("Column", "..."))) %>%
       mutate(sex = case_when(
         kp %in% c("FSW", "SW", "TGW", "TG") ~ "female",
         kp %in% c("MSM", "TGM") ~ "male",
@@ -99,9 +100,13 @@ out <- lapply(dat, function(x) {
         age_group = ifelse(is.na(age_group) | !age_group %in% unique(filtered_indicators$age_group), "Y015_049", as.character(age_group))
       ) %>%
       left_join(df %>% select(-area_name)) %>%
-      mutate(ratio = value/mean) %>%
-      # select(iso3, year, kp, age_group, has_age, value, denominator, mean, ratio, ref) %>%
-      rename(provincial_value = mean)
+      group_by(row_id) %>%
+      mutate(province = ifelse(length(unique(province)) > 1, NA_character_, province)) %>%
+      rename(provincial_value = mean) %>%
+      group_by(across(-c(provincial_value, area_id))) %>%
+      summarise(provincial_value = mean(provincial_value)) %>%
+      mutate(ratio = value/provincial_value) %>%
+      ungroup()
   } else {
     data.frame(x = character())
   }
@@ -110,6 +115,7 @@ out <- lapply(dat, function(x) {
 
 if(nrow(out$prev)) {
   out_prev_model <- out$prev %>%
+    filter(across(any_of("is_aggregate"), is.na)) %>%
     select(iso3, year, kp, age_group, has_age, value, denominator, provincial_value, ratio, ref)
 } else {
   out_prev_model <- data.frame(x = character()) 
@@ -117,6 +123,7 @@ if(nrow(out$prev)) {
 
 if(nrow(out$art)) {
   out_art_model <- out$art %>%
+    filter(across(any_of("is_aggregate"), is.na)) %>%
     select(iso3, year, kp, age_group, has_age, value, denominator, provincial_value, ratio, ref)
 } else {
   out_art_model <- data.frame(x = character()) 

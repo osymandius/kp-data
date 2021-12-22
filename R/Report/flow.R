@@ -452,21 +452,31 @@ prev_remove_label$unconf <- NA
 #          (is.na(source_found) | source_found == "no"),
 #          year > 2009) %>%
 #   count(iso3, kp, year) %>%
-#   arrange(desc(n)) %>%
-#   View(
-#     
-#   )
-#   # arrange(iso3, kp, year, desc(n)) %>%
-#   filter(iso3 != "ZWE", !is.na(ref)) %>%
-#   write_csv("~/Downloads/missing_kp_reports_new.csv")
-
+#   arrange(desc(n)) %>% 
+#   left_join(
+#     prev_spreadsheet_extract %>%
+#       filter(!data_checked %in% c("yes", "remove"),
+#              !(data_checked == "no" & iso3 == "ZWE"),
+#              (is.na(source_found) | source_found == "no"),
+#              year > 2009) %>%
+#       distinct(iso3, kp, year, ref) %>%
+#       arrange(iso3, kp, year) %>%
+#       filter(iso3 != "ZWE", !is.na(ref))
+#   ) %>%
+#   mutate(country = countrycode(iso3, "iso3c", "country.name")) %>%
+#   write_csv("~/Downloads/missing_prev.csv", na = "")
+# 
 # prev_spreadsheet_extract %>%
-#   filter(iso3 == "MLI",
-#          !data_checked %in% c("yes", "remove"),
-#          (is.na(source_found) | source_found == "no")) %>%
-#   View(
-#     
-#   )
+#   filter(!data_checked %in% c("yes", "remove"),
+#          !(data_checked == "no" & iso3 == "ZWE"),
+#          (is.na(source_found) | source_found == "no"),
+#          year > 2009) %>%
+#   count(iso3, year, ref) %>%
+#   arrange(desc(n)) %>%
+#   mutate(country = countrycode(iso3, "iso3c", "country.name")) %>%
+#   write_csv("~/Downloads/missing_prev_iso.csv", na = "")
+# 
+
 
 prev_checked <- prev_spreadsheet_extract %>%
   filter(data_checked == "yes",
@@ -698,13 +708,13 @@ art_spreadsheet_extract <- art_spreadsheet_extract %>%
 # Remove outliers
 art_remove_label$unconf <- NA
 
-art_spreadsheet_extract %>%
-  filter(!data_checked %in% c("yes", "remove"),
-         (is.na(source_found) | source_found == "no"),
-         year > 2009) %>%
-  count(iso3, kp, year, ref) %>%
-  arrange(desc(n)) %>%
-  View()
+# art_spreadsheet_extract %>%
+#   filter(!data_checked %in% c("yes", "remove"),
+#          (is.na(source_found) | source_found == "no"),
+#          year > 2009) %>%
+#   count(iso3, kp, year, ref) %>%
+#   arrange(desc(n)) %>%
+#   View()
 
 art_checked <- art_spreadsheet_extract %>%
   filter(data_checked == "yes",

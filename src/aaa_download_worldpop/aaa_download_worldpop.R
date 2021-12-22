@@ -10,6 +10,18 @@ cities <- read_sf("merge_cities.geojson") %>%
   mutate(area_id = paste0(iso3, "_city_", row_number())) %>%
   st_make_valid()
 
+city_province_map <- cities %>%
+  rename(city_name = area_name,
+                 city_id = area_id) %>%
+  st_join(areas %>% filter(area_level ==1), 
+          largest = TRUE) %>%
+  st_drop_geometry() %>%
+  dplyr::select(area_name = city_name,
+         area_id = city_id,
+         province = area_name)
+
+write_csv(city_province_map, "city_province_map.csv")
+
 if(nrow(cities)) {
 
   path <- file.path("https://data.worldpop.org/GIS/Population/Global_2000_2020_Constrained/2020/maxar_v1", iso3, paste0(tolower(iso3), "_ppp_2020_UNadj_constrained.tif"))

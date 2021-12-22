@@ -46,3 +46,5 @@ depends:
     id: latest(parameter:iso3 == iso3)
     use:
       depends/interpolated_city_population.csv: interpolated_city_population.csv
+      depends/city_province_map.csv: city_province_map.csv
+      

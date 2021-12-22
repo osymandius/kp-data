@@ -67,7 +67,7 @@ region <- read.csv("~/Documents/GitHub/fertility_orderly/global/region.csv") %>%
 
 ############## PSE
 
-pse_dat <- readRDS("R/Report/R objects for report/PSE/pse_final.rds")
+pse_dat <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_final.csv")
 
 lso_pop_id <- orderly::orderly_search(name = "aaa_scale_pop", query = paste0('latest(parameter:iso3 == "', "LSO", '")'), draft = FALSE)
 
@@ -98,18 +98,23 @@ pse_dat <- pse_dat %>%
   mutate(
     logit_proportion = logit(population_proportion)
   ) %>%
-  select(iso3, year, kp, method, simple_method, logit_proportion, population_proportion) %>%
-  filter(iso3 != "LBR")
+  ungroup %>%
+  select(iso3, year, kp, method, simple_method, logit_proportion, population_proportion, ref) %>%
+  filter(iso3 != "LBR",
+         !(iso3 == "BFA" & kp == "PWID"))
 
 pse_inla <- crossing(iso3 = ssa_iso3) %>%
   bind_rows(pse_dat %>%
               filter(kp == "FSW") %>%
               mutate(method = factor(method)) %>%
+              group_by(ref) %>%
+              mutate(id.ref = cur_group_id(),
+                     id.ref = ifelse(is.na(ref), NA, id.ref)) %>%
               ungroup) %>%
   left_join(geographies %>% st_drop_geometry()) %>%
-  select(iso3, logit_proportion, method, id.iso3)
+  select(iso3, logit_proportion, method, id.iso3, id.ref)
 
-pse_formula <- logit_proportion ~ f(id.iso3, model = "besag", scale.model = TRUE, graph = "national_level_adj.adj") + method
+pse_formula <- logit_proportion ~ f(id.iso3, model = "besag", scale.model = TRUE, graph = "national_level_adj.adj") + method + f(id.ref, model = "iid")
 
 fsw_fit <- INLA::inla(pse_formula,
                   data = pse_inla,
@@ -118,7 +123,9 @@ fsw_fit <- INLA::inla(pse_formula,
                   control.predictor=list(compute=TRUE),
                   verbose = TRUE)
 
-# log_prec_besag_msm <- pse_fit$internal.marginals.hyperpar$`Log precision for id.iso3`
+log_prec_spatial <- fsw_fit$internal.marginals.hyperpar$`Log precision for id.iso3`
+hist(log_prec_spatial)
+MASS::fitdistr()
 
 fitted_val <- get_mod_results_test(fsw_fit, pse_inla, "logit_proportion")
 
@@ -133,10 +140,13 @@ pse_inla <- crossing(iso3 = ssa_iso3) %>%
   bind_rows(pse_dat %>%
               filter(kp == "MSM") %>%
               mutate(method = factor(method)) %>%
+              group_by(ref) %>%
+              mutate(id.ref = cur_group_id(),
+                     id.ref = ifelse(is.na(ref), NA, id.ref)) %>%
               ungroup) %>%
   mutate(idx = row_number(),
          id.iso3 = as.numeric(factor(iso3))) %>%
-  select(iso3, logit_proportion, method, id.iso3)
+  select(iso3, logit_proportion, method, id.iso3, id.ref)
  
 msm_fit <- INLA::inla(pse_formula,
                       data = pse_inla,
@@ -158,10 +168,13 @@ pse_inla <- crossing(iso3 = ssa_iso3) %>%
   bind_rows(pse_dat %>%
               filter(kp == "PWID") %>%
               mutate(method = factor(method)) %>%
+              group_by(ref) %>%
+              mutate(id.ref = cur_group_id(),
+                     id.ref = ifelse(is.na(ref), NA, id.ref)) %>%
               ungroup) %>%
   mutate(idx = row_number(),
          id.iso3 = as.numeric(factor(iso3))) %>%
-  select(iso3, logit_proportion, method, id.iso3)
+  select(iso3, logit_proportion, method, id.iso3, id.ref)
 
 prec.prior <- list(prec= list(prior = "normal", param = c(0.4, 6.25)))
 

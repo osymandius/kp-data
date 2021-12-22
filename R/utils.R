@@ -17,10 +17,10 @@ map(ssa_iso3, ~possibly_pull("aaa_scale_pop", id = paste0('latest(parameter:iso3
 
 ### Assign populations
 id <- map(ssa_iso3, ~possibly_run("aaa_assign_populations", parameters = data.frame(iso3 = .x)))
-names(id) <- ssa_iso3
+# names(id) <- ssa_iso3
 lapply(id %>% compact(), orderly_commit)
 
-# orderly_develop_start("aaa_assign_populations", parameters = data.frame(iso3 = "MOZ"))
+# orderly_develop_start("aaa_assign_populations", parameters = data.frame(iso3 = "NGA"))
 # setwd("src/aaa_assign_populations")
 
 ### Assign province
@@ -29,19 +29,21 @@ id <- map(ssa_iso3, ~possibly_run("aaa_assign_province", parameters = data.frame
 lapply(id %>% compact(), orderly_commit)
 
 
-orderly_develop_start("aaa_assign_province", parameters = data.frame(iso3 = "ZAF"))
-setwd("src/aaa_assign_province")
+# orderly_develop_start("aaa_assign_province", parameters = data.frame(iso3 = "MOZ"))
+# setwd("src/aaa_assign_province")
 
 ### Extrapolate Naomi
 id <- map(ssa_iso3, ~possibly_run("aaa_extrapolate_naomi", parameters = data.frame(iso3 = .x)))
-names(id) <- ssa_iso3
+# names(id) <- ssa_iso3
 lapply(id %>% compact(), orderly_commit)
+
+to_do <- names(id %>% keep(~is.null(.x)))
 
 orderly_develop_start("aaa_extrapolate_naomi", parameters = data.frame(iso3 = "MOZ"))
 setwd("src/aaa_extrapolate_naomi")
 
-### Extrapolate Naomi
-id <- map(ssa_iso3, ~possibly_run("aaa_get_spectrum", parameters = data.frame(iso3 = .x)))
+### Get Spectrum
+id <- map(ssa_iso3, ~possibly_run("aaa_download_worldpop", parameters = data.frame(iso3 = .x)))
 names(id) <- ssa_iso3
 lapply(id %>% compact(), orderly_commit)
 

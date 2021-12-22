@@ -98,7 +98,9 @@ knitr::include_graphics('R objects for report/ART coverage/art_flowchart.png')
 \elandscape
 # Methods
 
-## 3.1 Transforming population size data
+## 3.1 Size estimates
+
+### 3.1.1 Transforming population size data
 
 Population size estimates reported as counts were converted to population proportion to facilitate comparison of population sizes across settings. Two sources were used to derive total population denominators:
 
@@ -119,6 +121,12 @@ data.frame("Key population" = c("FSW", "MSM", "PWID", "TG"),
 
 Each population size estimate was matched to the total population denominator for a given age, sex, year, and area. Age information was missing from nearly all key population data entries; missing data was assigned ages 15-49. Unless a sex was specified, all sex workers were assumed to be female, all PWID assumed to be both sexes, and all transgender people assumed to be female. String matching was used to assign one of a Naomi area name or GRUMP area name to each surveillance area, thereby matching to a total population denominator.
 
+### 3.1.2 Categorising size estimate methods
+
+Within a given surveillance activity, it is common for multiple size estimation methods to be conducted as variation in results between methods can be large [cite]. A final consensus size estimate may then be calculated by averaging these raw size estimates, taking a median of estimates, or using more complex methods for synthesising diverse data sources [cite: anchored multipler + FellStat]. Final size estimates may incorporate other sources of information including literature estimates conducted in neighbouring countries, existing size estimates from previous years, stakeholder estimates of population size [cite].
+
+Final size estimates were disaggregated into their raw methods and grouped into six categories: two-source capture-recapture (2S-CRC), three-source capture-recapture (3S-CRC), PLACE/programmatic mapping [cite], object/event multipliers, service multipliers, SS-PSE. Two further categories were defined in cases where surveillance activities reported only a final estimate of multiple methods without raw estimates by method: "Multiple methods - empirical" or "Multiple methods - mixture". The former contains average estimates derived from one or more of the six methods above, whilst the latter for is average estimates containing one or more non-empirical method - enumeration, wisdom of the crowds, key informant interviews, and the Delphi method [cite]. Population size estimates derived by non-empirical methods alone were excluded from this analysis.
+
 ## 3.2 Transforming HIV prevalence data and ART coverage data
 
 To facilitate cross-country comparison, key population HIV prevalence and ART coverage data were expressed relative to total population estimates for a given age, sex, year, and first administrative level (henceforth 'province').
@@ -131,9 +139,13 @@ Cross-sectional estimates of age/sex-specific HIV prevalence and ART coverage at
 
 ### 3.3.1 Population size
 
-We modelled national key population proportions with a spatial smoothing model allowing population proportions to be correlated between geographically neighbouring countries. Logit population proportion for each key population was assumed to be normally distributed. $\mu$ is decomposed into a model intercept, $\beta_0$, and a spatial smoothing component at the national level, $\theta$ for $i \in 1,2, ... 38$, given an intrinsic conditional autoregressive (ICAR) prior:
+We modelled national key population proportions with a spatial smoothing model allowing population proportions to be correlated between geographically neighbouring countries. Each key population was modelled separately, with logit population proportion assumed to be normally distributed with mean $\mu$ and standard deviation $\sigma$, estimated from the data. $\mu$ is decomposed into a model intercept $\beta_0$, a fixed effect for study method, $X$ for $m \in 1, 2 ... 8$ (see Section 3.1.2), an intrinsic conditional autoregressive (ICAR) spatial smoothing random effect at the national level, $\theta$ for $i \in 1,2, ... 38$, and a study $iid$ random effect, $\epsilon$ for $s \in 1,2 ... n$. 
 
-$$ logit(p_i) \sim N(\mu_i, \sigma) $$ $$\mu_i = \beta_0 + \theta_i $$
+$$ logit(p_i) \sim N(\mu_i, \sigma) $$ 
+$$\mu_i = \beta_0 + \beta_1 X_m + \theta_i + \epsilon_s$$
+$$\beta_{0:1} \sim N(0, 5)$$
+$$\theta_i \sim ICAR(\sigma_\theta) $$
+$$\epsilon_i \sim N(0, \sigma_\epsilon)$$
 
 ### 3.3.2 HIV prevalence
 
@@ -206,7 +218,7 @@ Estimates of key population size were extracted from:
 
 -   KP surveillance reports (FSW $`r pse_input_count_text[5,3]`$; MSM $`r pse_input_count_text[5,4]`$; PWID $`r pse_input_count_text[5,5]`$; TG $`r pse_input_count_text[5,6]`$);
 
-Following data cleaning, primary source review, and area matching, $`r nrow(pse_final)`$ data entries for population size were extracted from $`r length(unique(pse_final$ref))`$ studies. Data were most available for FSW (n=$`r nrow(filter(pse_final, kp == "FSW"))`$), followed by MSM (n=$`r nrow(filter(pse_final, kp == "MSM"))`$), PWID (n=$`r nrow(filter(pse_final, kp == "PWID"))`$), and TG (n=$`r nrow(filter(pse_final, kp == "TG"))`$). Size estimation methods were available for $`r round(nrow(filter(pse_final, !is.na(method)))/nrow(pse_final)*100)`$% of data ($`r nrow(filter(pse_final, !is.na(method)))`$/$`r nrow(pse_final)`$). Since 2010-12, studies estimating key population size in SSA are being conducted more frequently. In 2019-21, $`r study_n_2021$n[study_n_2021$kp == "FSW"]`$ FSW, $`r study_n_2021$n[study_n_2021$kp == "MSM"]`$ MSM, $`r study_n_2021$n[study_n_2021$kp == "PWID"]`$ PWID and XX TG PSE studies were recorded, increasing from $`r study_n_2012$n[study_n_2012$kp == "FSW"]`$, $`r study_n_2012$n[study_n_2012$kp == "MSM"]`$, $`r study_n_2012$n[study_n_2012$kp == "PWID"]`$, and 0 in 2010-12 respectively. The use of empirical methods (Two and three source capture-recapture (2S and 3S-CRC), multiplier methods, and SS-PSE) is also increasing from $`r filter(empirical_proportion, year == "2013-2015")$prop`$% in 2013-2015 to $`r filter(empirical_proportion, year == "2019-2021")$prop`$% in 2019-2021.
+Following data cleaning, primary source review, and area matching, $`r nrow(pse_final)`$ data entries for population size were extracted from $`r length(unique(pse_final$ref))`$ studies. Data were most available for FSW (n=$`r nrow(filter(pse_final, kp == "FSW"))`$), followed by MSM (n=$`r nrow(filter(pse_final, kp == "MSM"))`$), PWID (n=$`r nrow(filter(pse_final, kp == "PWID"))`$), and TG (n=$`r nrow(filter(pse_final, kp == "TG"))`$). Size estimation methods were available for $`r round(nrow(filter(pse_final, !is.na(method)))/nrow(pse_final)*100)`$% of data ($`r nrow(filter(pse_final, !is.na(method)))`$/$`r nrow(pse_final)`$). Since 2010-12, studies estimating key population size in SSA are being conducted more frequently. In 2019-21, $`r study_n_2021$n[study_n_2021$kp == "FSW"]`$ FSW, $`r study_n_2021$n[study_n_2021$kp == "MSM"]`$ MSM, $`r study_n_2021$n[study_n_2021$kp == "PWID"]`$ PWID and $`r study_n_2021$n[study_n_2021$kp == "TG"]`$ TG PSE studies were recorded, increasing from $`r study_n_2012$n[study_n_2012$kp == "FSW"]`$, $`r study_n_2012$n[study_n_2012$kp == "MSM"]`$, $`r study_n_2012$n[study_n_2012$kp == "PWID"]`$, and 0 in 2010-12 respectively. The use of empirical methods (Two and three source capture-recapture (2S and 3S-CRC), multiplier methods, and SS-PSE) is also increasing from $`r filter(empirical_proportion, year == "2013-2015")$prop`$% in 2013-2015 to $`r filter(empirical_proportion, year == "2019-2021")$prop`$% in 2019-2021.
 
 ``` {r echo=FALSE, message=FALSE, warning =FALSE, fig.width = 9, out.width = "75%", fig.align = "center"}
 
@@ -351,8 +363,7 @@ pse_iqr <- pse_estimates %>%
 grey <- read_sf("R objects for report/Longitude_Graticules_and_World_Countries_Boundaries-shp/99bfd9e7-bb42-4728-87b5-07f8c8ac631c2020328-1-1vef4ev.lu5nk.shp") %>%
   filter(CNTRY_NAME %in% c("Western Sahara", "Mauritania", "Morocco", "Algeria", "Libya", "Tunisia", "Egypt", "Equatorial Guinea", "Somalia", "Djibouti", "Eritrea")) %>%
   bind_rows(read_sf("R objects for report/sdn_adm_cbs_nic_ssa_20200831_shp/sdn_admbnda_adm0_cbs_nic_ssa_20200831.shp")) %>%
-  bind_rows(read_sf("R objects for report/ssd_admbnda_imwg_nbs_shp/ssd_admbnda_adm0_imwg_nbs_20180817.shp")) %>%
-  st_crop(xmin=-180, xmax=180, ymin=-35, ymax=90)
+  bind_rows(read_sf("R objects for report/ssd_admbnda_imwg_nbs_shp/ssd_admbnda_adm0_imwg_nbs_20180817.shp"))
 
 geographies <- read_sf("R objects for report/Longitude_Graticules_and_World_Countries_Boundaries-shp/99bfd9e7-bb42-4728-87b5-07f8c8ac631c2020328-1-1vef4ev.lu5nk.shp") %>%
   bind_rows(read_sf("R objects for report/ssd_admbnda_imwg_nbs_shp/ssd_admbnda_adm0_imwg_nbs_20180817.shp") %>% mutate(CNTRY_NAME = "South Sudan")) %>%

@@ -9,6 +9,10 @@ artefacts:
       description: City populations from constrained WorldPop raster
       filenames:
         - interpolated_city_population.csv
+  - data:
+      description: City to province map
+      filenames:
+        - city_province_map.csv
 
 parameters:
   iso3:

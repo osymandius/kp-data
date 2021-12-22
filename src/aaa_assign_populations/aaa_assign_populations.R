@@ -115,7 +115,8 @@ if(nrow(pse)) {
   
   pse_areas <- pse %>%
     select(iso3, area_name, year, kp, row_id) %>%
-    mutate(area_name = str_replace_all(area_name, "\\,|\\/", "\\;")) %>%
+    mutate(
+      area_name = str_replace_all(area_name, "\\,\\,|\\,|\\/", "\\;")) %>%
     distinct() %>%
     separate(area_name, sep = ";", into = paste0("area_split", 1:20), remove=FALSE) %>%
     mutate(across(starts_with("area_split"), ~str_trim(.x))) %>%
@@ -174,13 +175,17 @@ if(nrow(pse)) {
     bad_match_error <- data.frame(iso3 = iso3_c, x = "No bad matches")
   }
   
+  
+  
   area_reshape <- spread_areas(areas) %>%
     select(area_name1, starts_with("area_id")) %>%
     st_drop_geometry() %>%
     pivot_longer(-area_name1) %>%
     select(-name, area_id = value, province = area_name1) %>%
     distinct(province, area_id) %>%
-    filter(area_id != iso3)
+    filter(area_id != iso3) %>%
+    bind_rows(read_csv("depends/city_province_map.csv") %>%
+                select(-area_name))
   
   row_populations <- best_matches %>%
     left_join(area_reshape) %>%
@@ -191,6 +196,8 @@ if(nrow(pse)) {
     )) %>%
     type_convert() %>%
     left_join(population %>% select(area_id, year, sex, population) %>% type_convert()) %>%
+    group_by(row_id) %>%
+    mutate(province = ifelse(length(unique(province)) > 1, NA_character_, province)) %>%
     group_by(row_id, province) %>%
     summarise(population = sum(population))
   

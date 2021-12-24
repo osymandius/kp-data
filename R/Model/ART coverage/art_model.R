@@ -73,10 +73,13 @@ get_mod_results_test <- function(mod, inla_df, var) {
 
 art_dat <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_final.csv")
 
+imp_denomin <- quantile(filter(art_dat, !is.na(denominator))$denominator, 0.25)
+
 art_df <- art_dat %>%
   bind_rows() %>%
   left_join(region %>% select(region, iso3)) %>%
-  filter(!is.na(denominator), denominator != 0, denominator < 10000) %>% ## WORK OUT HOW TO USE PROGRAMME DATA
+  mutate(denominator = ifelse(is.na(denominator) | denominator == 0, imp_denomin, denominator)) %>%
+  filter(value < 1) %>%
   mutate(value = ifelse(value == 1, 0.99, value),
          value = ifelse(value ==0, 0.01, value),
          logit_kp_art = logit(value),
@@ -88,7 +91,7 @@ art_df <- art_dat %>%
   group_by(year, kp, iso3) %>%
   mutate(idx = cur_group_id())
 
-df_logit <- data.frame(logit_gen_art = logit(seq(0.25, 0.99, 0.01)))
+df_logit <- data.frame(logit_gen_art = logit(seq(0.01, 0.99, 0.01)))
 
 
 # art_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
@@ -249,7 +252,7 @@ art_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   art_fit <- INLA::inla(art_formula,
                          data = art_inla,
                          family = "betabinomial", 
-                         Ntrials = denominator,
+                         Ntrials = art_inla$denominator,
                          # offset = log(denominator),
                          control.compute = list(config = TRUE),
                          control.family = list(link = "logit"),

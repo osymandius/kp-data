@@ -280,20 +280,26 @@ prev_df <- prev_dat %>%
 
 #########################
 
-df_logit <- data.frame(logit_gen_prev = logit(c(seq(0.0005, 0.01, 0.001), seq(0.01, 0.5, 0.01))))
+df_logit <- data.frame(logit_gen_prev = logit(c(seq(0.0005, 0.01, 0.001), seq(0.01, 0.5, 0.01)))) %>%
+  bind_rows(
+    read_csv("R/Model/HIV prevalence/national_genpop_prev.csv") %>%
+      mutate(logit_gen_prev = logit(mean)) %>%
+      select(-mean)
+  )
+  
 
 prev_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   
   prev_df <- prev_df %>%
     filter(kp == kp_id)
   
-  prev_inla <- crossing(df_logit
+  prev_inla <- crossing(df_logit %>% filter(is.na(kp) | kp == kp_id)
                         # region = c("WCA", "ESA")
                         )%>%
     mutate(denominator = 1) %>%
     bind_rows(prev_df %>%
                 ungroup) %>%
-    select(logit_gen_prev, positive, negative, region, denominator, idx)
+    select(iso3, logit_gen_prev, positive, negative, region, denominator, idx)
   
   # prev_formula <- positive ~ logit_gen_prev + f(idx, model = "iid")
   # # *region + f(idx, model = "iid")
@@ -357,7 +363,7 @@ prev_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   prev_fit <- INLA::inla(prev_formula,
                          data = prev_inla,
                          family = "betabinomial", 
-                         Ntrials = denominator,
+                         Ntrials = prev_inla$denominator,
                          # offset = log(denominator),
                          control.compute = list(config = TRUE),
                          control.predictor=list(compute=TRUE),
@@ -412,7 +418,13 @@ prev_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
 })
 
 write_csv(prev_res %>%
-  bind_rows(), "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_estimates.csv")
+  bind_rows() %>%
+  filter(is.na(iso3)), "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_estimates.csv")
+
+write_csv(prev_res %>%
+  bind_rows() %>%
+  filter(!is.na(iso3)) %>%
+  select(iso3, kp, fit), "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_national_matched_estimates.csv")
 
 p1 <- prev_res %>%
   bind_rows() %>%

@@ -114,7 +114,13 @@ pse_inla <- crossing(iso3 = ssa_iso3) %>%
   left_join(geographies %>% st_drop_geometry()) %>%
   select(iso3, logit_proportion, method, id.iso3, id.ref)
 
-pse_formula <- logit_proportion ~ f(id.iso3, model = "besag", scale.model = TRUE, graph = "national_level_adj.adj") + method + f(id.ref, model = "iid")
+ref.iid.prec.prior <- list(prec= list(prior = "normal", param = c(1.6, 4)))
+spatial.prec.prior <- list(prec= list(prior = "normal", param = c(-0.75, 6.25)))
+
+pse_formula <- logit_proportion ~ 
+  f(id.iso3, model = "besag", scale.model = TRUE, graph = "national_level_adj.adj", hyper=spatial.prec.prior) +
+  method +
+  f(id.ref, model = "iid", hyper = ref.iid.prec.prior)
 
 fsw_fit <- INLA::inla(pse_formula,
                   data = pse_inla,
@@ -123,9 +129,19 @@ fsw_fit <- INLA::inla(pse_formula,
                   control.predictor=list(compute=TRUE),
                   verbose = TRUE)
 
-log_prec_spatial <- fsw_fit$internal.marginals.hyperpar$`Log precision for id.iso3`
-hist(log_prec_spatial)
-MASS::fitdistr()
+# log_prec_spatial <- fsw_fit$internal.marginals.hyperpar$`Log precision for id.iso3`
+# hist(log_prec_spatial)
+# data.frame(log_prec_spatial) %>%
+#   ggplot() +
+#     geom_line(aes(x=x, y=y), color="red") +
+#     geom_density(data = data.frame(x=rnorm(1000, -0.75, 0.4)), aes(x=x))
+
+# log_prec_ref <- fsw_fit$internal.marginals.hyperpar$`Log precision for id.ref`
+# 
+# data.frame(log_prec_ref) %>%
+#   ggplot() +
+#     geom_line(aes(x=x, y=y), color="red") +
+#     geom_density(data = data.frame(x=rnorm(1000, 1.6, 0.5)), aes(x=x))
 
 fitted_val <- get_mod_results_test(fsw_fit, pse_inla, "logit_proportion")
 

@@ -16,11 +16,23 @@ if(length(path) == 0)
 path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Data/Spectrum files/2021 naomi", path)
 
 indicators <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = path)
-indicators <- read_output_package(indicators)
-indicators <- add_output_labels(indicators) %>%
-  dplyr::left_join(indicators$meta_age_group, by = c("age_group", "age_group_label"))
+# indicators <- read_output_package(indicators)
 
-prev <- read.csv("depends/prev_assigned_province.csv") %>%
+tmpd <- tempfile()
+on.exit(unlink(tmpd))
+utils::unzip(indicators, exdir = tmpd)
+out <- list()
+out$indicators <- read.csv(list.files(tmpd, full.names = TRUE, pattern = "indicators.csv"))
+out$meta_age_group <- read.csv(list.files(tmpd, full.names = TRUE, pattern = "meta_age_group.csv"))
+out$meta_period <- read.csv(list.files(tmpd, full.names = TRUE, pattern = "meta_period.csv"))
+out$meta_area <- read_sf(list.files(tmpd, full.names = TRUE, pattern = "boundaries.geojson"))
+out$meta_indicator <- read.csv(list.files(tmpd, full.names = TRUE, pattern = "meta_indicator.csv"))
+class(out) <- "naomi_output"
+
+indicators <- add_output_labels(out) %>%
+  dplyr::left_join(out$meta_age_group, by = c("age_group", "age_group_label"))
+
+prev <- read_csv("depends/prev_assigned_province.csv") %>%
   mutate(indicator = "HIV prevalence",
          iso3 = iso3)
 
@@ -28,7 +40,7 @@ if(nrow(prev))
   prev <- prev %>%
     left_join(areas %>% select(area_id, province = area_name) %>% st_drop_geometry())
 
-art <- read.csv("depends/art_assigned_province.csv") %>%
+art <- read_csv("depends/art_assigned_province.csv") %>%
   mutate(indicator = "ART coverage",
          iso3 = iso3)
 

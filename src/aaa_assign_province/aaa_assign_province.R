@@ -75,7 +75,7 @@ out <- lapply(dat, function(x) {
            value = tolower(value)) %>%
     rename(given_area = area_name) %>%
     left_join(cities_areas, by="iso3") %>%
-    mutate(dist = stringdist::stringdist(value, tolower(area_name))) %>%
+    mutate(dist = stringdist(value, tolower(area_name))) %>%
     group_by(idx) %>%
     filter(dist == min(dist))
   

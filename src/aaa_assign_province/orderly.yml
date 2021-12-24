@@ -35,6 +35,7 @@ packages:
   - sf
   - spud
   - countrycode
+  - stringdist
 
 resources:
   - merge_cities.geojson

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2022/dev) (preloaded format=pdflatex 2021.12.10)  22 DEC 2021 14:01
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2022/dev) (preloaded format=pdflatex 2021.12.10)  24 DEC 2021 15:37
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -525,14 +525,14 @@ LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 1
 (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) [2]
-<R objects for report/PSE/pse_flowchart.png, id=91, 818.05624pt x 1323.94624pt>
+<R objects for report/PSE/pse_flowchart.png, id=87, 818.05624pt x 1323.94624pt>
 
 File: R objects for report/PSE/pse_flowchart.png Graphic file (type png)
 <use R objects for report/PSE/pse_flowchart.png>
 Package pdftex.def Info: R objects for report/PSE/pse_flowchart.png  used on in
 put line 199.
 (pdftex.def)             Requested size: 290.25597pt x 469.7517pt.
-<R objects for report/Prevalence/prev_flowchart.png, id=93, 813.0375pt x 1233.6
+<R objects for report/Prevalence/prev_flowchart.png, id=89, 813.0375pt x 1233.6
 0875pt>
 File: R objects for report/Prevalence/prev_flowchart.png Graphic file (type png
 )
@@ -543,7 +543,7 @@ ed on input line 199.
 
 LaTeX Warning: Float too large for page by 24.49998pt on input line 200.
 
-<R objects for report/ART coverage/art_flowchart.png, id=94, 520.94624pt x 1233
+<R objects for report/ART coverage/art_flowchart.png, id=90, 520.94624pt x 1233
 .60875pt>
 File: R objects for report/ART coverage/art_flowchart.png Graphic file (type pn
 g)
@@ -561,93 +561,92 @@ t.png>] [5
 
 ]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 331.
+(Font)              <10> on input line 332.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 331.
+(Font)              <7> on input line 332.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 331.
+(Font)              <5> on input line 332.
 [6]
-<kp_paper_files/figure-latex/unnamed-chunk-5-1.pdf, id=134, 650.43pt x 325.215p
+<kp_paper_files/figure-latex/unnamed-chunk-5-1.pdf, id=129, 505.89pt x 325.215p
 t>
 File: kp_paper_files/figure-latex/unnamed-chunk-5-1.pdf Graphic file (type pdf)
 
 <use kp_paper_files/figure-latex/unnamed-chunk-5-1.pdf>
 Package pdftex.def Info: kp_paper_files/figure-latex/unnamed-chunk-5-1.pdf  use
-d on input line 421.
-(pdftex.def)             Requested size: 352.31868pt x 176.15933pt.
-[7]
-<kp_paper_files/figure-latex/unnamed-chunk-6-1.pdf, id=142, 1011.78pt x 433.62p
+d on input line 425.
+(pdftex.def)             Requested size: 328.8323pt x 211.3922pt.
+<kp_paper_files/figure-latex/unnamed-chunk-6-1.pdf, id=130, 1011.78pt x 433.62p
 t>
 File: kp_paper_files/figure-latex/unnamed-chunk-6-1.pdf Graphic file (type pdf)
 
 <use kp_paper_files/figure-latex/unnamed-chunk-6-1.pdf>
 Package pdftex.def Info: kp_paper_files/figure-latex/unnamed-chunk-6-1.pdf  use
-d on input line 423.
+d on input line 434.
 (pdftex.def)             Requested size: 469.76266pt x 201.32686pt.
-<kp_paper_files/figure-latex/unnamed-chunk-7-1.pdf, id=143, 325.215pt x 361.35p
+<kp_paper_files/figure-latex/unnamed-chunk-7-1.pdf, id=131, 325.215pt x 361.35p
 t>
 File: kp_paper_files/figure-latex/unnamed-chunk-7-1.pdf Graphic file (type pdf)
 
 <use kp_paper_files/figure-latex/unnamed-chunk-7-1.pdf>
 Package pdftex.def Info: kp_paper_files/figure-latex/unnamed-chunk-7-1.pdf  use
-d on input line 430.
+d on input line 447.
 (pdftex.def)             Requested size: 204.8915pt x 227.65721pt.
-[8 <./kp_paper_files/figure-latex/unnamed-chunk-5-1.pdf> <./kp_paper_files/figu
-re-latex/unnamed-chunk-6-1.pdf>] [9 <./kp_paper_files/figure-latex/unnamed-chun
-k-7-1.pdf>] [10]
-<kp_paper_files/figure-latex/unnamed-chunk-10-1.pdf, id=175, 1011.78pt x 722.7p
+[7] [8 <./kp_paper_files/figure-latex/unnamed-chunk-5-1.pdf> <./kp_paper_files/
+figure-latex/unnamed-chunk-6-1.pdf>] [9 <./kp_paper_files/figure-latex/unnamed-
+chunk-7-1.pdf>] [10]
+<kp_paper_files/figure-latex/unnamed-chunk-10-1.pdf, id=172, 1011.78pt x 722.7p
 t>
 File: kp_paper_files/figure-latex/unnamed-chunk-10-1.pdf Graphic file (type pdf
 )
 <use kp_paper_files/figure-latex/unnamed-chunk-10-1.pdf>
 Package pdftex.def Info: kp_paper_files/figure-latex/unnamed-chunk-10-1.pdf  us
-ed on input line 515.
+ed on input line 541.
 (pdftex.def)             Requested size: 650.43942pt x 464.59958pt.
 
-LaTeX Warning: Float too large for page by 18.78899pt on input line 516.
+LaTeX Warning: Float too large for page by 18.78899pt on input line 542.
 
-<kp_paper_files/figure-latex/unnamed-chunk-11-1.pdf, id=176, 1156.32pt x 722.7p
+<kp_paper_files/figure-latex/unnamed-chunk-11-1.pdf, id=173, 1156.32pt x 722.7p
 t>
 File: kp_paper_files/figure-latex/unnamed-chunk-11-1.pdf Graphic file (type pdf
 )
 <use kp_paper_files/figure-latex/unnamed-chunk-11-1.pdf>
 Package pdftex.def Info: kp_paper_files/figure-latex/unnamed-chunk-11-1.pdf  us
-ed on input line 521.
+ed on input line 547.
 (pdftex.def)             Requested size: 650.4284pt x 406.51775pt.
 [11 <./kp_paper_files/figure-latex/unnamed-chunk-10-1.pdf>] [12 <./kp_paper_fil
 es/figure-latex/unnamed-chunk-11-1.pdf>]
-<kp_paper_files/figure-latex/unnamed-chunk-12-1.pdf, id=206, 722.7pt x 867.24pt
->
-File: kp_paper_files/figure-latex/unnamed-chunk-12-1.pdf Graphic file (type pdf
-)
-<use kp_paper_files/figure-latex/unnamed-chunk-12-1.pdf>
-Package pdftex.def Info: kp_paper_files/figure-latex/unnamed-chunk-12-1.pdf  us
-ed on input line 545.
-(pdftex.def)             Requested size: 469.76045pt x 563.71257pt.
-<kp_paper_files/figure-latex/unnamed-chunk-13-1.pdf, id=207, 722.7pt x 867.24pt
+<kp_paper_files/figure-latex/unnamed-chunk-13-1.pdf, id=203, 722.7pt x 867.24pt
 >
 File: kp_paper_files/figure-latex/unnamed-chunk-13-1.pdf Graphic file (type pdf
 )
 <use kp_paper_files/figure-latex/unnamed-chunk-13-1.pdf>
 Package pdftex.def Info: kp_paper_files/figure-latex/unnamed-chunk-13-1.pdf  us
-ed on input line 552.
+ed on input line 571.
+(pdftex.def)             Requested size: 469.76045pt x 563.71257pt.
+<kp_paper_files/figure-latex/unnamed-chunk-14-1.pdf, id=204, 722.7pt x 867.24pt
+>
+File: kp_paper_files/figure-latex/unnamed-chunk-14-1.pdf Graphic file (type pdf
+)
+<use kp_paper_files/figure-latex/unnamed-chunk-14-1.pdf>
+Package pdftex.def Info: kp_paper_files/figure-latex/unnamed-chunk-14-1.pdf  us
+ed on input line 578.
 (pdftex.def)             Requested size: 469.76045pt x 563.71257pt.
 [13
 
 
-] [14 <./kp_paper_files/figure-latex/unnamed-chunk-12-1.pdf>] [15 <./kp_paper_f
-iles/figure-latex/unnamed-chunk-13-1.pdf>] [16] [17] (./kp_paper.aux)
+] [14 <./kp_paper_files/figure-latex/unnamed-chunk-13-1.pdf>] [15 <./kp_paper_f
+iles/figure-latex/unnamed-chunk-14-1.pdf>] [16] [17] (./kp_paper.aux)
 Package rerunfilecheck Info: File `kp_paper.out' has not changed.
-(rerunfilecheck)             Checksum: 5253656D414012AD3DEAAD9FF8C1BEAA;3335.
+(rerunfilecheck)             Checksum: 518F2E805428DA967F20B5233FE65F3E;3183.
  ) 
 Here is how much of TeX's memory you used:
  11417 strings out of 480313
- 181750 string characters out of 5896198
- 476226 words of memory out of 5000000
+ 181754 string characters out of 5896198
+ 476352 words of memory out of 5000000
  29018 multiletter control sequences out of 15000+600000
  455053 words of font info for 68 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 60i,6n,63p,428b,395s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 60i,6n,63p,428b,390s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/Users/olistevens/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.en
 c}{/Users/olistevens/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/
 Users/olistevens/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/
@@ -661,10 +660,10 @@ istevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></Users/oli
 stevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></Users/olis
 tevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></Users/oliste
 vens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb>
-Output written on kp_paper.pdf (17 pages, 1242336 bytes).
+Output written on kp_paper.pdf (17 pages, 1245473 bytes).
 PDF statistics:
- 313 PDF objects out of 1000 (max. 8388607)
- 250 compressed objects within 3 object streams
+ 310 PDF objects out of 1000 (max. 8388607)
+ 247 compressed objects within 3 object streams
  64 named destinations out of 1000 (max. 500000)
- 195 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 187 words of extra memory for PDF output out of 10000 (max. 10000000)
 

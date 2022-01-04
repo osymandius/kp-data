@@ -74,7 +74,28 @@ mwi_pse %>%
 
 ### Zimbabwe PSE from Fearon et al. 2020
 
-zwe_pse <- read.csv("R/urban-rural-ratio/zwe_urban_rural.csv")
+zwe_pse <- read_csv("R/urban-rural-ratio/zwe_urban_rural.csv")
+
+zwe_pse <- zwe_pse %>%
+  filter(!is.na(lat)) %>%
+  sf::st_as_sf(coords = c("lat", "long"))
+
+zwe_pse <- zwe_pse %>%
+  mutate(lat = unlist(map(zwe_pse$geometry,1)),
+         long = unlist(map(zwe_pse$geometry,2)))
+
+zwe_ward_areas <- sf::read_sf("~/Downloads/zwe_admbnda_adm3_zimstat_ocha_20180911/zwe_admbnda_adm3_zimstat_ocha_20180911.shp")
+
+st_crs(zwe_pse) <- st_crs(zwe_ward_areas)
+
+zwe_ward_areas %>%
+  ggplot() +
+    geom_sf() +
+    geom_point(data = zwe_pse, aes(x=long, y=lat))
+
+zwe_pse %>%
+  select(site, geometry) %>%
+  st_join(zwe_ward_areas)
 
 zwe_areas <- sf::read_sf("archive/zwe_data_areas/20201103-094144-94388ee2/zwe_areas.geojson")
 

@@ -1,6 +1,7 @@
 library(tidyverse)
 library(DiagrammeR)
 library(countrycode)
+library(DiagrammeRsvg)
 
 ssa_names <- c("Angola", "Botswana", "Eswatini", "Ethiopia", "Kenya", "Lesotho",  "Malawi", "Mozambique", "Namibia", "Rwanda", "South Africa", "South Sudan", "Uganda", "United Republic of Tanzania", "Zambia", "Zimbabwe", "Benin", "Burkina Faso", "Burundi", "Cameroon", "Central African Republic", "Chad", "Congo", "Côte d'Ivoire", "Democratic Republic of the Congo", "Equatorial Guinea", "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Liberia", "Mali", "Niger", "Nigeria", "Senegal", "Sierra Leone", "Togo")
 ssa_iso3 <- countrycode(ssa_names, "country.name", "iso3c")
@@ -285,21 +286,17 @@ m1_dedup [label = '@@2-1']
 m2_nonspec [label = '@@2-2']
 m3_model [label = '@@2-3']
 m4_non_emp [label = '@@2-4']
-m5_outlier [label = 'Outlier (n=??)']
-m6_unconf [label = 'Unconfirmed (n=??)']
 clean [label = '@@3']
 c1_denom [label = '@@2-7']
 final [label = '@@4']
 
 node [shape=none, width=0, height=0, label='']
-  p6 -> clean
+  p4 -> clean
   p7 -> final
   {rank=same; p1 -> m1_dedup}
   {rank=same; p2 -> m2_nonspec}
   {rank=same; p3 -> m3_model}
   {rank=same; p4 -> m4_non_emp}
-  {rank=same; p5 -> m5_outlier}
-  {rank=same; p6 -> m6_unconf}
   {rank=same; p7 -> c1_denom}
 
 {inp_gam inp_atlas inp_cdc inp_gf inp_surv} -> inp_total
@@ -310,8 +307,6 @@ edge [dir = none]
   p1 -> p2;
   p2 -> p3;
   p3 -> p4;
-  p4 -> p5;
-  p5 -> p6;
   clean -> p7
   
  
@@ -330,11 +325,11 @@ library(rsvg)
 pse_flow %>%
   export_svg %>% 
   charToRaw %>% 
-  rsvg_png("R/Report/R objects for report/PSE/pse_flowchart.png")
+  rsvg::rsvg_png("R/Report/R objects for report/PSE/pse_flowchart.png")
 
 ### Prevalence
 
-prev_spreadsheet_extract <- lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/HIV prevalence/Edited/", full.names = TRUE, pattern = "csv"), read_csv, na= "")
+prev_spreadsheet_extract <- lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/HIV prevalence/Edited/", full.names = TRUE, pattern = "csv"), read_csv, na= "", show_col_types = FALSE)
 
 prev_spreadsheet_extract <- c(prev_spreadsheet_extract, 
               lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/HIV prevalence/Edited/", full.names = TRUE, pattern = "xlsx"), readxl::read_xlsx)
@@ -492,7 +487,13 @@ prev_unknown <- prev_spreadsheet_extract %>%
   mutate(data_checked = "No")
 
 prev_cleaned_data <- bind_rows(prev_checked, prev_unknown) %>%
-  mutate(kp = ifelse(kp == "TGW", "TG", kp)) %>%
+  mutate(kp = ifelse(kp == "TGW", "TG", kp),
+         method = case_when(
+           method %in% c("Lab") ~ "lab",
+           method %in%c("Self report", "self-report", "Self-report") ~ "selfreport",
+           method == "Unknown" ~ NA_character_,
+           TRUE ~ method
+         )) %>%
   filter(kp %in% c("FSW", "MSM", "PWID", "TG"))
 
 write_csv(prev_cleaned_data, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_clean.csv")
@@ -550,15 +551,12 @@ inp_surv [label = '@@1-5']
 inp_total [label = '@@1-6']
 m1_dedup [label = '@@2-1']
 m2_nonspec [label = '@@2-2']
-m3_model [label = '@@2-3']
-m4_outlier [label = 'Outlier (n=??)']
-m5_unconf [label = 'Unconfirmed (n=??)']
 clean [label = '@@3']
 c1_denom [label = '@@2-6']
 final [label = '@@4']
 
 node [shape=none, width=0, height=0, label='']
-  p5 -> clean
+  p2 -> clean
   p6 -> final
   {rank=same; p1 -> m1_dedup}
   {rank=same; p2 -> m2_nonspec}
@@ -573,9 +571,6 @@ node [shape=none, width=0, height=0, label='']
 edge [dir = none]
   inp_total -> p1;
   p1 -> p2;
-  p2 -> p3;
-  p3 -> p4;
-  p4 -> p5;
   clean -> p6
   
  
@@ -591,12 +586,12 @@ edge [dir = none]
 prev_flow %>%
   export_svg %>% 
   charToRaw %>% 
-  rsvg_png("R/Report/R objects for report/Prevalence/prev_flowchart.png")
+  rsvg::rsvg_png("R/Report/R objects for report/Prevalence/prev_flowchart.png")
 
 
 #### ART coverage
 
-art_spreadsheet_extract <- lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/ART coverage/Edited/", full.names = TRUE, pattern = "csv"), read_csv, na= "")
+art_spreadsheet_extract <- lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/ART coverage/Edited/", full.names = TRUE, pattern = "csv"), read_csv, na= "", show_col_types = FALSE)
 
 art_spreadsheet_extract <- c(art_spreadsheet_extract, 
                               lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/ART coverage/Edited/", full.names = TRUE, pattern = "xlsx"), readxl::read_xlsx)
@@ -734,7 +729,13 @@ art_cleaned_data <- bind_rows(art_checked, art_unknown) %>%
          art = ifelse(method == "VLS" & !is.na(method), art/.9, art),
          art_lower = ifelse(method == "VLS" & !is.na(method), art_lower/.9, art_lower),
          art_upper = ifelse(method == "VLS" & !is.na(method), art_upper/.9, art_upper),
-         method = ifelse(method == "VLS" & !is.na(method), "Lab", method)
+         method = ifelse(method == "VLS" & !is.na(method), "Lab", method),
+         method = case_when(
+           method %in% c("Lab") ~ "lab",
+           method %in%c("Self report", "self-report", "Self-report") ~ "selfreport",
+           method == "Unknown" ~ NA_character_,
+           TRUE ~ method
+         )
          ) %>%
   filter(kp %in% c("FSW", "MSM", "PWID", "TG"))
 
@@ -838,4 +839,4 @@ edge [dir = none]
 art_flow %>%
   export_svg %>% 
   charToRaw %>% 
-  rsvg_png("R/Report/R objects for report/ART coverage/art_flowchart.png")
+  rsvg::rsvg_png("R/Report/R objects for report/ART coverage/art_flowchart.png")

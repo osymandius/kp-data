@@ -73,20 +73,32 @@ get_mod_results_test <- function(mod, inla_df, var) {
 
 art_dat <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_final.csv")
 
-imp_denomin <- quantile(filter(art_dat, !is.na(denominator))$denominator, 0.25)
+imp_denomin <- art_dat %>%
+  filter(!is.na(denominator),
+         denominator != 0) %>%
+  group_by(kp) %>%
+  summarise(quant = quantile(denominator, 0.25))
+
 
 art_df <- art_dat %>%
   bind_rows() %>%
   left_join(region %>% select(region, iso3)) %>%
-  mutate(denominator = ifelse(is.na(denominator) | denominator == 0, imp_denomin, denominator)) %>%
-  filter(value < 1) %>%
+  mutate(denominator = case_when(
+    (is.na(denominator) | denominator == 0) & kp == "FSW" ~ filter(imp_denomin, kp == "FSW")$quant,
+    (is.na(denominator) | denominator == 0) & kp == "MSM" ~ filter(imp_denomin, kp == "MSM")$quant,
+    (is.na(denominator) | denominator == 0) & kp == "PWID" ~ filter(imp_denomin, kp == "PWID")$quant,
+    TRUE ~ denominator
+  )) %>%
+  filter(value < 1,
+         !is.na(provincial_value)) %>%
   mutate(value = ifelse(value == 1, 0.99, value),
          value = ifelse(value ==0, 0.01, value),
          logit_kp_art = logit(value),
          logit_gen_art = logit(provincial_value),
          logit_gen_art2 = logit_gen_art,
          positive = round(value * denominator),
-         negative = round(denominator - positive)
+         negative = round(denominator - positive),
+         method = factor(method, levels = c("lab", "selfreport"))
   ) %>%
   group_by(year, kp, iso3) %>%
   mutate(idx = cur_group_id())
@@ -179,7 +191,12 @@ df_logit <- data.frame(logit_gen_art = logit(seq(0.01, 0.99, 0.01)))
 art_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   
   art_df <- art_df %>%
-    filter(kp == kp_id)
+    filter(kp == kp_id) %>%
+    group_by(ref) %>%
+    mutate(id.ref = cur_group_id(),
+           id.ref = ifelse(is.na(ref), NA, id.ref)) %>%
+    ungroup()
+  
   
   art_inla <- crossing(df_logit
                         # region = c("WCA", "ESA")
@@ -187,7 +204,7 @@ art_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
     mutate(denominator = 1) %>%
     bind_rows(art_df %>%
                 ungroup) %>%
-    select(logit_gen_art, positive, negative, region, denominator, idx)
+    select(logit_gen_art, positive, negative, region, denominator, method, id.ref)
   
   # art_formula <- positive ~ logit_gen_art + f(idx, model = "iid")
   # # *region + f(idx, model = "iid")
@@ -247,7 +264,7 @@ art_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   # 
   ############
   
-  art_formula <- positive ~ logit_gen_art
+  art_formula <- positive ~ logit_gen_art + method + f(id.ref, model = "iid")
   
   art_fit <- INLA::inla(art_formula,
                          data = art_inla,

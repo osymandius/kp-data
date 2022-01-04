@@ -142,7 +142,7 @@ Cross-sectional estimates of age/sex-specific HIV prevalence and ART coverage at
 
 ### 3.3.1 Population size
 
-We modelled national key population proportions with a spatial smoothing model allowing population proportions to be correlated between geographically neighbouring countries. Each key population was modelled separately, with logit population proportion assumed to be normally distributed with mean $\mu$ and standard deviation $\sigma$, estimated from the data. $\mu$ is decomposed into a model intercept $\beta_0$, a fixed effect for study method, $X$ for $m \in 1, 2 ... 8$ (see Section 3.1.2), an intrinsic conditional autoregressive (ICAR) spatial smoothing random effect at the national level, $\theta$ for $i \in 1,2, ... 38$, and a study $iid$ random effect, $\epsilon$ for $s \in 1,2 ... n$. 
+We modelled national key population proportions with a spatial smoothing model allowing population proportions to be correlated between geographically neighbouring countries. Each key population was modelled separately, with logit population proportion assumed to be normally distributed with mean $\mu$ and standard deviation $\sigma$, estimated from the data. $\mu$ is decomposed into a model intercept $\beta_0$, a fixed effect for study method, $X$ for $m \in 1, 2 ... 8$ (see Section 3.1.2) using 2S-CRC as the base group, an intrinsic conditional autoregressive (ICAR) spatial smoothing random effect at the national level, $\theta$ for $i \in 1,2, ... 38$, and a study $iid$ random effect, $\epsilon$ for $s \in 1,2 ... n$. 
 
 $$ logit(p_i) \sim N(\mu_i, \sigma) $$ 
 $$\mu_i = \beta_0 + \beta_1 X_m + \theta_i + \epsilon_s$$
@@ -152,24 +152,35 @@ $$\epsilon_i \sim N(0, \sigma_\epsilon)$$
 
 ### 3.3.2 HIV prevalence
 
-We modelled the relationship between key population HIV prevalence and total population HIV prevalence (age 15-49 years) separately for each key population.
+We modelled the relationship between key population HIV prevalence and total population HIV prevalence (age 15-49 years) separately for each key population. Missing denominators were imputed using the 25th centile of known denominators (FSW n=192; MSM n=108; PWID n=41).
 
-The number of key population members living with HIV, $Y$, is assumed to be binomially distributed with the probability of testing positive given by $p$. Logit $p$ varies linearly with total population HIV prevalence, $\rho$, for a given age group, $a$, year, $t$, and province, $x$:
+The number of key population members living with HIV, $X$, is assumed to be betabinomially distributed with HIV positivity, $p$ for a given age group, $a$, year, $t$, and province, $x$. $p$ is decomposed into a model intercept $\beta_0$, fixed effects for matched total population HIV prevalence, $\rho$ and study method, $M$ where
 
-$$ Y_{a,t,x} \sim \text{Binom}(n, p_{a,t,x})$$ 
+$$M=\begin{cases} 0 & \text{for laboratory confirmed} \\ 1 & \text{for self-report} \end{cases}$$
+
+and a study $iid$ random effect, $\epsilon$ for $s \in 1,2 ... n$.
+
+$$ X_{a,t,x} \sim \text{Binom}(n, \rho_{a,t,x})$$ 
 $$ p_{a,t,x} \sim \text{Beta}(?,?)$$ 
-$$ logit(p_{a,t,x}) = \beta_0 + \beta_1 logit(\rho_{a,t,x})$$
-$$\beta_{0:1} \sim N(0, 5)$$
+$$ logit(p_{a,t,x}) = \beta_0 + \beta_1 logit(\rho_{a,t,x}) + \beta_2M + \epsilon_s$$ 
+$$\beta_{0:2} \sim N(0, 5)$$
+$$\epsilon_i \sim N(0, \sigma_\epsilon)$$
+
 ### 3.3.3 ART coverage
 
-We modelled key population ART coverage as a function of total population ART coverage, analogously to HIV prevalence. Missing denominators were imputed with n=38, the 25th centile of known denominators. Logit-transformed key population ART coverage is assumed to follow a betabinomial distribution against logit total population coverage.
+We modelled key population ART coverage as a function of total population ART coverage, analogously to HIV prevalence. For each key population, missing denominators were imputed using the 25th centile of known denominators (FSW n=44; MSM n=23; PWID n=28). 
 
-The number of key population members on ART, $X$, is assumed to be binomially distributed with the probability of being on treatment, $p$. $p$ varies linearly with matched total population coverage, $\alpha$, for a given age group, $a$, year, $t$, and province, $x$:
+The number of key population members on ART, $A$, is assumed to be betabinomially distributed with the probability of being on treatment, $p$ for a given age group, $a$, year, $t$, and province, $x$. $p$ is decomposed into a model intercept $\beta_0$, fixed effects for matched total population ART coverage, $\alpha$ and study method, $M$ where
 
-$$ X_{a,t,x} \sim \text{Binom}(n, p_{a,t,x})$$ 
+$$M=\begin{cases} 0 & \text{for laboratory confirmed} \\ 1 & \text{for self-report} \end{cases}$$
+
+and a study $iid$ random effect, $\epsilon$ for $s \in 1,2 ... n$.
+
+$$ A_{a,t,x} \sim \text{Binom}(n, p_{a,t,x})$$ 
 $$ p_{a,t,x} \sim \text{Beta}(?,?)$$ 
-$$ logit(p_{a,t,x}) = \beta_0 + \beta_1 logit(\alpha_{a,t,x})$$ 
-$$\beta_{0:1} \sim N(0, 5)$$
+$$ logit(p_{a,t,x}) = \beta_0 + \beta_1 logit(\alpha_{a,t,x}) + \beta_2M + \epsilon_s$$ 
+$$\beta_{0:2} \sim N(0, 5)$$
+$$\epsilon_i \sim N(0, \sigma_\epsilon)$$
 
 # 4. Results
 
@@ -540,11 +551,21 @@ ggpubr::ggarrange(p1, p2, nrow=1, common.legend = TRUE, legend = "bottom")
 
 art_estimates <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_estimates.csv")
 
-imp_denomin <- quantile(filter(art_final, !is.na(denominator))$denominator, 0.25)
+imp_denomin <- art_final %>%
+  filter(!is.na(denominator),
+         denominator != 0) %>%
+  group_by(kp) %>%
+  summarise(quant = quantile(denominator, 0.25))
+
 
 art_final <- art_final %>%
   filter(value < 1) %>%
-  mutate(denominator = ifelse(is.na(denominator) | denominator == 0, imp_denomin, denominator))
+  mutate(denominator = case_when(
+    (is.na(denominator) | denominator == 0) & kp == "FSW" ~ filter(imp_denomin, kp == "FSW")$quant,
+    (is.na(denominator) | denominator == 0) & kp == "MSM" ~ filter(imp_denomin, kp == "MSM")$quant,
+    (is.na(denominator) | denominator == 0) & kp == "PWID" ~ filter(imp_denomin, kp == "PWID")$quant,
+    TRUE ~ denominator
+  )) 
 
 art_corr_fsw <- lm(logit(value) ~ logit(provincial_value), 
    data = art_final %>% mutate(value = ifelse(value == 1, 0.99, value),
@@ -611,7 +632,7 @@ p2 <- art_estimates %>%
 ggpubr::ggarrange(p1, p2, nrow=1, common.legend = TRUE, legend = "bottom")
 ```
 
-Figure 9 shows estimates of key population ART coverage against age/sex matched total population ART coverage as estimated on the logit scale (left) and on the natural prevalence scale (right). Median ART coverage in FSW and MSM is correlated with and similar to matched total population ART coverage ($R^2$ = `r round(summary(art_corr_fsw)$adj.r.squared, 2)` and `r round(summary(art_corr_msm)$adj.r.squared, 2)` respectively). Modelled estimates in PWID suggest a lower ART coverage than in the total population, but data were sparse and estimates are uncertain. The observed range in ART coverage data was large, e.g. for datapoints near 80% total population ART coverage, FSW ART coverage varied from 13% to 93%. 
+Figure 9 shows estimates of key population ART coverage against age/sex matched total population ART coverage as estimated on the logit scale (left) and on the natural prevalence scale (right). Median ART coverage in FSW and MSM is correlated with and similar to matched total population ART coverage ($R^2$ = `r round(summary(art_corr_fsw)$adj.r.squared, 2)` and `r round(summary(art_corr_msm)$adj.r.squared, 2)` respectively). Modelled estimates in PWID suggest a lower ART coverage than in the total population, but data were sparse and estimates are uncertain. In all key populations the observed range in ART coverage data was large: e.g. for datapoints with age-sex matched total population ART coverage around 80%, FSW ART coverage varied from 13% to 93%. 
 
 # 5. Discussion
 

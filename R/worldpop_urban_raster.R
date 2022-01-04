@@ -1,24 +1,81 @@
+library(tidyverse)
 library(raster)
 library(naomi)
 library(sf)
 library(stars)
+library(rgeos)
 
-urban_raster <- raster::raster("~/Downloads/MOZ_buildings_v1_1/MOZ_buildings_v1_1_urban.tif")
+urban_raster <- raster::raster("~/Downloads/ZWE_buildings_v1_1/ZWE_buildings_v1_1_urban.tif")
+
+zwe_areas <- read_sf("archive/zwe_data_areas/20201103-094144-94388ee2/zwe_areas.geojson")
 
 urban_poly <- st_as_stars(urban_raster) %>% 
   st_as_sf(merge = TRUE) %>%
   st_set_crs("WGS84")
 
 urban_poly2 <- urban_poly %>%
-  rename(is_urban = MOZ_buildings_v1_1_urban) %>%
+  st_as_sf() %>%
+  st_make_valid() %>%
+  rename(is_urban = ZWE_buildings_v1_1_urban) %>%
   filter(is_urban == 1) %>%
-  mutate(idx = row_number()) %>%
-  st_as_sf()
+  mutate(idx = row_number())
+
+st_is_valid(urban_poly2)
 
 st_crs(urban_poly2)
 
 foo <- urban_poly2 %>%
-  mutate(buffer_geom = st_buffer(geometry, .003))
+  mutate(valid_geometry = st_is_valid(geometry)) %>%
+  filter(valid_geometry) %>%
+  mutate(buffer_geom = st_buffer(geometry, 0.001))
+
+loop_union <- function(df) {
+  x <- st_union(df$buffer_geom)
+  # x <- st_cast(x, "POLYGON")
+}
+
+i <- 0
+
+while(i < 6) {
+  
+  message(i)
+  i <- i+1
+  
+  test <- foo %>%
+    mutate(grouping = round(row_number(), -2)/100) %>%
+    group_by(grouping) %>%
+    group_split()
+  
+  union_res <- parallel::mclapply(test, loop_union, mc.cores = 7)
+  
+  ls <- union_res %>% unlist(recursive = FALSE)
+  
+  foo <- enframe(ls) %>%
+    rename(buffer_geom = value) %>%
+    st_as_sf()
+  
+}
+
+st_crs(foo) <- st_crs(zwe_areas)
+
+foo %>%
+  filter(name < 100) %>%
+  ggplot() +
+    geom_sf(data = zwe_areas %>% filter(area_level == 1)) +
+    geom_sf()
+
+message_parallel <- function(...){
+  system(sprintf('echo "\n%s\n"', paste0(..., collapse="")))
+}
+
+combine_res <- st_combine(test)
+
+
+maptools_res <- st_as_sf(
+  rgeos::gUnaryUnion(as_Spatial(test))
+  )
+
+parts <- st_cast(parts, "POLYGON")
 
 parts <- st_cast(st_union(foo$buffer_geom),"POLYGON")
 plot(parts)

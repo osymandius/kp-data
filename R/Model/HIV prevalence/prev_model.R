@@ -69,13 +69,23 @@ convert_logis_labels <- function(x) {
 
 prev_dat <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_final.csv")
 
+imp_denomin <- prev_dat %>%
+  filter(!is.na(denominator),
+         denominator != 0) %>%
+  group_by(kp) %>%
+  summarise(quant = quantile(denominator, 0.25))
+
 prev_df <- prev_dat %>%
   bind_rows() %>%
   # bind_rows(.id = "iso3") %>%
   left_join(region %>% select(region, iso3)) %>%
-  filter(!is.na(denominator),
-         denominator != 0,
-         !is.na(provincial_value),
+  mutate(denominator = case_when(
+    (is.na(denominator) | denominator == 0) & kp == "FSW", filter(imp_denomin, kp == "FSW")$quant,
+    (is.na(denominator) | denominator == 0) & kp == "MSM", filter(imp_denomin, kp == "MSM")$quant,
+    (is.na(denominator) | denominator == 0) & kp == "PWID", filter(imp_denomin, kp == "PWID")$quant,
+    TRUE ~ denominator
+  )) %>%
+  filter(!is.na(provincial_value),
          value<1) %>%
   ungroup %>%
   mutate(value = ifelse(value == 1, 0.99, value),
@@ -87,11 +97,11 @@ prev_df <- prev_dat %>%
          logit_gen_prev = logit(provincial_value),
          logit_gen_prev2 = logit_gen_prev,
          positive = round(value * denominator),
-         negative = round(denominator - positive)
-  ) %>%
-  group_by(year, kp, iso3) %>%
-  mutate(idx = cur_group_id())
+         negative = round(denominator - positive),
+         method = factor(method, levels = c("lab", "selfreport"))
+  )
 
+{
 # prev_df <- prev_df %>%
 #   filter(kp == "FSW")
 # 
@@ -277,7 +287,7 @@ prev_df <- prev_dat %>%
 # summary(mod)
 # 
 # mod.res = resid(mod) 
-
+}
 #########################
 
 df_logit <- data.frame(logit_gen_prev = logit(c(seq(0.0005, 0.01, 0.001), seq(0.01, 0.5, 0.01)))) %>%
@@ -286,12 +296,16 @@ df_logit <- data.frame(logit_gen_prev = logit(c(seq(0.0005, 0.01, 0.001), seq(0.
       mutate(logit_gen_prev = logit(mean)) %>%
       select(-mean)
   )
-  
+
 
 prev_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   
   prev_df <- prev_df %>%
-    filter(kp == kp_id)
+    filter(kp == kp_id) %>%
+    group_by(ref) %>%
+    mutate(id.ref = cur_group_id(),
+           id.ref = ifelse(is.na(ref), NA, id.ref)) %>%
+    ungroup()
   
   prev_inla <- crossing(df_logit %>% filter(is.na(kp) | kp == kp_id)
                         # region = c("WCA", "ESA")
@@ -299,8 +313,9 @@ prev_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
     mutate(denominator = 1) %>%
     bind_rows(prev_df %>%
                 ungroup) %>%
-    select(iso3, logit_gen_prev, positive, negative, region, denominator, idx)
+    select(iso3, logit_gen_prev, method, positive, negative, region, denominator, id.ref)
   
+  {
   # prev_formula <- positive ~ logit_gen_prev + f(idx, model = "iid")
   # # *region + f(idx, model = "iid")
   # 
@@ -355,10 +370,10 @@ prev_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   #         kp = kp_id,
   #              model = "betabinomial + iid")
   #   )
-  
+    }
   ############
   
-  prev_formula <- positive ~ logit_gen_prev
+  prev_formula <- positive ~ logit_gen_prev + method + f(id.ref, model = "iid")
   
   prev_fit <- INLA::inla(prev_formula,
                          data = prev_inla,
@@ -368,6 +383,8 @@ prev_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
                          control.compute = list(config = TRUE),
                          control.predictor=list(compute=TRUE),
                          verbose = TRUE)
+  
+  message(prev_fit$summary.fixed$mean)
   
   fitted_val <- get_mod_results_test(prev_fit, prev_inla, "positive")
   

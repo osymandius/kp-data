@@ -128,7 +128,7 @@ out <- lapply(dat, function(x) {
 if(nrow(out$prev)) {
   out_prev_model <- out$prev %>%
     filter(across(any_of("is_aggregate"), is.na)) %>%
-    select(iso3, year, kp, age_group, has_age, value, denominator, provincial_value, ratio, ref)
+    select(iso3, year, kp, method, age_group, has_age, value, denominator, provincial_value, ratio, ref)
 } else {
   out_prev_model <- data.frame(x = character()) 
 }
@@ -136,7 +136,7 @@ if(nrow(out$prev)) {
 if(nrow(out$art)) {
   out_art_model <- out$art %>%
     filter(across(any_of("is_aggregate"), is.na)) %>%
-    select(iso3, year, kp, age_group, has_age, value, denominator, provincial_value, ratio, ref)
+    select(iso3, year, kp, method, age_group, has_age, value, denominator, provincial_value, ratio, ref)
 } else {
   out_art_model <- data.frame(x = character()) 
 }

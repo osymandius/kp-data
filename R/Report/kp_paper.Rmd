@@ -9,15 +9,18 @@ header-includes:
 - \usepackage{pdflscape}
 - \newcommand{\blandscape}{\begin{landscape}}
 - \newcommand{\elandscape}{\end{landscape}}
+- \usepackage{float}
+
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 library(tidyverse)
 library(DiagrammeR)
 library(countrycode)
 library(knitr)
 library(sf)
+library(kableExtra)
 
 region <- read.csv("R objects for report/region.csv") %>%
   mutate(iso3 = toupper(iso3))
@@ -35,11 +38,155 @@ group_proportion <- function(df, variables) {
 invlogit <- function(x) {exp(x)/(1+exp(x))}
 logit <- function(x) {log(x/(1-x))}
 
+pse_final <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_final.csv")
+
+prev_final <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_final.csv")
+
+art_final <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_final.csv")
+
+mf <- crossing(region %>%
+                 select(-four_region) %>%
+                 bind_rows(region %>% select(iso3) %>% mutate(region = "SSA")),
+               kp = c("FSW", "MSM", "PWID", "TG")
+)
+
+pse_n <- pse_final %>%
+  left_join(region) %>%
+  count(region, kp) %>%
+  bind_rows(
+    pse_final %>% count(kp) %>% mutate(region = "SSA")
+  ) %>%
+  rename(pse_n = n)
+
+prev_n <- prev_final %>%
+  left_join(region) %>%
+  count(region, kp) %>%
+  bind_rows(
+    prev_final %>% count(kp) %>% mutate(region = "SSA")
+  ) %>%
+  rename(prev_n = n)
+
+art_n <- art_final %>%
+  left_join(region) %>%
+  count(region, kp) %>%
+  bind_rows(
+    art_final %>% count(kp) %>% mutate(region = "SSA")
+  ) %>%
+  rename(art_n = n)
+
+
+pse_tab <- mf %>%
+  left_join(
+    pse_final %>%
+      distinct(iso3, kp) %>%
+      mutate(has = 1)
+  ) %>%
+  mutate(has = ifelse(is.na(has), 0, has)) %>%
+  group_by(region, kp) %>%
+  summarise(has = sum(has)) %>%
+  left_join(mf %>% distinct(region, iso3) %>% count(region) %>% rename(region_n = n)) %>%
+  mutate(pse_prop = paste0(round(100*has/region_n), " (", has, "/", region_n, ")")) %>%
+  left_join(pse_n) %>%
+  select(-has)
+
+prev_tab <- mf %>%
+  left_join(
+    prev_final %>%
+      distinct(iso3, kp) %>%
+      mutate(has = 1)
+  ) %>%
+  mutate(has = ifelse(is.na(has), 0, has)) %>%
+  group_by(region, kp) %>%
+  summarise(has = sum(has)) %>%
+  left_join(mf %>% distinct(region, iso3) %>% count(region) %>% rename(region_n = n)) %>%
+  mutate(prev_prop = paste0(round(100*has/region_n), " (", has, "/", region_n, ")")) %>%
+  left_join(prev_n) %>%
+  select(-has)
+
+art_tab <- mf %>%
+  left_join(
+    art_final %>%
+      distinct(iso3, kp) %>%
+      mutate(has = 1)
+  ) %>%
+  mutate(has = ifelse(is.na(has), 0, has)) %>%
+  group_by(region, kp) %>%
+  summarise(has = sum(has)) %>%
+  left_join(mf %>% distinct(region, iso3) %>% count(region) %>% rename(region_n = n)) %>%
+  mutate(art_prop = paste0(round(100*has/region_n), " (", has, "/", region_n, ")")) %>%
+  left_join(art_n) %>%
+  select(-has)
+
+summary_table <- pse_tab %>%
+  left_join(prev_tab) %>%
+  left_join(art_tab) %>%
+  select(-region_n) %>%
+  mutate(region = factor(region, levels = c("SSA", "ESA", "WCA"))) %>%
+  arrange(region) %>%
+  select(region, kp, pse_n, pse_prop, prev_n, prev_prop, art_n, art_prop) %>%
+  kable(
+    align='c',linesep='',booktabs=TRUE,escape=FALSE,
+    col.names = linebreak(c("Region", "KP", rep(c("Data\npoints", "Countries with\ndata (\\%; n/N)"), 3)), align = "c"),
+    caption = "Availability of population size, HIV prevalence, and ART coverage data by key population and region") %>%
+  add_header_above(.,
+    c(" " = 1,
+      " " = 1,
+      "PSE" = 2,
+      "HIV prevalence" = 2,
+      "ART coverage" = 2),
+    escape = FALSE
+    ) %>%
+  kable_styling(position = "center")
+
 ```
 
-## Background
+Oliver Stevens^§1^, Keith Sabin^2^, Sonia Arias Garcia^2^, Kalai Willis^3^, Abu Abdul-Quader^4^, Anne McIntyre^4^, Frances Cowan^5^, Louisa Degenhardt^6^, Jinkou Zhou^7^, Isabel Sathane^8^, Makini Boothe^9^, Lucy Platt^10^, Brian Rice^10^, Wolfgang Hladik^4^, Stefan Baral^3^, Mary Mahy^2^, Jeffrey W. Eaton^1^
 
-Female sex workers (FSW), men who have sex with men (MSM), people who inject drugs (PWID), and transgender people (TG) experience disproportionate risk of HIV acquisition and transmission in sub-Saharan Africa (SSA) [1]. Delivering appropriate HIV prevention and treatment programming for these key populations requires estimates of population size, HIV prevalence, and new HIV infections.
+1 MRC Centre for Global Infectious Disease Analysis, School of Public Health, Imperial College London, London, United Kingdom
+
+2 Strategic Information Department, The Joint United Nations Program on HIV/AIDS (UNAIDS), Geneva, Switzerland 
+
+3 Johns Hopkins University, Baltimore, USA
+
+4 US Centers for Disease Control and Prevention (CDC), Atlanta, USA
+
+5 Centre for Sexual Health and HIV/AIDS Research, Zimbabwe
+
+6 National Drug & Alcohol Research Centre, University New South Wales, Sydney, Australia
+
+7 The Global Fund to Fight AIDS, Tuberculosis and Malaria, Geneva, Switzerland
+
+8 Ministry of Health, Maputo, Mozambique
+
+9 Strategic Information Department, The Joint United Nations Program on HIV/AIDS (UNAIDS), Maputo, Mozambique
+
+10 London School of Hygiene and Tropical Medicine, London, United Kingdom
+
+§ Corresponding author
+
+St. Mary’s Hospital Campus
+Norfolk Place
+London W2 1PG
+United Kingdom
+o.stevens\@imperial.ac.uk
+
+Abstract: /?
+Word count: /3500
+
+
+## Abstract
+
+**Background:** The Global AIDS Strategy 2021-2026 calls for equitable and equal access to HIV prevention and treatment programmes for all populations to reduce HIV incidence and end HIV/AIDS as a public health threat by 2030. Key population stratified-indicators are not presently produced as part of the UNAIDS estimates process in sub-Saharan Africa. Creating estimates for female sex workers (FSW), men who have sex with men (MSM), people who inject drugs (PWID), and transgender (TG) populations represents an important step towards reducing inequality in the global HIV/AIDS response. 
+
+**Methods:** Population size estimates (PSE), HIV prevalence, and ART coverage data from 38 countries from 2010-2021 were consolidated from existing databases and primary sources. Key population size estimates were spatially smoothed between neighbouring countries, and subnational key population HIV prevalence and ART coverage data were regressed against age/sex/year/province-matched total population HIV prevalence and ART coverage respectively. 
+
+**Results:** We extracted 1557 unique datapoints for population size from 122 studies [FSW (n=670); MSM (n=522); PWID (n=296); TG (n=69)]; 1248 HIV prevalence datapoints from 206 studies [FSW (n=648); MSM (n=361); PWID (n=182); TG (n=57)]; and 212 ART coverage datapoints [FSW (n=120); MSM (n=59); PWID (n=24); TG (n=9)]. Medians of national PSE proportions among adults 15-49 across SSA were: 0.65% of women were FSW (IQR 0.44-1.2%); 0.56% of men have sex with men (IQR 0.33-0.72%); and 0.1% of adults injected drugs (IQR 0.08-0.15%). HIV prevalence among FSW and PWID were higher than matched total population HIV prevalence, whilst MSM HIV prevalence was poorly correlated with total population HIV prevalence. ART coverage in FSW and MSM was similar to that in the total population, whilst PWID ART coverage was lower than in the total population. Insufficient data were available to estimate PSE, HIV prevalence, or ART coverage for TG populations. 
+
+**Conclusion:**
+
+## Introduction
+
+The Global AIDS Strategy 2021-2026 calls for equitable and equal access to HIV prevention and treatment programmes for all populations to reduce HIV incidence and end HIV/AIDS as a public health threat by 2030. The annual UNAIDS estimates in sub-Saharan Africa, stratified by age, sex, and administrative district, are well placed to guide programmes to reduce HIV incidence in certain target populations, including adolescent girls and young women, and eliminating vertical transmission in pregnant women. Key population stratified-estimates are not presently produced as part of the UNAIDS estimates process, and their creation represents an important step towards reducing inequality in the global HIV/AIDS response. Key populations, including female sex workers (FSW), men who have sex with men (MSM), people who inject drugs (PWID), and transgender people (TG) experience disproportionate risk of HIV acquisition and transmission in sub-Saharan Africa (SSA) [1]. Delivering appropriate HIV prevention and treatment programming for these populations requires estimates of population size, HIV prevalence, and new HIV infections.
 
 Key population surveillance relies on methods underpinned by respondent-driven or network sampling. Surveillance methods to quantify total population HIV burden, for example national household surveys or antenatal clinic data, are unsuitable for key population surveillance due to population size, high mobility or homelessness, non-disclosure of key population status, and societal marginalisation that often excludes key populations from relevant sampling frames. Key population surveillance is often restricted to or disproportionately conducted in urban areas and studies are conducted infrequently. As are result, data are sparse with limited representativeness.
 
@@ -51,59 +198,24 @@ Efforts to consolidate key population surveillance data have also been undertake
 
 We consolidated and harmonised key population size estimate, HIV prevalence, and ART coverage data from multiple existing databases. We described the availability of data across countries and over time for each key population group and characterised the relationship between key population and total population HIV indicators. We used regression analysis to extrapolate and smooth national level estimates of key population size, HIV prevalence, and ART coverage for all countries in SSA.
 
-## Data
+# Methods
 
-Population size estimate (PSE), HIV prevalence, and ART coverage data were extracted from:
+## 3.1 Data
 
--   UNAIDS Global AIDS Monitoring
+Population size estimate (PSE), HIV prevalence, and ART coverage data were extracted from UNAIDS Global AIDS Monitoring, UNAIDS Key Population Atlas, Global Fund surveillance database and CDC key population database.
 
--   UNAIDS Key Population Atlas
-
--   Global Fund surveillance database
-
--   CDC key population database 
-
-Data were excluded from analysis if:
-
--   Data were duplicated across or within databases; or
-
--   Information about key population definition, year, or surveillance area were missing; or
-
--   The surveillance area was non-specific (e.g. 'urban areas' or '5 provinces'); or
-
--   Estimates were modelled or extrapolated; or
-
--   Data were severe outliers; or
-
--   Data could not be confirmed by primary source review
+Data were excluded from analysis if: data were duplicated across or within databases; information about key population definition, year, or surveillance area were missing;
+the surveillance area was non-specific (e.g. 'urban areas' or '5 provinces'); estimates were modelled or extrapolated; or data could not be confirmed by primary source review
 
 Countries in Eastern and Southern Africa (ESA) were defined as: Angola, Botswana, Eswatini, Ethiopia, Kenya, Lesotho, Malawi, Mozambique, Namibia, Rwanda, South Africa, South Sudan, Tanzania, Uganda, Zambia, Zimbabwe
 
-Countres in Western and Central Africa (WCA) were defined as: Benin, Burkina Faso, Burundi, Cameroon, Central African Republic, Chad, Congo - Brazzaville, Congo - Kinshasa, Côte d'Ivoire, Equatorial Guinea, Gabon, Gambia, Ghana, Guinea, Guinea-Bissau, Liberia, Mali, Niger, Nigeria, Senegal, Sierra Leone, Togo
+Countries in Western and Central Africa (WCA) were defined as: Benin, Burkina Faso, Burundi, Cameroon, Central African Republic, Chad, Congo - Brazzaville, Congo - Kinshasa, Côte d'Ivoire, Equatorial Guinea, Gabon, Gambia, Ghana, Guinea, Guinea-Bissau, Liberia, Mali, Niger, Nigeria, Senegal, Sierra Leone, Togo
 
-\newpage
-\blandscape
+The island states of Madagascar, the Seychelles, Sao Tomé and Principe, Comoros, Mauritius, and Cape Verde were excluded from this analysis.
 
-```{r echo=FALSE, out.width='50%', fig.show="hold", fig.cap = "Data workflow for population size estimate data (left) and HIV prevalence data (right)"}
-knitr::include_graphics('R objects for report/PSE/pse_flowchart.png')
+## 3.2 Size estimates
 
-knitr::include_graphics('R objects for report/Prevalence/prev_flowchart.png')
-
-```
-
-\newpage
-
-```{r echo=FALSE, out.width='50%', fig.show="hold", fig.cap = "Data workflow for ART coverage data", fig.align="center"}
-
-knitr::include_graphics('R objects for report/ART coverage/art_flowchart.png')
-```
-
-\elandscape
-# Methods
-
-## 3.1 Size estimates
-
-### 3.1.1 Transforming population size data
+### 3.2.1 Transforming population size data
 
 Population size estimates reported as counts were converted to population proportion to facilitate comparison of population sizes across settings. Two sources were used to derive total population denominators:
 
@@ -111,26 +223,28 @@ Population size estimates reported as counts were converted to population propor
 
 2.  GRUMP & WorldPop: The Global Rural/Urban Mapping Project [23] provided geographic boundaries for urban areas in 1995. These urban boundaries were overlaid on constrained WorldPop population rasters for 2020 [24] to produce estimates of total population for all urban areas in 2020. Urban areas were snapped to their closest district. The district age/sex structure and population growth over time was used to create longitudinal estimates of age/sex stratified population from 2000-2020
 
-```{r echo=FALSE, fig.cap = "Total population denominators used for converting key population size estimates to population proportions"}
+```{r echo=FALSE, fig.align='center'}
 
-data.frame("Key population" = c("FSW", "MSM", "PWID", "TG"),
-           "Population denominator" = c("15-49 female",
+data.frame(`Key population` = c("FSW", "MSM", "PWID", "TG"),
+           `Population denominator` = c("15-49 female",
                                         "15-49 male",
                                         "15-49 both sexes",
                                         "15-49 female")) %>%
-  knitr::kable()
+  knitr::kable(col.names = c("Key population", "Population denominator"),
+               caption = "Total population denominators used for converting key population size estimates to population proportions") %>%
+  kable_styling(position = "center")
 
 ```
 
 Each population size estimate was matched to the total population denominator for a given age, sex, year, and area. Age information was missing from nearly all key population data entries; missing data was assigned ages 15-49. Unless a sex was specified, all sex workers were assumed to be female, all PWID assumed to be both sexes, and all transgender people assumed to be female. String matching was used to assign one of a Naomi area name or GRUMP area name to each surveillance area, thereby matching to a total population denominator.
 
-### 3.1.2 Categorising size estimate methods
+### 3.2.2 Categorising size estimate methods
 
 Within a given surveillance activity, it is common for multiple size estimation methods to be conducted as variation in results between methods can be large [cite]. A final consensus size estimate may then be calculated by averaging these raw size estimates, taking a median of estimates, or using more complex methods for synthesising diverse data sources [cite: anchored multipler + FellStat]. Final size estimates may incorporate other sources of information including literature estimates conducted in neighbouring countries, existing size estimates from previous years, stakeholder estimates of population size [cite].
 
 Final size estimates were disaggregated into their raw methods and grouped into six categories: two-source capture-recapture (2S-CRC), three-source capture-recapture (3S-CRC), PLACE/programmatic mapping [cite], object/event multipliers, service multipliers, SS-PSE. Two further categories were defined in cases where surveillance activities reported only a final estimate of multiple methods without raw estimates by method: "Multiple methods - empirical" or "Multiple methods - mixture". The former contains average estimates derived from one or more of the six methods above, whilst the latter for is average estimates containing one or more non-empirical method - enumeration, wisdom of the crowds, key informant interviews, and the Delphi method [cite]. Population size estimates derived by non-empirical methods alone were excluded from this analysis.
 
-## 3.2 Transforming HIV prevalence data and ART coverage data
+## 3.3 Transforming HIV prevalence data and ART coverage data
 
 To facilitate cross-country comparison, key population HIV prevalence and ART coverage data were expressed relative to total population estimates for a given age, sex, year, and first administrative level (henceforth 'province').
 
@@ -138,11 +252,11 @@ Age information was available for more HIV prevalence and ART coverage data entr
 
 Cross-sectional estimates of age/sex-specific HIV prevalence and ART coverage at the province level were extracted from Naomi for 2020. For each country, province level estimates were projected back in time 2000-2020 parallel to the EPP/Spectrum [25] 15-49 national HIV prevalence and ART coverage trajectories respectively.
 
-## 3.3 Regression models
+## 3.4 Regression models
 
-### 3.3.1 Population size
+### 3.4.1 Population size
 
-We modelled national key population proportions with a spatial smoothing model allowing population proportions to be correlated between geographically neighbouring countries. Each key population was modelled separately, with logit population proportion assumed to be normally distributed with mean $\mu$ and standard deviation $\sigma$, estimated from the data. $\mu$ is decomposed into a model intercept $\beta_0$, a fixed effect for study method, $X$ for $m \in 1, 2 ... 8$ (see Section 3.1.2) using 2S-CRC as the base group, an intrinsic conditional autoregressive (ICAR) spatial smoothing random effect at the national level, $\theta$ for $i \in 1,2, ... 38$, and a study $iid$ random effect, $\epsilon$ for $s \in 1,2 ... n$. 
+We modelled national key population proportions with a spatial smoothing model allowing population proportions to be correlated between geographically neighbouring countries. Each key population was modelled separately, with logit population proportion assumed to be normally distributed with mean $\mu$ and standard deviation $\sigma$, estimated from the data. $\mu$ is decomposed into a model intercept $\beta_0$, a fixed effect for study method, $X$ for $m \in 1, 2 ... 8$ (see Section 3.3.2) using 3S-CRC as the base group, an intrinsic conditional autoregressive (ICAR) spatial smoothing random effect at the national level, $\theta$ for $i \in 1,2, ... 38$, and a study $iid$ random effect, $\epsilon$ for $s \in 1,2 ... n$. 
 
 $$ logit(p_i) \sim N(\mu_i, \sigma) $$ 
 $$\mu_i = \beta_0 + \beta_1 X_m + \theta_i + \epsilon_s$$
@@ -150,23 +264,23 @@ $$\beta_{0:1} \sim N(0, 5)$$
 $$\theta_i \sim ICAR(\sigma_\theta) $$
 $$\epsilon_i \sim N(0, \sigma_\epsilon)$$
 
-### 3.3.2 HIV prevalence
+### 3.4.2 HIV prevalence
 
 We modelled the relationship between key population HIV prevalence and total population HIV prevalence (age 15-49 years) separately for each key population. Missing denominators were imputed using the 25th centile of known denominators (FSW n=192; MSM n=108; PWID n=41).
 
-The number of key population members living with HIV, $X$, is assumed to be betabinomially distributed with HIV positivity, $p$ for a given age group, $a$, year, $t$, and province, $x$. $p$ is decomposed into a model intercept $\beta_0$, fixed effects for matched total population HIV prevalence, $\rho$ and study method, $M$ where
+The number of key population members living with HIV, $X$, is assumed to be betabinomially distributed with HIV positivity, $p$ for a given age group, $a$, year, $t$, and province, $x$. $p$ is decomposed into a model intercept $\beta_0$, fixed effects for matched total population HIV prevalence, $\rho$; region, $R \in \text{ESA}, \text{WCA}$; an interaction between matched total population HIV prevalence and region; and study method, $M$ where
 
 $$M=\begin{cases} 0 & \text{for laboratory confirmed} \\ 1 & \text{for self-report} \end{cases}$$
 
 and a study $iid$ random effect, $\epsilon$ for $s \in 1,2 ... n$.
 
-$$ X_{a,t,x} \sim \text{Binom}(n, \rho_{a,t,x})$$ 
+$$ X_{a,t,x} \sim \text{Binom}(n, p_{a,t,x})$$ 
 $$ p_{a,t,x} \sim \text{Beta}(?,?)$$ 
-$$ logit(p_{a,t,x}) = \beta_0 + \beta_1 logit(\rho_{a,t,x}) + \beta_2M + \epsilon_s$$ 
-$$\beta_{0:2} \sim N(0, 5)$$
+$$ logit(p_{a,t,x}) = \beta_0 + \beta_1 logit(\rho_{a,t,x}) + \beta_2 R + \beta_3 logit(\rho_{a,t,x}) * R + \beta_4M + \epsilon_s$$ 
+$$\beta_{0:4} \sim N(0, 5)$$
 $$\epsilon_i \sim N(0, \sigma_\epsilon)$$
 
-### 3.3.3 ART coverage
+### 3.4.3 ART coverage
 
 We modelled key population ART coverage as a function of total population ART coverage, analogously to HIV prevalence. For each key population, missing denominators were imputed using the 25th centile of known denominators (FSW n=44; MSM n=23; PWID n=28). 
 
@@ -174,7 +288,7 @@ The number of key population members on ART, $A$, is assumed to be betabinomiall
 
 $$M=\begin{cases} 0 & \text{for laboratory confirmed} \\ 1 & \text{for self-report} \end{cases}$$
 
-and a study $iid$ random effect, $\epsilon$ for $s \in 1,2 ... n$.
+and a study $iid$ random effect, $\epsilon$ for $s \in 1,2 ... n$. Insufficient data were available to estimate region-specific trends.
 
 $$ A_{a,t,x} \sim \text{Binom}(n, p_{a,t,x})$$ 
 $$ p_{a,t,x} \sim \text{Beta}(?,?)$$ 
@@ -184,7 +298,22 @@ $$\epsilon_i \sim N(0, \sigma_\epsilon)$$
 
 # 4. Results
 
-Table X shows a summary of the deduplicated PSE, HIV prevalence, and ART coverage data.
+We extracted 1557 unique datapoints for population size from 122 studies, 1248 HIV prevalence datapoints from 206 studies, and 212 ART coverage datapoints for XX studies (Fig X, Y). 
+
+\newpage
+\blandscape
+
+```{r echo=FALSE, out.width='33%', fig.show="hold", fig.cap = "Data workflow for population size estimate data (left), HIV prevalence data (centre), and ART coverage (right)"}
+knitr::include_graphics('R objects for report/PSE/pse_flowchart.png')
+
+knitr::include_graphics('R objects for report/Prevalence/prev_flowchart.png')
+
+knitr::include_graphics('R objects for report/ART coverage/art_flowchart.png')
+
+```
+
+
+\elandscape
 
 
 ```{r include=FALSE}
@@ -193,7 +322,7 @@ pse_input_count_text <- readRDS("R objects for report/PSE/pse_input_count_text.r
   mutate(across(c("FSW", "MSM", "PWID", "TG"), ~str_remove(.x, "FSW|MSM|PWID|TG")),
          across(c("FSW", "MSM", "PWID", "TG"), ~str_trim(.x))
   )
-pse_final <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_final.csv")
+
 
 pse_method <- pse_final %>%
   distinct(country.name, ref, year, kp, method) %>%
@@ -223,21 +352,16 @@ msm_region_proportions <- pse_final %>%
 
 ```
 
+```{r echo=FALSE, message=FALSE, warning = FALSE, fig.cap = "foo", fig.pos = "h"}
+
+summary_table
+```
+
 ## 4.1 Population size data
 
-Estimates of key population size were extracted from:
+Estimates of key population size were extracted from: UNAIDS Global AIDS Monitoring (FSW $`r pse_input_count_text[1,3]`$; MSM $`r pse_input_count_text[1,4]`$; PWID $`r pse_input_count_text[1,5]`$; TG $`r pse_input_count_text[1,6]`$); UNAIDS Key Population Atlas (FSW $`r pse_input_count_text[2,3]`$; MSM $`r pse_input_count_text[2,4]`$; PWID $`r pse_input_count_text[2,5]`$; TG $`r pse_input_count_text[2,6]`$); Global Fund surveillance database (FSW $`r pse_input_count_text[3,3]`$; MSM $`r pse_input_count_text[3,4]`$; PWID $`r pse_input_count_text[3,5]`$; TG $`r pse_input_count_text[3,6]`$); CDC key population database (FSW $`r pse_input_count_text[4,3]`$; MSM $`r pse_input_count_text[4,4]`$; PWID $`r pse_input_count_text[4,5]`$; TG $`r pse_input_count_text[4,6]`$); and KP surveillance reports (FSW $`r pse_input_count_text[5,3]`$; MSM $`r pse_input_count_text[5,4]`$; PWID $`r pse_input_count_text[5,5]`$; TG $`r pse_input_count_text[5,6]`$);
 
--   UNAIDS Global AIDS Monitoring (FSW $`r pse_input_count_text[1,3]`$; MSM $`r pse_input_count_text[1,4]`$; PWID $`r pse_input_count_text[1,5]`$; TG $`r pse_input_count_text[1,6]`$); and
-
--   UNAIDS Key Population Atlas (FSW $`r pse_input_count_text[2,3]`$; MSM $`r pse_input_count_text[2,4]`$; PWID $`r pse_input_count_text[2,5]`$; TG $`r pse_input_count_text[2,6]`$); and
-
--   Global Fund surveillance database (FSW $`r pse_input_count_text[3,3]`$; MSM $`r pse_input_count_text[3,4]`$; PWID $`r pse_input_count_text[3,5]`$; TG $`r pse_input_count_text[3,6]`$); and
-
--   CDC key population database (FSW $`r pse_input_count_text[4,3]`$; MSM $`r pse_input_count_text[4,4]`$; PWID $`r pse_input_count_text[4,5]`$; TG $`r pse_input_count_text[4,6]`$); and
-
--   KP surveillance reports (FSW $`r pse_input_count_text[5,3]`$; MSM $`r pse_input_count_text[5,4]`$; PWID $`r pse_input_count_text[5,5]`$; TG $`r pse_input_count_text[5,6]`$);
-
-Following data cleaning, primary source review, and area matching, $`r nrow(pse_final)`$ data entries for population size were extracted from $`r length(unique(pse_final$ref))`$ studies. Data were most available for FSW (n=$`r nrow(filter(pse_final, kp == "FSW"))`$), followed by MSM (n=$`r nrow(filter(pse_final, kp == "MSM"))`$), PWID (n=$`r nrow(filter(pse_final, kp == "PWID"))`$), and TG (n=$`r nrow(filter(pse_final, kp == "TG"))`$). Size estimation methods were available for $`r round(nrow(filter(pse_final, !is.na(method)))/nrow(pse_final)*100)`$% of data ($`r nrow(filter(pse_final, !is.na(method)))`$/$`r nrow(pse_final)`$). Since 2010-12, studies estimating key population size in SSA are being conducted more frequently. In 2019-21, $`r study_n_2021$n[study_n_2021$kp == "FSW"]`$ FSW, $`r study_n_2021$n[study_n_2021$kp == "MSM"]`$ MSM, $`r study_n_2021$n[study_n_2021$kp == "PWID"]`$ PWID and $`r study_n_2021$n[study_n_2021$kp == "TG"]`$ TG PSE studies were recorded, increasing from $`r study_n_2012$n[study_n_2012$kp == "FSW"]`$, $`r study_n_2012$n[study_n_2012$kp == "MSM"]`$, $`r study_n_2012$n[study_n_2012$kp == "PWID"]`$, and 0 in 2010-12 respectively (Fig. 4). The use of empirical methods (Two and three source capture-recapture (2S and 3S-CRC), multiplier methods, and SS-PSE) is also increasing from $`r filter(empirical_proportion, year == "2013-2015")$prop`$% in 2013-2015 to $`r filter(empirical_proportion, year == "2019-2021")$prop`$% in 2019-2021 (Fig. 5).
+Following data cleaning, primary source review, and area matching, $`r nrow(pse_final)`$ data entries for population size were extracted from $`r length(unique(pse_final$ref))`$ studies. Data were most available for FSW (n=$`r nrow(filter(pse_final, kp == "FSW"))`$), followed by MSM (n=$`r nrow(filter(pse_final, kp == "MSM"))`$), PWID (n=$`r nrow(filter(pse_final, kp == "PWID"))`$), and TG (n=$`r nrow(filter(pse_final, kp == "TG"))`$). Size estimation methods were available for $`r round(nrow(filter(pse_final, !is.na(method)))/nrow(pse_final)*100)`$% of data ($`r nrow(filter(pse_final, !is.na(method)))`$/$`r nrow(pse_final)`$). Since 2010-12, studies estimating key population size in SSA are being conducted more frequently. In 2019-21, $`r study_n_2021$n[study_n_2021$kp == "FSW"]`$ FSW, $`r study_n_2021$n[study_n_2021$kp == "MSM"]`$ MSM, $`r study_n_2021$n[study_n_2021$kp == "PWID"]`$ PWID and $`r study_n_2021$n[study_n_2021$kp == "TG"]`$ TG PSE studies were recorded, increasing from $`r study_n_2012$n[study_n_2012$kp == "FSW"]`$, $`r study_n_2012$n[study_n_2012$kp == "MSM"]`$, $`r study_n_2012$n[study_n_2012$kp == "PWID"]`$, and 0 in 2010-12 respectively (Fig. 3). The use of empirical methods (Two and three source capture-recapture (2S and 3S-CRC), multiplier methods, and SS-PSE) is also increasing from $`r filter(empirical_proportion, year == "2013-2015")$prop`$% in 2013-2015 to $`r filter(empirical_proportion, year == "2019-2021")$prop`$% in 2019-2021 (Fig. 5).
 
 ``` {r echo=FALSE, message=FALSE, warning =FALSE, fig.width = 7, out.width = "70%", fig.align = "center", fig.cap = "Number of population size estimation studies over time by key population"}
 
@@ -266,7 +390,7 @@ pse_method %>%
   facet_wrap(~kp, nrow=1) +
   moz.utils::standard_theme() +
   labs(x=element_blank(), y=element_blank(), fill=element_blank()) +
-  theme(panel.background = element_rect(fill=NA, colour="black"),
+  theme(panel.background = element_rect(fill=NA, colour="black", size=1),
         axis.text.x = element_text(angle = 20, hjust = 1))
 
 ```
@@ -298,7 +422,6 @@ prev_input_count_text <- readRDS("R objects for report/Prevalence/prev_input_cou
   mutate(across(c("FSW", "MSM", "PWID", "TG"), ~str_remove(.x, "FSW|MSM|PWID|TG")),
          across(c("FSW", "MSM", "PWID", "TG"), ~str_trim(.x))
   )
-prev_final <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_final.csv")
 
 prev_denom <- prev_final %>% 
   mutate(has_denominator = ifelse(!is.na(denominator), 1, 0)) %>% 
@@ -308,7 +431,6 @@ art_input_count_text <- readRDS("R objects for report/ART coverage/art_input_cou
   mutate(across(c("FSW", "MSM", "PWID", "TG"), ~str_remove(.x, "FSW|MSM|PWID|TG")),
          across(c("FSW", "MSM", "PWID", "TG"), ~str_trim(.x))
   )
-art_final <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_final.csv")
 
 art_denom <- art_final %>% 
   mutate(has_denominator = ifelse(!is.na(denominator), 1, 0)) %>% 
@@ -319,34 +441,29 @@ art_denom <- art_final %>%
 ```
 
 
-Estimates of key population HIV prevalence were extracted from:
-
--   UNAIDS Global AIDS Monitoring (FSW $`r prev_input_count_text[1,3]`$; MSM $`r prev_input_count_text[1,4]`$; PWID $`r prev_input_count_text[1,5]`$; TG $`r prev_input_count_text[1,6]`$); and
-
--   UNAIDS Key Population Atlas (FSW $`r prev_input_count_text[2,3]`$; MSM $`r prev_input_count_text[2,4]`$; PWID $`r prev_input_count_text[2,5]`$; TG $`r prev_input_count_text[2,6]`$); and
-
--   Global Fund surveillance database (FSW $`r prev_input_count_text[3,3]`$; MSM $`r prev_input_count_text[3,4]`$; PWID $`r prev_input_count_text[3,5]`$; TG $`r prev_input_count_text[3,6]`$); and
-
--   CDC key population database (FSW $`r prev_input_count_text[4,3]`$; MSM $`r prev_input_count_text[4,4]`$; PWID $`r prev_input_count_text[4,5]`$; TG $`r prev_input_count_text[4,6]`$); and
-
--   KP surveillance reports (FSW $`r prev_input_count_text[5,3]`$; MSM $`r prev_input_count_text[5,4]`$; PWID $`r prev_input_count_text[5,5]`$; TG $`r prev_input_count_text[5,6]`$);
+Estimates of key population HIV prevalence were extracted from: UNAIDS Global AIDS Monitoring (FSW $`r prev_input_count_text[1,3]`$; MSM $`r prev_input_count_text[1,4]`$; PWID $`r prev_input_count_text[1,5]`$; TG $`r prev_input_count_text[1,6]`$); UNAIDS Key Population Atlas (FSW $`r prev_input_count_text[2,3]`$; MSM $`r prev_input_count_text[2,4]`$; PWID $`r prev_input_count_text[2,5]`$; TG $`r prev_input_count_text[2,6]`$); Global Fund surveillance database (FSW $`r prev_input_count_text[3,3]`$; MSM $`r prev_input_count_text[3,4]`$; PWID $`r prev_input_count_text[3,5]`$; TG $`r prev_input_count_text[3,6]`$); CDC key population database (FSW $`r prev_input_count_text[4,3]`$; MSM $`r prev_input_count_text[4,4]`$; PWID $`r prev_input_count_text[4,5]`$; TG $`r prev_input_count_text[4,6]`$); and KP surveillance reports (FSW $`r prev_input_count_text[5,3]`$; MSM $`r prev_input_count_text[5,4]`$; PWID $`r prev_input_count_text[5,5]`$; TG $`r prev_input_count_text[5,6]`$);
 
 Following data cleaning, primary source review, and area matching, $`r nrow(prev_final)`$ data entries for HIV prevalence were extracted from $`r distinct(prev_final, ref) %>% filter(!is.na(ref)) %>% nrow()`$ studies. Denominators were available for $`r round(100*prev_denom$prop[prev_denom$has_denominator == 1])`$% ($`r prev_denom$n[prev_denom$has_denominator == 1]`$/$`r sum(prev_denom$n)`$) of data entries. Data were most available for FSW (n=$`r nrow(filter(prev_final, kp == "FSW"))`$), followed by MSM (n=$`r nrow(filter(prev_final, kp == "MSM"))`$), PWID (n=$`r nrow(filter(prev_final, kp == "PWID"))`$), and TG (n=$`r nrow(filter(prev_final, kp == "TG"))`$). 
 
-Estimates of key population ART coverage were extracted from:
-
--   UNAIDS Key Population Atlas (FSW $`r art_input_count_text[1,3]`$; MSM $`r art_input_count_text[1,4]`$; PWID $`r art_input_count_text[1,5]`$; TG $`r art_input_count_text[1,6]`$); and
-
--   Global Fund surveillance database (FSW $`r art_input_count_text[2,3]`$; MSM $`r art_input_count_text[2,4]`$; PWID $`r art_input_count_text[2,5]`$; TG $`r art_input_count_text[3,6]`$); and
-
--   KP surveillance reports (FSW $`r art_input_count_text[3,3]`$; MSM $`r art_input_count_text[3,4]`$; PWID $`r art_input_count_text[3,5]`$; TG $`r art_input_count_text[3,6]`$);
+Estimates of key population ART coverage were extracted from: UNAIDS Key Population Atlas (FSW $`r art_input_count_text[1,3]`$; MSM $`r art_input_count_text[1,4]`$; PWID $`r art_input_count_text[1,5]`$; TG $`r art_input_count_text[1,6]`$); Global Fund surveillance database (FSW $`r art_input_count_text[2,3]`$; MSM $`r art_input_count_text[2,4]`$; PWID $`r art_input_count_text[2,5]`$; TG $`r art_input_count_text[3,6]`$); and KP surveillance reports (FSW $`r art_input_count_text[3,3]`$; MSM $`r art_input_count_text[3,4]`$; PWID $`r art_input_count_text[3,5]`$; TG $`r art_input_count_text[3,6]`$);
 
 Following data cleaning, primary source review, and area matching, $`r nrow(art_final)`$ data entries for ART coverage were extracted from $`r distinct(art_final, ref) %>% filter(!is.na(ref)) %>% nrow()`$ studies. Denominators were available for $`r round(100*art_denom$prop[art_denom$has_denominator == 1])`$% ($`r art_denom$n[art_denom$has_denominator == 1]`$/$`r sum(art_denom$n)`$) of data entries. Data were most available for FSW (n=$`r nrow(filter(art_final, kp == "FSW"))`$), followed by MSM (n=$`r nrow(filter(art_final, kp == "MSM"))`$), PWID (n=$`r nrow(filter(art_final, kp == "PWID"))`$), and TG (n=$`r nrow(filter(art_final, kp == "TG"))`$). 
+
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+
+
+
+```
 
 ## 4.3 Population size estimates - modelled estimates
 
 ```{r include=FALSE}
-pse_estimates <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_estimates.csv")
+pse_estimates <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_estimates.csv") %>%
+    mutate(region = ifelse(iso3 == "BDI", "ESA", region),
+           four_region = ifelse(iso3 == "BDI", "Eastern", four_region)
+           )
+
+pse_method <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_method.csv")
 
 pse_estimates <- pse_estimates %>%
   left_join(pse_final %>%
@@ -365,6 +482,7 @@ iso3_sort <- pse_estimates %>%
   mutate(iso3_idx = as.numeric(fct_inorder(iso3)))
 
 pse_estimates <- pse_estimates %>%
+  select(-area_name) %>%
   left_join(iso3_sort) %>%
   mutate(xmin = iso3_idx - 0.48,
          xmax = iso3_idx + 0.48,
@@ -407,13 +525,11 @@ geographies <- geographies %>%
 
 ```
 
-Population size estimates were estimated at the national level for 38 countries in sub-Saharan Africa for FSW, MSM, and PWID (Figs. 6 and 7). Data were insufficient to estimate transgender population proportions. Medians of national PSE proportions among adults 15-49 across SSA were:
-
--   $`r pse_iqr[[4,4]]`$% of women were female sex workers (IQR $`r pse_iqr[[4,3]]`$-$`r pse_iqr[[4,5]]`$%);
--   $`r pse_iqr[[5,4]]`$% of men have sex with men (IQR $`r pse_iqr[[5,3]]`$-$`r pse_iqr[[5,5]]`$%);
--   $`r pse_iqr[[6,4]]`$% of adults injected drugs (IQR $`r pse_iqr[[6,3]]`$-$`r pse_iqr[[6,5]]`$%)
+Population size estimates were estimated at the national level for 38 countries in sub-Saharan Africa for FSW, MSM, and PWID (Figs. 6 and 7). Data were insufficient to estimate transgender population proportions. Medians of national PSE proportions among adults 15-49 across SSA were: $`r pse_iqr[[4,4]]`$% of women were female sex workers (IQR $`r pse_iqr[[4,3]]`$-$`r pse_iqr[[4,5]]`$%); $`r pse_iqr[[5,4]]`$% of men have sex with men (IQR $`r pse_iqr[[5,3]]`$-$`r pse_iqr[[5,5]]`$%); and $`r pse_iqr[[6,4]]`$% of adults injected drugs (IQR $`r pse_iqr[[6,3]]`$-$`r pse_iqr[[6,5]]`$%).
 
 Estimated PSE proportions for FSW were similar in ESA ($`r pse_iqr[[1,4]]`$% IQR $`r pse_iqr[[1,3]]`$-$`r pse_iqr[[1,5]]`$%) and WCA ($`r pse_iqr[[7,4]]`$% IQR $`r pse_iqr[[7,3]]`$-$`r pse_iqr[[7,5]]`$%). MSM and PWID population proportions differed between ESA and WCA. MSM proportions in ESA ($`r pse_iqr[[2,4]]`$% IQR $`r pse_iqr[[2,3]]`$-$`r pse_iqr[[2,5]]`$%) were twice those in WCA ($`r pse_iqr[[8,4]]`$% IQR $`r pse_iqr[[8,3]]`$-$`r pse_iqr[[8,5]]`$%). PWID proportions in ESA ($`r pse_iqr[[3,4]]`$% IQR $`r pse_iqr[[3,3]]`$-$`r pse_iqr[[3,5]]`$%) were lower than those in WCA ($`r pse_iqr[[9,4]]`$% IQR $`r pse_iqr[[9,3]]`$-$`r pse_iqr[[9,5]]`$%). However, data to inform PWID estimates in ESA were sparse. Only two of ten Southern African countries had PWID size estimate data, and the majority of PWID size estimate data points in ESA were derived from district-level mapping studies in Kenya and Uganda. 
+
+Relative to PSE derived by 3S-CRC: estimates from 2S-CRC were lower for all three KPs though only significantly so for MSM (OR 0.35 95% CI 0.15-0.83) whilst estimates derived from multiplier methods were higher, though uncertainty was large for all KPs and these effects were not significant. PLACE and mapped PSE for MSM and PWID were lower (MSM OR 0.30 95% CI 0.16-0.55; PWID OR 0.17 95% CI 0.07-0.40) (Supplementary Table 1).
 
 \newpage
 \blandscape
@@ -458,12 +574,14 @@ pse_estimates %>%
     scale_color_manual(values = c(wesanderson::wes_palette("Zissou1")[c(4,1)])) +
     scale_fill_manual(values = wesanderson::wes_palette("Zissou1")[c(4,1)])  +
     scale_x_continuous(breaks = 1:38, labels = iso3_sort$iso3) +
-    facet_grid(kp ~ four_region, scales="free", space="free_x") +
+    facet_grid(kp ~ factor(four_region, levels=c("Western", "Central", "Eastern", "Southern"), labels = c("Western Africa", "Central Africa", "Eastern Africa", "Southern Africa")), scales="free", space="free_x") +
     scale_y_log10(breaks = scales::log_breaks(), labels = scales::label_percent(accuracy = 0.001)) +
+    coord_cartesian(ylim = c(0.00003, .1)) +
     labs(x=element_blank(), y="Population proportion", color = "Informed by:", shape = "Data reported\nas national") +
     moz.utils::standard_theme() +
     theme(axis.text.x = element_text(size=10),
-          panel.background = element_rect(fill=NA, color="black"))
+          panel.background = element_rect(fill=NA, color="black"),
+          strip.text = element_text(face = "bold"))
 
 ```
 
@@ -496,53 +614,79 @@ prev_corr_pwid <- lm(logit(value) ~ logit(provincial_value),
 
 ## 4.4 HIV prevalence - modelled estimates
 
-Figure 8 shows estimates for key population HIV prevalence as estimated on the logit scale (left) and on the natural prevalence scale (right). Prevalence among FSW and PWID are positively correlated ($R^2$ = `r round(summary(prev_corr_fsw)$adj.r.squared, 2)` and `r round(summary(prev_corr_pwid)$adj.r.squared, 2)` respectively) and higher than matched total population HIV prevalence. At 1% total population prevalence, FSW prevalence is 17fold higher, and PWID prevalence is 7fold higher, and at 30% total population prevalence 1.6fold and 1.4fold respectively. Estimates of HIV prevalence in PWID at high total population prevalences are poorly informed by data. Prevalence among MSM was poorly correlated with total population prevalence ($R^2$ = `r round(summary(prev_corr_msm)$adj.r.squared, 2)`). The average estimated HIV prevalence among MSM was around 20% and did not vary with total population HIV prevalence, but the observed range was large from less than 1% to over 60%.
+Estimates of key population HIV prevalence as estimated on the logit scale, on the natural prevalence scale, and expressed relative to total population prevalence are shown in Figure 8. Prevalence among FSW and PWID are positively correlated ($R^2$ = `r round(summary(prev_corr_fsw)$adj.r.squared, 2)` and `r round(summary(prev_corr_pwid)$adj.r.squared, 2)` respectively) and higher than matched total population HIV prevalence. At 1% total population prevalence, FSW prevalence is 17fold higher, and PWID prevalence is 7fold higher, and at 30% total population prevalence 1.6fold and 1.4fold respectively. Estimates of HIV prevalence in PWID at high total population prevalences are poorly informed by data. Prevalence among MSM was poorly correlated with total population prevalence ($R^2$ = `r round(summary(prev_corr_msm)$adj.r.squared, 2)`). The average estimated HIV prevalence among MSM was around 20% and did not vary with total population HIV prevalence, but the observed range was large from less than 1% to over 60%.
+
+The odds of self-reporting HIV status were significantly lower than biologically confirmed prevalence in FSW (OR 0.27; 95% CI 0.14-0.50) and MSM (OR 0.24; 95% CI 0.06-0.81), whilst no significant difference was found in PWID. 
 
 ```{r echo=FALSE, warning = FALSE, message = FALSE, fig.cap = "Estimated key population prevalence as a function of total population prevalence on the estimated logit scale (left) and natural scale (right)", fig.height = 12, fig.width = 10, out.width = "100%", out.height = "90%"}
 
-prev_estimates <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_estimates.csv")
+prev_estimates <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_estimates.csv", show_col_types = FALSE)
 
 convert_logis_labels <- function(x) {
   paste0(round(plogis(x)*100, 1), "%")
 }
 
 p1 <- prev_estimates %>%
-  bind_rows() %>%
-  filter(model == "betabinomial") %>%
   ggplot(aes(x=qlogis(provincial_value), y=logit_fit)) +
-  geom_line(size=1) +
-  geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper), alpha=0.3) +
+  # geom_line(size=1) +
+  # geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper), alpha=0.3) +
   geom_point(data = prev_final %>% 
-               filter(kp %in% c("MSM", "PWID", "FSW")) %>%
+               filter(kp %in% c("MSM", "PWID", "FSW", "TG")) %>%
                left_join(region), 
-             aes(y=qlogis(value), color=region), alpha = 0.3) +
+             aes(y=qlogis(value), color=region), shape=16, stroke = 0, alpha = 0.4) +
+  geom_line(aes(color=region), size=1) +
+  geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper, fill=region), alpha=0.3) +
   geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
   moz.utils::standard_theme() +
   scale_y_continuous(labels = convert_logis_labels) +
-  scale_x_continuous(labels = convert_logis_labels) +
-  labs(y = "KP HIV prevalence", x = "Age/sex matched total\npopulation HIV prevalence")+
+  scale_x_continuous(labels = convert_logis_labels, limits = c(NA, logit(0.4))) +
+  scale_color_manual(values = c(wesanderson::wes_palette("Zissou1")[c(4,1)])) +
+  scale_fill_manual(values = wesanderson::wes_palette("Zissou1")[c(4,1)])  +
+  labs(y = "KP HIV prevalence", x = "Age/sex matched total\npopulation HIV prevalence (logit scale)")+
   theme(panel.border = element_rect(fill=NA, color="black")) +
   facet_wrap(~kp, ncol=1)
 
 p2 <- prev_estimates %>%
-  bind_rows() %>%
-  filter(model == "betabinomial") %>%
   ggplot(aes(x=provincial_value, y=fit)) +
-  geom_line(size=1) +
-  geom_ribbon(aes(ymin = lower, ymax = upper), alpha=0.3) +
+  # geom_line(size=1) +
+  # geom_ribbon(aes(ymin = lower, ymax = upper), alpha=0.3) +
   geom_point(data = prev_final %>% 
-               filter(kp %in% c("MSM", "PWID", "FSW")) %>%
+               filter(kp %in% c("MSM", "PWID", "FSW", "TG")) %>%
                left_join(region), 
-             aes(y=value, color=region), alpha = 0.3) +
+             aes(y=value, color=region), shape=16, stroke = 0, alpha = 0.4) +
+  geom_line(aes(color=region), size=1) +
+  geom_ribbon(aes(ymin = lower, ymax = upper, fill=region), alpha=0.3) +
   geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
   moz.utils::standard_theme() +
-  scale_x_continuous(labels = scales::label_percent(accuracy = 1), limits = c(0,0.5)) +
+  scale_x_continuous(labels = scales::label_percent(accuracy = 1), limits = c(0,0.4)) +
   scale_y_continuous(labels = scales::label_percent(), limits = c(0,1)) +
+  scale_color_manual(values = c(wesanderson::wes_palette("Zissou1")[c(4,1)])) +
+  scale_fill_manual(values = wesanderson::wes_palette("Zissou1")[c(4,1)])  +
   labs(y = "KP HIV prevalence", x = "Age/sex matched total\npopulation HIV prevalence")+
   theme(panel.border = element_rect(fill=NA, color="black")) +
   facet_wrap(~kp, ncol=1)
 
-ggpubr::ggarrange(p1, p2, nrow=1, common.legend = TRUE, legend = "bottom")
+p3 <- prev_estimates %>%
+  ggplot(aes(x=provincial_value, y=fit/provincial_value)) +
+  # geom_line(size=1) +
+  # geom_ribbon(aes(ymin = lower, ymax = upper), alpha=0.3) +
+  geom_point(data = prev_final %>% 
+               filter(kp %in% c("MSM", "PWID", "FSW", "TG")) %>%
+               left_join(region), 
+             aes(y=value/provincial_value, color=region), shape=16, stroke = 0, alpha = 0.4) +
+  geom_line(aes(color=region), size=1) +
+  geom_ribbon(aes(ymin = lower/provincial_value, ymax = upper/provincial_value, fill=region), alpha=0.3) +
+  moz.utils::standard_theme() +
+  scale_y_log10() +
+  scale_x_continuous(labels = scales::label_percent(accuracy = 1), limits = c(0,0.4)) +
+  scale_color_manual(values = c(wesanderson::wes_palette("Zissou1")[c(4,1)])) +
+  scale_fill_manual(values = wesanderson::wes_palette("Zissou1")[c(4,1)])  +
+  geom_hline(aes(yintercept = 1), linetype = 2) +
+  labs(y="Prevalence ratio", x="Age/sex matched total\npopulation HIV prevalence") +
+  theme(panel.border = element_rect(fill=NA, color="black")) +
+  facet_wrap(~kp, ncol=1)
+
+ggpubr::ggarrange(p1, p2, p3, nrow=1, common.legend = TRUE, legend = "bottom")
 ```
 
 ## 4.5 ART coverage
@@ -597,42 +741,44 @@ p1 <- art_estimates %>%
   bind_rows() %>%
   filter(model == "betabinomial") %>%
   ggplot(aes(x=qlogis(provincial_value), y=logit_fit)) +
-  geom_line(size=1) +
-  geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper), alpha=0.3) +
-  geom_point(data = art_final %>% 
-               filter(kp %in% c("MSM", "PWID", "FSW")) %>%
-               left_join(region), 
-             aes(y=qlogis(value), color=region), alpha = 0.3) +
-  geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
-  moz.utils::standard_theme() +
-  scale_y_continuous(labels = convert_logis_labels) +
-  scale_x_continuous(labels = convert_logis_labels) +
-  labs(y = "KP ART coverage", x = "Age/sex matched total\npopulation ART coverage")+
-  theme(panel.border = element_rect(fill=NA, color="black")) +
-  facet_wrap(~kp, ncol=1)
+    geom_point(data = art_final %>% 
+                 filter(kp %in% c("MSM", "PWID", "FSW")) %>%
+                 left_join(region), 
+               aes(y=qlogis(value), color=region), shape=16, stroke = 0, alpha = 0.4) +
+    geom_line(size=1) +
+    geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper), alpha=0.3) +
+    geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
+    moz.utils::standard_theme() +
+    scale_y_continuous(labels = convert_logis_labels) +
+    scale_x_continuous(labels = convert_logis_labels) +
+    scale_color_manual(values = c(wesanderson::wes_palette("Zissou1")[c(4, 1)])) +
+    labs(y = "KP ART coverage", x = "Age/sex matched total\npopulation ART coverage")+
+    theme(panel.border = element_rect(fill=NA, color="black")) +
+    facet_wrap(~kp, ncol=1)
 
 p2 <- art_estimates %>%
   bind_rows() %>%
   filter(model == "betabinomial") %>%
   ggplot(aes(x=provincial_value, y=fit)) +
-  geom_line(size=1) +
-  geom_ribbon(aes(ymin = lower, ymax = upper), alpha=0.3) +
-  geom_point(data = art_final %>% 
-               filter(kp %in% c("MSM", "PWID", "FSW")) %>%
-               left_join(region), 
-             aes(y=value, color=region), alpha = 0.3) +
-  geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
-  moz.utils::standard_theme() +
-  scale_x_continuous(labels = scales::label_percent(accuracy = 1), limits = c(0,1)) +
-  scale_y_continuous(labels = scales::label_percent(), limits = c(0,1)) +
-  labs(y = "KP ART coverage", x = "Age/sex matched total\npopulation HIV prevalence")+
-  theme(panel.border = element_rect(fill=NA, color="black")) +
-  facet_wrap(~kp, ncol=1)
+    geom_point(data = art_final %>% 
+                 filter(kp %in% c("MSM", "PWID", "FSW")) %>%
+                 left_join(region), 
+               aes(y=value, color=region), shape=16, stroke = 0, alpha = 0.4) +
+    geom_line(size=1) +
+    geom_ribbon(aes(ymin = lower, ymax = upper), alpha=0.3) +
+    geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
+    moz.utils::standard_theme() +
+    scale_x_continuous(labels = scales::label_percent(accuracy = 1), limits = c(0,1)) +
+    scale_y_continuous(labels = scales::label_percent(), limits = c(0,1)) +
+    scale_color_manual(values = c(wesanderson::wes_palette("Zissou1")[c(4,1)])) +
+    labs(y = "KP ART coverage", x = "Age/sex matched total\npopulation ART coverage")+
+    theme(panel.border = element_rect(fill=NA, color="black")) +
+    facet_wrap(~kp, ncol=1)
 
 ggpubr::ggarrange(p1, p2, nrow=1, common.legend = TRUE, legend = "bottom")
 ```
 
-Figure 9 shows estimates of key population ART coverage against age/sex matched total population ART coverage as estimated on the logit scale (left) and on the natural prevalence scale (right). Median ART coverage in FSW and MSM is correlated with and similar to matched total population ART coverage ($R^2$ = `r round(summary(art_corr_fsw)$adj.r.squared, 2)` and `r round(summary(art_corr_msm)$adj.r.squared, 2)` respectively). Modelled estimates in PWID suggest a lower ART coverage than in the total population, but data were sparse and estimates are uncertain. In all key populations the observed range in ART coverage data was large: e.g. for datapoints with age-sex matched total population ART coverage around 80%, FSW ART coverage varied from 13% to 93%. 
+Median ART coverage in FSW and MSM is correlated with and similar to matched total population ART coverage ($R^2$ = `r round(summary(art_corr_fsw)$adj.r.squared, 2)` and `r round(summary(art_corr_msm)$adj.r.squared, 2)` respectively) (Figure 9). Modelled estimates in PWID suggest a lower ART coverage than in the total population, but data were sparse. In all key populations the observed range in ART coverage data was large: e.g. for datapoints with age-sex matched total population ART coverage around 80%, FSW ART coverage varied from 13% to 93%. Self-reported ART coverage did not differ from biologically confirmed estimates in any key population. 
 
 # 5. Discussion
 
@@ -640,11 +786,11 @@ We consolidated and deduplicated key population data from several independently 
 
 National-level key population estimates may be used to guide National Strategic Planning and are of use to international donor programmes. In countries lacking any surveillance data, these model-based estimates provide a foundation on which to base programmatic decisions and highlight opportunities for future surveillance exercises. However, the use of national-level estimates should not be used at the expense of locally-derived estimates which may be more appropriate for targeting and evaluating HIV prevention and treatment programmes. Further, surveillance data informing these estimates were collected exclusively in urban areas or rural KP hotspots (e.g. on trucking routes or near mining sites) and their application to rural populations should be carefully considered. 
 
-Surveillance data for transgender people available for this analysis were insufficient to estimate robustly population size, HIV prevalence, or ART coverage at the national level. In some surveillance exercises, transgender people were enumerated and tested for HIV, but their sample sizes deemed too small to report, or are omitted as transgender surveillance was not a primary objective [26]. Retrospective review of surveillance reports and the recovery of these data would assist in estimation for transgender people. 
+Surveillance data for transgender people available for this analysis were insufficient to estimate robustly population size, HIV prevalence, or ART coverage at the national level. In some surveillance exercises, transgender people were enumerated and tested for HIV, but their sample sizes deemed too small to report, or are omitted as transgender surveillance was not a primary objective [26]. Retrospective recovery of these data would assist in estimation for transgender people. 
 
 PSE data were available for the majority of countries for FSW and MSM. Model-based estimates for these populations are well informed by local data in each country, and heterogeneity in modelled estimates across countries is driven by variation in the data. Uncertainty was, appropriately, larger for countries that did not have data. FSW estimates and regional differences are in line with those reported by Laga et al. who estimated higher population proportions in ESA than WCA, and lower FSW proportion in South Africa than its immediate neighbours [27]. Data on PWID population size were sparser, particularly in Southern Africa countries, which is concerning given their HIV burden. 
 
-Guided by less data, PWID PSE model estimates were more homogeneous than PSE estimates for FSW and MSM with large uncertainty ranges. Given the data sparsity of data about PWID size estimates, modelled point estimates may not reflect the true population sizes in many settings, and size estimates for programme planning will benefit from triangulation with programmatic data and expert knowledge in each setting. This analysis estimates that the median national population proportion of PWID is $`r pse_iqr[[6,4]]`$%, lower than estimates from Degenhardt et al. of 0.28% (95% CI 0.13–0.62%). This analysis sought to include only countries with generalised HIV epidemics, excluding the island states of Cape Verde, Mauritius, Sao Tome & Principe, Seychelles, and Madagascar whose epidemics are primarily driven by key populations, have higher prevalence of injecting drug use, and were included in Degenhardt et al.. Second, this analysis has benefited from the increase in SSA PWID surveillance in recent years, incorporating 26 studies from 18 countries.
+Guided by less data, PWID PSE model estimates were more homogeneous than PSE estimates for FSW and MSM with large uncertainty ranges. Given the data sparsity of data about PWID size estimates, modelled point estimates may not reflect the true population sizes in many settings, and size estimates for programme planning will benefit from triangulation with programmatic data and expert knowledge in each setting. This analysis estimates that the median national population proportion of PWID is $`r pse_iqr[[6,4]]`$%, lower than estimates from Degenhardt et al. of 0.28% (95% CI 0.13–0.62%). This analysis sought to include only countries with generalised HIV epidemics, excluding the island states of Cape Verde, Mauritius, Sao Tome & Principe, Seychelles, and Madagascar whose epidemics are primarily driven by key populations, have higher prevalence of injecting drug use [6]. Second, this analysis has benefited from the increase in SSA PWID surveillance in recent years, incorporating 26 studies from 18 countries.
 
 <!-- round(100*nrow(filter(pse_final, kp == "MSM", population_proportion < 0.01))/nrow(filter(pse_final, kp == "MSM"))) -->
 
@@ -656,7 +802,7 @@ Guided by less data, PWID PSE model estimates were more homogeneous than PSE est
 <!--     geom_col(position = "fill") -->
 
 
-Seventy-nine percent of MSM PSE datapoints and 36 of 37 national-level modelled MSM estimates from this analysis are below 1% of the matched 15-49 male population which UNAIDS and WHO recommend be revised [15]. Data and estimates under 1% are not restricted to older estimates. Since 2016, 30% (3/10) of PSEs designated ‘nationally adequate’ by UNAIDS and 82% (289/351) of datapoints collected were under 1% of the adult male population. Consideration should be given to (1) the methods used to generate small population proportion estimates and (2) the use of the recommended minimum threshold. Of 351 recent datapoints, 210 were derived by mapping, of which 90% were beneath the 1% threshold. Mapped estimates can rely on the provision of KP-focused services and the generalisability of these estimates should be closely reviewed.The 1% recommended proportion is a useful tool to guide the review of MSM population proportions. Its use, however, as a minimum threshold is difficult to reconcile with the distribution of available PSE data particularly when newly conducted surveillance produce smaller population proportions than the 1% threshold. 
+Seventy-nine percent of MSM PSE datapoints and 36 of 37 national-level modelled MSM estimates from this analysis are below 1% of the matched 15-49 male population which UNAIDS and WHO recommend be revised [15]. Data and estimates under 1% are not restricted to older estimates. Since 2016, 30% (3/10) of PSEs designated ‘nationally adequate’ by UNAIDS and 82% (289/351) of datapoints collected were under 1% of the adult male population. Consideration should be given to (1) the methods used to generate small population proportion estimates and (2) the use of the recommended minimum threshold. Of 351 recent datapoints, 210 were derived by mapping, of which 90% were beneath the 1% threshold. PLACE/mapped estimates were found to produce significantly lower PSE for MSM and PWID compared to 3S-CRC. This may reflect challenges with venue-based enumeration of MSM and PWID compared to FSW. The 1% recommended proportion is a useful tool to guide the review of MSM population proportions. Its use, however, as a minimum threshold is difficult to reconcile with the distribution of available PSE data particularly when newly conducted surveillance produce smaller population proportions than the 1% threshold. 
 
 Estimates of HIV prevalence in FSW and PWID were correlated with matched total population prevalence. While FSW HIV prevalence data were available from across sub-Saharan Africa and therefore over a range of total population HIV prevalence, PWID data were sparse in Southern Africa with few datapoints from above 5% total population prevalence. Additional PWID data from high prevalence settings would strengthen the findings from this analysis. 
 
@@ -669,3 +815,14 @@ Estimates of ART coverage in MSM and FSW indicate similar treatment coverage to 
 Future surveillance studies should prioritise estimates for transgender people throughout the region and PWID in Southern Africa. Estimates for all KPs would benefit from rural estimates, without which national-level estimates extrapolated from urban surveillance activities are uncertain. The inclusion of routine key population data from testing and treatment programmes would provide data with large sample sizes, permit longitudinal analyses over time, and inform estimates in rural areas. However, these data are challenging to include within model-based estimates. Key population programmes are most often provided in areas with the highest perceived need, leading to spatially biased data, the data are difficult to deduplicate, and it is challenging to verify key population status.
 
 Several limitations should be considered in the interpretation of these estimates.Firstly, population proportions were derived from population size estimate counts, population denominators, and urban boundaries. The Global Rural/Urban Mapping Project boundaries date from 1995 [23]. Their application will underestimate urban size and population, and consequently overestimate population proportions. Second, sample size was omitted from the majority of data entries and all size estimates were equally weighted within the model. In some cases, sample sizes or standard error estimates could be recovered with further review of primary sources. Third, data entries with the country name as the surveillance area are treated as nationally representative and the national matched population used as the denominator. This will lead to underestimated population proportions if the data are only representative of a subnational area. Fourth, insufficient data exist to estimate trends in population proportions over time and this analysis treats all data as cross-sectional at a single timepoint. Fifth, few data points have methodological information accompanying them and data generated by non-empirical methods (e.g. wisdom of the crowds or expert opinion) will have been used in model calibration.
+
+\newpage
+## Supplementary figures
+
+```{r echo=FALSE, warning = FALSE, message = FALSE, fig.height = 12, fig.width = 10, out.width = "100%", out.height = "90%"}
+
+knitr::kable(pse_method,col.names = c("Method", "KP", "OR (95% CI)", "Number of studies", "n"),
+             caption = "Size estimation method fixed effect estimates") %>%
+  kable_styling(position = "center")
+
+```

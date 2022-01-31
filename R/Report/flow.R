@@ -104,7 +104,7 @@ pse_remove_label$model <- pse_spreadsheet_extract %>%
 pse_remove_label$model <- paste0("Extrapolated/modelled data (n = ", pse_remove_label$model, ")")
 
 pse_spreadsheet_extract <- pse_spreadsheet_extract %>%
-  filter(!str_detect(method, regex("extrapolat", ignore_case = TRUE)) | is.na(method))
+  filter(!(str_detect(method, regex("extrapolat", ignore_case = TRUE)) & data_checked != "yes") | is.na(method))
 
 #Remove non-empirical methods
 pse_remove_label$non_emp <- pse_spreadsheet_extract %>%
@@ -509,6 +509,8 @@ prev_cleaned_text <- prev_cleaned_data %>%
 
 prev_clean_labels <- collapse(prev_cleaned_text)
 
+setwd(rprojroot::find_rstudio_root_file())
+
 prev_id <- lapply(ssa_iso3, function(x){
   orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
 })
@@ -560,9 +562,6 @@ node [shape=none, width=0, height=0, label='']
   p6 -> final
   {rank=same; p1 -> m1_dedup}
   {rank=same; p2 -> m2_nonspec}
-  {rank=same; p3 -> m3_model}
-  {rank=same; p4 -> m4_outlier}
-  {rank=same; p5 -> m5_unconf}
   {rank=same; p6 -> c1_denom}
 
 {inp_gam inp_atlas inp_cdc inp_gf inp_surv} -> inp_total
@@ -752,6 +751,8 @@ art_cleaned_text <- art_cleaned_data %>%
 
 art_clean_labels <- collapse(art_cleaned_text)
 
+setwd(rprojroot::find_rstudio_root_file())
+
 art_id <- lapply(ssa_iso3, function(x){
   orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
 })
@@ -798,21 +799,15 @@ inp_surv [label = '@@1-3']
 inp_total [label = '@@1-4']
 m1_dedup [label = '@@2-1']
 m2_nonspec [label = '@@2-2']
-m3_model [label = '@@2-3']
-m4_outlier [label = 'Outlier (n=??)']
-m5_unconf [label = 'Unconfirmed (n=??)']
 clean [label = '@@3']
 c1_denom [label = '@@2-6']
 final [label = '@@4']
 
 node [shape=none, width=0, height=0, label='']
-  p5 -> clean
+  p2 -> clean
   p6 -> final
   {rank=same; p1 -> m1_dedup}
   {rank=same; p2 -> m2_nonspec}
-  {rank=same; p3 -> m3_model}
-  {rank=same; p4 -> m4_outlier}
-  {rank=same; p5 -> m5_unconf}
   {rank=same; p6 -> c1_denom}
 
 {inp_atlas inp_gf inp_surv} -> inp_total
@@ -821,9 +816,6 @@ node [shape=none, width=0, height=0, label='']
 edge [dir = none]
   inp_total -> p1;
   p1 -> p2;
-  p2 -> p3;
-  p3 -> p4;
-  p4 -> p5;
   clean -> p6
   
  

@@ -2,6 +2,7 @@ library(tidyverse)
 library(orderly)
 library(countrycode)
 library(purrr)
+library(moz.utils)
 
 ssa_names <- c("Angola", "Botswana", "Eswatini", "Ethiopia", "Kenya", "Lesotho",  "Malawi", "Mozambique", "Namibia", "Rwanda", "South Africa", "South Sudan", "Uganda", "United Republic of Tanzania", "Zambia", "Zimbabwe", "Benin", "Burkina Faso", "Burundi", "Cameroon", "Central African Republic", "Chad", "Congo", "Côte d'Ivoire", "Democratic Republic of the Congo", "Equatorial Guinea", "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Liberia", "Mali", "Niger", "Nigeria", "Senegal", "Sierra Leone", "Togo")
 ssa_iso3 <- countrycode(ssa_names, "country.name", "iso3c")
@@ -16,30 +17,30 @@ orderly_pull_archive("ssd_data_areas", remote = "fertility")
 map(ssa_iso3, ~possibly_pull("aaa_scale_pop", id = paste0('latest(parameter:iso3 == "', .x, '")'), recursive = FALSE, remote = "fertility"))
 
 ### Assign populations
-id <- map("TZA", ~possibly_run("aaa_assign_populations", parameters = data.frame(iso3 = .x)))
+id <- map(ssa_iso3, ~possibly_run("aaa_assign_populations", parameters = data.frame(iso3 = .x)))
 # names(id) <- ssa_iso3
 lapply(id %>% compact(), orderly_commit)
 
-# orderly_develop_start("aaa_assign_populations", parameters = data.frame(iso3 = "NGA"))
+orderly_dev_start_oli("aaa_assign_populations", data.frame(iso3 = "SLE"))
 # setwd("src/aaa_assign_populations")
 
 ### Assign province
-id <- map("NGA", ~possibly_run("aaa_assign_province", parameters = data.frame(iso3 = .x)))
+id <- map(ssa_iso3, ~possibly_run("aaa_assign_province", parameters = data.frame(iso3 = .x)))
 # names(id) <- ssa_iso3
 lapply(id %>% compact(), orderly_commit)
 
 
-# orderly_dev_start_oli("aaa_assign_province", data.frame(iso3 = "NGA"))
+orderly_dev_start_oli("aaa_assign_province", data.frame(iso3 = "SLE"))
 # setwd("src/aaa_assign_province")
 
 ### Extrapolate Naomi
-id <- map("KEN", ~possibly_run("aaa_extrapolate_naomi", parameters = data.frame(iso3 = .x)))
+id <- map(ssa_iso3, ~possibly_run("aaa_extrapolate_naomi", parameters = data.frame(iso3 = .x)))
 # names(id) <- ssa_iso3
 lapply(id %>% compact(), orderly_commit)
 
 to_do <- names(id %>% keep(~is.null(.x)))
 
-orderly_dev_start_oli("aaa_extrapolate_naomi", data.frame(iso3 = "KEN"))
+orderly_dev_start_oli("aaa_extrapolate_naomi", data.frame(iso3 = "NER"))
 
 ### Get Spectrum
 id <- map(ssa_iso3, ~possibly_run("aaa_download_worldpop", parameters = data.frame(iso3 = .x)))

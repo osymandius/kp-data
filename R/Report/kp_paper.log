@@ -1,24 +1,24 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2022/dev) (preloaded format=pdflatex 2021.12.10)  4 JAN 2022 18:12
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2022/dev) (preloaded format=pdflatex 2022.1.20)  20 JAN 2022 15:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **kp_paper.tex
 (./kp_paper.tex
 LaTeX2e <2021-11-15> patch level 1
-L3 programming layer <2021-11-22> (/Users/olistevens/Library/TinyTeX/texmf-dist
+L3 programming layer <2022-01-12> (/Users/olistevens/Library/TinyTeX/texmf-dist
 /tex/latex/base/article.cls
 Document Class: article 2021/10/04 v1.4n Standard LaTeX document class
 (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/base/size10.clo
 File: size10.clo 2021/10/04 v1.4n Standard LaTeX file (size option)
 )
-\c@part=\count183
-\c@section=\count184
-\c@subsection=\count185
-\c@subsubsection=\count186
-\c@paragraph=\count187
-\c@subparagraph=\count188
-\c@figure=\count189
-\c@table=\count190
+\c@part=\count185
+\c@section=\count186
+\c@subsection=\count187
+\c@subsubsection=\count188
+\c@paragraph=\count189
+\c@subparagraph=\count190
+\c@figure=\count191
+\c@table=\count192
 \abovecaptionskip=\skip47
 \belowcaptionskip=\skip48
 \bibindent=\dimen138
@@ -38,13 +38,13 @@ Package: amsbsy 1999/11/29 v1.2d Bold Symbols
 ) (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2021/08/26 v2.02 operator names
 )
-\inf@bad=\count191
+\inf@bad=\count193
 LaTeX Info: Redefining \frac on input line 234.
-\uproot@=\count192
-\leftroot@=\count193
+\uproot@=\count194
+\leftroot@=\count195
 LaTeX Info: Redefining \overline on input line 399.
-\classnum@=\count194
-\DOTSCASE@=\count195
+\classnum@=\count196
+\DOTSCASE@=\count197
 LaTeX Info: Redefining \ldots on input line 496.
 LaTeX Info: Redefining \dots on input line 499.
 LaTeX Info: Redefining \cdots on input line 620.
@@ -53,15 +53,15 @@ LaTeX Info: Redefining \cdots on input line 620.
 \big@size=\dimen141
 LaTeX Font Info:    Redeclaring font encoding OML on input line 743.
 LaTeX Font Info:    Redeclaring font encoding OMS on input line 744.
-\macc@depth=\count196
-\c@MaxMatrixCols=\count197
+\macc@depth=\count198
+\c@MaxMatrixCols=\count199
 \dotsspace@=\muskip16
-\c@parentequation=\count198
-\dspbrk@lvl=\count199
+\c@parentequation=\count266
+\dspbrk@lvl=\count267
 \tag@help=\toks17
-\row@=\count266
-\column@=\count267
-\maxfields@=\count268
+\row@=\count268
+\column@=\count269
+\maxfields@=\count270
 \andhelp@=\toks18
 \eqnshift@=\dimen142
 \alignsep@=\dimen143
@@ -196,8 +196,8 @@ Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
 Package: kvoptions 2020-10-07 v3.14 Key value format for package options (HO)
 )
 \@linkdim=\dimen148
-\Hy@linkcounter=\count269
-\Hy@pagecounter=\count270
+\Hy@linkcounter=\count271
+\Hy@pagecounter=\count272
 (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/hyperref/pd1enc.def
 File: pd1enc.def 2021-06-07 v7.00m Hyperref: PDFDocEncoding definition (HO)
 Now handling font encoding PD1 ...
@@ -213,7 +213,7 @@ Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/generic/etexcmds/etexcmds.sty
 Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
 )
-\Hy@SavedSpaceFactor=\count271
+\Hy@SavedSpaceFactor=\count273
 (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/hyperref/puenc.def
 File: puenc.def 2021-06-07 v7.00m Hyperref: PDF Unicode definition (HO)
 Now handling font encoding PU ...
@@ -227,7 +227,7 @@ Package hyperref Info: Plain pages OFF on input line 4207.
 Package hyperref Info: Backreferencing OFF on input line 4212.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4445.
-\c@Hy@tempcnt=\count272
+\c@Hy@tempcnt=\count274
 (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip17
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
@@ -242,7 +242,7 @@ Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
 Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
 )
 ))
-\Fld@menulength=\count273
+\Fld@menulength=\count275
 \Field@Width=\dimen150
 \Fld@charsize=\dimen151
 Package hyperref Info: Hyper figures OFF on input line 6076.
@@ -258,9 +258,9 @@ LaTeX Info: Redefining \pageref on input line 6150.
 Package: atbegshi-ltx 2021/01/10 v1.0c Emulation of the original atbegshi
 package with kernel methods
 )
-\Hy@abspage=\count274
-\c@Item=\count275
-\c@Hfootnote=\count276
+\Hy@abspage=\count276
+\c@Item=\count277
+\c@Hfootnote=\count278
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
 (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/hyperref/hpdftex.def
@@ -270,8 +270,8 @@ Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atveryend pac
 kage
 with kernel methods
 )
-\Fld@listcount=\count277
-\c@bookmark@seq@number=\count278
+\Fld@listcount=\count279
+\c@bookmark@seq@number=\count280
 
 (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/rerunfilecheck/rerunfil
 echeck.sty
@@ -290,9 +290,9 @@ Package: geometry 2020/01/02 v5.9 Page Geometry
 (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/generic/iftex/ifvtex.sty
 Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 )
-\Gm@cnth=\count279
-\Gm@cntv=\count280
-\c@Gm@tempcnt=\count281
+\Gm@cnth=\count281
+\Gm@cntv=\count282
+\c@Gm@tempcnt=\count283
 \Gm@bindingoffset=\dimen152
 \Gm@wd@mp=\dimen153
 \Gm@odd@mp=\dimen154
@@ -302,71 +302,6 @@ Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 \Gm@layouthoffset=\dimen158
 \Gm@layoutvoffset=\dimen159
 \Gm@dimlist=\toks24
-) (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/tools/longtable.sty
-Package: longtable 2021-09-01 v4.17 Multi-page Table package (DPC)
-\LTleft=\skip53
-\LTright=\skip54
-\LTpre=\skip55
-\LTpost=\skip56
-\LTchunksize=\count282
-\LTcapwidth=\dimen160
-\LT@head=\box52
-\LT@firsthead=\box53
-\LT@foot=\box54
-\LT@lastfoot=\box55
-\LT@gbox=\box56
-\LT@cols=\count283
-\LT@rows=\count284
-\c@LT@tables=\count285
-\c@LT@chunks=\count286
-\LT@p@ftn=\toks25
-) (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/booktabs/booktabs.sty
-Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
-\heavyrulewidth=\dimen161
-\lightrulewidth=\dimen162
-\cmidrulewidth=\dimen163
-\belowrulesep=\dimen164
-\belowbottomsep=\dimen165
-\aboverulesep=\dimen166
-\abovetopsep=\dimen167
-\cmidrulesep=\dimen168
-\cmidrulekern=\dimen169
-\defaultaddspace=\dimen170
-\@cmidla=\count287
-\@cmidlb=\count288
-\@aboverulesep=\dimen171
-\@belowrulesep=\dimen172
-\@thisruleclass=\count289
-\@lastruleclass=\count290
-\@thisrulewidth=\dimen173
-) (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/tools/array.sty
-Package: array 2021/10/04 v2.5f Tabular extension package (FMi)
-\col@sep=\dimen174
-\ar@mcellbox=\box57
-\extrarowheight=\dimen175
-\NC@list=\toks26
-\extratabsurround=\skip57
-\backup@length=\skip58
-\ar@cellbox=\box58
-) (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/tools/calc.sty
-Package: calc 2017/05/25 v4.3 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count291
-\calc@Bcount=\count292
-\calc@Adimen=\dimen176
-\calc@Bdimen=\dimen177
-\calc@Askip=\skip59
-\calc@Bskip=\skip60
-LaTeX Info: Redefining \setlength on input line 80.
-LaTeX Info: Redefining \addtolength on input line 81.
-\calc@Ccount=\count293
-\calc@Cskip=\skip61
-) (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/etoolbox/etoolbox.sty
-Package: etoolbox 2020/10/05 v2.5k e-TeX tools for LaTeX (JAW)
-\etb@tempcnta=\count294
-) (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/mdwtools/footnote.sty
-Package: footnote 1997/01/28 1.13 Save footnotes around boxes
-\fn@notes=\box59
-\fn@width=\dimen178
 ) (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
 (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/graphics/graphics.sty
@@ -380,8 +315,8 @@ File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
 Package graphics Info: Driver file: pdftex.def on input line 107.
 )
-\Gin@req@height=\dimen179
-\Gin@req@width=\dimen180
+\Gin@req@height=\dimen160
+\Gin@req@width=\dimen161
 )
 (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/pdflscape/pdflscape.sty
 Package: pdflscape 2019/12/05 v0.12 Display of landscape pages in PDF (HO)
@@ -389,33 +324,167 @@ Package: pdflscape 2019/12/05 v0.12 Display of landscape pages in PDF (HO)
 Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
 )
 Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
+) (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count284
+\float@exts=\toks25
+\float@box=\box52
+\@float@everytoks=\toks26
+\@floatcapt=\box53
+) (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/booktabs/booktabs.sty
+Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
+\heavyrulewidth=\dimen162
+\lightrulewidth=\dimen163
+\cmidrulewidth=\dimen164
+\belowrulesep=\dimen165
+\belowbottomsep=\dimen166
+\aboverulesep=\dimen167
+\abovetopsep=\dimen168
+\cmidrulesep=\dimen169
+\cmidrulekern=\dimen170
+\defaultaddspace=\dimen171
+\@cmidla=\count285
+\@cmidlb=\count286
+\@aboverulesep=\dimen172
+\@belowrulesep=\dimen173
+\@thisruleclass=\count287
+\@lastruleclass=\count288
+\@thisrulewidth=\dimen174
+) (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/tools/longtable.sty
+Package: longtable 2021-09-01 v4.17 Multi-page Table package (DPC)
+\LTleft=\skip53
+\LTright=\skip54
+\LTpre=\skip55
+\LTpost=\skip56
+\LTchunksize=\count289
+\LTcapwidth=\dimen175
+\LT@head=\box54
+\LT@firsthead=\box55
+\LT@foot=\box56
+\LT@lastfoot=\box57
+\LT@gbox=\box58
+\LT@cols=\count290
+\LT@rows=\count291
+\c@LT@tables=\count292
+\c@LT@chunks=\count293
+\LT@p@ftn=\toks27
+) (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/tools/array.sty
+Package: array 2021/10/04 v2.5f Tabular extension package (FMi)
+\col@sep=\dimen176
+\ar@mcellbox=\box59
+\extrarowheight=\dimen177
+\NC@list=\toks28
+\extratabsurround=\skip57
+\backup@length=\skip58
+\ar@cellbox=\box60
+) (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/multirow/multirow.sty
+Package: multirow 2021/03/15 v2.8 Span multiple rows of a table
+\multirow@colwidth=\skip59
+\multirow@cntb=\count294
+\multirow@dima=\skip60
+\bigstrutjot=\dimen178
+) (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/wrapfig/wrapfig.sty
+\wrapoverhang=\dimen179
+\WF@size=\dimen180
+\c@WF@wrappedlines=\count295
+\WF@box=\box61
+\WF@everypar=\toks29
+Package: wrapfig 2003/01/31  v 3.6
+) (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/colortbl/colortbl.sty
+Package: colortbl 2020/01/04 v1.0e Color table columns (DPC)
+\everycr=\toks30
+\minrowclearance=\skip61
+) (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/tabu/tabu.sty
+Package: tabu 2019/01/11 v2.9 - flexible LaTeX tabulars (FC+tabu-fixed)
+(/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/varwidth/varwidth.sty
+Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
+\@vwid@box=\box62
+\sift@deathcycles=\count296
+\@vwid@loff=\dimen181
+\@vwid@roff=\dimen182
+)
+\c@taburow=\count297
+\tabu@nbcols=\count298
+\tabu@cnt=\count299
+\tabu@Xcol=\count300
+\tabu@alloc=\count301
+\tabu@nested=\count302
+\tabu@target=\dimen183
+\tabu@spreadtarget=\dimen184
+\tabu@naturalX=\dimen185
+\tabucolX=\dimen186
+\tabu@Xsum=\dimen187
+\extrarowdepth=\dimen188
+\abovetabulinesep=\dimen189
+\belowtabulinesep=\dimen190
+\tabustrutrule=\dimen191
+\tabu@thebody=\toks31
+\tabu@footnotes=\toks32
+\tabu@box=\box63
+\tabu@arstrutbox=\box64
+\tabu@hleads=\box65
+\tabu@vleads=\box66
+\tabu@cellskip=\skip62
+)
+(/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/threeparttable/threepar
+ttable.sty
+Package: threeparttable 2003/06/13  v 3.0
+\@tempboxb=\box67
+)
+(/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/threeparttablex/threepa
+rttablex.sty
+Package: threeparttablex 2013/07/23 v0.3 by daleif
+(/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/environ/environ.sty
+Package: environ 2014/05/04 v0.3 A new way to define environments
+
+(/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/trimspaces/trimspaces.s
+ty
+Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
+))
+\TPTL@width=\skip63
+) (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/generic/ulem/ulem.sty
+\UL@box=\box68
+\UL@hyphenbox=\box69
+\UL@skip=\skip64
+\UL@hook=\toks33
+\UL@height=\dimen192
+\UL@pe=\count303
+\UL@pixel=\dimen193
+\ULC@box=\box70
+Package: ulem 2019/11/18
+\ULdepth=\dimen194
+) (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/makecell/makecell.sty
+Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
+\rotheadsize=\dimen195
+\c@nlinenum=\count304
+\TeXr@lab=\toks34
 )
 (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdf
 tex.def
-File: l3backend-pdftex.def 2021-10-18 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count295
-\l__pdf_internal_box=\box60
+File: l3backend-pdftex.def 2022-01-12 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count305
+\l__pdf_internal_box=\box71
 ) (./kp_paper.aux)
 \openout1 = `kp_paper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 83.
-LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 88.
+LaTeX Font Info:    ... okay on input line 88.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 88.
+LaTeX Font Info:    ... okay on input line 88.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 88.
+LaTeX Font Info:    ... okay on input line 88.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 88.
+LaTeX Font Info:    ... okay on input line 88.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 88.
+LaTeX Font Info:    ... okay on input line 88.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 88.
+LaTeX Font Info:    ... okay on input line 88.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 88.
+LaTeX Font Info:    ... okay on input line 88.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 88.
+LaTeX Font Info:    ... okay on input line 88.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 88.
+LaTeX Font Info:    ... okay on input line 88.
 
 (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-b
 ase.sty
@@ -428,7 +497,7 @@ s.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Package hyperref Info: Link coloring OFF on input line 83.
+Package hyperref Info: Link coloring OFF on input line 88.
 (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
 (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/refcount/refcount.sty
@@ -438,11 +507,11 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 lestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count296
+\c@section@level=\count306
 )
-LaTeX Info: Redefining \ref on input line 83.
-LaTeX Info: Redefining \pageref on input line 83.
-LaTeX Info: Redefining \nameref on input line 83.
+LaTeX Info: Redefining \ref on input line 88.
+LaTeX Info: Redefining \pageref on input line 88.
+LaTeX Info: Redefining \nameref on input line 88.
 (./kp_paper.out) (./kp_paper.out)
 \@outlinefile=\write3
 \openout3 = `kp_paper.out'.
@@ -481,196 +550,240 @@ LaTeX Info: Redefining \nameref on input line 83.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 8
-5.
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 9
+0.
 (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 8
-5.
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 9
+0.
 (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-85.
+90.
 (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-85.
+90.
 (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 85.
+(Font)              <12> on input line 90.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 85.
+(Font)              <8> on input line 90.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 85.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 85.
+(Font)              <6> on input line 90.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 90.
 
 (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 85.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 90.
 
 (/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) [1
+)
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <10> on input line 91.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <7> on input line 91.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <5> on input line 91.
+[1
 
 {/Users/olistevens/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map
-}]
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 1
-56.
-(/Users/olistevens/Library/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
-File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-) [2]
-<R objects for report/PSE/pse_flowchart.png, id=91, 818.05624pt x 1143.27126pt>
-
+}] [2] [3] [4pdfTeX warning (ext4): destination with the same identifier (name{
+table.1}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.403 
+      ] [5] [6]
+<R objects for report/PSE/pse_flowchart.png, id=136, 818.05624pt x 1143.27126pt
+>
 File: R objects for report/PSE/pse_flowchart.png Graphic file (type png)
 <use R objects for report/PSE/pse_flowchart.png>
 Package pdftex.def Info: R objects for report/PSE/pse_flowchart.png  used on in
-put line 199.
-(pdftex.def)             Requested size: 325.2195pt x 454.50922pt.
-<R objects for report/Prevalence/prev_flowchart.png, id=93, 813.0375pt x 962.59
-625pt>
+put line 470.
+(pdftex.def)             Requested size: 214.63687pt x 299.96492pt.
+<R objects for report/Prevalence/prev_flowchart.png, id=138, 813.0375pt x 962.5
+9625pt>
 File: R objects for report/Prevalence/prev_flowchart.png Graphic file (type png
 )
 <use R objects for report/Prevalence/prev_flowchart.png>
 Package pdftex.def Info: R objects for report/Prevalence/prev_flowchart.png  us
-ed on input line 199.
-(pdftex.def)             Requested size: 325.20924pt x 385.03168pt.
-
-Overfull \hbox (2.22095pt too wide) in paragraph at lines 199--199
-[][] [] 
- []
-
-
-LaTeX Warning: Float too large for page by 9.2542pt on input line 200.
-
-<R objects for report/ART coverage/art_flowchart.png, id=94, 520.94624pt x 962.
-59625pt>
+ed on input line 470.
+(pdftex.def)             Requested size: 214.63512pt x 254.11739pt.
+<R objects for report/ART coverage/art_flowchart.png, id=139, 520.94624pt x 962
+.59625pt>
 File: R objects for report/ART coverage/art_flowchart.png Graphic file (type pn
 g)
 <use R objects for report/ART coverage/art_flowchart.png>
 Package pdftex.def Info: R objects for report/ART coverage/art_flowchart.png  u
-sed on input line 206.
-(pdftex.def)             Requested size: 254.22458pt x 469.75217pt.
-
-LaTeX Warning: Float too large for page by 23.94157pt on input line 211.
-
-[3 <./R objects for report/PSE/pse_flowchart.png> <./R objects for report/Preva
-lence/prev_flowchart.png>] [4 <./R objects for report/ART coverage/art_flowchar
-t.png>] [5
-
-
-]
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 332.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 332.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 332.
-[6]
-<kp_paper_files/figure-latex/unnamed-chunk-5-1.pdf, id=134, 505.89pt x 325.215p
+sed on input line 470.
+(pdftex.def)             Requested size: 214.63861pt x 396.60583pt.
+[7pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.473 \end{landscape}
+                      <./R objects for report/PSE/pse_flowchart.png> <./R objec
+ts for report/Prevalence/prev_flowchart.png> <./R objects for report/ART covera
+ge/art_flowchart.png>]
+<kp_paper_files/figure-latex/unnamed-chunk-5-1.pdf, id=149, 505.89pt x 325.215p
 t>
 File: kp_paper_files/figure-latex/unnamed-chunk-5-1.pdf Graphic file (type pdf)
 
 <use kp_paper_files/figure-latex/unnamed-chunk-5-1.pdf>
 Package pdftex.def Info: kp_paper_files/figure-latex/unnamed-chunk-5-1.pdf  use
-d on input line 436.
+d on input line 528.
 (pdftex.def)             Requested size: 328.8323pt x 211.3922pt.
-<kp_paper_files/figure-latex/unnamed-chunk-6-1.pdf, id=135, 1011.78pt x 433.62p
+<kp_paper_files/figure-latex/unnamed-chunk-6-1.pdf, id=150, 1011.78pt x 433.62p
 t>
 File: kp_paper_files/figure-latex/unnamed-chunk-6-1.pdf Graphic file (type pdf)
 
 <use kp_paper_files/figure-latex/unnamed-chunk-6-1.pdf>
 Package pdftex.def Info: kp_paper_files/figure-latex/unnamed-chunk-6-1.pdf  use
-d on input line 445.
+d on input line 537.
 (pdftex.def)             Requested size: 469.76266pt x 201.32686pt.
-[7] [8 <./kp_paper_files/figure-latex/unnamed-chunk-5-1.pdf> <./kp_paper_files/
-figure-latex/unnamed-chunk-6-1.pdf>]
-<kp_paper_files/figure-latex/unnamed-chunk-7-1.pdf, id=161, 325.215pt x 361.35p
+<kp_paper_files/figure-latex/unnamed-chunk-7-1.pdf, id=151, 325.215pt x 361.35p
 t>
 File: kp_paper_files/figure-latex/unnamed-chunk-7-1.pdf Graphic file (type pdf)
 
 <use kp_paper_files/figure-latex/unnamed-chunk-7-1.pdf>
 Package pdftex.def Info: kp_paper_files/figure-latex/unnamed-chunk-7-1.pdf  use
-d on input line 458.
+d on input line 550.
 (pdftex.def)             Requested size: 204.8915pt x 227.65721pt.
-[9 <./kp_paper_files/figure-latex/unnamed-chunk-7-1.pdf>] [10]
-<kp_paper_files/figure-latex/unnamed-chunk-10-1.pdf, id=178, 1011.78pt x 722.7p
-t>
-File: kp_paper_files/figure-latex/unnamed-chunk-10-1.pdf Graphic file (type pdf
-)
-<use kp_paper_files/figure-latex/unnamed-chunk-10-1.pdf>
-Package pdftex.def Info: kp_paper_files/figure-latex/unnamed-chunk-10-1.pdf  us
-ed on input line 552.
-(pdftex.def)             Requested size: 650.43942pt x 464.59958pt.
+[8pdfTeX warning (ext4): destination with the same identifier (name{table.2}) h
+as been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.557 \newpage
+              
 
-LaTeX Warning: Float too large for page by 18.78899pt on input line 553.
 
-<kp_paper_files/figure-latex/unnamed-chunk-11-1.pdf, id=179, 1156.32pt x 722.7p
+] [9pdfTeX warning (ext4): destination with the same identifier (name{figure.2}
+) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.557 \newpage
+              pdfTeX warning (ext4): destination with the same identifier (name
+{figure.3}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.557 \newpage
+               <./kp_paper_files/figure-latex/unnamed-chunk-5-1.pdf> <./kp_pape
+r_files/figure-latex/unnamed-chunk-6-1.pdf>] [10pdfTeX warning (ext4): destinat
+ion with the same identifier (name{figure.4}) has been already used, duplicate 
+ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.614 
+       <./kp_paper_files/figure-latex/unnamed-chunk-7-1.pdf>] [11]
+<kp_paper_files/figure-latex/unnamed-chunk-11-1.pdf, id=191, 1011.78pt x 722.7p
 t>
 File: kp_paper_files/figure-latex/unnamed-chunk-11-1.pdf Graphic file (type pdf
 )
 <use kp_paper_files/figure-latex/unnamed-chunk-11-1.pdf>
 Package pdftex.def Info: kp_paper_files/figure-latex/unnamed-chunk-11-1.pdf  us
-ed on input line 558.
-(pdftex.def)             Requested size: 650.4284pt x 406.51775pt.
-[11 <./kp_paper_files/figure-latex/unnamed-chunk-10-1.pdf>] [12 <./kp_paper_fil
-es/figure-latex/unnamed-chunk-11-1.pdf>]
-<kp_paper_files/figure-latex/unnamed-chunk-13-1.pdf, id=209, 722.7pt x 867.24pt
->
-File: kp_paper_files/figure-latex/unnamed-chunk-13-1.pdf Graphic file (type pdf
+ed on input line 627.
+(pdftex.def)             Requested size: 650.43942pt x 464.59958pt.
+
+LaTeX Warning: Float too large for page by 30.78899pt on input line 628.
+
+<kp_paper_files/figure-latex/unnamed-chunk-12-1.pdf, id=192, 1156.32pt x 722.7p
+t>
+File: kp_paper_files/figure-latex/unnamed-chunk-12-1.pdf Graphic file (type pdf
 )
-<use kp_paper_files/figure-latex/unnamed-chunk-13-1.pdf>
-Package pdftex.def Info: kp_paper_files/figure-latex/unnamed-chunk-13-1.pdf  us
-ed on input line 582.
-(pdftex.def)             Requested size: 469.76045pt x 563.71257pt.
-<kp_paper_files/figure-latex/unnamed-chunk-14-1.pdf, id=210, 722.7pt x 867.24pt
+<use kp_paper_files/figure-latex/unnamed-chunk-12-1.pdf>
+Package pdftex.def Info: kp_paper_files/figure-latex/unnamed-chunk-12-1.pdf  us
+ed on input line 633.
+(pdftex.def)             Requested size: 650.4284pt x 406.51775pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 633--633
+[][]
+ []
+
+[12pdfTeX warning (ext4): destination with the same identifier (name{figure.5})
+ has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.636 \end{landscape}
+                      <./kp_paper_files/figure-latex/unnamed-chunk-11-1.pdf>] [
+13pdfTeX warning (ext4): destination with the same identifier (name{figure.6}) 
+has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.636 \end{landscape}
+                      <./kp_paper_files/figure-latex/unnamed-chunk-12-1.pdf>]
+<kp_paper_files/figure-latex/unnamed-chunk-14-1.pdf, id=223, 722.7pt x 867.24pt
 >
 File: kp_paper_files/figure-latex/unnamed-chunk-14-1.pdf Graphic file (type pdf
 )
 <use kp_paper_files/figure-latex/unnamed-chunk-14-1.pdf>
 Package pdftex.def Info: kp_paper_files/figure-latex/unnamed-chunk-14-1.pdf  us
-ed on input line 589.
+ed on input line 663.
 (pdftex.def)             Requested size: 469.76045pt x 563.71257pt.
-[13
+<kp_paper_files/figure-latex/unnamed-chunk-15-1.pdf, id=224, 722.7pt x 867.24pt
+>
+File: kp_paper_files/figure-latex/unnamed-chunk-15-1.pdf Graphic file (type pdf
+)
+<use kp_paper_files/figure-latex/unnamed-chunk-15-1.pdf>
+Package pdftex.def Info: kp_paper_files/figure-latex/unnamed-chunk-15-1.pdf  us
+ed on input line 670.
+(pdftex.def)             Requested size: 469.76045pt x 563.71257pt.
+[14
 
 
-] [14 <./kp_paper_files/figure-latex/unnamed-chunk-13-1.pdf>] [15 <./kp_paper_f
-iles/figure-latex/unnamed-chunk-14-1.pdf>] [16] [17] (./kp_paper.aux)
+] [15pdfTeX warning (ext4): destination with the same identifier (name{figure.7
+}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.741 
+       <./kp_paper_files/figure-latex/unnamed-chunk-14-1.pdf>] [16pdfTeX warnin
+g (ext4): destination with the same identifier (name{figure.8}) has been alread
+y used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.741 
+       <./kp_paper_files/figure-latex/unnamed-chunk-15-1.pdf>] [17] [18] [19pdf
+TeX warning (ext4): destination with the same identifier (name{table.3}) has be
+en already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.891 \end{document}
+                    ] (./kp_paper.aux)
 Package rerunfilecheck Info: File `kp_paper.out' has not changed.
-(rerunfilecheck)             Checksum: FF216386023F3668E076B09BCF8F800A;3335.
+(rerunfilecheck)             Checksum: 1FCAB6FBB3D7588BE3A956838576C955;3629.
  ) 
 Here is how much of TeX's memory you used:
- 11421 strings out of 480313
- 181808 string characters out of 5896198
- 476395 words of memory out of 5000000
- 29020 multiletter control sequences out of 15000+600000
- 455053 words of font info for 68 fonts, out of 8000000 for 9000
+ 12368 strings out of 480246
+ 198160 string characters out of 5894860
+ 496742 words of memory out of 5000000
+ 29997 multiletter control sequences out of 15000+600000
+ 520623 words of font info for 69 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 60i,9n,63p,428b,379s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 60i,17n,63p,480b,362s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/Users/olistevens/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.en
 c}{/Users/olistevens/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.en
 c}{/Users/olistevens/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/
 Users/olistevens/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/
-Users/olistevens/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/User
-s/olistevens/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}</Users/o
-listevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></Users/o
-listevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></Users/o
-listevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb></Users/o
-listevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></Users/o
-listevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></Users/ol
-istevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></Users/oli
-stevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></Users/olis
-tevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></Users/oliste
-vens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb>
-Output written on kp_paper.pdf (17 pages, 1235138 bytes).
+Users/olistevens/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}</User
+s/olistevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></User
+s/olistevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></User
+s/olistevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb></User
+s/olistevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></User
+s/olistevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></Users
+/olistevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></Users/
+olistevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></Users/o
+listevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></Users/oli
+stevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb>
+Output written on kp_paper.pdf (19 pages, 1373504 bytes).
 PDF statistics:
- 321 PDF objects out of 1000 (max. 8388607)
- 256 compressed objects within 3 object streams
- 66 named destinations out of 1000 (max. 500000)
- 195 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 343 PDF objects out of 1000 (max. 8388607)
+ 276 compressed objects within 3 object streams
+ 73 named destinations out of 1000 (max. 500000)
+ 211 words of extra memory for PDF output out of 10000 (max. 10000000)
 

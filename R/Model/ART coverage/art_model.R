@@ -103,7 +103,10 @@ art_df <- art_dat %>%
   group_by(year, kp, iso3) %>%
   mutate(idx = cur_group_id())
 
-df_logit <- data.frame(logit_gen_art = logit(seq(0.01, 0.99, 0.01)))
+# df_logit <- crossing(logit_gen_art = logit(seq(0.01, 0.99, 0.01)),
+#                      region = c("WCA", "ESA"))
+
+df_logit <- crossing(logit_gen_art = logit(seq(0.01, 0.99, 0.01)))
 
 
 # art_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
@@ -188,13 +191,15 @@ df_logit <- data.frame(logit_gen_art = logit(seq(0.01, 0.99, 0.01)))
 #   
 # })
 
-art_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
+res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   
   art_df <- art_df %>%
-    filter(kp == kp_id) %>%
     group_by(ref) %>%
+    filter(kp == kp_id) %>%
+    # filter(kp == "PWID") %>%
     mutate(id.ref = cur_group_id(),
-           id.ref = ifelse(is.na(ref), NA, id.ref)) %>%
+           id.ref = ifelse(is.na(ref), NA, id.ref),
+           logit_gen_art2 = logit_gen_art) %>%
     ungroup()
   
   
@@ -204,7 +209,7 @@ art_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
     mutate(denominator = 1) %>%
     bind_rows(art_df %>%
                 ungroup) %>%
-    select(logit_gen_art, positive, negative, region, denominator, method, id.ref)
+    select(logit_gen_art, logit_gen_art2, positive, negative, region, denominator, method, id.ref)
   
   # art_formula <- positive ~ logit_gen_art + f(idx, model = "iid")
   # # *region + f(idx, model = "iid")
@@ -266,6 +271,16 @@ art_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   
   art_formula <- positive ~ logit_gen_art + method + f(id.ref, model = "iid")
   
+  if(kp_id == "PWID") {
+    art_formula <- positive ~ f(logit_gen_art, mean.linear = 0.66, prec.linear = 25, model = "linear") + method + f(id.ref, model = "iid")
+  }
+  
+  # 
+  # # pwid_pse_formula <- logit_proportion ~ f(id.iso3, model = "besag",
+  # #                                     scale.model = TRUE,
+  # #                                     graph = "national_level_adj.adj",
+  # #                                     hyper = prec.prior) + method
+  
   art_fit <- INLA::inla(art_formula,
                          data = art_inla,
                          family = "betabinomial", 
@@ -274,24 +289,34 @@ art_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
                          control.compute = list(config = TRUE),
                          control.family = list(link = "logit"),
                          control.predictor=list(compute=TRUE),
-                         verbose = TRUE)
+                         verbose = FALSE)
+
   
   fitted_val <- get_mod_results_test(art_fit, art_inla, "positive")
   
-  res <- 
+  out <- list()
+  
+  out$res <- 
     # res %>%
-    # bind_rows(
-    fitted_val %>%
-      rename(logit_fit = median,
-             logit_lower = lower,
-             logit_upper = upper) %>%
-      mutate(
-        lower = invlogit(logit_lower),
-        upper = invlogit(logit_upper),
-        fit = invlogit(logit_fit),
-        provincial_value = invlogit(logit_gen_art),
-        kp = kp_id,
-        model = "betabinomial")
+    bind_rows(
+      fitted_val %>%
+        rename(logit_fit = median,
+               logit_lower = lower,
+               logit_upper = upper) %>%
+        mutate(
+          lower = invlogit(logit_lower),
+          upper = invlogit(logit_upper),
+          fit = invlogit(logit_fit),
+          provincial_value = invlogit(logit_gen_art),
+          kp = kp_id,
+          model = "betabinomial")
+    )
+  
+  out$fixed <- data.frame(art_fit$summary.fixed) %>%
+    rownames_to_column() %>%
+    mutate(kp = kp_id)
+  
+  out
     
   
   #########
@@ -324,18 +349,25 @@ art_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   # )
 })
 
+art_res <- lapply(res, "[[", "res") %>%
+  bind_rows()
+
+art_fixed <- lapply(res, "[[", "fixed") %>%
+  bind_rows()
+
 write.csv(art_res %>%
   bind_rows(), "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_estimates.csv")
 
+write_csv(art_fixed, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_fixed.csv")
+
+
 p1 <- art_res %>%
-  bind_rows() %>%
-  filter(model == "betabinomial") %>%
   ggplot(aes(x=logit_gen_art, y=logit_fit)) +
   geom_line(size=1) +
   geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper), alpha=0.3) +
   # geom_line(size=1, aes(color = region)) +
   # geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper, fill = region), alpha=0.3) +
-  geom_point(data = art_df %>% filter(kp %in% c("MSM", "PWID", "FSW")), aes(y=logit_kp_art, color=region), alpha = 0.3) +
+  geom_point(data = art_df %>% filter(kp %in% c("MSM", "PWID", "FSW")), aes(y=logit_kp_art, color=region), alpha = 0.8) +
   geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
   moz.utils::standard_theme() +
   # scale_x_continuous(labels = scales::label_percent(), limits = c(0,0.5)) +
@@ -348,14 +380,12 @@ p1 <- art_res %>%
   # facet_grid(model~kp)
 
 p2 <- art_res %>%
-  bind_rows() %>%
-  filter(model == "betabinomial") %>%
   ggplot(aes(x=provincial_value, y=fit)) +
   geom_line(size=1) +
   geom_ribbon(aes(ymin = lower, ymax = upper), alpha=0.3) +
-  # geom_line(size=1, aes(color=source)) +
-  # geom_ribbon(aes(ymin = lower, ymax = upper, fill=source), alpha=0.3) +
-  geom_point(data = art_df %>% filter(kp %in% c("MSM", "PWID", "FSW")), aes(y=value, color=region), alpha = 0.3) +
+  # geom_line(size=1, aes(color=region)) +
+  # geom_ribbon(aes(ymin = lower, ymax = upper, fill=region), alpha=0.3) +
+  geom_point(data = art_df %>% filter(kp %in% c("MSM", "PWID", "FSW")), aes(y=value, color=region), alpha = 0.9) +
   geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
   moz.utils::standard_theme() +
   scale_x_continuous(labels = scales::label_percent(), limits = c(0,1)) +

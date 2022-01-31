@@ -88,6 +88,10 @@ pse_dat <- pse_dat %>%
       left_join(lso_pop %>% select(area_name, year, sex, population) %>% ungroup()) %>%
       mutate(population_proportion = pse/population) %>%
       select(colnames(pse_dat))
+  ) %>%
+  mutate(
+    method = ifelse(method == "Service multiplier", "Object/event multiplier", method),
+    method = ifelse(method == "Object/event multiplier", "Multiplier", method)
   )
 
 pse_dat <- pse_dat %>%
@@ -96,130 +100,152 @@ pse_dat <- pse_dat %>%
   filter(population_proportion != 0, !is.na(population_proportion), population_proportion < 1) %>%
   left_join(region %>% select(region, iso3)) %>%
   mutate(
-    logit_proportion = logit(population_proportion)
+    logit_proportion = logit(population_proportion),
+    method = factor(method, levels=c("3S-CRC", unique(pse_dat$method)[unique(pse_dat$method) != "3S-CRC" & !is.na(unique(pse_dat$method))]))
   ) %>%
   ungroup %>%
   select(iso3, year, kp, method, simple_method, logit_proportion, population_proportion, ref) %>%
   filter(iso3 != "LBR",
          !(iso3 == "BFA" & kp == "PWID"))
 
-pse_inla <- crossing(iso3 = ssa_iso3) %>%
-  bind_rows(pse_dat %>%
-              filter(kp == "FSW") %>%
-              mutate(method = factor(method)) %>%
-              group_by(ref) %>%
-              mutate(id.ref = cur_group_id(),
-                     id.ref = ifelse(is.na(ref), NA, id.ref)) %>%
-              ungroup) %>%
-  left_join(geographies %>% st_drop_geometry()) %>%
-  select(iso3, logit_proportion, method, id.iso3, id.ref)
-
 ref.iid.prec.prior <- list(prec= list(prior = "normal", param = c(1.6, 4)))
 spatial.prec.prior <- list(prec= list(prior = "normal", param = c(-0.75, 6.25)))
 
-pse_formula <- logit_proportion ~ 
-  f(id.iso3, model = "besag", scale.model = TRUE, graph = "national_level_adj.adj", hyper=spatial.prec.prior) +
-  method +
-  f(id.ref, model = "iid", hyper = ref.iid.prec.prior)
+res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
 
-fsw_fit <- INLA::inla(pse_formula,
-                  data = pse_inla,
-                  family = "gaussian", 
-                  control.compute = list(config = TRUE),
-                  control.predictor=list(compute=TRUE),
-                  verbose = TRUE)
+  pse_inla <- crossing(iso3 = ssa_iso3) %>%
+    bind_rows(pse_dat %>%
+                filter(kp == kp_id) %>%
+                group_by(ref) %>%
+                mutate(id.ref = cur_group_id(),
+                       id.ref = ifelse(is.na(ref), NA, id.ref)) %>%
+                ungroup) %>%
+    left_join(geographies %>% st_drop_geometry()) %>%
+    select(iso3, logit_proportion, method, id.iso3, id.ref)
+  
+  pse_formula <- logit_proportion ~ 
+    f(id.iso3, model = "besag", scale.model = TRUE, graph = "national_level_adj.adj", hyper=spatial.prec.prior) +
+    method +
+    f(id.ref, model = "iid", hyper = ref.iid.prec.prior)
+  
+  fit <- INLA::inla(pse_formula,
+                    data = pse_inla,
+                    family = "gaussian", 
+                    control.compute = list(config = TRUE),
+                    control.predictor=list(compute=TRUE),
+                    verbose = FALSE)
+  
+  # log_prec_spatial <- fsw_fit$internal.marginals.hyperpar$`Log precision for id.iso3`
+  # hist(log_prec_spatial)
+  # data.frame(log_prec_spatial) %>%
+  #   ggplot() +
+  #     geom_line(aes(x=x, y=y), color="red") +
+  #     geom_density(data = data.frame(x=rnorm(1000, -0.75, 0.4)), aes(x=x))
+  
+  # log_prec_ref <- fsw_fit$internal.marginals.hyperpar$`Log precision for id.ref`
+  # 
+  # data.frame(log_prec_ref) %>%
+  #   ggplot() +
+  #     geom_line(aes(x=x, y=y), color="red") +
+  #     geom_density(data = data.frame(x=rnorm(1000, 1.6, 0.5)), aes(x=x))
+  
+  fitted_val <- get_mod_results_test(fit, pse_inla, "logit_proportion")
+  
+  # invlogit <- function(x) {exp(x)/(1+exp(x))}
+  
+  out <- list()
+  
+  out$res <- fitted_val %>%
+    mutate(across(c(lower, median, upper), invlogit),
+           kp = kp_id)
+  
+  out$fixed <- data.frame(fit$summary.fixed) %>%
+    rownames_to_column() %>%
+    select(rowname, starts_with("X")) %>%
+    type.convert(as.is = FALSE) %>%
+    mutate(kp = kp_id)
+  
+  out
 
-# log_prec_spatial <- fsw_fit$internal.marginals.hyperpar$`Log precision for id.iso3`
-# hist(log_prec_spatial)
-# data.frame(log_prec_spatial) %>%
-#   ggplot() +
-#     geom_line(aes(x=x, y=y), color="red") +
-#     geom_density(data = data.frame(x=rnorm(1000, -0.75, 0.4)), aes(x=x))
+})
 
-# log_prec_ref <- fsw_fit$internal.marginals.hyperpar$`Log precision for id.ref`
+######################
+
+# pse_inla <- crossing(iso3 = ssa_iso3) %>%
+#   bind_rows(pse_dat %>%
+#               filter(kp == "MSM") %>%
+#               mutate(method = factor(method)) %>%
+#               group_by(ref) %>%
+#               mutate(id.ref = cur_group_id(),
+#                      id.ref = ifelse(is.na(ref), NA, id.ref)) %>%
+#               ungroup) %>%
+#   mutate(idx = row_number(),
+#          id.iso3 = as.numeric(factor(iso3))) %>%
+#   select(iso3, logit_proportion, method, id.iso3, id.ref)
+#  
+# msm_fit <- INLA::inla(pse_formula,
+#                       data = pse_inla,
+#                       family = "gaussian", 
+#                       control.compute = list(config = TRUE),
+#                       control.predictor=list(compute=TRUE),
+#                       verbose = FALSE)
 # 
-# data.frame(log_prec_ref) %>%
-#   ggplot() +
-#     geom_line(aes(x=x, y=y), color="red") +
-#     geom_density(data = data.frame(x=rnorm(1000, 1.6, 0.5)), aes(x=x))
-
-fitted_val <- get_mod_results_test(fsw_fit, pse_inla, "logit_proportion")
-
+# fitted_val <- get_mod_results_test(msm_fit, pse_inla, "logit_proportion")
+# 
 # invlogit <- function(x) {exp(x)/(1+exp(x))}
+# 
+# msm_val <- fitted_val %>%
+#   mutate(across(c(lower, median, upper), invlogit))
+# 
+# ######################
+# 
+# pse_inla <- crossing(iso3 = ssa_iso3) %>%
+#   bind_rows(pse_dat %>%
+#               filter(kp == "PWID") %>%
+#               mutate(method = factor(method)) %>%
+#               group_by(ref) %>%
+#               mutate(id.ref = cur_group_id(),
+#                      id.ref = ifelse(is.na(ref), NA, id.ref)) %>%
+#               ungroup) %>%
+#   mutate(idx = row_number(),
+#          id.iso3 = as.numeric(factor(iso3))) %>%
+#   select(iso3, logit_proportion, method, id.iso3, id.ref)
+# 
+# prec.prior <- list(prec= list(prior = "normal", param = c(0.4, 6.25)))
+# 
+# # pwid_pse_formula <- logit_proportion ~ f(id.iso3, model = "besag",
+# #                                     scale.model = TRUE,
+# #                                     graph = "national_level_adj.adj",
+# #                                     hyper = prec.prior) + method
+# 
+# pwid_fit <- INLA::inla(pse_formula,
+#                       data = pse_inla,
+#                       family = "gaussian", 
+#                       control.compute = list(config = TRUE),
+#                       control.predictor=list(compute=TRUE),
+#                       verbose = FALSE)
+# 
+# fitted_val <- get_mod_results_test(pwid_fit, pse_inla, "logit_proportion")
+# 
+# pwid_val <- fitted_val %>%
+#   mutate(across(c(lower, median, upper), invlogit))
+# 
+# 
+# 
+# #######
+# 
+# pse_out <- fsw_val %>%
+#   mutate(kp = "FSW") %>%
+#   bind_rows(
+#     msm_val %>% mutate(kp = "MSM"),
+#     pwid_val %>% mutate(kp = "PWID")
+#   ) %>%
+#   mutate(area_name = countrycode(iso3, "iso3c", "country.name")) %>%
+#   select(iso3, area_name, kp, lower:upper) %>%
+#   left_join(region)
 
-fsw_val <- fitted_val %>%
-  mutate(across(c(lower, median, upper), invlogit))
-
-######################
-
-pse_inla <- crossing(iso3 = ssa_iso3) %>%
-  bind_rows(pse_dat %>%
-              filter(kp == "MSM") %>%
-              mutate(method = factor(method)) %>%
-              group_by(ref) %>%
-              mutate(id.ref = cur_group_id(),
-                     id.ref = ifelse(is.na(ref), NA, id.ref)) %>%
-              ungroup) %>%
-  mutate(idx = row_number(),
-         id.iso3 = as.numeric(factor(iso3))) %>%
-  select(iso3, logit_proportion, method, id.iso3, id.ref)
- 
-msm_fit <- INLA::inla(pse_formula,
-                      data = pse_inla,
-                      family = "gaussian", 
-                      control.compute = list(config = TRUE),
-                      control.predictor=list(compute=TRUE),
-                      verbose = TRUE)
-
-fitted_val <- get_mod_results_test(msm_fit, pse_inla, "logit_proportion")
-
-invlogit <- function(x) {exp(x)/(1+exp(x))}
-
-msm_val <- fitted_val %>%
-  mutate(across(c(lower, median, upper), invlogit))
-
-######################
-
-pse_inla <- crossing(iso3 = ssa_iso3) %>%
-  bind_rows(pse_dat %>%
-              filter(kp == "PWID") %>%
-              mutate(method = factor(method)) %>%
-              group_by(ref) %>%
-              mutate(id.ref = cur_group_id(),
-                     id.ref = ifelse(is.na(ref), NA, id.ref)) %>%
-              ungroup) %>%
-  mutate(idx = row_number(),
-         id.iso3 = as.numeric(factor(iso3))) %>%
-  select(iso3, logit_proportion, method, id.iso3, id.ref)
-
-prec.prior <- list(prec= list(prior = "normal", param = c(0.4, 6.25)))
-
-# pwid_pse_formula <- logit_proportion ~ f(id.iso3, model = "besag",
-#                                     scale.model = TRUE,
-#                                     graph = "national_level_adj.adj",
-#                                     hyper = prec.prior) + method
-
-pwid_fit <- INLA::inla(pse_formula,
-                      data = pse_inla,
-                      family = "gaussian", 
-                      control.compute = list(config = TRUE),
-                      control.predictor=list(compute=TRUE),
-                      verbose = TRUE)
-
-fitted_val <- get_mod_results_test(pwid_fit, pse_inla, "logit_proportion")
-
-pwid_val <- fitted_val %>%
-  mutate(across(c(lower, median, upper), invlogit))
-
-
-#######
-
-pse_out <- fsw_val %>%
-  mutate(kp = "FSW") %>%
-  bind_rows(
-    msm_val %>% mutate(kp = "MSM"),
-    pwid_val %>% mutate(kp = "PWID")
-  ) %>%
+pse_out <- lapply(res, "[[", "res") %>%
+  bind_rows() %>%
   mutate(area_name = countrycode(iso3, "iso3c", "country.name")) %>%
   select(iso3, area_name, kp, lower:upper) %>%
   left_join(region)
@@ -227,32 +253,37 @@ pse_out <- fsw_val %>%
 # pse_out <- read_csv("R/Model/PSE/pse_estimates.csv")
 write.csv(pse_out, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_estimates.csv")
 
-pse_dat %>%
-  count(method)
-
-fsw_fit$summary.fixed %>%
-  mutate(kp = "FSW") %>%
-  rownames_to_column("method") %>%
-  bind_rows(
-    msm_fit$summary.fixed %>%
-      mutate(kp = "MSM") %>%
-      rownames_to_column("method"),
-    pwid_fit$summary.fixed %>%
-      mutate(kp = "PWID") %>%
-      rownames_to_column("method") 
+pse_method <- lapply(res, "[[", "fixed") %>%
+  bind_rows() %>%
+  filter(rowname != "(Intercept)") %>%
+  mutate(rowname = str_remove(rowname, "method")) %>%
+  rename(method = rowname) %>%
+  full_join(pse_dat %>%
+              count(kp, method)) %>%
+  full_join(pse_dat %>%
+              distinct(kp, ref, method) %>%
+              count(kp, method) %>%
+              rename(n_studies = n)) %>%
+  filter(kp != "TG", !is.na(method)) %>%
+  mutate(across(starts_with("X"), exp),
+         est = paste0(round(X0.5quant,2), " (", round(X0.025quant,2), "-", round(X0.975quant,2),")"),
+         est = ifelse(method == "3S-CRC", 1, est),
+         method = fct_relevel(method, 
+                              c("3S-CRC", "2S-CRC", "Multiplier", "PLACE/Mapping", "SS-PSE", "Multiple methods - empirical", "Multiple methods - mixture"))
   ) %>%
-  filter(method != "(Intercept)") %>%
-  mutate(method = str_remove(method, "method")) %>%
-  left_join(pse_dat %>%
-              count(method)) %>%
-  mutate(method = paste0(method, "  n = (", n, ")")) %>%
+  arrange(method) %>%
+  select(method, kp, est, n_studies, n)
+
+write_csv(pse_method, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_method.csv")
+
   ggplot(aes(x=kp)) +
-    geom_pointrange(position = position_dodge(.9), aes(y=`0.5quant`, ymin = `0.025quant`, ymax = `0.975quant`)) +
-    geom_hline(aes(yintercept = 0), linetype = 3, color = "red") +
-    facet_wrap(~method) +
-    moz.utils::standard_theme() +
-    labs(x=element_blank(), y=element_blank()) +
-    theme(panel.background = element_rect(fill=NA, color="black"))
+  geom_pointrange(position = position_dodge(.9), aes(y=`X0.5quant`, ymin = `X0.025quant`, ymax = `X0.975quant`)) +
+  geom_hline(aes(yintercept = 0), linetype = 3, color = "red") +
+  facet_wrap(~method) +
+  moz.utils::standard_theme() +
+  labs(x=element_blank(), y=element_blank()) +
+  theme(panel.background = element_rect(fill=NA, color="black"))
+
 
 pse_out %>%
   mutate(source = "Default") %>%
@@ -273,18 +304,28 @@ pse_out %>%
     moz.utils::standard_theme() +
     theme(axis.text.x = element_text(size=10))
 
-pse_out %>%
-  # filter(source == "Surveillance only") %>%
-  left_join(geographies) %>%
-  ggplot() +
+pal <- wesanderson::wes_palette("Zissou1", 100, type = "continuous")
+
+pse_maps <- lapply(c("FSW", "MSM", "PWID", "TG"), function(x) {
+  
+  pse_out %>%
+    filter(kp == x) %>%
+    left_join(geographies) %>%
+    ggplot() +
     geom_sf(data = grey, aes(geometry = geometry), fill="darkgrey") +
     geom_sf(aes(geometry = geometry, fill=median)) +
     moz.utils::standard_theme() +
-    viridis::scale_fill_viridis(labels = scales::label_percent()) +
-    labs(fill = "PSE proportion") +
+    # viridis::scale_fill_viridis(labels = scales::label_percent()) +
+    scale_fill_gradientn(colours = pal, labels = scales::label_percent()) +
+    labs(fill = "PSE proportion", title = x) +
     coord_sf(datum = NA) +
-    theme(legend.key.width = unit(1.5, "cm")) +
-    facet_wrap(~kp, ncol=3)
+    theme(legend.key.width = unit(1.5, "cm"),
+          plot.title = element_text(hjust = 0.5, face = "bold", size=16))
+  
+})
+
+ggpubr::ggarrange(pse_maps[[1]], pse_maps[[2]], pse_maps[[3]], pse_maps[[4]], nrow=1)
+
   
 
 pse_out %>%

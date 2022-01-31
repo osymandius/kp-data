@@ -32,7 +32,7 @@ class(out) <- "naomi_output"
 indicators <- add_output_labels(out) %>%
   dplyr::left_join(out$meta_age_group, by = c("age_group", "age_group_label"))
 
-prev <- read_csv("depends/prev_assigned_province.csv") %>%
+prev <- read_csv("depends/prev_assigned_province.csv", show_col_types = FALSE) %>%
   mutate(indicator = "HIV prevalence",
          iso3 = iso3)
 
@@ -40,7 +40,7 @@ if(nrow(prev))
   prev <- prev %>%
     left_join(areas %>% select(area_id, province = area_name) %>% st_drop_geometry())
 
-art <- read_csv("depends/art_assigned_province.csv") %>%
+art <- read_csv("depends/art_assigned_province.csv", show_col_types = FALSE) %>%
   mutate(indicator = "ART coverage",
          iso3 = iso3)
 

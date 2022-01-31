@@ -3,6 +3,8 @@ iso3_c <- iso3
 areas <- read_sf("depends/naomi_areas.geojson")%>%
   mutate(iso3 = iso3_c)
 
+admin1_lvl <- filter(read_csv("resources/iso_mapping_fit.csv", show_col_types = FALSE), iso3 == iso3_c)$admin1_level
+
 # areas <- read_sf("archive/bdi_data_areas/20201024-115335-68b89939/bdi_areas.geojson") %>%
 #   mutate(iso3 = iso3_c)
 # merge_cities <- read_sf("src/aaa_assign_populations/merge_cities.geojson") %>%
@@ -16,20 +18,20 @@ merge_cities <- merge_cities %>%
   st_make_valid()
 
 cities_areas <- merge_cities %>%
-  st_join(areas %>% filter(area_level == 1) %>% select(area_id) %>% st_make_valid(), largest=TRUE) %>%
+  st_join(areas %>% filter(area_level == admin1_lvl) %>% select(area_id) %>% st_make_valid(), largest=TRUE) %>%
   bind_rows(areas)
   
 sharepoint <- spud::sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
 
 prev_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/HIV prevalence", "prev_clean.csv")
 prev <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = prev_path)
-prev <- read_csv(prev) %>%
+prev <- read_csv(prev, show_col_types = FALSE) %>%
   rename(value = prev) %>%
   mutate(iso3 = countrycode(country.name, "country.name", "iso3c"))
 
 art_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/ART coverage", "art_clean.csv")
 art <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = art_path)
-art <- read_csv(art) %>%
+art <- read_csv(art, show_col_types = FALSE) %>%
   rename(value = art) %>%
   mutate(iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
   left_join(naomi::get_age_groups() %>% select(age_group_label, age_group)) %>%
@@ -79,9 +81,18 @@ out <- lapply(dat, function(x) {
     group_by(idx) %>%
     filter(dist == min(dist))
   
+  # Single hits, good matches
   best_matches <- min_dist %>%
     filter(n() == 1, dist<3) %>%
     ungroup
+  
+  # Multiple hits, good matches (caused when city df and area df have the same string distance match. See "Dar-es-salaam" and "Dar es salaam")
+  best_matches <- best_matches %>%
+    bind_rows(
+      min_dist %>%
+        filter(dist<3, n()>1, !is.na(area_id), !is.na(area_level)) %>%
+        filter(area_level == max(area_level))
+    )
   
   level_check <- min_dist %>%
     filter(dist==0, n()>1, !is.na(area_id)) %>%
@@ -133,11 +144,11 @@ out <- lapply(dat, function(x) {
     ))
   
   naomi_to_admin1 <- best_matches %>%
-    filter(area_level >1) %>%
+    filter(area_level > admin1_lvl) %>%
     st_as_sf() %>%
     st_make_valid() %>%
     select(-area_id) %>%
-    st_join(areas %>% filter(area_level == 1) %>% select(area_id) %>% st_make_valid(), largest=TRUE)
+    st_join(areas %>% filter(area_level == admin1_lvl) %>% select(area_id) %>% st_make_valid(), largest=TRUE)
   
   assigned_province <- best_matches %>%
     filter(!row_id %in% naomi_to_admin1$row_id) %>%
@@ -156,7 +167,7 @@ out <- lapply(dat, function(x) {
 })
 
 write_csv(out$prev$bad_match_error, "prev_bad_match_error.csv")
-write.csv(out$prev$assigned_province, "prev_assigned_province.csv")
+write_csv(out$prev$assigned_province, "prev_assigned_province.csv")
 
 write_csv(out$art$bad_match_error, "art_bad_match_error.csv")
-write.csv(out$art$assigned_province, "art_assigned_province.csv")
+write_csv(out$art$assigned_province, "art_assigned_province.csv")

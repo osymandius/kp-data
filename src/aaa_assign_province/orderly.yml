@@ -26,6 +26,9 @@ parameters:
   iso3:
     default: ~
 
+global_resources:
+  resources/iso_mapping_fit.csv: iso_mapping_fit.csv
+
 packages:
   # - naomi
   - readr

@@ -1,3 +1,5 @@
+library(countrycode)
+
 ever_sex <- read_csv("~/Dropbox/Work Streams/2021/Key populations/Data consolidation/MMG/everpaidforsex-bycountry.csv")
 recent_sex <- read_csv("~/Dropbox/Work Streams/2021/Key populations/Data consolidation/MMG/recentpaidforsex-bycountry.csv")
 
@@ -13,7 +15,7 @@ bought_sex <- recent_sex %>%
   )
 
 
-est_pse  <- read_csv("R/pse_out_surveillance_only.csv")
+est_pse  <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_estimates.csv")
 
 est_pse %>%
   filter(kp == "FSW") %>%
@@ -22,6 +24,6 @@ est_pse %>%
   ggplot(aes(x=median, y=estimate)) +
     geom_point() +
     geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
-    geom_smooth(method = "lm", se) +
+    geom_smooth(method = "lm") +
     labs(x="Estimated PSE proportion", y="Bought sex proportion") +
     facet_wrap(~indicator) 

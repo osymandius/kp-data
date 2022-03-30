@@ -12,15 +12,15 @@ collapse <- function(...) {paste0(..., collapse = "\n")}
 
 pse_remove_label <- list()
 
-pse_total_dat <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/2021_11_28_pse_all_data.csv")
+pse_total_dat <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/2021_11_28_pse_all_data.csv", show_col_types = FALSE)
 
 pse_inputs <- pse_total_dat %>%
   filter(!dataset %in% c("Goals_Nat", "Optima")) %>%
   count(dataset, kp) 
 
-pse_simple_deduplication <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/2021_11_28_pse_distinct.csv")
+pse_simple_deduplication <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/2021_11_28_pse_distinct.csv", show_col_types = FALSE)
 
-pse_spreadsheet_extract <- lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/PSE/Edited/", full.names = TRUE, pattern = "csv"), read_csv, na= "")
+pse_spreadsheet_extract <- lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/PSE/Edited/", full.names = TRUE, pattern = "csv"), read_csv, na= "", show_col_types = FALSE)
 
 pse_spreadsheet_extract <- c(pse_spreadsheet_extract, 
               lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/PSE/Edited/", full.names = TRUE, pattern = "xlsx"), readxl::read_xlsx)
@@ -130,6 +130,10 @@ pse_remove_label$unconf <- NA
 #   arrange(desc(n)) %>%
 #   View()
 
+pse_spreadsheet_extract <- pse_spreadsheet_extract %>%
+  ungroup() %>%
+  mutate(idx = row_number())
+
 truly_checked <- pse_spreadsheet_extract %>%
   filter(data_checked == "yes",
          year > 2009
@@ -152,14 +156,14 @@ unknown <- pse_spreadsheet_extract %>%
   ) %>%
   mutate(data_checked = "No")
 
-pse_cleaned_data <- bind_rows(truly_checked, mapped_place, unknown) %>%
+pse_cleaned_data <- bind_rows(truly_checked, mapped_place) %>%
   mutate(kp = ifelse(kp == "TGW", "TG", kp)) %>%
   filter(kp %in% c("FSW", "MSM", "PWID", "TG"))
 
 pse_cleaned_data <- pse_cleaned_data %>%
   mutate(area_name = str_replace(area_name, " and", ","))
 
-write_csv(pse_cleaned_data, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_spreadsheet_cleaned.csv")
+write_csv(pse_cleaned_data, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_spreadsheet_cleaned_sourced.csv")
 
 pse_cleaned_text <- pse_cleaned_data %>%
   count(kp) %>%
@@ -177,7 +181,7 @@ pse_id <- lapply(ssa_iso3, function(x){
 })
 
 pse_final <- lapply(paste0("archive/aaa_assign_populations/", pse_id[!is.na(pse_id)], "/pse_prevalence.csv"),
-       read_csv) %>%
+       read_csv, show_col_types = FALSE) %>%
   bind_rows() %>%
   filter(is.na(x),
          !is.na(population_proportion)
@@ -267,7 +271,7 @@ pse_remove_label$denom <- paste0("No population denominator (n = ", pse_remove_l
 pse_final_labels <- collapse(pse_final_text)
 
 saveRDS(pse_final_text, "R/Report/R objects for report/PSE/pse_final_count_text.rds")
-write_csv(pse_final, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_final.csv")
+write_csv(pse_final, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_final_sourced.csv")
 saveRDS(pse_inputs_text, "R/Report/R objects for report/PSE/pse_input_count_text.rds")
 
 pse_flow <- grViz("

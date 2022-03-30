@@ -49,30 +49,9 @@ if(iso3 != "SSD") {
 }
 
 
-# merge_cities <- read_sf("merge_cities.geojson")
-
-# sharepoint <- spud::sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
-# 
-# pse_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/PSE", "pse.csv")
-# pse <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = pse_path)
-# pse <- read_csv(pse)
-# 
-# gf_pse_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/PSE", "pse_gf_flib.csv")
-# gf_pse <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = gf_pse_path)
-# gf_pse <- read_csv(gf_pse)
-# 
-# pse <- pse %>%
-#   mutate(iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
-#   filter(iso3 == iso3_c) %>%
-#   rename(notes = method)
-# 
-# gf_pse <- gf_pse %>%
-#   mutate(iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
-#   filter(iso3 == iso3_c)
-
 population <- population %>%
   bind_rows(city_population) %>%
-  left_join(get_age_groups() %>% select(age_group, age_group_sort_order)) %>%
+  left_join(get_age_groups() %>% dplyr::select(age_group, age_group_sort_order)) %>%
   filter(age_group_sort_order %in% 16:22) %>%
   group_by(area_id, area_name, year, sex) %>%
   summarise(population = sum(population)) %>%
@@ -93,7 +72,7 @@ population <- population %>%
 # cities_areas <- merge_cities %>%
 #   bind_rows(areas)
 
-pse_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/PSE", "pse_spreadsheet_cleaned.csv")
+pse_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/PSE", "pse_spreadsheet_cleaned_sourced.csv")
 pse <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = pse_path)
 pse <- read_csv(pse) 
 
@@ -101,7 +80,7 @@ pse <- pse %>%
   # bind_rows(gf_pse) %>%
   mutate(iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
   filter(iso3 == iso3_c) %>%
-  # select(iso3:pse_upper, uid) %>%
+  dplyr::select(iso3:pse_upper, ref, data_checked, uid) %>%
   mutate(sex = case_when(
     kp %in% c("FSW", "TG") ~ "female",
     kp == "MSM" ~ "male",
@@ -114,7 +93,7 @@ pse <- pse %>%
 if(nrow(pse)) {
   
   pse_areas <- pse %>%
-    select(iso3, area_name, year, kp, row_id) %>%
+    dplyr::select(iso3, area_name, year, kp, row_id) %>%
     mutate(
       area_name = str_replace_all(area_name, "\\,\\,|\\,|\\/", "\\;")) %>%
     distinct() %>%
@@ -127,7 +106,7 @@ if(nrow(pse)) {
     rename(given_area = area_name)
   
   min_dist <- pse_areas %>%
-    full_join(population %>% select(iso3, area_name, area_id) %>% distinct(), by="iso3")  %>%
+    full_join(population %>% dplyr::select(iso3, area_name, area_id) %>% distinct(), by="iso3")  %>%
     mutate(dist = stringdist::stringdist(value, tolower(area_name))) %>%
     group_by(idx) %>%
     filter(dist == min(dist)) 
@@ -149,7 +128,7 @@ if(nrow(pse)) {
         #   filter(idx %in% level_check$idx),
         min_dist %>%
           filter(dist==0, n()>1, !is.na(area_id)) %>%
-          left_join(areas %>% select(area_id, area_level) %>% st_drop_geometry()) %>%
+          left_join(areas %>% dplyr::select(area_id, area_level) %>% st_drop_geometry()) %>%
           filter(area_level == max(area_level))
       ) %>%
       ungroup
@@ -165,7 +144,7 @@ if(nrow(pse)) {
     bad_match_error <- bad_match %>%
       ungroup %>%
       mutate(iso3 = iso3_c) %>%
-      select(iso3, given_name = value, attempted_match = area_name, attempted_area_id = area_id, string_distance = dist)
+      dplyr::select(iso3, given_name = value, attempted_match = area_name, attempted_area_id = area_id, string_distance = dist)
     
     warning("\nString match is bad:\n", 
             paste0(utils::capture.output(bad_match_error), collapse = "\n"))
@@ -178,14 +157,14 @@ if(nrow(pse)) {
   
   
   area_reshape <- spread_areas(areas) %>%
-    select(area_name1, starts_with("area_id")) %>%
+    dplyr::select(area_name1, starts_with("area_id")) %>%
     st_drop_geometry() %>%
     pivot_longer(-area_name1) %>%
-    select(-name, area_id = value, province = area_name1) %>%
+    dplyr::select(-name, area_id = value, province = area_name1) %>%
     distinct(province, area_id) %>%
     filter(area_id != iso3) %>%
     bind_rows(read_csv("depends/city_province_map.csv") %>%
-                select(-area_name))
+                dplyr::select(-area_name))
   
   row_populations <- best_matches %>%
     left_join(area_reshape) %>%
@@ -195,7 +174,7 @@ if(nrow(pse)) {
       kp %in% c("FSW", "SW", "TG", "TGW") ~ "female"
     )) %>%
     type_convert() %>%
-    left_join(population %>% select(area_id, year, sex, population) %>% type_convert()) %>%
+    left_join(population %>% dplyr::select(area_id, year, sex, population) %>% type_convert()) %>%
     group_by(row_id) %>%
     mutate(province = ifelse(length(unique(province)) > 1, NA_character_, province)) %>%
     group_by(row_id, province) %>%
@@ -273,7 +252,7 @@ if(nrow(pse)) {
         ) ~ "Multiple methods - empirical",
         TRUE ~ method
       )) %>%
-    select(all_of(c("country.name", "data_checked", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "province", "year", "pse_lower", "pse", "pse_upper", "population", "prop_lower", "population_proportion", "prop_upper", "sample", "notes", "ref", "link")))
+    dplyr::select(all_of(c("country.name", "data_checked", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "province", "year", "pse_lower", "pse", "pse_upper", "population", "prop_lower", "population_proportion", "prop_upper", "sample", "notes", "ref", "link")))
     # arrange(country.name, kp, year)
   
   
@@ -301,7 +280,7 @@ write_csv(bad_match_error, "bad_match_error.csv")
 #   
 #   pop_search_unique <- pop_search %>%
 #     filter(!area_id %in% areas$area_id) %>%
-#     select(area_id, geometry) %>%
+#     dplyr::select(area_id, geometry) %>%
 #     distinct() %>%
 #     mutate(source = "WorldPop")
 #   
@@ -311,11 +290,11 @@ write_csv(bad_match_error, "bad_match_error.csv")
 #   pop_search_res <- extract_kp_worldpop(pop_search_unique, iso3_c) 
 #   
 #   extrapolate_id <- pop_search_unique %>%
-#     select(area_id, source) %>%
+#     dplyr::select(area_id, source) %>%
 #     bind_rows(
 #       best_matches %>%
 #         filter(area_id %in% areas$area_id) %>%
-#         select(area_id) %>%
+#         dplyr::select(area_id) %>%
 #         distinct() %>%
 #         mutate(source = "Naomi")
 #     ) %>% 
@@ -323,7 +302,7 @@ write_csv(bad_match_error, "bad_match_error.csv")
 #   
 #   pop_search_res <- pop_search_res %>%
 #     separate(calendar_quarter, remove=FALSE, sep = c(2,6), into=c(NA, "year", NA), convert = TRUE) %>%
-#     select(area_id, year, sex, age_group, population)
+#     dplyr::select(area_id, year, sex, age_group, population)
 #     
 #   merged_populations <- crossing(area_id = pop_search_res$area_id,
 #              year = 2000:2020,
@@ -336,19 +315,19 @@ write_csv(bad_match_error, "bad_match_error.csv")
 #            population = exp(population)) %>%
 #     bind_rows(
 #       population %>%
-#         select(area_id, year, sex, age_group, population)
+#         dplyr::select(area_id, year, sex, age_group, population)
 #     )
 #   
 # } else {
 #   
 #   extrapolate_id <- best_matches %>%
 #     filter(area_id %in% areas$area_id) %>%
-#     select(area_id) %>%
+#     dplyr::select(area_id) %>%
 #     distinct() %>%
 #     mutate(source = "Naomi")
 #   
 #   merged_populations <- population %>%
-#     select(area_id, year, sex, age_group, population)
+#     dplyr::select(area_id, year, sex, age_group, population)
 #   
 # }
 # 
@@ -361,7 +340,7 @@ write_csv(bad_match_error, "bad_match_error.csv")
 # #                                      sex = c("female", "male"),
 # #                                      year = 1970:2025
 # # ) %>%
-# #   left_join(spectrum_population_change %>% select(year, sex, source, change)) %>%
+# #   left_join(spectrum_population_change %>% dplyr::select(year, sex, source, change)) %>%
 # #   left_join(merged_populations) %>%
 # #   mutate(population = population*change) %>%
 # #   group_by(area_id, sex, year) %>%
@@ -379,7 +358,7 @@ write_csv(bad_match_error, "bad_match_error.csv")
 # 
 # row_populations <- pop_search %>%
 #   bind_rows(best_matches %>% filter(!is.na(area_id))) %>%
-#   select(row_id, area_id, year, kp) %>%
+#   dplyr::select(row_id, area_id, year, kp) %>%
 #   mutate(sex = case_when(
 #     kp %in% c("PWID") ~ "both",
 #     kp %in% c("MSM", "TGM") ~ "male",

@@ -12,8 +12,8 @@ grey <- read_sf("~/Downloads/Longitude_Graticules_and_World_Countries_Boundaries
   bind_rows(read_sf("~/Downloads/ssd_admbnda_imwg_nbs_shp/ssd_admbnda_adm0_imwg_nbs_20180817.shp")) %>%
   st_crop(xmin=-180, xmax=180, ymin=-35, ymax=90)
 
-geographies <- read_sf("~/Downloads/Longitude_Graticules_and_World_Countries_Boundaries-shp/99bfd9e7-bb42-4728-87b5-07f8c8ac631c2020328-1-1vef4ev.lu5nk.shp") %>%
-  bind_rows(read_sf("~/Downloads/ssd_admbnda_imwg_nbs_shp/ssd_admbnda_adm0_imwg_nbs_20180817.shp") %>% mutate(CNTRY_NAME = "South Sudan")) %>%
+geographies <- read_sf("R/Report/R objects for report/Longitude_Graticules_and_World_Countries_Boundaries-shp/99bfd9e7-bb42-4728-87b5-07f8c8ac631c2020328-1-1vef4ev.lu5nk.shp") %>%
+  bind_rows(read_sf("R/Report/R objects for report/ssd_admbnda_imwg_nbs_shp/ssd_admbnda_adm0_imwg_nbs_20180817.shp") %>% mutate(CNTRY_NAME = "South Sudan")) %>%
   mutate(iso3 = countrycode(CNTRY_NAME, "country.name", "iso3c"),
          area_name = countrycode(iso3, "iso3c", "country.name")) %>%
   filter(iso3 %in% ssa_iso3)
@@ -21,7 +21,7 @@ geographies <- read_sf("~/Downloads/Longitude_Graticules_and_World_Countries_Bou
 geographies <- geographies %>%
   arrange(iso3) %>%
   mutate(id.iso3 = as.numeric(factor(iso3))) %>%
-  select(iso3, area_name, id.iso3) %>%
+  dplyr::select(iso3, area_name, id.iso3) %>%
   st_make_valid()
 
 # nb <- spdep::poly2nb(geographies)
@@ -67,14 +67,14 @@ region <- read.csv("~/Documents/GitHub/fertility_orderly/global/region.csv") %>%
 
 ############## PSE
 
-pse_dat <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_final.csv")
+pse_dat <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_final_sourced.csv")
 
 lso_pop_id <- orderly::orderly_search(name = "aaa_scale_pop", query = paste0('latest(parameter:iso3 == "', "LSO", '")'), draft = FALSE)
 
 lso_pop <- read_csv(paste0("archive/aaa_scale_pop/", lso_pop_id, "/interpolated_population.csv")) %>%
-  left_join(read_sf("archive/lso_data_areas/20211015-090317-5bfee435/lso_areas.geojson") %>%
+  left_join(sf::read_sf("archive/lso_data_areas/20201211-100113-b6410c57/lso_areas.geojson") %>%
               st_drop_geometry() %>%
-              select(area_id, area_name, area_level)) %>%
+              dplyr::select(area_id, area_name, area_level)) %>%
   filter(area_level == 1) %>%
   moz.utils::five_year_to_15to49("population")
 
@@ -84,10 +84,10 @@ pse_dat <- pse_dat %>%
   bind_rows(
     pse_dat %>%
       filter(iso3 == "LSO", year == 2018) %>%
-      select(-population) %>%
-      left_join(lso_pop %>% select(area_name, year, sex, population) %>% ungroup()) %>%
+      dplyr::select(-population) %>%
+      left_join(lso_pop %>% dplyr::select(area_name, year, sex, population) %>% ungroup()) %>%
       mutate(population_proportion = pse/population) %>%
-      select(colnames(pse_dat))
+      dplyr::select(colnames(pse_dat))
   ) %>%
   mutate(
     method = ifelse(method == "Service multiplier", "Object/event multiplier", method),
@@ -98,13 +98,13 @@ pse_dat <- pse_dat %>%
   mutate(population_proportion = pse/population,
          ) %>%
   filter(population_proportion != 0, !is.na(population_proportion), population_proportion < 1) %>%
-  left_join(region %>% select(region, iso3)) %>%
+  left_join(region %>% dplyr::select(region, iso3)) %>%
   mutate(
     logit_proportion = logit(population_proportion),
     method = factor(method, levels=c("3S-CRC", unique(pse_dat$method)[unique(pse_dat$method) != "3S-CRC" & !is.na(unique(pse_dat$method))]))
   ) %>%
   ungroup %>%
-  select(iso3, year, kp, method, simple_method, logit_proportion, population_proportion, ref) %>%
+  dplyr::select(iso3, year, kp, method, simple_method, logit_proportion, population_proportion, ref) %>%
   filter(iso3 != "LBR",
          !(iso3 == "BFA" & kp == "PWID"))
 
@@ -121,7 +121,7 @@ res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
                        id.ref = ifelse(is.na(ref), NA, id.ref)) %>%
                 ungroup) %>%
     left_join(geographies %>% st_drop_geometry()) %>%
-    select(iso3, logit_proportion, method, id.iso3, id.ref)
+    dplyr::select(iso3, logit_proportion, method, id.iso3, id.ref)
   
   pse_formula <- logit_proportion ~ 
     f(id.iso3, model = "besag", scale.model = TRUE, graph = "national_level_adj.adj", hyper=spatial.prec.prior) +
@@ -135,23 +135,8 @@ res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
                     control.predictor=list(compute=TRUE),
                     verbose = FALSE)
   
-  # log_prec_spatial <- fsw_fit$internal.marginals.hyperpar$`Log precision for id.iso3`
-  # hist(log_prec_spatial)
-  # data.frame(log_prec_spatial) %>%
-  #   ggplot() +
-  #     geom_line(aes(x=x, y=y), color="red") +
-  #     geom_density(data = data.frame(x=rnorm(1000, -0.75, 0.4)), aes(x=x))
-  
-  # log_prec_ref <- fsw_fit$internal.marginals.hyperpar$`Log precision for id.ref`
-  # 
-  # data.frame(log_prec_ref) %>%
-  #   ggplot() +
-  #     geom_line(aes(x=x, y=y), color="red") +
-  #     geom_density(data = data.frame(x=rnorm(1000, 1.6, 0.5)), aes(x=x))
-  
   fitted_val <- get_mod_results_test(fit, pse_inla, "logit_proportion")
   
-  # invlogit <- function(x) {exp(x)/(1+exp(x))}
   
   out <- list()
   
@@ -161,7 +146,7 @@ res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   
   out$fixed <- data.frame(fit$summary.fixed) %>%
     rownames_to_column() %>%
-    select(rowname, starts_with("X")) %>%
+    dplyr::select(rowname, starts_with("X")) %>%
     type.convert(as.is = FALSE) %>%
     mutate(kp = kp_id)
   
@@ -169,91 +154,21 @@ res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
 
 })
 
-######################
 
-# pse_inla <- crossing(iso3 = ssa_iso3) %>%
-#   bind_rows(pse_dat %>%
-#               filter(kp == "MSM") %>%
-#               mutate(method = factor(method)) %>%
-#               group_by(ref) %>%
-#               mutate(id.ref = cur_group_id(),
-#                      id.ref = ifelse(is.na(ref), NA, id.ref)) %>%
-#               ungroup) %>%
-#   mutate(idx = row_number(),
-#          id.iso3 = as.numeric(factor(iso3))) %>%
-#   select(iso3, logit_proportion, method, id.iso3, id.ref)
-#  
-# msm_fit <- INLA::inla(pse_formula,
-#                       data = pse_inla,
-#                       family = "gaussian", 
-#                       control.compute = list(config = TRUE),
-#                       control.predictor=list(compute=TRUE),
-#                       verbose = FALSE)
-# 
-# fitted_val <- get_mod_results_test(msm_fit, pse_inla, "logit_proportion")
-# 
-# invlogit <- function(x) {exp(x)/(1+exp(x))}
-# 
-# msm_val <- fitted_val %>%
-#   mutate(across(c(lower, median, upper), invlogit))
-# 
-# ######################
-# 
-# pse_inla <- crossing(iso3 = ssa_iso3) %>%
-#   bind_rows(pse_dat %>%
-#               filter(kp == "PWID") %>%
-#               mutate(method = factor(method)) %>%
-#               group_by(ref) %>%
-#               mutate(id.ref = cur_group_id(),
-#                      id.ref = ifelse(is.na(ref), NA, id.ref)) %>%
-#               ungroup) %>%
-#   mutate(idx = row_number(),
-#          id.iso3 = as.numeric(factor(iso3))) %>%
-#   select(iso3, logit_proportion, method, id.iso3, id.ref)
-# 
-# prec.prior <- list(prec= list(prior = "normal", param = c(0.4, 6.25)))
-# 
-# # pwid_pse_formula <- logit_proportion ~ f(id.iso3, model = "besag",
-# #                                     scale.model = TRUE,
-# #                                     graph = "national_level_adj.adj",
-# #                                     hyper = prec.prior) + method
-# 
-# pwid_fit <- INLA::inla(pse_formula,
-#                       data = pse_inla,
-#                       family = "gaussian", 
-#                       control.compute = list(config = TRUE),
-#                       control.predictor=list(compute=TRUE),
-#                       verbose = FALSE)
-# 
-# fitted_val <- get_mod_results_test(pwid_fit, pse_inla, "logit_proportion")
-# 
-# pwid_val <- fitted_val %>%
-#   mutate(across(c(lower, median, upper), invlogit))
-# 
-# 
-# 
-# #######
-# 
-# pse_out <- fsw_val %>%
-#   mutate(kp = "FSW") %>%
-#   bind_rows(
-#     msm_val %>% mutate(kp = "MSM"),
-#     pwid_val %>% mutate(kp = "PWID")
-#   ) %>%
-#   mutate(area_name = countrycode(iso3, "iso3c", "country.name")) %>%
-#   select(iso3, area_name, kp, lower:upper) %>%
-#   left_join(region)
-
-pse_out <- lapply(res, "[[", "res") %>%
+pse_out <- bind_rows(pse_out,
+                     lapply(res, "[[", "res") %>%
   bind_rows() %>%
   mutate(area_name = countrycode(iso3, "iso3c", "country.name")) %>%
-  select(iso3, area_name, kp, lower:upper) %>%
-  left_join(region)
+  dplyr::select(iso3, area_name, kp, lower:upper) %>%
+  left_join(region) %>%
+  mutate(source = "Source")
+)
 
 # pse_out <- read_csv("R/Model/PSE/pse_estimates.csv")
-write.csv(pse_out, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_estimates.csv")
+write.csv(pse_out, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_estimates_full.csv")
 
-pse_method <- lapply(res, "[[", "fixed") %>%
+pse_method <- bind_rows(pse_method, 
+                        lapply(res, "[[", "fixed") %>%
   bind_rows() %>%
   filter(rowname != "(Intercept)") %>%
   mutate(rowname = str_remove(rowname, "method")) %>%
@@ -272,8 +187,9 @@ pse_method <- lapply(res, "[[", "fixed") %>%
                               c("3S-CRC", "2S-CRC", "Multiplier", "PLACE/Mapping", "SS-PSE", "Multiple methods - empirical", "Multiple methods - mixture"))
   ) %>%
   arrange(method) %>%
-  select(method, kp, est, n_studies, n)
-
+  dplyr::select(method, kp, est, n_studies, n) %>%
+  mutate(source = "Sourced")
+)
 write_csv(pse_method, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_method.csv")
 
   ggplot(aes(x=kp)) +
@@ -290,7 +206,7 @@ pse_out %>%
   bind_rows(foo) %>%
   # filter(source == "Surveillance only") %>%
   # left_join(pse_dat %>%
-  #             select(iso3, kp) %>%
+  #             dplyr::select(iso3, kp) %>%
   #             distinct() %>%
   #             mutate(has_data = 1)) %>%
   mutate(has_data = ifelse(is.na(has_data), "No data", "Data")) %>%
@@ -339,7 +255,7 @@ reg_med <- pse_out %>%
     filter(source == "Surveillance only") %>%
     left_join(region) %>%
     left_join(pse_dat %>%
-                select(iso3, kp) %>%
+                dplyr::select(iso3, kp) %>%
                 distinct() %>%
                 mutate(has_data = 1)) %>%
     mutate(has_data = ifelse(is.na(has_data), "No data", "Data")) %>%

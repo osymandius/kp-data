@@ -44,7 +44,7 @@ resources:
   - merge_cities.geojson
 
 depends:
-  aaa_inputs_orderly_pull:
+  aaa_areas_pull:
     id: latest(parameter:iso3 == iso3)
     use:
       depends/naomi_areas.geojson: naomi_areas.geojson

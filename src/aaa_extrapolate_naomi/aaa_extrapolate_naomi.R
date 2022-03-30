@@ -34,7 +34,9 @@ indicators <- add_output_labels(out) %>%
 
 prev <- read_csv("depends/prev_assigned_province.csv", show_col_types = FALSE) %>%
   mutate(indicator = "HIV prevalence",
+         # age_group = NA, ## COMMENT OUT!!!!
          iso3 = iso3)
+  # select(iso3, area_id, area_name, year, indicator, ref, method, denominator, value, kp, row_id, age_group)
 
 if(nrow(prev))
   prev <- prev %>%
@@ -46,10 +48,14 @@ art <- read_csv("depends/art_assigned_province.csv", show_col_types = FALSE) %>%
 
 if(nrow(art))
   art <- art %>%
-    left_join(areas %>% select(area_id, province = area_name) %>% st_drop_geometry())
+    left_join(areas %>% select(area_id, province = area_name) %>% st_drop_geometry()) %>%
+    group_by(row_id) %>%
+    mutate(province = ifelse(length(unique(province)) > 1, NA_character_, province))
 
 
 dat <- list("prev" = prev, "art" = art)
+
+# dat <- list("prev" = prev)
 
 lvl_map <- read.csv("resources/iso_mapping_fit.csv")
 admin1_lvl <- lvl_map$admin1_level[lvl_map$iso3 == iso3]
@@ -115,8 +121,8 @@ out <- lapply(dat, function(x) {
       group_by(row_id) %>%
       mutate(province = ifelse(length(unique(province)) > 1, NA_character_, province)) %>%
       rename(provincial_value = mean) %>%
-      group_by(across(-c(provincial_value, area_id))) %>%
-      summarise(provincial_value = mean(provincial_value)) %>%
+      group_by(across(-c(lower, provincial_value, upper, area_id))) %>%
+      summarise(provincial_value = median(provincial_value)) %>%
       mutate(ratio = value/provincial_value) %>%
       ungroup()
   } else {
@@ -128,7 +134,7 @@ out <- lapply(dat, function(x) {
 if(nrow(out$prev)) {
   out_prev_model <- out$prev %>%
     filter(across(any_of("is_aggregate"), is.na)) %>%
-    select(iso3, year, kp, method, age_group, has_age, value, denominator, provincial_value, ratio, ref)
+    select(iso3, year, kp, age_group, method, denominator, has_age, value, provincial_value, ratio, ref)
 } else {
   out_prev_model <- data.frame(x = character()) 
 }
@@ -147,6 +153,7 @@ write_csv(out_art_model, "art.csv")
 
 if(nrow(prev)) {
   workbook_export_prev <- prev %>%
+    distinct(iso3, data_checked, country.name, method, kp, area_name, province, year, prev_lower, value, prev_upper, denominator, ref, link) %>%
     mutate(indicator = "HIV prevalence") %>%
     rename(prop_lower = prev_lower,
            prop = value,
@@ -171,11 +178,13 @@ if(nrow(prev)) {
     ) %>%
     select(all_of(c("country.name", "data_checked", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "province", "year", "pse_lower", "pse", "pse_upper", "population", "prop_lower", "prop", "prop_upper", "denominator", "notes", "ref", "link")))
 } else {
-  workbook_export_prev <- data.frame(x = character()) 
+  workbook_export_prev <- data.frame(x = character())
 }
 
 if(nrow(art)) {
   workbook_export_art <- art %>%
+    ungroup() %>%
+    distinct(iso3, data_checked, country.name, method, kp, area_name, province, year, art_lower, value, art_upper, denominator, ref, link) %>%
     mutate(indicator = "ART coverage") %>%
     rename(prop_lower = art_lower,
            prop = value,
@@ -200,7 +209,7 @@ if(nrow(art)) {
     ) %>%
     select(all_of(c("country.name", "data_checked", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "province", "year", "pse_lower", "pse", "pse_upper", "population", "prop_lower", "prop", "prop_upper", "denominator", "notes", "ref", "link")))
 } else {
-  workbook_export_art <- data.frame(x = character()) 
+  workbook_export_art <- data.frame(x = character())
 }
 
 

@@ -28,6 +28,13 @@ prev <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), share
 prev <- read_csv(prev, show_col_types = FALSE) %>%
   rename(value = prev) %>%
   mutate(iso3 = countrycode(country.name, "country.name", "iso3c"))
+# 
+# prev <- read_csv("msm_tg.csv") %>%
+#   filter(iso3 == iso3_c) %>%
+#   mutate(kp = "MSM") %>%
+#   rename(value = estimate_MSM) %>%
+#   select(-idx) %>%
+#   ungroup()
 
 art_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/ART coverage", "art_clean.csv")
 art <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = art_path)
@@ -38,6 +45,10 @@ art <- read_csv(art, show_col_types = FALSE) %>%
   select(-age_group_label)
 
 dat <- list("prev" = prev, "art" = art)
+
+# dat <- list("prev" = prev)
+# 
+# x <- prev
 
 out <- lapply(dat, function(x) {
 
@@ -67,7 +78,9 @@ out <- lapply(dat, function(x) {
   
   min_dist <- x %>%
     select(iso3, area_name, year, kp, row_id) %>%
-    mutate(area_name = str_replace_all(area_name, "\\,|\\/| and ", "\\;")) %>%
+    mutate(area_name = str_replace_all(area_name, "\\,|\\/| and ", "\\;"),
+           area_name = str_replace_all(area_name, "\\;\\;", "\\;")
+           ) %>%
     distinct() %>%
     separate(area_name, sep = ";", into = paste0("area_split", 1:20), remove=FALSE) %>%
     mutate(across(starts_with("area_split"), ~str_trim(.x))) %>%
@@ -137,7 +150,7 @@ out <- lapply(dat, function(x) {
   
   
   best_matches <- best_matches %>%
-    select(row_id, area_id, area_level, geometry) %>%
+    select(row_id, idx, area_id, area_level, geometry) %>%
     mutate(area_level = case_when(
       str_detect(area_id, "_1_") ~ as.integer(1),
       TRUE ~ as.integer(area_level)
@@ -147,13 +160,15 @@ out <- lapply(dat, function(x) {
     filter(area_level > admin1_lvl) %>%
     st_as_sf() %>%
     st_make_valid() %>%
-    select(-area_id) %>%
+    select(-c(area_id, area_level)) %>%
     st_join(areas %>% filter(area_level == admin1_lvl) %>% select(area_id) %>% st_make_valid(), largest=TRUE)
   
   assigned_province <- best_matches %>%
-    filter(!row_id %in% naomi_to_admin1$row_id) %>%
+    # filter(!row_id %in% naomi_to_admin1$row_id) %>%
+    filter(!idx %in% naomi_to_admin1$idx) %>%
     bind_rows(naomi_to_admin1) %>%
-    select(row_id, area_id)
+    select(row_id, idx, area_id) %>%
+    arrange(row_id, idx)
   
   x <- x %>%
     left_join(assigned_province) %>%

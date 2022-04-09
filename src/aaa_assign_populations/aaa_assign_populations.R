@@ -68,6 +68,19 @@ population <- population %>%
       ungroup()
   )
 
+extrap_pop <- population %>%
+  filter(year %in% 2015:2020) %>%
+  group_by(iso3, area_id, area_name, age_group, sex) %>%
+  mutate(
+    population = log(population),
+    population = exp(Hmisc::approxExtrap(year, population, xout = 2020:2025)$y),
+    year = year + 5)
+
+population <- bind_rows(
+  population,
+  extrap_pop
+)
+
 
 # cities_areas <- merge_cities %>%
 #   bind_rows(areas)
@@ -76,11 +89,13 @@ pse_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/
 pse <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = pse_path)
 pse <- read_csv(pse) 
 
+# pse <- read.csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_spreadsheet_cleaned_sourced.csv")
+
 pse <- pse %>%
   # bind_rows(gf_pse) %>%
   mutate(iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
   filter(iso3 == iso3_c) %>%
-  dplyr::select(iso3:pse_upper, ref, data_checked, uid) %>%
+  dplyr::select(iso3:pse_upper, area_level, ref, data_checked, uid) %>%
   mutate(sex = case_when(
     kp %in% c("FSW", "TG") ~ "female",
     kp == "MSM" ~ "male",
@@ -93,23 +108,40 @@ pse <- pse %>%
 if(nrow(pse)) {
   
   pse_areas <- pse %>%
-    dplyr::select(iso3, area_name, year, kp, row_id) %>%
+    dplyr::select(iso3, area_name, area_level, year, kp, row_id) %>%
     mutate(
       area_name = str_replace_all(area_name, "\\,\\,|\\,|\\/", "\\;")) %>%
     distinct() %>%
     separate(area_name, sep = ";", into = paste0("area_split", 1:20), remove=FALSE) %>%
     mutate(across(starts_with("area_split"), ~str_trim(.x))) %>%
-    pivot_longer(-c(iso3, area_name, year, row_id, kp)) %>%
+    pivot_longer(-c(iso3, area_name, area_level, year, row_id, kp)) %>%
     filter(!is.na(value)) %>%
     mutate(idx = row_number(),
            value = tolower(value)) %>%
     rename(given_area = area_name)
   
-  min_dist <- pse_areas %>%
-    full_join(population %>% dplyr::select(iso3, area_name, area_id) %>% distinct(), by="iso3")  %>%
+  min_dist_area_level <- pse_areas %>%
+    filter(!is.na(area_level)) %>%
+    full_join(areas %>% 
+                mutate(iso3 = iso3_c) %>%
+                select(iso3, area_name, area_level, area_id) %>% 
+                st_drop_geometry(), by=c("iso3", "area_level"))  %>%
     mutate(dist = stringdist::stringdist(value, tolower(area_name))) %>%
     group_by(idx) %>%
     filter(dist == min(dist)) 
+  
+  min_dist <- pse_areas %>%
+    filter(is.na(area_level)) %>%
+    select(-area_level) %>%
+    full_join(areas %>% 
+                mutate(iso3 = iso3_c) %>%
+                select(iso3, area_name, area_level, area_id) %>% 
+                st_drop_geometry(), by="iso3")  %>%
+    mutate(dist = stringdist::stringdist(value, tolower(area_name))) %>%
+    group_by(idx) %>%
+    filter(dist == min(dist)) 
+  
+  min_dist <- bind_rows(min_dist, min_dist_area_level)
   
   best_matches <- min_dist %>%
     filter(n() == 1, dist<3) %>%

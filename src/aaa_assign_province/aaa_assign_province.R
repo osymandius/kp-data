@@ -21,9 +21,9 @@ cities_areas <- merge_cities %>%
   st_join(areas %>% filter(area_level == admin1_lvl) %>% select(area_id) %>% st_make_valid(), largest=TRUE) %>%
   bind_rows(areas)
   
-sharepoint <- spud::sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
+sharepoint <- sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
 
-prev_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/HIV prevalence", "prev_clean.csv")
+prev_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/HIV prevalence", "prev_clean_sourced.csv")
 prev <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = prev_path)
 prev <- read_csv(prev, show_col_types = FALSE) %>%
   rename(value = prev) %>%
@@ -36,7 +36,7 @@ prev <- read_csv(prev, show_col_types = FALSE) %>%
 #   select(-idx) %>%
 #   ungroup()
 
-art_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/ART coverage", "art_clean.csv")
+art_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/ART coverage", "art_clean_sourced.csv")
 art <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = art_path)
 art <- read_csv(art, show_col_types = FALSE) %>%
   rename(value = art) %>%
@@ -52,29 +52,9 @@ dat <- list("prev" = prev, "art" = art)
 
 out <- lapply(dat, function(x) {
 
-  # cities_areas <- merge_cities %>%
-  #   bind_rows(areas)
-  
-  # x <- data.frame(
-  #   iso3 = "BEN",
-  #   area_name = "Alibori, Atacora",
-  #   year = 2010,
-  #   kp = "FSW"
-  # )
-  
   x <- x %>%
     mutate(row_id = row_number()) %>%
     filter(iso3 == iso3_c)
-  
-  # min_dist <- x %>%
-  #   select(iso3, area_name, year, kp, row_id) %>%
-  #   # filter(!str_detect(area_name, "\\,|\\;|\\&|\\+\\/")) %>%
-  #   mutate(area_name = tolower(area_name)) %>%
-  #   rename(given_area = area_name) %>%
-  #   left_join(cities_areas, by="iso3") %>%
-  #   mutate(dist = stringdist::stringdist(given_area, tolower(area_name))) %>%
-  #   group_by(row_id) %>%
-  #   filter(dist == min(dist))
   
   min_dist <- x %>%
     select(iso3, area_name, year, kp, row_id) %>%
@@ -171,6 +151,7 @@ out <- lapply(dat, function(x) {
     arrange(row_id, idx)
   
   x <- x %>%
+    select(-any_of("idx")) %>%
     left_join(assigned_province) %>%
     # select(row_id, kp, year, age_group, area_id, value, denominator, ref) %>%
     filter(!is.na(area_id))

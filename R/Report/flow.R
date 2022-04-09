@@ -98,29 +98,29 @@ pse_spreadsheet_extract <- pse_spreadsheet_extract %>%
 
 #Remove extrapolated values
 pse_remove_label$model <- pse_spreadsheet_extract %>%
-  filter(str_detect(method, regex("extrapolat", ignore_case = TRUE))) %>%
+  filter(str_detect(method, regex("extrapolat|modelled", ignore_case = TRUE))) %>%
   nrow()
 
 pse_remove_label$model <- paste0("Extrapolated/modelled data (n = ", pse_remove_label$model, ")")
 
 pse_spreadsheet_extract <- pse_spreadsheet_extract %>%
-  filter(!(str_detect(method, regex("extrapolat", ignore_case = TRUE)) & data_checked != "yes") | is.na(method))
+  filter(!(str_detect(method, regex("extrapolat|modelled", ignore_case = TRUE)) & data_checked != "yes") | is.na(method))
 
 #Remove non-empirical methods
 pse_remove_label$non_emp <- pse_spreadsheet_extract %>%
-  filter(str_detect(method, regex("enumeration|delphi", ignore_case = TRUE))) %>%
+  filter(str_detect(method, regex("enumeration|delphi|wisdom|WOTC|WODC", ignore_case = TRUE))) %>%
   nrow()
 
 pse_remove_label$non_emp <- paste0("Non-empirical methods (n = ", pse_remove_label$non_emp, ")")
 
 pse_spreadsheet_extract <- pse_spreadsheet_extract %>%
-  filter(!str_detect(method, regex("enumeration|delphi", ignore_case = TRUE)) | is.na(method))
+  filter(!str_detect(method, regex("enumeration|delphi|wisdom|WOTC|WODC", ignore_case = TRUE)) | is.na(method))
 
-#Remove outliers
-pse_remove_label$outlier <- NA
-
-#Remove unconfirmed data
-pse_remove_label$unconf <- NA
+# #Remove outliers
+# pse_remove_label$outlier <- NA
+# 
+# #Remove unconfirmed data
+# pse_remove_label$unconf <- NA
 
 # pse_spreadsheet_extract %>%
 #   filter(!data_checked %in% c("yes", "remove"),
@@ -156,6 +156,10 @@ unknown <- pse_spreadsheet_extract %>%
   ) %>%
   mutate(data_checked = "No")
 
+pse_remove_label$unsourced <- paste0("Unsourced (n = ", nrow(unknown), ")")
+# 
+# View(filter(pse_spreadsheet_extract, !idx %in% c(truly_checked$idx, mapped_place$idx, unknown$idx)) %>% select(data_checked, source_found, everything()) %>% filter(year > 2009))
+
 pse_cleaned_data <- bind_rows(truly_checked, mapped_place) %>%
   mutate(kp = ifelse(kp == "TGW", "TG", kp)) %>%
   filter(kp %in% c("FSW", "MSM", "PWID", "TG"))
@@ -184,7 +188,8 @@ pse_final <- lapply(paste0("archive/aaa_assign_populations/", pse_id[!is.na(pse_
        read_csv, show_col_types = FALSE) %>%
   bind_rows() %>%
   filter(is.na(x),
-         !is.na(population_proportion)
+         !is.na(population_proportion),
+         method != "Extrapolation from 2S-CRC"
   ) %>%
   mutate(
     iso3 = countrycode(country.name, "country.name", "iso3c"),
@@ -221,6 +226,7 @@ pse_final <- lapply(paste0("archive/aaa_assign_populations/", pse_id[!is.na(pse_
                     "RDS",
                     "Snowball",
                     "Triangulation",
+                    "Social event, wisdom of the crowds, capture-recapture, unique object multiplier and service multiplier",
                     "Wisdom of the masses, unique object multiplier and social event"
                     
       ) ~ "Multiple methods - mixture",
@@ -237,6 +243,7 @@ pse_final <- lapply(paste0("archive/aaa_assign_populations/", pse_id[!is.na(pse_
                     "Unique object, social, service",
                     "Consensus (SS-PSE, unique object, multiplier, 1% recommendation)",
                     "Consensus (SS-PSE, unique object, multiplier)",
+                    "Social event, unique object multiplier and service multiplier",
                     "Bayesian synthesis (SS-PSE, literature, something else)"
                     
                     
@@ -266,7 +273,7 @@ pse_final_text <- pse_final %>%
   select(name, n, everything())
 
 pse_remove_label$denom <- nrow(pse_cleaned_data) - nrow(pse_final)
-pse_remove_label$denom <- paste0("No population denominator (n = ", pse_remove_label$denom, ")")
+pse_remove_label$denom <- paste0("No area match (n = ", pse_remove_label$denom, ")")
 
 pse_final_labels <- collapse(pse_final_text)
 
@@ -276,45 +283,59 @@ saveRDS(pse_inputs_text, "R/Report/R objects for report/PSE/pse_input_count_text
 
 pse_flow <- grViz("
 digraph a_nice_graph {
-
-# node definitions with substituted label text
-  node [fontname = Helvetica, fontcolor = darkslategray,
-        shape = rectangle, color = darkslategray]
-inp_gam [label = '@@1-1']
-inp_atlas [label = '@@1-2']
-inp_gf [label = '@@1-3']
-inp_cdc [label = '@@1-4']
-inp_surv [label = '@@1-5']
-inp_total [label = '@@1-6']
-m1_dedup [label = '@@2-1']
-m2_nonspec [label = '@@2-2']
-m3_model [label = '@@2-3']
-m4_non_emp [label = '@@2-4']
-clean [label = '@@3']
-c1_denom [label = '@@2-7']
-final [label = '@@4']
-
-node [shape=none, width=0, height=0, label='']
-  p4 -> clean
+  
+    subgraph cluster_0 {
+    # style=filled;
+    # color=lightgrey;
+  node [fontname = Helvetica, fontcolor = darkslategray,shape = rectangle, color = darkslategray]
+    inp_gam [label = '@@1-1']
+    inp_atlas [label = '@@1-2'];
+    inp_gf [label = '@@1-3'];
+    inp_cdc [label = '@@1-4'];
+    inp_surv [label = '@@1-5'];
+    
+  node [shape=none, width=0, height=0, label='']
+    p0
+    
+    edge [dir = none, style=invis]
+      p0 -> inp_cdc;
+      {rank = same; inp_gam -> p0 -> inp_atlas};
+      {rank = same; inp_gf -> inp_cdc -> inp_surv};
+  
+    label = 'Data sources';
+    }
+    
+  node [fontname = Helvetica, fontcolor = darkslategray,shape = rectangle, color = darkslategray]
+  inp_total [label = '@@1-6']
+  m1_dedup [label = '@@2-1']
+  m2_nonspec [label = '@@2-2']
+  m3_model [label = '@@2-3']
+  m4_non_emp [label = '@@2-4']
+  m5_unsourced [label = '@@2-5']
+  clean [label = '@@3']
+  c1_denom [label = '@@2-7']
+  final [label = '@@4']
+    
+  node [shape=none, width=0, height=0, label='']
+  p5 -> clean
   p7 -> final
   {rank=same; p1 -> m1_dedup}
   {rank=same; p2 -> m2_nonspec}
   {rank=same; p3 -> m3_model}
   {rank=same; p4 -> m4_non_emp}
+  {rank=same; p5 -> m5_unsourced}
   {rank=same; p7 -> c1_denom}
-
-{inp_gam inp_atlas inp_cdc inp_gf inp_surv} -> inp_total
-
-# edge definitions with the node IDs
-edge [dir = none]
-  inp_total -> p1;
-  p1 -> p2;
-  p2 -> p3;
-  p3 -> p4;
-  clean -> p7
   
- 
+  inp_cdc -> inp_total;
 
+  edge [dir = none]
+    inp_total -> p1;
+    p1 -> p2;
+    p2 -> p3;
+    p3 -> p4;
+    p4 -> p5;
+    clean -> p7
+    
 }
 
 [1]: pse_inputs_labels
@@ -322,6 +343,7 @@ edge [dir = none]
 [3]: pse_clean_labels
 [4]: pse_final_labels
 ")
+
 
 
 library(DiagrammeRsvg)
@@ -443,7 +465,7 @@ prev_spreadsheet_extract <- prev_spreadsheet_extract %>%
   filter(!str_detect(area_name, regex("urban|rural|county|counties|districts|state|total", ignore_case = TRUE)))
 
 # Remove outliers
-prev_remove_label$unconf <- NA
+# prev_remove_label$unconf <- NA
 
 # prev_spreadsheet_extract %>%
 #   filter(!data_checked %in% c("yes", "remove"),
@@ -475,7 +497,9 @@ prev_remove_label$unconf <- NA
 #   mutate(country = countrycode(iso3, "iso3c", "country.name")) %>%
 #   write_csv("~/Downloads/missing_prev_iso.csv", na = "")
 # 
-
+prev_spreadsheet_extract <- prev_spreadsheet_extract %>%
+  ungroup() %>%
+  mutate(idx = row_number())
 
 prev_checked <- prev_spreadsheet_extract %>%
   filter(data_checked == "yes",
@@ -490,17 +514,25 @@ prev_unknown <- prev_spreadsheet_extract %>%
   ) %>%
   mutate(data_checked = "No")
 
-prev_cleaned_data <- bind_rows(prev_checked, prev_unknown) %>%
+prev_unknown %>%
+  filter(kp == "PWID") %>%
+  write_csv("~/Downloads/Louisa export/prev_unsourced.csv")
+
+prev_remove_label$unsourced <- paste0("Unsourced (n = ", nrow(prev_unknown), ")")
+
+View(filter(prev_spreadsheet_extract, !idx %in% c(prev_checked$idx, prev_unknown$idx)) %>% select(data_checked, source_found, everything()) %>% filter(year > 2009))
+
+prev_cleaned_data <- bind_rows(prev_checked) %>%
   mutate(kp = ifelse(kp == "TGW", "TG", kp),
          method = case_when(
            method %in% c("Lab") ~ "lab",
            method %in%c("Self report", "self-report", "Self-report") ~ "selfreport",
-           method == "Unknown" ~ NA_character_,
+           method == "Unknown" ~ "selfreport",
            TRUE ~ method
          )) %>%
   filter(kp %in% c("FSW", "MSM", "PWID", "TG"))
 
-write_csv(prev_cleaned_data, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_clean.csv")
+write_csv(prev_cleaned_data, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_clean_sourced.csv")
 
 prev_cleaned_text <- prev_cleaned_data %>%
   count(kp) %>%
@@ -540,44 +572,67 @@ prev_remove_label$denom <- paste0("No area match (n = ", prev_remove_label$denom
 prev_final_labels <- collapse(prev_final_text)
 
 saveRDS(prev_final_text, "R/Report/R objects for report/Prevalence/prev_count_text.rds")
-write_csv(prev_final, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_final.csv")
+write_csv(prev_final, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_final_sourced.csv")
 saveRDS(prev_inputs_text, "R/Report/R objects for report/Prevalence/prev_input_count_text.rds")
+
+# subgraph input_cluster {
+#   node [fontname = Helvetica, fontcolor = darkslategray, shape = rectangle, color = darkslategray];
+#   inp_gam [label = '@@1-1'];
+#   inp_atlas [label = '@@1-2'];
+#   inp_gf [label = '@@1-3'];
+#   inp_cdc [label = '@@1-4'];
+#   inp_surv [label = '@@1-5'];
+# }
 
 prev_flow <- grViz("
 digraph a_nice_graph {
-
-# node definitions with substituted label text
-  node [fontname = Helvetica, fontcolor = darkslategray,
-        shape = rectangle, color = darkslategray]
-inp_gam [label = '@@1-1']
-inp_atlas [label = '@@1-2']
-inp_gf [label = '@@1-3']
-inp_cdc [label = '@@1-4']
-inp_surv [label = '@@1-5']
-inp_total [label = '@@1-6']
-m1_dedup [label = '@@2-1']
-m2_nonspec [label = '@@2-2']
-clean [label = '@@3']
-c1_denom [label = '@@2-6']
-final [label = '@@4']
-
-node [shape=none, width=0, height=0, label='']
-  p2 -> clean
-  p6 -> final
-  {rank=same; p1 -> m1_dedup}
-  {rank=same; p2 -> m2_nonspec}
-  {rank=same; p6 -> c1_denom}
-
-{inp_gam inp_atlas inp_cdc inp_gf inp_surv} -> inp_total
-
-# edge definitions with the node IDs
-edge [dir = none]
-  inp_total -> p1;
-  p1 -> p2;
-  clean -> p6
   
- 
+    subgraph cluster_0 {
+    # style=filled;
+    # color=lightgrey;
+  node [fontname = Helvetica, fontcolor = darkslategray,shape = rectangle, color = darkslategray]
+    inp_gam [label = '@@1-1']
+    inp_atlas [label = '@@1-2'];
+    inp_gf [label = '@@1-3'];
+    inp_cdc [label = '@@1-4'];
+    inp_surv [label = '@@1-5'];
+    
+  node [shape=none, width=0, height=0, label='']
+    p0
+    
+    edge [dir = none, style=invis]
+      p0 -> inp_cdc;
+      {rank = same; inp_gam -> p0 -> inp_atlas};
+      {rank = same; inp_gf -> inp_cdc -> inp_surv};
+  
+    label = 'Data sources';
+    }
+    
+  node [fontname = Helvetica, fontcolor = darkslategray,shape = rectangle, color = darkslategray]
+  inp_total [label = '@@1-6']
+  m1_dedup [label = '@@2-1']
+  m2_nonspec [label = '@@2-2']
+  m3_unsourced [label = '@@2-3']
+  clean [label = '@@3']
+  c1_denom [label = '@@2-6']
+  final [label = '@@4']
+    
+  node [shape=none, width=0, height=0, label='']
+  p3 -> clean;
+  p6 -> final;
+  {rank=same; p1 -> m1_dedup};
+  {rank=same; p2 -> m2_nonspec};
+  {rank=same; p3 -> m3_unsourced};
+  {rank=same; p6 -> c1_denom};
+  
+  inp_cdc -> inp_total;
 
+  edge [dir = none]
+    inp_total -> p1;
+    p1 -> p2;
+    p2 -> p3;
+    clean -> p6;
+    
 }
 
 [1]: prev_inputs_labels
@@ -586,10 +641,12 @@ edge [dir = none]
 [4]: prev_final_labels
 ")
 
+
 prev_flow %>%
   export_svg %>% 
   charToRaw %>% 
   rsvg::rsvg_png("R/Report/R objects for report/Prevalence/prev_flowchart.png")
+
 
 
 #### ART coverage
@@ -704,7 +761,7 @@ art_spreadsheet_extract <- art_spreadsheet_extract %>%
   filter(!str_detect(area_name, regex("urban|rural|county|counties|districts|state|total", ignore_case = TRUE)))
 
 # Remove outliers
-art_remove_label$unconf <- NA
+# art_remove_label$unconf <- NA
 
 # art_spreadsheet_extract %>%
 #   filter(!data_checked %in% c("yes", "remove"),
@@ -727,7 +784,9 @@ art_unknown <- art_spreadsheet_extract %>%
   ) %>%
   mutate(data_checked = "No")
 
-art_cleaned_data <- bind_rows(art_checked, art_unknown) %>%
+art_remove_label$unsourced <- paste0("Unsourced (n = ", nrow(art_unknown), ")")
+
+art_cleaned_data <- bind_rows(art_checked) %>%
   mutate(kp = ifelse(kp == "TGW", "TG", kp),
          art = ifelse(method == "VLS" & !is.na(method), art/.9, art),
          art_lower = ifelse(method == "VLS" & !is.na(method), art_lower/.9, art_lower),
@@ -742,7 +801,7 @@ art_cleaned_data <- bind_rows(art_checked, art_unknown) %>%
          ) %>%
   filter(kp %in% c("FSW", "MSM", "PWID", "TG"))
 
-write_csv(art_cleaned_data, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_clean.csv")
+write_csv(art_cleaned_data, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_clean_sourced.csv")
 
 art_cleaned_text <- art_cleaned_data %>%
   count(kp) %>%
@@ -793,37 +852,46 @@ saveRDS(art_inputs_text, "R/Report/R objects for report/ART coverage/art_input_c
 
 art_flow <- grViz("
 digraph a_nice_graph {
-
-# node definitions with substituted label text
-  node [fontname = Helvetica, fontcolor = darkslategray,
-        shape = rectangle, color = darkslategray]
-inp_atlas [label = '@@1-1']
-inp_gf [label = '@@1-2']
-inp_surv [label = '@@1-3']
-inp_total [label = '@@1-4']
-m1_dedup [label = '@@2-1']
-m2_nonspec [label = '@@2-2']
-clean [label = '@@3']
-c1_denom [label = '@@2-6']
-final [label = '@@4']
-
-node [shape=none, width=0, height=0, label='']
-  p2 -> clean
-  p6 -> final
-  {rank=same; p1 -> m1_dedup}
-  {rank=same; p2 -> m2_nonspec}
-  {rank=same; p6 -> c1_denom}
-
-{inp_atlas inp_gf inp_surv} -> inp_total
-
-# edge definitions with the node IDs
-edge [dir = none]
-  inp_total -> p1;
-  p1 -> p2;
-  clean -> p6
   
- 
+    subgraph cluster_0 {
+    # style=filled;
+    # color=lightgrey;
+  node [fontname = Helvetica, fontcolor = darkslategray,shape = rectangle, color = darkslategray]
+    inp_atlas [label = '@@1-1'];
+    inp_gf [label = '@@1-2'];
+    inp_surv [label = '@@1-3'];
+    
+    edge [dir = none, style=invis]
+      {rank = same; inp_atlas -> inp_gf -> inp_surv};
+  
+    label = 'Data sources';
+    }
+    
+  node [fontname = Helvetica, fontcolor = darkslategray,shape = rectangle, color = darkslategray]
+  inp_total [label = '@@1-6']
+  m1_dedup [label = '@@2-1']
+  m2_nonspec [label = '@@2-2']
+  m3_unsourced [label = '@@2-3']
+  clean [label = '@@3']
+  c1_denom [label = '@@2-6']
+  final [label = '@@4']
+    
+  node [shape=none, width=0, height=0, label='']
+  p3 -> clean;
+  p6 -> final;
+  {rank=same; p1 -> m1_dedup};
+  {rank=same; p2 -> m2_nonspec};
+  {rank=same; p3 -> m3_unsourced};
+  {rank=same; p6 -> c1_denom};
+  
+  inp_gf -> inp_total;
 
+  edge [dir = none]
+    inp_total -> p1;
+    p1 -> p2;
+    p2 -> p3;
+    clean -> p6;
+    
 }
 
 [1]: art_inputs_labels
@@ -832,7 +900,11 @@ edge [dir = none]
 [4]: art_final_labels
 ")
 
+
+
 art_flow %>%
   export_svg %>% 
   charToRaw %>% 
   rsvg::rsvg_png("R/Report/R objects for report/ART coverage/art_flowchart.png")
+
+######

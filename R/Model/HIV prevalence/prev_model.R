@@ -25,11 +25,14 @@ get_mod_results_test <- function(mod, inla_df, var) {
   ident <- inla_df[ind.effect, ]
   
   qtls <- apply(sapply(samples.effect, cbind), 1, quantile, c(0.025, 0.5, 0.975))
+  sd <- apply(sapply(samples.effect, cbind), 1, sd)
   
   samples_ident <- ident %>%
-    mutate(lower = qtls[1,],
-           median = qtls[2,],
-           upper = qtls[3,]
+    mutate(
+      sd = sd,
+      lower = qtls[1,],
+      median = qtls[2,],
+      upper = qtls[3,]
     )
   
   return(samples_ident)
@@ -67,7 +70,7 @@ convert_logis_labels <- function(x) {
   paste0(round(plogis(x)*100, 1), "%")
 }
 
-prev_dat <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_final.csv")
+prev_dat <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_final_sourced.csv")
 
 imp_denomin <- prev_dat %>%
   filter(!is.na(denominator),

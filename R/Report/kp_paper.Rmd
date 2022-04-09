@@ -38,9 +38,9 @@ group_proportion <- function(df, variables) {
 invlogit <- function(x) {exp(x)/(1+exp(x))}
 logit <- function(x) {log(x/(1-x))}
 
-pse_final <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_final.csv")
+pse_final <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_final_sourced.csv")
 
-prev_final <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_final.csv")
+prev_final <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_final_sourced.csv")
 
 art_final <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_final.csv")
 
@@ -459,11 +459,13 @@ Following data cleaning, primary source review, and area matching, $`r nrow(art_
 
 ```{r include=FALSE}
 pse_estimates <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_estimates.csv") %>%
+  mutate(area_name = countrycode::countrycode(iso3, "iso3c", "country.name")) %>%
+  left_join(region) %>%
     mutate(region = ifelse(iso3 == "BDI", "ESA", region),
            four_region = ifelse(iso3 == "BDI", "Eastern", four_region)
            )
 
-pse_method <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_method.csv")
+pse_method <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_fixed.csv")
 
 pse_estimates <- pse_estimates %>%
   left_join(pse_final %>%
@@ -476,10 +478,10 @@ pse_estimates <- pse_estimates %>%
          has_data = factor(has_data, labels = c("No data", "Data")))
 
 iso3_sort <- pse_estimates %>%
-  distinct(iso3) %>%
+  distinct(area_name, iso3) %>%
   left_join(region) %>%
   arrange(four_region) %>%
-  mutate(iso3_idx = as.numeric(fct_inorder(iso3)))
+  mutate(iso3_idx = as.numeric(fct_inorder(area_name)))
 
 pse_estimates <- pse_estimates %>%
   select(-area_name) %>%
@@ -551,7 +553,11 @@ pse_maps <- lapply(c("FSW", "MSM", "PWID"), function(x) {
     scale_fill_gradientn(colours = pal, labels = scales::label_percent()) +
     labs(fill = "PSE proportion", title = x) +
     coord_sf(datum = NA) +
-    theme(legend.key.width = unit(1.5, "cm"),
+    theme_minimal() +
+    theme(
+      legend.position = "bottom",
+      # strip.text = 
+      legend.key.width = unit(1.5, "cm"),
           plot.title = element_text(hjust = 0.5, face = "bold", size=16))
   
 })
@@ -573,13 +579,13 @@ pse_estimates %>%
     geom_hline(data = data.frame(yintercept = 0.01, kp = "MSM", iso3 = c("AGO", "ZWE")), linetype = 3, aes(yintercept = yintercept), color="red") +
     scale_color_manual(values = c(wesanderson::wes_palette("Zissou1")[c(4,1)])) +
     scale_fill_manual(values = wesanderson::wes_palette("Zissou1")[c(4,1)])  +
-    scale_x_continuous(breaks = 1:38, labels = iso3_sort$iso3) +
+    scale_x_continuous(breaks = 1:37, labels = iso3_sort$area_name) +
     facet_grid(kp ~ factor(four_region, levels=c("Western", "Central", "Eastern", "Southern"), labels = c("Western Africa", "Central Africa", "Eastern Africa", "Southern Africa")), scales="free", space="free_x") +
     scale_y_log10(breaks = scales::log_breaks(), labels = scales::label_percent(accuracy = 0.001)) +
     coord_cartesian(ylim = c(0.00003, .1)) +
     labs(x=element_blank(), y="Population proportion", color = "Informed by:", shape = "Data reported\nas national") +
     moz.utils::standard_theme() +
-    theme(axis.text.x = element_text(size=10),
+    theme(axis.text.x = element_text(size=12, angle = 25, hjust=1),
           panel.background = element_rect(fill=NA, color="black"),
           strip.text = element_text(face = "bold"))
 
@@ -618,18 +624,21 @@ Estimates of key population HIV prevalence as estimated on the logit scale, on t
 
 The odds of self-reporting HIV status were significantly lower than biologically confirmed prevalence in FSW (OR 0.27; 95% CI 0.14-0.50) and MSM (OR 0.24; 95% CI 0.06-0.81), whilst no significant difference was found in PWID. 
 
-```{r echo=FALSE, warning = FALSE, message = FALSE, fig.cap = "Estimated key population prevalence as a function of total population prevalence on the estimated logit scale (left) and natural scale (right)", fig.height = 12, fig.width = 10, out.width = "100%", out.height = "90%"}
+```{r echo=FALSE, warning = FALSE, message = FALSE, fig.cap = "Estimated key population prevalence as a function of total population prevalence on the estimated logit scale (left) and natural scale (right)", fig.height = 11, fig.width = 10, out.width = "100%", out.height = "90%"}
 
-prev_estimates <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_estimates.csv", show_col_types = FALSE)
+prev_estimates <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_estimates.csv", show_col_types = FALSE) %>%
+  mutate(provincial_value = invlogit(logit_gen_prev),
+         logit_fit = logit(median),
+         logit_lower = logit(lower),
+         logit_upper = logit(upper),
+         fit = median)
 
 convert_logis_labels <- function(x) {
   paste0(round(plogis(x)*100, 1), "%")
 }
 
-p1 <- prev_estimates %>%
+p1 <-prev_estimates %>%
   ggplot(aes(x=qlogis(provincial_value), y=logit_fit)) +
-  # geom_line(size=1) +
-  # geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper), alpha=0.3) +
   geom_point(data = prev_final %>% 
                filter(kp %in% c("MSM", "PWID", "FSW", "TG")) %>%
                left_join(region), 
@@ -637,13 +646,15 @@ p1 <- prev_estimates %>%
   geom_line(aes(color=region), size=1) +
   geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper, fill=region), alpha=0.3) +
   geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
+  # geom_text(data = data.frame(kp = c("FSW", "MSM", "PWID", "TG"), label = c("FSW", "MSM", "PWID", "TG")), aes(x=logit(0.25), y=logit(0.9), label = label)) +
   moz.utils::standard_theme() +
   scale_y_continuous(labels = convert_logis_labels) +
   scale_x_continuous(labels = convert_logis_labels, limits = c(NA, logit(0.4))) +
   scale_color_manual(values = c(wesanderson::wes_palette("Zissou1")[c(4,1)])) +
   scale_fill_manual(values = wesanderson::wes_palette("Zissou1")[c(4,1)])  +
-  labs(y = "KP HIV prevalence", x = "Age/sex matched total\npopulation HIV prevalence (logit scale)")+
-  theme(panel.border = element_rect(fill=NA, color="black")) +
+  labs(y = "KP HIV prevalence (logit scale)", x = "Total population\nHIV prevalence (logit scale)")+
+  theme(panel.border = element_rect(fill=NA, color="black"),
+        strip.text = element_blank()) +
   facet_wrap(~kp, ncol=1)
 
 p2 <- prev_estimates %>%
@@ -657,13 +668,15 @@ p2 <- prev_estimates %>%
   geom_line(aes(color=region), size=1) +
   geom_ribbon(aes(ymin = lower, ymax = upper, fill=region), alpha=0.3) +
   geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
+  # geom_text(data = data.frame(kp = c("FSW", "MSM", "PWID", "TG"), label = c("FSW", "MSM", "PWID", "TG")), aes(x=0.3, y=0.9, label = label)) +
   moz.utils::standard_theme() +
   scale_x_continuous(labels = scales::label_percent(accuracy = 1), limits = c(0,0.4)) +
   scale_y_continuous(labels = scales::label_percent(), limits = c(0,1)) +
   scale_color_manual(values = c(wesanderson::wes_palette("Zissou1")[c(4,1)])) +
   scale_fill_manual(values = wesanderson::wes_palette("Zissou1")[c(4,1)])  +
-  labs(y = "KP HIV prevalence", x = "Age/sex matched total\npopulation HIV prevalence")+
-  theme(panel.border = element_rect(fill=NA, color="black")) +
+  labs(y = "KP HIV prevalence", x = "Total population\nHIV prevalence")+
+  theme(panel.border = element_rect(fill=NA, color="black"),
+        strip.text = element_blank()) +
   facet_wrap(~kp, ncol=1)
 
 p3 <- prev_estimates %>%
@@ -676,14 +689,16 @@ p3 <- prev_estimates %>%
              aes(y=value/provincial_value, color=region), shape=16, stroke = 0, alpha = 0.4) +
   geom_line(aes(color=region), size=1) +
   geom_ribbon(aes(ymin = lower/provincial_value, ymax = upper/provincial_value, fill=region), alpha=0.3) +
+  # geom_text(data = data.frame(kp = c("FSW", "MSM", "PWID", "TG"), label = c("FSW", "MSM", "PWID", "TG")), aes(x=0.3, y=100, label = label)) +
   moz.utils::standard_theme() +
   scale_y_log10() +
   scale_x_continuous(labels = scales::label_percent(accuracy = 1), limits = c(0,0.4)) +
   scale_color_manual(values = c(wesanderson::wes_palette("Zissou1")[c(4,1)])) +
   scale_fill_manual(values = wesanderson::wes_palette("Zissou1")[c(4,1)])  +
   geom_hline(aes(yintercept = 1), linetype = 2) +
-  labs(y="Prevalence ratio", x="Age/sex matched total\npopulation HIV prevalence") +
-  theme(panel.border = element_rect(fill=NA, color="black")) +
+  labs(y="Prevalence ratio", x = "Total population\nHIV prevalence")+
+  theme(panel.border = element_rect(fill=NA, color="black"),
+        strip.text = element_blank()) +
   facet_wrap(~kp, ncol=1)
 
 ggpubr::ggarrange(p1, p2, p3, nrow=1, common.legend = TRUE, legend = "bottom")
@@ -693,7 +708,12 @@ ggpubr::ggarrange(p1, p2, p3, nrow=1, common.legend = TRUE, legend = "bottom")
 
 ```{r echo=FALSE, warning = FALSE, message = FALSE, fig.cap = "Estimated key population ART coverage as a function of total population ART coverage on the estimated logit scale (left) and natural scale (right)", fig.height = 12, fig.width = 10, out.width = "100%", out.height = "90%"}
 
-art_estimates <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_estimates.csv")
+art_estimates <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_estimates.csv")  %>%
+  mutate(provincial_value = invlogit(logit_gen_art),
+         logit_fit = logit(median),
+         logit_lower = logit(lower),
+         logit_upper = logit(upper),
+         fit = median)
 
 imp_denomin <- art_final %>%
   filter(!is.na(denominator),
@@ -739,7 +759,7 @@ convert_logis_labels <- function(x) {
 
 p1 <- art_estimates %>%
   bind_rows() %>%
-  filter(model == "betabinomial") %>%
+  # filter(model == "betabinomial") %>%
   ggplot(aes(x=qlogis(provincial_value), y=logit_fit)) +
     geom_point(data = art_final %>% 
                  filter(kp %in% c("MSM", "PWID", "FSW")) %>%
@@ -752,13 +772,14 @@ p1 <- art_estimates %>%
     scale_y_continuous(labels = convert_logis_labels) +
     scale_x_continuous(labels = convert_logis_labels) +
     scale_color_manual(values = c(wesanderson::wes_palette("Zissou1")[c(4, 1)])) +
-    labs(y = "KP ART coverage", x = "Age/sex matched total\npopulation ART coverage")+
-    theme(panel.border = element_rect(fill=NA, color="black")) +
-    facet_wrap(~kp, ncol=1)
+    labs(y = "KP ART coverage (logit scale)", x = "Total population ART\ncoverage (logit scale)")+
+  theme(panel.border = element_rect(fill=NA, color="black"),
+        strip.text = element_blank()) +
+  facet_wrap(~kp, ncol=1)
 
 p2 <- art_estimates %>%
   bind_rows() %>%
-  filter(model == "betabinomial") %>%
+  # filter(model == "betabinomial") %>%
   ggplot(aes(x=provincial_value, y=fit)) +
     geom_point(data = art_final %>% 
                  filter(kp %in% c("MSM", "PWID", "FSW")) %>%
@@ -771,9 +792,10 @@ p2 <- art_estimates %>%
     scale_x_continuous(labels = scales::label_percent(accuracy = 1), limits = c(0,1)) +
     scale_y_continuous(labels = scales::label_percent(), limits = c(0,1)) +
     scale_color_manual(values = c(wesanderson::wes_palette("Zissou1")[c(4,1)])) +
-    labs(y = "KP ART coverage", x = "Age/sex matched total\npopulation ART coverage")+
-    theme(panel.border = element_rect(fill=NA, color="black")) +
-    facet_wrap(~kp, ncol=1)
+    labs(y = "KP ART coverage", x = "Total population\nART coverage")+
+  theme(panel.border = element_rect(fill=NA, color="black"),
+        strip.text = element_blank()) +
+  facet_wrap(~kp, ncol=1)
 
 ggpubr::ggarrange(p1, p2, nrow=1, common.legend = TRUE, legend = "bottom")
 ```

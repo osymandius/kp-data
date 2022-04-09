@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2022/dev) (preloaded format=pdflatex 2022.1.20)  20 JAN 2022 15:27
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2022/dev) (preloaded format=pdflatex 2022.1.20)  9 APR 2022 14:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -601,29 +601,31 @@ table.1}) has been already used, duplicate ignored
                                                   \__shipout_drop_firstpage_...
 l.403 
       ] [5] [6]
-<R objects for report/PSE/pse_flowchart.png, id=136, 818.05624pt x 1143.27126pt
->
+<R objects for report/PSE/pse_flowchart.png, id=136, 578.16pt x 1466.47874pt>
 File: R objects for report/PSE/pse_flowchart.png Graphic file (type png)
 <use R objects for report/PSE/pse_flowchart.png>
 Package pdftex.def Info: R objects for report/PSE/pse_flowchart.png  used on in
 put line 470.
-(pdftex.def)             Requested size: 214.63687pt x 299.96492pt.
-<R objects for report/Prevalence/prev_flowchart.png, id=138, 813.0375pt x 962.5
-9625pt>
+(pdftex.def)             Requested size: 185.20024pt x 469.7527pt.
+<R objects for report/Prevalence/prev_flowchart.png, id=138, 519.9425pt x 1285.
+80376pt>
 File: R objects for report/Prevalence/prev_flowchart.png Graphic file (type png
 )
 <use R objects for report/Prevalence/prev_flowchart.png>
 Package pdftex.def Info: R objects for report/Prevalence/prev_flowchart.png  us
 ed on input line 470.
-(pdftex.def)             Requested size: 214.63512pt x 254.11739pt.
-<R objects for report/ART coverage/art_flowchart.png, id=139, 520.94624pt x 962
-.59625pt>
+(pdftex.def)             Requested size: 189.95595pt x 469.75592pt.
+<R objects for report/ART coverage/art_flowchart.png, id=139, 545.03625pt x 110
+4.125pt>
 File: R objects for report/ART coverage/art_flowchart.png Graphic file (type pn
 g)
 <use R objects for report/ART coverage/art_flowchart.png>
 Package pdftex.def Info: R objects for report/ART coverage/art_flowchart.png  u
 sed on input line 470.
-(pdftex.def)             Requested size: 214.63861pt x 396.60583pt.
+(pdftex.def)             Requested size: 214.64243pt x 434.81891pt.
+
+LaTeX Warning: Float too large for page by 24.5009pt on input line 471.
+
 [7pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
@@ -718,15 +720,15 @@ has been already used, duplicate ignored
                                                   \__shipout_drop_firstpage_...
 l.636 \end{landscape}
                       <./kp_paper_files/figure-latex/unnamed-chunk-12-1.pdf>]
-<kp_paper_files/figure-latex/unnamed-chunk-14-1.pdf, id=223, 722.7pt x 867.24pt
+<kp_paper_files/figure-latex/unnamed-chunk-14-1.pdf, id=224, 722.7pt x 794.97pt
 >
 File: kp_paper_files/figure-latex/unnamed-chunk-14-1.pdf Graphic file (type pdf
 )
 <use kp_paper_files/figure-latex/unnamed-chunk-14-1.pdf>
 Package pdftex.def Info: kp_paper_files/figure-latex/unnamed-chunk-14-1.pdf  us
 ed on input line 663.
-(pdftex.def)             Requested size: 469.76045pt x 563.71257pt.
-<kp_paper_files/figure-latex/unnamed-chunk-15-1.pdf, id=224, 722.7pt x 867.24pt
+(pdftex.def)             Requested size: 469.76045pt x 516.73651pt.
+<kp_paper_files/figure-latex/unnamed-chunk-15-1.pdf, id=225, 722.7pt x 867.24pt
 >
 File: kp_paper_files/figure-latex/unnamed-chunk-15-1.pdf Graphic file (type pdf
 )
@@ -753,7 +755,7 @@ TeX warning (ext4): destination with the same identifier (name{table.3}) has be
 en already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.891 \end{document}
+l.885 \end{document}
                     ] (./kp_paper.aux)
 Package rerunfilecheck Info: File `kp_paper.out' has not changed.
 (rerunfilecheck)             Checksum: 1FCAB6FBB3D7588BE3A956838576C955;3629.
@@ -780,10 +782,10 @@ s/olistevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></Users
 olistevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></Users/o
 listevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></Users/oli
 stevens/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb>
-Output written on kp_paper.pdf (19 pages, 1373504 bytes).
+Output written on kp_paper.pdf (19 pages, 1207211 bytes).
 PDF statistics:
- 343 PDF objects out of 1000 (max. 8388607)
- 276 compressed objects within 3 object streams
+ 344 PDF objects out of 1000 (max. 8388607)
+ 277 compressed objects within 3 object streams
  73 named destinations out of 1000 (max. 500000)
  211 words of extra memory for PDF output out of 10000 (max. 10000000)
 

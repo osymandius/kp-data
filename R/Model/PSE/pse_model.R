@@ -91,7 +91,8 @@ pse_dat <- pse_dat %>%
   ) %>%
   mutate(
     method = ifelse(method == "Service multiplier", "Object/event multiplier", method),
-    method = ifelse(method == "Object/event multiplier", "Multiplier", method)
+    method = ifelse(method == "Object/event multiplier", "Multiplier", method),
+    method = ifelse(str_detect(method, "CRC"), "CRC", method)
   )
 
 pse_dat <- pse_dat %>%
@@ -101,7 +102,7 @@ pse_dat <- pse_dat %>%
   left_join(region %>% dplyr::select(region, iso3)) %>%
   mutate(
     logit_proportion = logit(population_proportion),
-    method = factor(method, levels=c("3S-CRC", unique(pse_dat$method)[unique(pse_dat$method) != "3S-CRC" & !is.na(unique(pse_dat$method))]))
+    method = factor(method, levels=c("CRC", unique(pse_dat$method)[unique(pse_dat$method) != "CRC" & !is.na(unique(pse_dat$method))]))
   ) %>%
   ungroup %>%
   dplyr::select(iso3, year, kp, method, simple_method, logit_proportion, population_proportion, ref) %>%
@@ -111,7 +112,7 @@ pse_dat <- pse_dat %>%
 ref.iid.prec.prior <- list(prec= list(prior = "normal", param = c(1.6, 4)))
 spatial.prec.prior <- list(prec= list(prior = "normal", param = c(-0.75, 6.25)))
 
-res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
+pse_res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
 
   pse_inla <- crossing(iso3 = ssa_iso3) %>%
     bind_rows(pse_dat %>%
@@ -141,7 +142,7 @@ res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   out <- list()
   
   out$res <- fitted_val %>%
-    mutate(across(c(lower, median, upper), invlogit),
+    mutate(across(c(lower, median, upper, sd), invlogit),
            kp = kp_id)
   
   out$fixed <- data.frame(fit$summary.fixed) %>%
@@ -155,20 +156,27 @@ res <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
 })
 
 
-pse_out <- bind_rows(pse_out,
-                     lapply(res, "[[", "res") %>%
+pse_out <- lapply(pse_res, "[[", "res") %>%
   bind_rows() %>%
   mutate(area_name = countrycode(iso3, "iso3c", "country.name")) %>%
   dplyr::select(iso3, area_name, kp, lower:upper) %>%
   left_join(region) %>%
   mutate(source = "Source")
-)
+
+pse_out %>% 
+  ggplot() + 
+    geom_pointrange(aes(x=iso3, ymin=lower, y=median, ymax = upper)) + 
+    facet_wrap(~kp) +
+    standard_theme() +
+    geom_hline(aes(yintercept = 0.01), color="red", linetype = 2) +
+    geom_hline(aes(yintercept = 0.03), color="blue", linetype = 2) +
+    labs(x=element_blank(), y="PSE proportion") +
+    coord_flip()
 
 # pse_out <- read_csv("R/Model/PSE/pse_estimates.csv")
-write.csv(pse_out, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_estimates_full.csv")
+write.csv(pse_out, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_estimates.csv")
 
-pse_method <- bind_rows(pse_method, 
-                        lapply(res, "[[", "fixed") %>%
+pse_method <- lapply(pse_res, "[[", "fixed") %>%
   bind_rows() %>%
   filter(rowname != "(Intercept)") %>%
   mutate(rowname = str_remove(rowname, "method")) %>%
@@ -182,14 +190,13 @@ pse_method <- bind_rows(pse_method,
   filter(kp != "TG", !is.na(method)) %>%
   mutate(across(starts_with("X"), exp),
          est = paste0(round(X0.5quant,2), " (", round(X0.025quant,2), "-", round(X0.975quant,2),")"),
-         est = ifelse(method == "3S-CRC", 1, est),
+         est = ifelse(method == "CRC", 1, est),
          method = fct_relevel(method, 
-                              c("3S-CRC", "2S-CRC", "Multiplier", "PLACE/Mapping", "SS-PSE", "Multiple methods - empirical", "Multiple methods - mixture"))
+                              c("CRC", "Multiplier", "PLACE/Mapping", "SS-PSE", "Multiple methods - empirical", "Multiple methods - mixture"))
   ) %>%
   arrange(method) %>%
-  dplyr::select(method, kp, est, n_studies, n) %>%
-  mutate(source = "Sourced")
-)
+  dplyr::select(method, kp, est, n_studies, n)
+
 write_csv(pse_method, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_method.csv")
 
   ggplot(aes(x=kp)) +

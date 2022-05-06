@@ -764,7 +764,7 @@ p1 <- art_estimates %>%
     geom_point(data = art_final %>% 
                  filter(kp %in% c("MSM", "PWID", "FSW")) %>%
                  left_join(region), 
-               aes(y=qlogis(value), color=region), shape=16, stroke = 0, alpha = 0.4) +
+               aes(y=qlogis(value), color=region), shape=16, stroke = 0, alpha = 0.4, size=2.5) +
     geom_line(size=1) +
     geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper), alpha=0.3) +
     geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
@@ -784,7 +784,7 @@ p2 <- art_estimates %>%
     geom_point(data = art_final %>% 
                  filter(kp %in% c("MSM", "PWID", "FSW")) %>%
                  left_join(region), 
-               aes(y=value, color=region), shape=16, stroke = 0, alpha = 0.4) +
+               aes(y=value, color=region), shape=16, stroke = 0, alpha = 0.4, size=2.5) +
     geom_line(size=1) +
     geom_ribbon(aes(ymin = lower, ymax = upper), alpha=0.3) +
     geom_abline(aes(intercept = 0, slope=1), linetype = 3) +

@@ -18,15 +18,15 @@ map(ssa_iso3, ~possibly_pull("aaa_scale_pop", id = paste0('latest(parameter:iso3
 
 ### Assign populations
 id <- map(ssa_iso3, ~possibly_run("aaa_assign_populations", parameters = data.frame(iso3 = .x)))
-id <- orderly::orderly_batch("aaa_assign_populations", data.frame(iso3 = ssa_iso3[!ssa_iso3 %in% c("BWA", "GNQ")]))
+id <- orderly::orderly_batch("aaa_assign_populations", data.frame(iso3 = ssa_iso3))
 # names(id) <- ssa_iso3
-lapply(id %>% compact(), orderly_commit)
+lapply(id$id[id$success == TRUE], orderly_commit)
 
 orderly_dev_start_oli("aaa_assign_populations", data.frame(iso3 = "SLE"))
 # setwd("src/aaa_assign_populations")
 
 ### Assign province
-id <- map(ssa_iso3, ~possibly_run("aaa_assign_province", parameters = data.frame(iso3 = .x)))
+id <- map(c("ZAF", "TZA", "RWA", "GHA", "ETH", "COD", "CIV", "BDI", "UGA", "BEN", "TGO"), ~possibly_run("aaa_assign_province", parameters = data.frame(iso3 = .x)))
 # names(id) <- ssa_iso3
 lapply(id %>% compact(), orderly_commit)
 
@@ -41,7 +41,7 @@ lapply(id %>% compact(), orderly_commit)
 
 to_do <- names(id %>% keep(~is.null(.x)))
 
-orderly_dev_start_oli("aaa_extrapolate_naomi", data.frame(iso3 = "NER"))
+orderly_dev_start_oli("aaa_extrapolate_naomi", data.frame(iso3 = "TZA"))
 
 ### Get Spectrum
 id <- map(ssa_iso3, ~possibly_run("aaa_download_worldpop", parameters = data.frame(iso3 = .x)))
@@ -49,7 +49,7 @@ names(id) <- ssa_iso3
 lapply(id %>% compact(), orderly_commit)
 
 ### SEARCH
-orderly::orderly_search(name = "aaa_assign_province", query = paste0('latest(parameter:iso3 == "', "ZAF", '")'), draft = FALSE)
+orderly::orderly_search(name = "aaa_assign_populations", query = paste0('latest(parameter:iso3 == "', "ZAF", '")'), draft = FALSE)
 
 
 id <- orderly_batch("aaa_inputs_orderly_pull", parameters = data.frame(iso3 = ssa_iso3))
@@ -59,6 +59,10 @@ orderly_run("aaa_assign_populations", parameters = data.frame(iso3 = "ZAF"))
 
 lapply(c("BWA", "ZAF"), function(x){
   orderly::orderly_search(name = "aaa_scale_pop", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
+})
+
+lapply(c("TZA"), function(x){
+  orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('parameter:iso3 == "', x, '"'), draft = FALSE)
 })
 
 

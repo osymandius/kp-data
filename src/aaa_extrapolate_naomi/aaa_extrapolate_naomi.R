@@ -29,8 +29,8 @@ out$meta_area <- read_sf(list.files(tmpd, full.names = TRUE, pattern = "boundari
 out$meta_indicator <- read.csv(list.files(tmpd, full.names = TRUE, pattern = "meta_indicator.csv"))
 class(out) <- "naomi_output"
 
-indicators <- add_output_labels(out) %>%
-  dplyr::left_join(out$meta_age_group, by = c("age_group", "age_group_label"))
+indicators <- add_output_labels(out)
+  # dplyr::left_join(out$meta_age_group, by = c("age_group", "age_group_label"))
 
 prev <- read_csv("depends/prev_assigned_province.csv", show_col_types = FALSE) %>%
   mutate(indicator = "HIV prevalence",
@@ -64,9 +64,31 @@ time_point <- unique(indicators$calendar_quarter)[2]
   
 filtered_indicators <- indicators %>%
   filter(area_level <= admin1_lvl,
-         indicator %in% c("prevalence", "art_coverage", "population"),
+         indicator %in% c("population", "plhiv", "art_current_residents"),
          age_group_label %in% c("15+", "15-49", "15-24", "20-24", "25-29", "25-49", "15-64"),
-         calendar_quarter == time_point)
+         calendar_quarter == time_point) %>%
+  select(area_level:age_group_label, indicator, mean) %>%
+  pivot_wider(names_from = indicator, values_from = mean) %>%
+  ungroup()
+
+filtered_indicators <- bind_rows(filtered_indicators, 
+                                 filtered_indicators %>%
+                                   filter(age_group_label %in% c("15-24", "25-29")) %>%
+                                   group_by(across(-c(age_group, age_group_label))) %>%
+                                   summarise(plhiv = sum(plhiv),
+                                             population = sum(population),
+                                             art_current_residents = sum(art_current_residents)) %>%
+                                   mutate(age_group_label = "15-29",
+                                          age_group = "Y015_029") 
+  
+) %>%
+  ungroup() %>%
+  mutate(prevalence = plhiv/population,
+         art_coverage = art_current_residents/plhiv) %>%
+  select(-c(plhiv, art_current_residents))
+
+filtered_indicators <- filtered_indicators %>%
+  pivot_longer(cols = c(prevalence, population, art_coverage), names_to = "indicator", values_to = "mean")
 
 spectrum <- spectrum %>%
   filter(age %in% 15:49, year > 1999)
@@ -91,8 +113,8 @@ spectrum_ratio <- spectrum %>%
 df <- spectrum_ratio %>%
   left_join(filtered_indicators, by=c("sex", "indicator")) %>%
   mutate(mean = ratio * mean,
-         lower = ratio * lower,
-         upper = ratio * upper,
+         # lower = ratio * lower,
+         # upper = ratio * upper,
          indicator = case_when(
            indicator == "prevalence" ~ "HIV prevalence",
            indicator == "art_coverage" ~ "ART coverage",
@@ -102,9 +124,14 @@ df <- spectrum_ratio %>%
          sex:indicator,
          age_group_label,
          age_group,
-         lower, mean, upper)
+         # lower, 
+         mean, 
+         # upper
+         )
 
 out <- lapply(dat, function(x) {
+  # 
+  # x <- prev
   
   if(nrow(x)) {
     anonymised_dat <- x %>%
@@ -115,13 +142,16 @@ out <- lapply(dat, function(x) {
         kp == "PWID" ~ "both"
         ),
         has_age = ifelse(!is.na(age_group), 1, 0),
-        age_group = ifelse(is.na(age_group) | !age_group %in% unique(filtered_indicators$age_group), "Y015_049", as.character(age_group))
+        age_group = case_when(
+          (is.na(age_group) | !age_group %in% unique(filtered_indicators$age_group)) & !kp %in% c("TG", "TGW", "MSM") ~ "Y015_049",
+          (is.na(age_group) | !age_group %in% unique(filtered_indicators$age_group)) & kp %in% c("TG", "TGW", "MSM") ~ "Y015_029",
+          TRUE ~ as.character(age_group))
       ) %>%
       left_join(df %>% select(-area_name)) %>%
       group_by(row_id) %>%
       mutate(province = ifelse(length(unique(province)) > 1, NA_character_, province)) %>%
       rename(provincial_value = mean) %>%
-      group_by(across(-c(lower, provincial_value, upper, area_id))) %>%
+      group_by(across(-provincial_value)) %>%
       summarise(provincial_value = median(provincial_value)) %>%
       mutate(ratio = value/provincial_value) %>%
       ungroup()
@@ -134,7 +164,7 @@ out <- lapply(dat, function(x) {
 if(nrow(out$prev)) {
   out_prev_model <- out$prev %>%
     filter(across(any_of("is_aggregate"), is.na)) %>%
-    select(iso3, year, kp, age_group, method, denominator, has_age, value, provincial_value, ratio, ref)
+    select(iso3, area_id, year, kp, age_group, method, denominator, has_age, value, provincial_value, ratio, ref)
 } else {
   out_prev_model <- data.frame(x = character()) 
 }
@@ -142,14 +172,22 @@ if(nrow(out$prev)) {
 if(nrow(out$art)) {
   out_art_model <- out$art %>%
     filter(across(any_of("is_aggregate"), is.na)) %>%
-    select(iso3, year, kp, method, age_group, has_age, value, denominator, provincial_value, ratio, ref)
+    select(iso3, area_id, year, kp, method, age_group, has_age, value, denominator, provincial_value, ratio, ref)
 } else {
   out_art_model <- data.frame(x = character()) 
 }
 
+area_indicators <- indicators %>%
+  filter(age_group == "Y015_049",
+         indicator %in% c("prevalence", "art_coverage"),
+         area_level == 1,
+         calendar_quarter == unique(indicators$calendar_quarter)[2]) %>%
+  select(area_id, sex, indicator, mean)
+
 write_csv(df, "extrapolated_naomi.csv")
 write_csv(out_prev_model, "prev.csv")
 write_csv(out_art_model, "art.csv")
+write_csv(area_indicators, "area_indicators.csv")
 
 if(nrow(prev)) {
   workbook_export_prev <- prev %>%

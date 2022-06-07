@@ -3,7 +3,9 @@ iso3_c <- iso3
 areas <- read_sf("depends/naomi_areas.geojson")%>%
   mutate(iso3 = iso3) %>%
   st_make_valid()
+
 population <- read_csv("depends/interpolated_population.csv")
+
 cities <- read_sf("merge_cities.geojson") %>%
   filter(iso3 == iso3_c) %>%
   arrange(area_name) %>%

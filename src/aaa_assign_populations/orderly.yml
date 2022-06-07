@@ -27,6 +27,7 @@ packages:
   - sf
   - spud
   - countrycode
+  - moz.utils
 
 sources:
   - kp_population_functions.R

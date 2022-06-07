@@ -18,6 +18,10 @@ artefacts:
       filenames:
         - art.csv
   - data:
+      description: 2020 admin-1 indicators for prediction
+      filenames:
+        - area_indicators.csv
+  - data:
       description: HIV prevalence export for KP workbook
       filenames:
         - workbook_export_prev.csv

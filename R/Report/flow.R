@@ -258,10 +258,10 @@ pse_final <- lapply(paste0("archive/aaa_assign_populations/", pse_id[!is.na(pse_
       TRUE ~ method
     ))
 
-bad_match <- lapply(paste0("archive/aaa_assign_populations/", pse_id[!is.na(pse_id)], "/bad_match_error.csv"),
-       read_csv) %>%
-  bind_rows() %>%
-  distinct(iso3, given_name)
+# bad_match <- lapply(paste0("archive/aaa_assign_populations/", pse_id[!is.na(pse_id)], "/bad_match_error.csv"),
+#        read_csv) %>%
+#   bind_rows() %>%
+#   distinct(iso3, given_name)
 
 pse_final_text <- pse_final %>%
   mutate(kp = ifelse(kp == "TGW", "TG", kp)) %>%
@@ -282,56 +282,56 @@ pse_final_labels <- collapse(pse_final_text)
 saveRDS(pse_final_text, "R/Report/R objects for report/PSE/pse_final_count_text.rds")
 write_csv(pse_final, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_final_sourced.csv")
 saveRDS(pse_inputs_text, "R/Report/R objects for report/PSE/pse_input_count_text.rds")
-
-pal <- wesanderson::wes_palette("Zissou1", 9, "continuous")
-
-pse_final <- read.csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_final_sourced.csv")
-
-pse_cleaned_data %>%
-  filter(str_detect(method, regex("enumeration|delphi|wisdom|WOTC|WODC", ignore_case = TRUE))) %>%
-  filter(source_found == "yes") %>% 
-  mutate(method = "Non-empirical") %>%
-  bind_rows(pse_final) %>%
-  filter(year > 2009) %>%
-  mutate(year = plyr::round_any(year, 3, floor),
-         year = paste0(year, "-", year+2),
-         # year = ifelse(year == "2019-2021", "2019-2020", year)
-         ) %>%
-  filter(year != "2007-2009") %>%
-  distinct(kp, method, year, ref) %>%
-  group_by(kp, method, year) %>%
-  count() %>%
-  # mutate(simple_method = ifelse(method %in% c("2S-CRC", "3S-CRC", "SS-PSE", "Object/event multiplier", "Service multiplier"), 1, 0)) %>%
-  # group_by(year) %>%
-  # count(simple_method)
-  mutate(method = factor(method,
-                         levels= c("3S-CRC", "SS-PSE", "2S-CRC", "Object/event multiplier", "Multiple methods - empirical", "Service multiplier", "PLACE/Mapping", "Multiple methods - mixture", "Non-empirical"))) %>%
-  ggplot(aes(x=year, y=n)) +
-  geom_col(aes(fill=method), position = "fill") +
-  scale_fill_manual(values = pal)+
-  scale_y_continuous(labels = scales::label_percent()) +
-  facet_wrap(~kp, nrow=1) +
-  moz.utils::standard_theme() +
-  labs(x=element_blank(), y=element_blank(), fill=element_blank()) +
-  coord_cartesian(clip = "off", ylim = c(0,1)) +
-  geom_text(data = method_counts, aes(y=1.1, label = n)) +
-  theme(strip.text = element_text(face = "bold", size=13),
-        strip.text.x = element_text(margin = margin(b=20)),
-        axis.text.x = element_text(angle = 20, hjust = 1))
-  
-
-method_counts <- pse_spreadsheet_extract %>%
-  filter(str_detect(method, regex("enumeration|delphi|wisdom|WOTC|WODC", ignore_case = TRUE))) %>%
-  filter(source_found == "yes") %>% 
-  mutate(method = "Non-empirical") %>%
-  bind_rows(pse_final) %>%
-  mutate(year = plyr::round_any(year, 3, floor),
-         year = paste0(year, "-", year+2),
-         # year = ifelse(year == "2019-2021", "2019-2020", year)
-         ) %>%
-  filter(year != "2007-2009") %>%
-  distinct(year, ref, kp) %>%
-  count(year, kp)
+# 
+# pal <- wesanderson::wes_palette("Zissou1", 9, "continuous")
+# 
+# pse_final <- read.csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_final_sourced.csv")
+# 
+# pse_cleaned_data %>%
+#   filter(str_detect(method, regex("enumeration|delphi|wisdom|WOTC|WODC", ignore_case = TRUE))) %>%
+#   filter(source_found == "yes") %>% 
+#   mutate(method = "Non-empirical") %>%
+#   bind_rows(pse_final) %>%
+#   filter(year > 2009) %>%
+#   mutate(year = plyr::round_any(year, 3, floor),
+#          year = paste0(year, "-", year+2),
+#          # year = ifelse(year == "2019-2021", "2019-2020", year)
+#          ) %>%
+#   filter(year != "2007-2009") %>%
+#   distinct(kp, method, year, ref) %>%
+#   group_by(kp, method, year) %>%
+#   count() %>%
+#   # mutate(simple_method = ifelse(method %in% c("2S-CRC", "3S-CRC", "SS-PSE", "Object/event multiplier", "Service multiplier"), 1, 0)) %>%
+#   # group_by(year) %>%
+#   # count(simple_method)
+#   mutate(method = factor(method,
+#                          levels= c("3S-CRC", "SS-PSE", "2S-CRC", "Object/event multiplier", "Multiple methods - empirical", "Service multiplier", "PLACE/Mapping", "Multiple methods - mixture", "Non-empirical"))) %>%
+#   ggplot(aes(x=year, y=n)) +
+#   geom_col(aes(fill=method), position = "fill") +
+#   scale_fill_manual(values = pal)+
+#   scale_y_continuous(labels = scales::label_percent()) +
+#   facet_wrap(~kp, nrow=1) +
+#   moz.utils::standard_theme() +
+#   labs(x=element_blank(), y=element_blank(), fill=element_blank()) +
+#   coord_cartesian(clip = "off", ylim = c(0,1)) +
+#   geom_text(data = method_counts, aes(y=1.1, label = n)) +
+#   theme(strip.text = element_text(face = "bold", size=13),
+#         strip.text.x = element_text(margin = margin(b=20)),
+#         axis.text.x = element_text(angle = 20, hjust = 1))
+#   
+# 
+# method_counts <- pse_spreadsheet_extract %>%
+#   filter(str_detect(method, regex("enumeration|delphi|wisdom|WOTC|WODC", ignore_case = TRUE))) %>%
+#   filter(source_found == "yes") %>% 
+#   mutate(method = "Non-empirical") %>%
+#   bind_rows(pse_final) %>%
+#   mutate(year = plyr::round_any(year, 3, floor),
+#          year = paste0(year, "-", year+2),
+#          # year = ifelse(year == "2019-2021", "2019-2020", year)
+#          ) %>%
+#   filter(year != "2007-2009") %>%
+#   distinct(year, ref, kp) %>%
+#   count(year, kp)
 
 pse_flow <- grViz("
 digraph a_nice_graph {

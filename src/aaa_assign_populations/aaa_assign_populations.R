@@ -1,76 +1,44 @@
-# extract_kp_worldpop <- function(areas, iso3, 
-#                                 years = c(2000, 2005, 2010, 2015, 2020)) {
-#                                 # years = c(2015)) {
-#   stopifnot(inherits(areas, "sf"))
-#   stopifnot(grepl("^[A-Z]{3}$", iso3))
-#   stopifnot(years %in% 2000:2020)
-#   wp_ages <- c(`15` = "Y015_019", `20` = "Y020_024",
-#                `25` = "Y025_029", `30` = "Y030_034", `35` = "Y035_039",
-#                `40` = "Y040_044", `45` = "Y045_049"
-#   )
-#   wp_sexes <- c(m = "male", f = "female")
-#   # wp_sexes <- c(m = "male")
-#   grid <- expand.grid(iso3 = iso3, year = years, wp_age = names(wp_ages), 
-#                       wp_sex = names(wp_sexes), stringsAsFactors = FALSE)
-#   pop_list <- do.call(Map, c(f = naomi.utils:::worldpop_extract_one, areas = list(list(areas)), 
-#                              grid))
-#   pop <- dplyr::bind_rows(pop_list)
-#   pop$age_group <- dplyr::recode(pop$wp_age, !!!wp_ages)
-#   pop$sex <- dplyr::recode(pop$wp_sex, !!!wp_sexes)
-#   pop$calendar_quarter <- paste0("CY", pop$year, "Q2")
-#   pop$source <- "WorldPop"
-#   # pop <- pop %>% dplyr::left_join(dplyr::select(sf::st_drop_geometry(areas), 
-#   # area_id, area_name), by = "area_id")
-#   pop <- dplyr::count(pop, area_id, source, calendar_quarter, 
-#                       sex, age_group, wt = population, name = "population")
-#   # pop$asfr <- NA_real_
-#   pop$age_group <- "Y015_049"
-#   # validate_naomi_population(pop, areas, unique(areas$area_level))
-#   pop
-# }
-
 iso3_c <- iso3
 
 areas <- read_sf("depends/naomi_areas.geojson")%>%
   mutate(iso3 = iso3_c)
 
+merge_cities <- read_sf("depends/")
+
 population <- read.csv("depends/interpolated_population.csv") %>%
   left_join(areas %>% dplyr::select(area_id, area_name) %>% st_drop_geometry()) %>%
   mutate(area_name = str_to_sentence(area_name))
 
-naomi_names <- unique(population$area_name)
+# naomi_names <- unique(population$area_name)
 
 if(iso3 != "SSD") {
   city_population <- read.csv("depends/interpolated_city_population.csv") %>%
-    mutate(area_name = str_to_sentence(area_name)) %>%
-    filter(!area_name %in% naomi_names)
+    mutate(area_name = str_to_sentence(area_name),
+           iso3 = iso3_c
+    )
 } else {
-  city_population <- NULL
+  city_population <- data.frame(iso3 = iso3_c)
 }
 
 
 population <- population %>%
-  bind_rows(city_population) %>%
-  left_join(get_age_groups() %>% dplyr::select(age_group, age_group_sort_order)) %>%
-  filter(age_group_sort_order %in% 16:22) %>%
-  group_by(area_id, area_name, year, sex) %>%
-  summarise(population = sum(population)) %>%
-  mutate(age_group = "Y015_049",
-         iso3 = iso3) %>%
-  ungroup()
+  bind_rows(city_population)
 
 population <- population %>%
+  mutate(msm_age = ifelse(age_group %in% c("Y015_019", "Y020_024", "Y025_029"), 1, 0)) %>%
+  filter(msm_age == 1) %>%
+  group_by(area_id, area_name, year, sex) %>%
+  summarise(population = sum(population)) %>%
+  mutate(age_group = "Y015_029") %>%
   bind_rows(
     population %>%
-      group_by(iso3, area_id, area_name, year, age_group) %>%
-      summarise(population = sum(population)) %>%
-      mutate(sex = "both") %>%
-      ungroup()
+      five_year_to_15to49("population") %>%
+      sex_aggregation("population")
   )
 
 extrap_pop <- population %>%
-  filter(year %in% 2015:2020) %>%
-  group_by(iso3, area_id, area_name, age_group, sex) %>%
+  filter(year %in% 2015:2020, !is.na(population)) %>%
+  group_by(area_id, area_name, age_group, sex) %>%
   mutate(
     population = log(population),
     population = exp(Hmisc::approxExtrap(year, population, xout = 2020:2025)$y),
@@ -81,18 +49,11 @@ population <- bind_rows(
   extrap_pop
 )
 
-
-# cities_areas <- merge_cities %>%
-#   bind_rows(areas)
-
 pse_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/PSE", "pse_spreadsheet_cleaned_sourced.csv")
 pse <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = pse_path)
 pse <- read_csv(pse) 
 
-# pse <- read.csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_spreadsheet_cleaned_sourced.csv")
-
 pse <- pse %>%
-  # bind_rows(gf_pse) %>%
   mutate(iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
   filter(iso3 == iso3_c) %>%
   dplyr::select(iso3:pse_upper, area_level, ref, data_checked, uid) %>%
@@ -124,41 +85,59 @@ if(nrow(pse)) {
     filter(!is.na(area_level)) %>%
     full_join(areas %>% 
                 mutate(iso3 = iso3_c) %>%
-                select(iso3, area_name, area_level, area_id) %>% 
+                dplyr::select(iso3, area_name, area_level, area_id) %>% 
                 st_drop_geometry(), by=c("iso3", "area_level"))  %>%
     mutate(dist = stringdist::stringdist(value, tolower(area_name))) %>%
     group_by(idx) %>%
     filter(dist == min(dist)) 
   
-  min_dist <- pse_areas %>%
-    filter(is.na(area_level)) %>%
-    select(-area_level) %>%
+  min_dist_cities <- pse_areas %>%
+      filter(is.na(area_level)) %>%
+      dplyr::select(-area_level) %>%
+      full_join(city_population %>% distinct(iso3, area_id, area_name),
+                by="iso3") %>%
+      mutate(dist = stringdist::stringdist(value, tolower(area_name))) %>%
+      group_by(idx) %>%
+      filter(dist == min(dist)) 
+  
+  assigned_areas_idx <- min_dist_cities %>%
+    filter(n() == 1, dist<3) %>%
+    pull(idx)
+  
+  min_dist_naomi <- min_dist_cities %>%
+    filter(!idx %in% assigned_areas_idx) %>%
+    dplyr::select(iso3, given_area, year, kp, row_id, name, value, idx) %>%
     full_join(areas %>% 
                 mutate(iso3 = iso3_c) %>%
-                select(iso3, area_name, area_level, area_id) %>% 
+                dplyr::select(iso3, area_name, area_level, area_id) %>% 
                 st_drop_geometry(), by="iso3")  %>%
     mutate(dist = stringdist::stringdist(value, tolower(area_name))) %>%
     group_by(idx) %>%
     filter(dist == min(dist)) 
   
-  min_dist <- bind_rows(min_dist, min_dist_area_level)
+  # min_dist <- bind_rows(min_dist_area_level, min_dist_cities, min_dist_naomi)
   
-  best_matches <- min_dist %>%
+  best_matches_cities <- min_dist_cities %>%
     filter(n() == 1, dist<3) %>%
     ungroup
   
-  level_check <- min_dist %>%
+  best_matches_naomi <- min_dist_naomi %>%
+    bind_rows(min_dist_area_level) %>%
+    filter(n() == 1, dist<3) %>%
+    ungroup
+  
+  level_check <- min_dist_naomi %>%
     filter(dist==0, n()>1, !is.na(area_id)) %>%
     count(idx) %>%
     filter(n > 1)
   
   if(nrow(level_check)) {
-    best_matches <- best_matches %>%
+    best_matches_naomi <- best_matches_naomi %>%
       bind_rows(
         # min_dist %>%
         #   filter(dist==0, n()>1, !is.na(area_id)) %>%
         #   filter(idx %in% level_check$idx),
-        min_dist %>%
+        min_dist_naomi %>%
           filter(dist==0, n()>1, !is.na(area_id)) %>%
           left_join(areas %>% dplyr::select(area_id, area_level) %>% st_drop_geometry()) %>%
           filter(area_level == max(area_level))
@@ -169,14 +148,20 @@ if(nrow(pse)) {
     
   }
   
-  bad_match <- min_dist %>%
-    filter(dist>=3)
+  bad_match <- min_dist_cities %>%
+    filter(dist>=3, !idx %in% best_matches_naomi$idx) %>%
+    bind_rows(
+      min_dist_naomi %>%
+        filter(dist>=3, !idx %in% best_matches_cities$idx)
+    ) %>%
+    ungroup() %>%
+    distinct(iso3, kp, year, given_area, area_name, area_id, dist)
   
   if (nrow(bad_match)) {
     bad_match_error <- bad_match %>%
       ungroup %>%
       mutate(iso3 = iso3_c) %>%
-      dplyr::select(iso3, given_name = value, attempted_match = area_name, attempted_area_id = area_id, string_distance = dist)
+      dplyr::select(iso3, given_area, attempted_match = area_name, attempted_area_id = area_id, string_distance = dist)
     
     warning("\nString match is bad:\n", 
             paste0(utils::capture.output(bad_match_error), collapse = "\n"))
@@ -186,7 +171,7 @@ if(nrow(pse)) {
     bad_match_error <- data.frame(iso3 = iso3_c, x = "No bad matches")
   }
   
-  
+  best_matches <- bind_rows(best_matches_cities, best_matches_naomi)
   
   area_reshape <- spread_areas(areas) %>%
     dplyr::select(area_name1, starts_with("area_id")) %>%
@@ -204,9 +189,13 @@ if(nrow(pse)) {
       kp %in% c("PWID") ~ "both",
       kp %in% c("MSM", "TGM") ~ "male",
       kp %in% c("FSW", "SW", "TG", "TGW") ~ "female"
+    ),
+    age_group = case_when(
+      kp %in% c("PWID", "FSW", "SW") ~ "Y015_049",
+      kp %in% c("MSM", "TG", "TGW", "TGM") ~ "Y015_029"
     )) %>%
     type_convert() %>%
-    left_join(population %>% dplyr::select(area_id, year, sex, population) %>% type_convert()) %>%
+    left_join(population %>% ungroup() %>% dplyr::select(area_id, year, sex, age_group, population) %>% type_convert()) %>%
     group_by(row_id) %>%
     mutate(province = ifelse(length(unique(province)) > 1, NA_character_, province)) %>%
     group_by(row_id, province) %>%

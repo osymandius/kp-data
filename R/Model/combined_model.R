@@ -6,41 +6,6 @@ library(lme4)
 
 region <- read.csv("~/Documents/GitHub/fertility_orderly/global/region.csv")
 
-get_mod_results_test <- function(mod, inla_df, var) {
-  
-  
-  df <- inla_df %>%
-    filter(across(all_of(var), ~!is.na(.x)))
-  
-  print("Sampling..")
-  samples <- inla.posterior.sample(1000, mod)
-  print("Done sampling")
-  contents = mod$misc$configs$contents
-  effect = "Predictor"
-  id.effect = which(contents$tag==effect)
-  ind.effect = contents$start[id.effect]-1 + (1:contents$length[id.effect])
-  
-  ind.effect <- 1:(nrow(inla_df) - nrow(df))
-  
-  samples.effect = lapply(samples, function(x) x$latent[ind.effect])
-  
-  ident <- inla_df[ind.effect, ]
-  
-  qtls <- apply(sapply(samples.effect, cbind), 1, quantile, c(0.025, 0.5, 0.975))
-  sd <- apply(sapply(samples.effect, cbind), 1, sd)
-  
-  samples_ident <- ident %>%
-    mutate(
-      sd = sd,
-      lower = qtls[1,],
-      median = qtls[2,],
-      upper = qtls[3,]
-    )
-  
-  return(samples_ident)
-  
-}
-
 ssa_names <- c("Angola", "Botswana", "Eswatini", "Ethiopia", "Kenya", "Lesotho",  "Malawi", "Mozambique", "Namibia", "Rwanda", "South Africa", "South Sudan", "Uganda", "United Republic of Tanzania", "Zambia", "Zimbabwe", "Benin", "Burkina Faso", "Burundi", "Cameroon", "Central African Republic", "Chad", "Congo", "Côte d'Ivoire", "Democratic Republic of the Congo", "Equatorial Guinea", "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Liberia", "Mali", "Niger", "Nigeria", "Senegal", "Sierra Leone", "Togo")
 ssa_iso3 <- countrycode(ssa_names, "country.name", "iso3c")
 
@@ -107,6 +72,35 @@ prev_df <- prev_dat %>%
          method = factor(method, levels = c("lab", "selfreport"))
   )
 
+# 
+# prev_id <- lapply(ssa_iso3, function(x){
+#   orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
+# })
+# 
+# area_indicators <- lapply(paste0("archive/aaa_extrapolate_naomi/", prev_id[!is.na(prev_id)], "/area_indicators.csv"),
+#                      function(x) {read_csv(x, show_col_types = FALSE) %>% select(-any_of("...1"))}) %>%
+#   bind_rows()
+# 
+# id_input <- lapply(ssa_iso3, function(x){
+#   orderly::orderly_search(name = "aaa_areas_pull", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
+# }) %>% 
+#   setNames(ssa_iso3)
+# 
+# areas_list <- lapply(file.path("archive/aaa_areas_pull", id_input, "naomi_areas.geojson"), sf::read_sf) %>%
+#   setNames(ssa_iso3)
+# 
+# areas <- areas_list %>%
+#   lapply(select, -spectrum_region_code) %>%
+#   bind_rows() %>%
+#   separate(area_id, into=c("iso3", NA), sep=3, remove=FALSE) %>%
+#   filter(area_level == 1) %>%
+#   st_make_valid() %>%
+#   mutate(id.area = row_number())
+# 
+# area_pred <- area_indicators %>% 
+#   left_join(areas %>% select(area_id, id.area) %>% st_drop_geometry()) %>%
+#   filter(sex == "female", indicator == "prevalence")
+
 genpop_pred <- read_csv("R/Model/HIV prevalence/national_genpop_prev.csv") %>%
   mutate(logit_gen_prev = logit(mean)) %>%
   select(-mean)
@@ -114,19 +108,23 @@ genpop_pred <- read_csv("R/Model/HIV prevalence/national_genpop_prev.csv") %>%
 genpop_pred <- genpop_pred %>%
   bind_rows(
     genpop_pred %>% filter(kp == "FSW") %>% mutate(kp = "TG")
-  )
+  ) %>%
+  left_join(region)
 
-# df_logit <- genpop_pred %>%
-#   left_join(region) %>%
-#   select(-four_region)
+df_logit <- data.frame(logit_gen_prev = logit(seq(0.001, 0.07, 0.005)),
+               region = "WCA") %>%
+      bind_rows(
+        data.frame(logit_gen_prev = logit(seq(0.006, 0.35, 0.005)),
+                   region = "ESA"),
+        genpop_pred
+      )
 
-df_logit <- data.frame(logit_gen_prev = logit(seq(0.001, 0.1, 0.005)),
-           region = "WCA") %>%
-  bind_rows(
-    data.frame(logit_gen_prev = logit(seq(0.006, 0.35, 0.005)),
-               region = "ESA"),
-    genpop_pred
-  )
+# df_logit <- area_pred %>%
+#   select(area_id, id.area, logit_gen_prev = mean) %>%
+#   mutate(logit_gen_prev = logit(logit_gen_prev))
+# 
+# adj <- dfertility::make_adjacency_matrix(areas, 1)
+
 
 ####### PSE
 
@@ -218,36 +216,42 @@ df_logit_art <- crossing(logit_gen_art = logit(seq(0.01, 0.99, 0.01))) %>%
       select(-c(value, year))
   )
 
+###
 
 
-prev_mod <- lapply(c("FSW", "MSM", "PWID", "TG"), function(kp_id) {
+
+prev_mod <- lapply(c("FSW", "PWID"), function(kp_id) {
   
   out <- list()
   
   prev_df <- prev_df %>%
-    filter(kp == "FSW") %>%
+    filter(kp == kp_id) %>%
     group_by(ref) %>%
     mutate(id.ref = cur_group_id()) %>%
-    ungroup()
+    ungroup() 
   
   prev_inla <- df_logit %>% 
-    # filter(kp == "FSW) %>%
-    filter(is.na(kp) | kp == "FSW") %>%
+    filter(is.na(kp) | kp == kp_id) %>%
     mutate(denominator = 1) %>%
     bind_rows(prev_df %>%
                 filter(!is.na(ref)) %>%
                 ungroup %>%
                 mutate(obs_iid = row_number())) %>%
-    group_by(iso3) %>%
-    mutate(id.iso3 = cur_group_id(),
-           logit_gen_prev2 = logit_gen_prev,
-           # id.iso3 = ifelse(is.na(iso3), NA_integer_, id.iso3),
-           region = factor(region)) %>%
+    mutate(
+      logit_gen_prev2 = logit_gen_prev,
+      region = factor(region)) %>%
+    left_join(geographies %>% st_drop_geometry()) %>%
+    mutate(id.iso3 = ifelse(is.na(iso3), 39, id.iso3)) %>%
     ungroup() %>%
-    select(iso3, logit_gen_prev, obs_iid, method, positive, negative, region, denominator, id.ref, id.iso3) 
+    select(iso3, area_id, logit_gen_prev, obs_iid, method, positive, negative, region, denominator, id.ref, id.iso3) 
   
   
-  prev_formula <- positive ~ logit_gen_prev + region + region*logit_gen_prev + method + f(id.ref, model = "iid") + f(id.iso3, model = "iid", hyper = iso.iid.prec.prior)
+  
+  # prev_formula <- positive ~ logit_gen_prev + method + f(id.ref, model = "iid") + f(id.iso3, model = "iid", hyper = iso.iid.prec.prior)
+  # prev_formula <- positive ~ logit_gen_prev + region + region*logit_gen_prev + method + f(id.iso3, model = "besag", scale.model = TRUE, graph = "national_level_adj.adj") + f(id.ref, model = "iid")
+  prev_formula <- positive ~ logit_gen_prev + region + region*logit_gen_prev + method + f(id.iso3, model = "iid") + f(id.ref, model = "iid")
+  # prev_formula <- positive ~ logit_gen_prev + region + region*logit_gen_prev + method + f(id.iso3, model = "iid", hyper = iso.iid.prec.prior) + f(id.ref, model = "iid")
+    
   # prev_formula <- positive ~ logit_gen_prev
   # prev_formula <- positive ~ logit_gen_prev + method + f(id.ref, model = "iid") + f(id.iso3, model = "iid", hyper = iso.iid.prec.prior)
   # prev_formula <- positive ~ logit_gen_prev + f(id.prev, model = "rw2") + method + f(id.ref, model = "iid") + f(id.iso3, model = "iid", hyper = iso.iid.prec.prior)
@@ -261,6 +265,26 @@ prev_mod <- lapply(c("FSW", "MSM", "PWID", "TG"), function(kp_id) {
                                                 dic = TRUE),
                          control.predictor=list(compute=TRUE),
                          verbose = FALSE)
+  
+  # fit <- gamlss(cbind(positive, negative) ~ logit_gen_prev,
+  #                data = na.omit(prev_inla),
+  #                family = BB(mu.link = "logit"),
+  #                control = gamlss.control(n.cyc=200))
+  
+  # data.frame(logit_kp_prev = predict(fit, newdata = data.frame(logit_gen_prev = -6:0)),
+  #            logit_gen_prev = -6:0) %>%
+  #     ggplot(aes(y=logit_kp_prev, x=logit_gen_prev)) +
+  #       geom_line() +
+  #       geom_point(data = prev_df %>% filter(kp %in% c("FSW"), !is.na(ref)), aes(x=logit_gen_prev, y=logit_kp_prev, color=region, size=denominator), alpha = 0.3) +
+  #       geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
+  #       # geom_smooth(data = prev_df %>% filter(kp %in% c("FSW"), !is.na(ref)), aes(x=logit_gen_prev, y=logit_kp_prev, color=region), method = "lm", se = FALSE) +
+  #       moz.utils::standard_theme() +
+  #       # scale_y_continuous(labels = convert_logis_labels) +
+  #       # scale_x_continuous(labels = convert_logis_labels) +
+  #       labs(y = "KP HIV prevalence", x = "Age/sex matched total\npopulation HIV prevalence")+
+  #       theme(panel.border = element_rect(fill=NA, color="black")) +
+  #       facet_wrap(~kp, ncol=1)
+            
   
   # df <- prev_inla %>% mutate(logit_kp_prev = logit(positive/(positive+negative))) %>% filter(!is.na(logit_kp_prev)) %>% filter(positive != 0)
   # mod <- lm(logit_kp_prev ~ logit_gen_prev, weights = denominator, data = df)
@@ -319,14 +343,22 @@ prev_mod <- lapply(c("FSW", "MSM", "PWID", "TG"), function(kp_id) {
   prev_samples <- matrix(sapply(samples.effect, cbind), ncol=1000)
   
   # # country_iid_precision <- matrix(inla.rmarginal(length(prev_samples), prev_fit$marginals.hyperpar$`Precision for id.iso3`), nrow=nrow(prev_samples))
+  # 
+  # 
+  # 
   # country_iid_samples <- matrix(
-  #   rnorm(1000*length(prev_samples), 0, sqrt(1/prev_fit$summary.hyperpar$mean[3])), 
+  #   rnorm(length(prev_samples), 0, prev_fit$summary.hyperpar$mean[2]^-0.5),
   #   nrow=nrow(prev_samples))
   # 
+  # country_iid_samples <- rnorm(120000, 0, prev_fit$summary.hyperpar$mean[2]^-0.5)
+  # country_iid_samples <- rnorm(1000, 0, 0.1)
+  # # 
   # prev_samples <- prev_samples + country_iid_samples
+  # 
+  # prev_samples <- prev_samples + rep(country_iid_samples, each = nrow(prev_samples))
   
   ident <- prev_inla[ind.effect, ]
-
+  
   qtls <- apply(prev_samples, 1, quantile, c(0.025, 0.5, 0.975))
 
   prev <- ident %>%
@@ -338,31 +370,40 @@ prev_mod <- lapply(c("FSW", "MSM", "PWID", "TG"), function(kp_id) {
       indicator = "prevalence"
     )
   
-  prev %>%
-    filter(is.na(iso3)) %>%
-    ggplot(aes(x=logit_gen_prev, y=median)) +
-    # geom_line(size=1) +
-    # geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper), alpha=0.3) +
-    geom_point(data = prev_df %>% filter(kp %in% c("FSW"), !is.na(ref)), aes(y=logit_kp_prev, size=denominator), alpha = 0.3) +
-    geom_line(size=1) +
-    geom_ribbon(aes(ymin = lower, ymax = upper), alpha=0.3) +
-    geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
-    moz.utils::standard_theme() +
-    # scale_y_continuous(labels = convert_logis_labels) +
-    # scale_x_continuous(labels = convert_logis_labels) +
-    labs(y = "KP HIV prevalence", x = "Age/sex matched total\npopulation HIV prevalence")+
-    theme(panel.border = element_rect(fill=NA, color="black")) +
-    facet_wrap(~region)
   
-  prev_fit$summary.random$id.iso3 %>%
-    left_join(prev_inla %>% distinct(iso3, id.iso3), by=c("ID" = "id.iso3")) %>%
-    left_join(genpop_pred %>% filter(kp == "FSW") %>% mutate(gen_prev = invlogit(logit_gen_prev))) %>%
-    ggplot(aes(x=gen_prev, y=mean)) +
-      geom_point() +
-      labs(y="iso3 IID random effect (unscaled)", x="Genpop HIV prevalence") +
-      scale_x_continuous(labels = scales::label_percent()
-      ) +
-      standard_theme()
+  # ggpubr::ggarrange(p1, p2)
+  # 
+  # prev %>%
+  #   select(area_id, median) %>%
+  #   left_join(areas) %>%
+  #   ggplot() +
+  #   geom_sf(aes(geometry = geometry, fill = invlogit(median))) +
+  #   scale_fill_continuous(labels = scales::label_percent()) +
+  #   labs(fill = "FSW Prevalence") +
+  #   standard_theme() +
+  #   coord_sf(datum=NA) +
+  #   theme(legend.key.width = unit(2, "cm"))
+  # 
+  # prev %>%
+  #   left_join(prev_df %>% distinct(area_id) %>% mutate(has_data = 1)) %>%
+  #   mutate(has_data = ifelse(is.na(has_data), 0, 1)) %>%
+  #   ggplot(aes(x=invlogit(logit_gen_prev), y=invlogit(median), color=factor(has_data))) +
+  #     geom_pointrange(aes(ymin = invlogit(lower), ymax = invlogit(upper))) +
+  #     standard_theme() +
+  #     scale_y_continuous(labels = scales::label_percent()) +
+  #     scale_x_continuous(labels = scales::label_percent()) 
+  #     
+  # # 
+  # prev_fit$summary.random$id.iso3 %>%
+  #   left_join(prev_inla %>% distinct(iso3, id.iso3), by=c("ID" = "id.iso3")) %>%
+  #   left_join(genpop_pred %>% filter(kp == "FSW") %>% mutate(gen_prev = invlogit(logit_gen_prev))) %>%
+  #   ggplot(aes(x=logit_gen_prev, y=mean)) +
+  #     geom_point() +
+  #     geom_smooth(method = "lm") +
+  #     labs(y="iso3 IID random effect (unscaled)", x="Genpop HIV prevalence") +
+  #     scale_x_continuous(labels = scales::label_percent()
+  #     ) +
+  #     standard_theme()
   
   # filter(prev, is.na(iso3)) %>% 
   #   select(logit_gen_prev, lower:upper, region) %>% 
@@ -375,6 +416,102 @@ prev_mod <- lapply(c("FSW", "MSM", "PWID", "TG"), function(kp_id) {
   #     #                   mutate(across(!iso3, invlogit)),
   #     #                 aes(ymin=lower, ymax=upper))
   # 
+  prev_fixed <- data.frame(prev_fit$summary.fixed) %>%
+    rownames_to_column() %>%
+    mutate(kp = kp_id)
+  
+  out <- list()
+  out$prev_samples <- prev_samples
+  out$prev <- prev
+  out$prev_fixed <- prev_fixed
+  out
+  
+})
+
+names(prev_mod) <- c("FSW", "PWID")
+
+prev_mod_msm_tg <- lapply("MSM", function(kp_id) {
+  
+  out <- list()
+  
+  prev_df <- prev_df %>%
+    filter(kp %in% c("MSM", "TG")) %>%
+    group_by(ref) %>%
+    mutate(id.ref = cur_group_id()) %>%
+    ungroup() 
+  
+  prev_inla <- df_logit %>% 
+    filter(is.na(kp)) %>% 
+    mutate(kp = "MSM") %>% 
+    bind_rows(df_logit %>% 
+                filter(is.na(kp)) %>% 
+                mutate(kp = "TG"),
+              df_logit %>% 
+                filter(kp %in% c("MSM", "TG")) %>%
+                distinct()
+    ) %>%
+    mutate(denominator = 1) %>%
+    bind_rows(prev_df %>%
+                filter(!is.na(ref)) %>%
+                ungroup %>%
+                mutate(obs_iid = row_number())) %>%
+    mutate(
+      logit_gen_prev2 = logit_gen_prev,
+      region = factor(region)) %>%
+    left_join(geographies %>% st_drop_geometry()) %>%
+    mutate(id.iso3 = ifelse(is.na(iso3), 39, id.iso3)) %>%
+    ungroup() %>%
+    select(iso3, area_id, kp, logit_gen_prev, obs_iid, method, positive, negative, region, denominator, id.ref, id.iso3) 
+  
+
+  prev_formula <- positive ~ logit_gen_prev + region + region*logit_gen_prev + method + kp + f(id.iso3, model = "iid") + f(id.ref, model = "iid")
+  
+  prev_fit <- INLA::inla(prev_formula,
+                         data = prev_inla,
+                         family = "betabinomial", 
+                         Ntrials = prev_inla$denominator,
+                         # offset = log(denominator),
+                         control.compute = list(config = TRUE,
+                                                dic = TRUE),
+                         control.predictor=list(compute=TRUE),
+                         verbose = FALSE)
+  
+  
+  
+  
+  ###
+  
+  df <- prev_inla %>%
+    filter(across(all_of("positive"), ~!is.na(.x)))
+  
+  print("Sampling..")
+  samples <- inla.posterior.sample(1000, prev_fit)
+  print("Done sampling")
+  contents = prev_fit$misc$configs$contents
+  effect = "Predictor"
+  id.effect = which(contents$tag==effect)
+  ind.effect = contents$start[id.effect]-1 + (1:contents$length[id.effect])
+  
+  ind.effect <- 1:(nrow(prev_inla) - nrow(df))
+  
+  samples.effect = lapply(samples, function(x) x$latent[ind.effect])
+  
+  prev_samples <- matrix(sapply(samples.effect, cbind), ncol=1000)
+  
+  ident <- prev_inla[ind.effect, ]
+  
+  qtls <- apply(prev_samples, 1, quantile, c(0.025, 0.5, 0.975))
+  
+  prev <- ident %>%
+    ungroup() %>%
+    mutate(
+      lower = qtls[1,],
+      median = qtls[2,],
+      upper = qtls[3,],
+      indicator = "prevalence"
+    )
+  
+  
   prev_fixed <- data.frame(prev_fit$summary.fixed) %>%
     rownames_to_column() %>%
     mutate(kp = kp_id)
@@ -464,7 +601,7 @@ art_mod <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
     # filter(kp == "PWID") %>%
     mutate(id.ref = cur_group_id(),
            id.ref = ifelse(is.na(ref), NA, id.ref),
-           id.iso3 = cur_group_id(),
+           # id.iso3 = cur_group_id(),
            logit_gen_art2 = logit_gen_art) %>%
     ungroup()
   
@@ -474,16 +611,19 @@ art_mod <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
     mutate(denominator = 1) %>%
     bind_rows(art_df %>%
                 ungroup) %>%
-    group_by(iso3) %>%
-    mutate(id.iso3 = cur_group_id(),
-           region = factor(region)) %>%
+    # group_by(iso3) %>%
+    # mutate(id.iso3 = cur_group_id(),
+    #        region = factor(region)) %>%
     ungroup() %>%
-    select(iso3, logit_gen_art, method, positive, negative, region, denominator, id.ref, id.iso3)
+    left_join(geographies %>% st_drop_geometry()) %>%
+    mutate(id.iso3 = ifelse(is.na(iso3), 39, id.iso3)) %>%
+    select(iso3, logit_gen_art, method, positive, negative, denominator, id.ref, id.iso3)
   
-  art_formula <- positive ~ logit_gen_art + method + f(id.ref, model = "iid", hyper = ref.iid.prec.prior) + f(id.iso3, model = "iid", hyper = iso.iid.prec.prior)
+  # art_formula <- positive ~ logit_gen_art + method + f(id.ref, model = "iid", hyper = ref.iid.prec.prior) + f(id.iso3, model = "besag", graph = "national_level_adj.adj")
+  art_formula <- positive ~ logit_gen_art  + f(id.ref, model = "iid", hyper = ref.iid.prec.prior) + f(id.iso3, model = "iid")
   
   if(kp_id == "PWID") {
-    art_formula <- positive ~ f(logit_gen_art, mean.linear = 0.66, prec.linear = 25, model = "linear") + method + f(id.ref, model = "iid", hyper = ref.iid.prec.prior) + f(id.iso3, model = "iid", hyper = iso.iid.prec.prior)
+    art_formula <- positive ~ f(logit_gen_art, mean.linear = 0.66, prec.linear = 25, model = "linear") + f(id.ref, model = "iid", hyper = ref.iid.prec.prior) + f(id.iso3, model = "iid")
   }
   
   # 
@@ -497,8 +637,8 @@ art_mod <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
                         family = "betabinomial", 
                         Ntrials = art_inla$denominator,
                         # offset = log(denominator),
-                        control.compute = list(config = TRUE),
-                        control.family = list(link = "logit"),
+                        control.compute = list(config = TRUE,
+                                               dic = TRUE),
                         control.predictor=list(compute=TRUE),
                         verbose = FALSE)
   
@@ -539,49 +679,25 @@ art_mod <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   
 })
 
-names(prev_mod) <- c("FSW", "MSM", "PWID", "TG")
+names(prev_mod_msm_tg) <- "MSM-TG"
+
+prev_mod$MSM$prev_samples <- prev_mod_msm_tg$`MSM-TG`$prev_samples[1:120,]
+prev_mod$MSM$prev <- prev_mod_msm_tg$`MSM-TG`$prev %>% filter(kp == "MSM")
+
+prev_mod$TG$prev_samples <- prev_mod_msm_tg$`MSM-TG`$prev_samples[121:240,]
+prev_mod$TG$prev <- prev_mod_msm_tg$`MSM-TG`$prev %>% filter(kp == "TG")
+
 names(pse_mod) <- c("FSW", "MSM", "PWID")
 names(art_mod) <- c("FSW", "MSM", "PWID")
-
-pl <- imap(art_mod, 
-  ~filter(.x$art, is.na(iso3)) %>% 
-    select(logit_gen_art, lower:upper) %>% 
-    mutate(across(everything(), invlogit)) %>%
-    ggplot(aes(x=logit_gen_art, y=median)) + 
-    geom_line() + 
-    geom_ribbon(aes(ymin=lower, ymax=upper), alpha= 0.3) +
-    moz.utils::standard_theme() +
-    scale_y_continuous(labels = scales::label_percent(), limits = c(0,1)) +
-    scale_x_continuous(labels = scales::label_percent()) +
-    labs(title = .y, y="KP art", x="Genpop art")
-)
-
-pl2 <- imap(prev_mod, 
-           ~filter(.x$prev, !is.na(iso3)) %>% 
-             select(logit_gen_prev, lower:upper, iso3) %>% 
-             mutate(across(!iso3, invlogit)) %>%
-             ggplot(aes(x=logit_gen_prev, y=median)) + 
-             # geom_line(aes(color=iso3)) + 
-             # geom_ribbon(aes(ymin=lower, ymax=upper, fill=iso3), alpha= 0.3) +
-             geom_pointrange(aes(ymin=lower, ymax=upper)) +
-             moz.utils::standard_theme() +
-             scale_y_continuous(labels = scales::label_percent(), limits = c(0,1)) +
-             scale_x_continuous(labels = scales::label_percent()) +
-             labs(title = .y, y="KP prev", x="Genpop prev")
-)
-
-ggpubr::ggarrange(pl2[[1]], pl2[[2]], pl2[[3]], pl2[[4]], common.legend = TRUE)
-
-ggpubr::ggarrange(pl[[1]], pl[[2]], pl[[3]],
-                  common.legend = TRUE)
-
 
 pop <- lapply(ssa_iso3, function(x){
   orderly::orderly_search(name = "aaa_scale_pop", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
 })
 
 pop <- lapply(file.path("archive/aaa_scale_pop", pop, "interpolated_population.csv"), read_csv, show_col_types = FALSE) %>%
-  bind_rows() %>%
+  bind_rows()
+
+pop <- pop %>%
   filter(year == 2020,
          str_length(area_id) == 3) %>%
   five_year_to_15to49("population")
@@ -618,9 +734,9 @@ wpp_urban <- read.csv("~/Imperial College London/HIV Inference Group - WP - Docu
 
 
 kplhiv_art <- Map(function(prev, pse, art, pop) {
-  prev_s <- prev$prev_samples[90:126,]
+  prev_s <- prev$prev_samples[84:120,]
   pse_s <- pse$pse_samples
-  art_s <- art$art_samples[90:126,]
+  art_s <- art$art_samples[84:120,]
   
   pop_curr <- pop %>%
     mutate(iso3 = factor(iso3, levels = ssa_iso3)) %>%
@@ -712,6 +828,25 @@ region_pop <- pop %>%
       summarise(population = sum(population))
   )
 
+unaids_num <- bind_rows(
+  read.csv("~/Downloads/People living with HIV_People living with HIV - Adults (15-49)_Population All adults (15-49).csv") %>%
+    mutate(indicator = "plhiv"),
+  read.csv("~/Downloads/Treatment cascade_People living with HIV receiving ART (#)_Population Adults (15+).csv") %>%
+    mutate(indicator = "art")
+) %>%
+  select(!contains(c("lower", "upper", "Footnote"))) %>%
+  mutate(iso3 = countrycode::countrycode(Country, "country.name", "iso3c")) %>%
+  filter(iso3 %in% ssa_iso3) %>%
+  select(-Country) %>%
+  pivot_longer(-c(iso3, indicator)) %>%
+  mutate(year = str_remove(name, "X"),
+         value = str_remove_all(value, " ")) %>%
+  group_by(iso3, indicator) %>%
+  fill(value, .direction = "down") %>%
+  filter(year == "2020", !(iso3 == "ZAF" & indicator == "art")) %>%
+  type_convert() %>%
+  select(-name)
+
 region_unaids_num <- unaids_num %>%
   left_join(region) %>%
   group_by(region, indicator) %>%
@@ -739,9 +874,9 @@ bind_rows(
 
 ########################
 
-prev_s <- rbind(prev_mod$FSW$prev_samples[90:126,], prev_mod$MSM$prev_samples[90:126,], prev_mod$PWID$prev_samples[90:126,])
+prev_s <- rbind(prev_mod$FSW$prev_samples[84:120,], prev_mod$MSM$prev_samples[84:120,], prev_mod$PWID$prev_samples[84:120,])
 pse_s <- rbind(pse_mod$FSW$pse_samples, pse_mod$MSM$pse_samples, pse_mod$PWID$pse_samples)
-art_s <- rbind(art_mod$FSW$art_samples[90:126,], art_mod$MSM$art_samples[90:126,], art_mod$PWID$art_samples[90:126,])
+art_s <- rbind(art_mod$FSW$art_samples[84:120,], art_mod$MSM$art_samples[84:120,], art_mod$PWID$art_samples[84:120,])
 
 pop_curr <- pop %>%
   mutate(iso3 = factor(iso3, levels = ssa_iso3),
@@ -865,28 +1000,15 @@ prev_res %>%
 art_res %>%
   mutate(across(lower:upper, invlogit)) %>%
   ggplot(aes(x=invlogit(logit_gen_art), y=median)) +
-  geom_pointrange(aes(ymax = upper, ymin = lower, color=iso3)) +
-  facet_wrap(~kp)
+  # geom_pointrange(aes(ymax = upper, ymin = lower, color=iso3)) +
+    geom_line() +
+    geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.3) +
+    geom_point(data = art_df %>% filter(kp != "TG"), aes(y=value)) +
+    geom_abline(aes(intercept=0, slope=1), linetype =3 ) +
+    facet_wrap(~kp)
 
 
-unaids_num <- bind_rows(
-  read.csv("~/Downloads/People living with HIV_People living with HIV - Adults (15-49)_Population All adults (15-49).csv") %>%
-    mutate(indicator = "plhiv"),
-  read.csv("~/Downloads/Treatment cascade_People living with HIV receiving ART (#)_Population Adults (15+).csv") %>%
-    mutate(indicator = "art")
-) %>%
-  select(!contains(c("lower", "upper", "Footnote"))) %>%
-  mutate(iso3 = countrycode::countrycode(Country, "country.name", "iso3c")) %>%
-  filter(iso3 %in% ssa_iso3) %>%
-  select(-Country) %>%
-  pivot_longer(-c(iso3, indicator)) %>%
-  mutate(year = str_remove(name, "X"),
-         value = str_remove_all(value, " ")) %>%
-  group_by(iso3, indicator) %>%
-  fill(value, .direction = "down") %>%
-  filter(year == "2020", !(iso3 == "ZAF" & indicator == "art")) %>%
-  type_convert() %>%
-  select(-name)
+
 
 remaining_num <- kplhiv_art %>%
   lapply("[[", "country") %>%
@@ -977,24 +1099,6 @@ png("~/Downloads/kplhiv_plot.png", width = 400, height=300)
 kplhiv_plot
 dev.off()
 
-
-crossing(iso3 = ssa_iso3,
-         kp = c("FSW", "MSM", "PWID", "TG")) %>%
-  left_join(prev_df %>% distinct(iso3, kp) %>% mutate(indicator = "prev", has_data = 1)) %>%
-  bind_rows(
-    crossing(iso3 = ssa_iso3,
-             kp = c("FSW", "MSM", "PWID", "TG")) %>%
-      left_join(pse_dat %>% distinct(iso3, kp) %>% mutate(indicator = "pse", has_data = 1)),
-    crossing(iso3 = ssa_iso3,
-             kp = c("FSW", "MSM", "PWID", "TG")) %>%
-      left_join(art_df %>% ungroup() %>% distinct(iso3, kp) %>% mutate(indicator = "art_cov", has_data = 1))
-  ) %>%
-  mutate(has_data = ifelse(is.na(has_data), 0, 1)) %>%
-  group_by(iso3) %>%
-  summarise(has_data = sum(has_data)) %>%
-  ungroup() %>%
-  summarise(med = median(has_data))
-
 write_csv(prev_fixed, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_fixed.csv")
 
 write_csv(prev_res %>%
@@ -1003,8 +1107,7 @@ write_csv(prev_res %>%
 
 write_csv(prev_res %>%
   filter(!is.na(iso3)) %>%
-    mutate(median = invlogit(median)) %>%
-    select(iso3, kp, fit = median), "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_national_matched_estimates.csv")
+    mutate(across(lower:upper, invlogit)), "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_national_matched_estimates.csv")
 
 ######
 
@@ -1021,51 +1124,8 @@ write_csv(art_res %>%
 
 write_csv(art_res %>%
             filter(!is.na(iso3)) %>%
-            mutate(fit = invlogit(median)) %>%
-            select(iso3, kp, fit), "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_national_matched_estimates.csv")
+            mutate(across(lower:upper, invlogit)), "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_national_matched_estimates.csv")
 
-##
-
-art_res %>% mutate(gen_art = round(invlogit(logit_gen_art), 3), median = invlogit(median)*100) %>% filter(gen_art %in% c(0.4, 0.75, 0.8), is.na(iso3)) %>% arrange(gen_art)
-
-names(prev_mod) <- c("FSW", "MSM", "PWID", "TG")
-lapply(prev_mod, "[[", "prev") %>%
-  bind_rows(.id = "kp") %>%
-  filter(is.na(iso3)) %>%
-  ggplot(aes(x=logit_gen_prev, y=median)) +
-  # geom_line(size=1) +
-  # geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper), alpha=0.3) +
-  geom_line(aes(color=region), size=1) +
-  geom_ribbon(aes(ymin = lower, ymax = upper, fill=region), alpha=0.3) +
-  geom_point(data = prev_df %>% filter(kp %in% c("MSM", "PWID", "FSW", "TG")), aes(y=logit_kp_prev, color=region), alpha = 0.3) +
-  geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
-  moz.utils::standard_theme() +
-  scale_y_continuous(labels = convert_logis_labels) +
-  scale_x_continuous(labels = convert_logis_labels) +
-  labs(y = "KP HIV prevalence", x = "Age/sex matched total\npopulation HIV prevalence")+
-  theme(panel.border = element_rect(fill=NA, color="black")) +
-  facet_wrap(~kp, ncol=1)
-
-p2 <- prev_res %>%
-  bind_rows() %>%
-  filter(is.na(iso3)) %>%
-  ggplot(aes(x=provincial_value, y=fit)) +
-  # geom_line(size=1) +
-  # geom_ribbon(aes(ymin = lower, ymax = upper), alpha=0.3) +
-  geom_line(aes(color=region), size=1) +
-  geom_ribbon(aes(ymin = lower, ymax = upper, fill=region), alpha=0.3) +
-  geom_point(data = prev_df %>% filter(kp %in% c("MSM", "PWID", "FSW", "TG")), aes(y=value, color=region), alpha = 0.3) +
-  geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
-  moz.utils::standard_theme() +
-  scale_x_continuous(labels = scales::label_percent(accuracy = 1), limits = c(0,0.5)) +
-  scale_y_continuous(labels = scales::label_percent(), limits = c(0,1)) +
-  labs(y = "KP HIV prevalence", x = "Age/sex matched total\npopulation HIV prevalence")+
-  theme(panel.border = element_rect(fill=NA, color="black")) +
-  facet_wrap(~kp, ncol=1)
-
-png(file="~/Dropbox/Work Streams/2021/Key populations/Paper/Data consolidation paper/Figs/Prevalence/prev_results.png", width=700, height=850)
-ggpubr::ggarrange(p1, p2, nrow=1, common.legend = TRUE, legend = "bottom")
-dev.off()
 
 #########
 pse_fixed %>%
@@ -1087,3 +1147,25 @@ pse_fixed %>%
   ) %>%
   arrange(method) %>%
   dplyr::select(method, kp, est, n_studies, n)
+
+#3##
+
+prev_res %>%
+  mutate(median = round(invlogit(median), 3),
+         lower = round(invlogit(lower), 3),
+         upper = round(invlogit(upper), 3),
+         gen_prev = round(invlogit(logit_gen_prev), 3)) %>%
+  filter(is.na(iso3),
+         (region == "ESA" & gen_prev %in% c(0.011, 0.151)) | (region == "WCA" & gen_prev %in% c(0.011, 0.066))) %>%
+  select(region, kp, gen_prev, lower, median, upper) %>%
+  arrange(region, gen_prev)
+  
+art_res %>%
+  mutate(median = round(invlogit(median), 3),
+         lower = round(invlogit(lower), 3),
+         upper = round(invlogit(upper), 3),
+         gen_art = round(invlogit(logit_gen_art), 3)) %>%
+  filter(is.na(iso3),
+         gen_art %in% c(0.4, 0.8)) %>%
+  select(kp, gen_art, lower, median, upper) %>%
+  arrange(gen_art)

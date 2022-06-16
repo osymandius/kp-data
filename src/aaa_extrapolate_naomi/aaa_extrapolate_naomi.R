@@ -143,8 +143,9 @@ out <- lapply(dat, function(x) {
         ),
         has_age = ifelse(!is.na(age_group), 1, 0),
         age_group = case_when(
-          (is.na(age_group) | !age_group %in% unique(filtered_indicators$age_group)) & !kp %in% c("TG", "TGW", "MSM") ~ "Y015_049",
-          (is.na(age_group) | !age_group %in% unique(filtered_indicators$age_group)) & kp %in% c("TG", "TGW", "MSM") ~ "Y015_029",
+          # (is.na(age_group) | !age_group %in% unique(filtered_indicators$age_group)) & !kp %in% c("TG", "TGW", "MSM") ~ "Y015_049",
+          # (is.na(age_group) | !age_group %in% unique(filtered_indicators$age_group)) & kp %in% c("TG", "TGW", "MSM") ~ "Y015_029",
+          is.na(age_group) | !age_group %in% unique(filtered_indicators$age_group) ~ "Y015_049",
           TRUE ~ as.character(age_group))
       ) %>%
       left_join(df %>% select(-area_name)) %>%

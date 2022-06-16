@@ -15,6 +15,9 @@ orderly_pull_archive("ssd_data_areas", remote = "fertility")
 
 #######
 map(ssa_iso3, ~possibly_pull("aaa_scale_pop", id = paste0('latest(parameter:iso3 == "', .x, '")'), recursive = FALSE, remote = "fertility"))
+id <- map(area_tasks, ~possibly_pull(.x, id = paste0('latest(parameter:version == "', 2021, '")'), recursive = FALSE, remote = "naomi_2021"))
+
+
 
 ### Assign populations
 id <- map(ssa_iso3, ~possibly_run("aaa_assign_populations", parameters = data.frame(iso3 = .x)))
@@ -28,7 +31,7 @@ orderly_dev_start_oli("aaa_assign_populations", data.frame(iso3 = "SLE"))
 ### Assign province
 id <- map(c("ZAF", "TZA", "RWA", "GHA", "ETH", "COD", "CIV", "BDI", "UGA", "BEN", "TGO"), ~possibly_run("aaa_assign_province", parameters = data.frame(iso3 = .x)))
 # names(id) <- ssa_iso3
-lapply(id %>% compact(), orderly_commit)
+lapply(id2 %>% compact(), orderly_commit)
 
 
 orderly_dev_start_oli("aaa_assign_province", data.frame(iso3 = "SLE"))
@@ -36,6 +39,7 @@ orderly_dev_start_oli("aaa_assign_province", data.frame(iso3 = "SLE"))
 
 ### Extrapolate Naomi
 id <- map(ssa_iso3, ~possibly_run("aaa_extrapolate_naomi", parameters = data.frame(iso3 = .x)))
+id <- orderly_batch("aaa_extrapolate_naomi", parameters = data.frame(iso3 = ssa_iso3))
 # names(id) <- ssa_iso3
 lapply(id %>% compact(), orderly_commit)
 

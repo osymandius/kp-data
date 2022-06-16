@@ -198,9 +198,9 @@ pse_final <- lapply(paste0("archive/aaa_assign_populations/", pse_id[!is.na(pse_
     method = case_when(
       method == "" ~ NA_character_,
       method %in% c("Programmatic mapping", "Hotspot mapping", "PLACE", "Enumeration/mapping", "Mapping", "Mapping and enumeration") ~ "PLACE/Mapping",
-      method %in% c("Unique object", "Unique object multiplier", "Unique Object Multiploer") ~ "Object/event multiplier",
+      method %in% c("Unique object", "Unique object multiplier", "Unique Object Multiploer") ~ "Object multiplier",
       method %in% c("Service Multiplier", "Service multiplier", "Multiplier") ~ "Service multiplier",
-      method %in% c("Unique event multiplier", "Unique event", "Event multiplier") ~ "Object/event multiplier",
+      method %in% c("Unique event multiplier", "Unique event", "Event multiplier") ~ "Event multiplier",
       method %in% c("Capture - recapture", "CRC", "2S-CEC") ~ "2S-CRC",
       method %in% c("Wisdom of Crowds, unique object distribution, social event and successive-sampling methods",
                     "Service multiplier, Unique Object , Literature SS-PSE(RDS-A), Unique event & Consensus approach-Modified Delphi",

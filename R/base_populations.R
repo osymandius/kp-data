@@ -69,8 +69,64 @@ p1 <- grump_naomi %>%
 
 p2 <- grump_naomi %>%  
   ggplot(aes(x=iso3, y=ratio)) +
-  geom_point(aes(size=naomi_population)) +
+  geom_point(aes(size=naomi_population), show.legend = FALSE) +
   lims(y=c(0,5))
 
-p1 + p2
+p2
 
+grump_naomi %>% 
+  filter(iso3 == "ZWE") %>%
+  ggplot(aes(x=naomi_population, y=city_population)) +
+  geom_point() +
+  geom_abline(aes(intercept=0, slope=1), linetype=3) +
+  scale_y_continuous(trans = "log", 
+                     breaks = c(30000, 60000, 100000, 250000, 500000, 1000000, 3000000),
+                     labels = scales::label_number(scale = 1E-3), limits = c(20000, 3300000)) +
+  scale_x_continuous(trans = "log", 
+                     breaks = c(30000, 60000, 100000, 250000, 500000, 1000000, 3000000),
+                     labels = scales::label_number(scale = 1E-3), limits = c(20000, 3300000)) +
+  standard_theme() +
+  labs(y="GRUMP population (thousands)", x="Naomi population (thousands)")
+
+grump %>% 
+  filter(area_name == "harare") %>%
+  ggplot() +
+    geom_sf() +
+    geom_sf(data = areas %>% filter(area_id == "ZWE_2_3"))
+
+grump %>% 
+  filter(area_name == "bulawayo") %>%
+  ggplot() +
+  geom_sf() +
+  geom_sf(data = areas %>% filter(area_id == "ZWE_2_1"))
+
+pse_priority <- read_csv("~/Downloads/pse_estimates_grump_priority.csv") %>%
+  mutate(source = "Priority GRUMP") %>%
+  bind_rows(
+    read_csv("~/Downloads/pse_estimates_naomi_priority.csv") %>%
+      mutate(source = "Priority Naomi")
+  )
+
+pse_priority %>%
+  ggplot(aes(x=fct_rev(iso3), y=median, color=source)) +
+    geom_point() +
+    facet_wrap(~kp) +
+    standard_theme() +
+    coord_flip() +
+    scale_y_continuous(labels = scales::label_percent()) +
+    labs(x=element_blank(), y=element_blank())
+
+## Namibia
+
+setdiff(
+  grump %>%
+    st_drop_geometry() %>%
+    filter(iso3 == "NAM") %>%
+    pull(area_name),
+  areas %>% 
+    st_drop_geometry() %>%
+    filter(iso3 == "NAM") %>%
+    pull(area_name) %>%
+    sort() %>%
+    tolower()
+)

@@ -3,7 +3,7 @@ iso3_c <- iso3
 areas <- read_sf("depends/naomi_areas.geojson")%>%
   mutate(iso3 = iso3_c)
 
-merge_cities <- read_sf("depends/")
+# merge_cities <- read_sf("depends/")
 
 population <- read.csv("depends/interpolated_population.csv") %>%
   left_join(areas %>% dplyr::select(area_id, area_name) %>% st_drop_geometry()) %>%
@@ -24,17 +24,21 @@ if(iso3 != "SSD") {
 population <- population %>%
   bind_rows(city_population)
 
+# population <- population %>%
+#   mutate(msm_age = ifelse(age_group %in% c("Y015_019", "Y020_024", "Y025_029"), 1, 0)) %>%
+#   filter(msm_age == 1) %>%
+#   group_by(area_id, area_name, year, sex) %>%
+#   summarise(population = sum(population)) %>%
+#   mutate(age_group = "Y015_029") %>%
+#   bind_rows(
+#     population %>%
+#       five_year_to_15to49("population") %>%
+#       sex_aggregation("population")
+#   )
+
 population <- population %>%
-  mutate(msm_age = ifelse(age_group %in% c("Y015_019", "Y020_024", "Y025_029"), 1, 0)) %>%
-  filter(msm_age == 1) %>%
-  group_by(area_id, area_name, year, sex) %>%
-  summarise(population = sum(population)) %>%
-  mutate(age_group = "Y015_029") %>%
-  bind_rows(
-    population %>%
-      five_year_to_15to49("population") %>%
-      sex_aggregation("population")
-  )
+  five_year_to_15to49("population") %>%
+  sex_aggregation("population")
 
 extrap_pop <- population %>%
   filter(year %in% 2015:2020, !is.na(population)) %>%
@@ -91,6 +95,8 @@ if(nrow(pse)) {
     group_by(idx) %>%
     filter(dist == min(dist)) 
   
+  ## GRUMP PRIORITY
+  
   min_dist_cities <- pse_areas %>%
       filter(is.na(area_level)) %>%
       dplyr::select(-area_level) %>%
@@ -98,28 +104,38 @@ if(nrow(pse)) {
                 by="iso3") %>%
       mutate(dist = stringdist::stringdist(value, tolower(area_name))) %>%
       group_by(idx) %>%
-      filter(dist == min(dist)) 
-  
+      filter(dist == min(dist))
+
   assigned_areas_idx <- min_dist_cities %>%
     filter(n() == 1, dist<3) %>%
     pull(idx)
-  
-  min_dist_naomi <- min_dist_cities %>%
+
+  min_dist_naomi <- pse_areas %>%
+    filter(is.na(area_level)) %>%
+    dplyr::select(-area_level) %>%
     filter(!idx %in% assigned_areas_idx) %>%
-    dplyr::select(iso3, given_area, year, kp, row_id, name, value, idx) %>%
-    full_join(areas %>% 
+    full_join(areas %>%
                 mutate(iso3 = iso3_c) %>%
-                dplyr::select(iso3, area_name, area_level, area_id) %>% 
+                dplyr::select(iso3, area_name, area_level, area_id) %>%
                 st_drop_geometry(), by="iso3")  %>%
     mutate(dist = stringdist::stringdist(value, tolower(area_name))) %>%
     group_by(idx) %>%
-    filter(dist == min(dist)) 
+    filter(dist == min(dist))
   
-  # min_dist <- bind_rows(min_dist_area_level, min_dist_cities, min_dist_naomi)
+  ## NAOMI PRIORITY
   
-  best_matches_cities <- min_dist_cities %>%
-    filter(n() == 1, dist<3) %>%
-    ungroup
+  # min_dist_naomi <- pse_areas %>%
+  #     filter(is.na(area_level)) %>%
+  #     dplyr::select(-area_level) %>%
+  #     full_join(areas %>%
+  #               mutate(iso3 = iso3_c) %>%
+  #               dplyr::select(iso3, area_name, area_level, area_id) %>%
+  #               st_drop_geometry(), by="iso3")  %>%
+  #     mutate(dist = stringdist::stringdist(value, tolower(area_name))) %>%
+  #     group_by(idx) %>%
+  #     filter(dist == min(dist))
+  
+  ####
   
   best_matches_naomi <- min_dist_naomi %>%
     bind_rows(min_dist_area_level) %>%
@@ -147,6 +163,27 @@ if(nrow(pse)) {
     warning("\nArea name matched several Naomi area IDs. The finest area level has been chosen\nThis is likely a district sharing the same name as its province. Check.\n")
     
   }
+  
+
+  ## NAOMI PRIORITY
+  # assigned_areas_idx <- sort(best_matches_naomi$idx)
+
+  # min_dist_cities <- pse_areas %>%
+  #   filter(is.na(area_level)) %>%
+  #   dplyr::select(-area_level) %>%
+  #   filter(!idx %in% assigned_areas_idx) %>%
+  #   # dplyr::select(iso3, given_area, year, kp, row_id, name, value, idx) %>%
+  #   full_join(city_population %>% distinct(iso3, area_id, area_name),
+  #             by="iso3") %>%
+  #   mutate(dist = stringdist::stringdist(value, tolower(area_name))) %>%
+  #   group_by(idx) %>%
+  #   filter(dist == min(dist))
+  
+  # min_dist <- bind_rows(min_dist_area_level, min_dist_cities, min_dist_naomi)
+  
+  best_matches_cities <- min_dist_cities %>%
+    filter(n() == 1, dist<3) %>%
+    ungroup
   
   bad_match <- min_dist_cities %>%
     filter(dist>=3, !idx %in% best_matches_naomi$idx) %>%
@@ -190,10 +227,12 @@ if(nrow(pse)) {
       kp %in% c("MSM", "TGM") ~ "male",
       kp %in% c("FSW", "SW", "TG", "TGW") ~ "female"
     ),
-    age_group = case_when(
-      kp %in% c("PWID", "FSW", "SW") ~ "Y015_049",
-      kp %in% c("MSM", "TG", "TGW", "TGM") ~ "Y015_029"
-    )) %>%
+    # age_group = case_when(
+    #   kp %in% c("PWID", "FSW", "SW") ~ "Y015_049",
+    #   kp %in% c("MSM", "TG", "TGW", "TGM") ~ "Y015_029"
+    # )
+    age_group = "Y015_049"
+    ) %>%
     type_convert() %>%
     left_join(population %>% ungroup() %>% dplyr::select(area_id, year, sex, age_group, population) %>% type_convert()) %>%
     group_by(row_id) %>%
@@ -221,9 +260,9 @@ if(nrow(pse)) {
       method = case_when(
         method == "" ~ NA_character_,
         method %in% c("Programmatic mapping", "Hotspot mapping", "PLACE", "Enumeration/mapping", "Mapping", "Mapping and enumeration") ~ "PLACE/Mapping",
-        method %in% c("Unique object", "Unique object multiplier", "Unique Object Multiploer") ~ "Object/event multiplier",
+        method %in% c("Unique object", "Unique object multiplier", "Unique Object Multiploer") ~ "Object multiplier",
         method %in% c("Service Multiplier", "Service multiplier", "Multiplier") ~ "Service multiplier",
-        method %in% c("Unique event multiplier", "Unique event", "Event multiplier") ~ "Object/event multiplier",
+        method %in% c("Unique event multiplier", "Unique event", "Event multiplier") ~ "Event multiplier",
         method %in% c("Capture - recapture", "CRC", "2S-CEC") ~ "2S-CRC",
         method %in% c("Wisdom of Crowds, unique object distribution, social event and successive-sampling methods",
                       "Service multiplier, Unique Object , Literature SS-PSE(RDS-A), Unique event & Consensus approach-Modified Delphi",

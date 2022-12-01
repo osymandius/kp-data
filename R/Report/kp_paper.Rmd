@@ -47,7 +47,7 @@ art_final <- read_csv("~/Imperial College London/HIV Inference Group - WP - Docu
 mf <- crossing(region %>%
                  select(-four_region) %>%
                  bind_rows(region %>% select(iso3) %>% mutate(region = "SSA")),
-               kp = c("FSW", "MSM", "PWID", "TG")
+               kp = c("FSW", "MSM", "PWID", "TG", "TGM")
 )
 
 pse_n <- pse_final %>%
@@ -121,7 +121,12 @@ summary_table <- pse_tab %>%
   left_join(prev_tab) %>%
   left_join(art_tab) %>%
   select(-region_n) %>%
-  mutate(region = factor(region, levels = c("SSA", "ESA", "WCA"))) %>%
+  mutate(region = factor(region, levels = c("SSA", "ESA", "WCA")),
+         kp = ifelse(kp == "TG", "TGW", kp))
+
+summary_table[is.na(summary_table)] <- 0
+
+summary_table <- summary_table %>%
   arrange(region) %>%
   select(region, kp, pse_n, pse_prop, prev_n, prev_prop, art_n, art_prop) %>%
   kable(
@@ -579,7 +584,7 @@ pse_estimates %>%
     geom_hline(data = data.frame(yintercept = 0.01, kp = "MSM", iso3 = c("AGO", "ZWE")), linetype = 3, aes(yintercept = yintercept), color="red") +
     scale_color_manual(values = c(wesanderson::wes_palette("Zissou1")[c(4,1)])) +
     scale_fill_manual(values = wesanderson::wes_palette("Zissou1")[c(4,1)])  +
-    scale_x_continuous(breaks = 1:37, labels = iso3_sort$area_name) +
+    scale_x_continuous(breaks = 1:38, labels = iso3_sort$area_name) +
     facet_grid(kp ~ factor(four_region, levels=c("Western", "Central", "Eastern", "Southern"), labels = c("Western Africa", "Central Africa", "Eastern Africa", "Southern Africa")), scales="free", space="free_x") +
     scale_y_log10(breaks = scales::log_breaks(), labels = scales::label_percent(accuracy = 0.001)) +
     coord_cartesian(ylim = c(0.00003, .1)) +
@@ -862,10 +867,10 @@ Several limitations should be considered in the interpretation of these estimate
 \newpage
 ## Supplementary figures
 
-```{r echo=FALSE, warning = FALSE, message = FALSE, fig.height = 12, fig.width = 10, out.width = "100%", out.height = "90%"}
+<!-- ```{r echo=FALSE, warning = FALSE, message = FALSE, fig.height = 12, fig.width = 10, out.width = "100%", out.height = "90%"} -->
 
-knitr::kable(pse_method,col.names = c("Method", "KP", "OR (95% CI)", "Number of studies", "n"),
-             caption = "Size estimation method fixed effect estimates") %>%
-  kable_styling(position = "center")
+<!-- knitr::kable(pse_method,col.names = c("Method", "KP", "OR (95% CI)", "Number of studies", "n"), -->
+<!--              caption = "Size estimation method fixed effect estimates") %>% -->
+<!--   kable_styling(position = "center") -->
 
-```
+<!-- ``` -->

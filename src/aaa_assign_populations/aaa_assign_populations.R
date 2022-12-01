@@ -17,7 +17,13 @@ if(iso3 != "SSD") {
            iso3 = iso3_c
     )
 } else {
-  city_population <- data.frame(iso3 = iso3_c)
+  city_population <- data.frame(area_id = NA_character_,
+                                area_name = NA_character_,
+                                year = NA_integer_,
+                                sex = NA_character_,
+                                age_group = NA_character_,
+                                population = NA_integer_,
+                                iso3 = NA_character_)
 }
 
 
@@ -189,6 +195,7 @@ if(nrow(pse)) {
     filter(dist>=3, !idx %in% best_matches_naomi$idx) %>%
     bind_rows(
       min_dist_naomi %>%
+        select(-area_level) %>%
         filter(dist>=3, !idx %in% best_matches_cities$idx)
     ) %>%
     ungroup() %>%

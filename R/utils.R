@@ -14,14 +14,12 @@ map(ssa_iso3, ~possibly_pull(paste0(tolower(.x), "_data_areas"), remote = "naomi
 orderly_pull_archive("ssd_data_areas", remote = "fertility")
 
 #######
-map(ssa_iso3, ~possibly_pull("aaa_scale_pop", id = paste0('latest(parameter:iso3 == "', .x, '")'), recursive = FALSE, remote = "fertility"))
+id <- map(ssa_iso3, ~possibly_pull("aaa_download_constrained_worldpop", id = paste0('latest(parameter:iso3 == "', .x, '" && parameter:version == 2022)'), recursive = TRUE, remote = "inference"))
 id <- map(area_tasks, ~possibly_pull(.x, id = paste0('latest(parameter:version == "', 2021, '")'), recursive = FALSE, remote = "naomi_2021"))
-
-
 
 ### Assign populations
 id <- map(ssa_iso3, ~possibly_run("aaa_assign_populations", parameters = data.frame(iso3 = .x)))
-id <- orderly::orderly_batch("aaa_assign_populations", data.frame(iso3 = ssa_iso3))
+id <- orderly::orderly_batch("aaa_extrapolate_naomi", data.frame(iso3 = c("AGO", "BWA", "KEN", "UGA"), version = 2022))
 # names(id) <- ssa_iso3
 lapply(id$id[id$success == TRUE], orderly_commit)
 
@@ -34,12 +32,12 @@ id <- map(c("ZAF", "TZA", "RWA", "GHA", "ETH", "COD", "CIV", "BDI", "UGA", "BEN"
 lapply(id2 %>% compact(), orderly_commit)
 
 
-orderly_dev_start_oli("aaa_assign_province", data.frame(iso3 = "SLE"))
+orderly_dev_start_oli("aaa_extrapolate_naomi", data.frame(iso3 = "MOZ"))
 # setwd("src/aaa_assign_province")
 
 ### Extrapolate Naomi
 id <- map(ssa_iso3, ~possibly_run("aaa_extrapolate_naomi", parameters = data.frame(iso3 = .x)))
-id <- orderly_batch("aaa_extrapolate_naomi", parameters = data.frame(iso3 = ssa_iso3))
+id <- orderly_batch("aaa_extrapolate_naomi", parameters = data.frame(iso3 = ssa_iso3, version = 2022))
 # names(id) <- ssa_iso3
 lapply(id %>% compact(), orderly_commit)
 
@@ -53,7 +51,7 @@ names(id) <- ssa_iso3
 lapply(id %>% compact(), orderly_commit)
 
 ### SEARCH
-orderly::orderly_search(name = "aaa_assign_populations", query = paste0('latest(parameter:iso3 == "', "ZAF", '")'), draft = FALSE)
+orderly::orderly_search(name = "aaa_assign_populations", query = paste0('latest(parameter:iso3 == "', "SSD", '")'), draft = FALSE)
 
 
 id <- orderly_batch("aaa_inputs_orderly_pull", parameters = data.frame(iso3 = ssa_iso3))
@@ -61,8 +59,8 @@ names(id) <- ssa_iso3
 lapply(id, orderly_commit)
 orderly_run("aaa_assign_populations", parameters = data.frame(iso3 = "ZAF"))
 
-lapply(c("BWA", "ZAF"), function(x){
-  orderly::orderly_search(name = "aaa_scale_pop", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
+foo <- lapply(ssa_iso3, function(x){
+  orderly::orderly_search(name = "aaa_scale_pop", query = paste0('latest(parameter:iso3 == "', x, '" && parameter:version == 2021)'), draft = FALSE)
 })
 
 lapply(c("TZA"), function(x){
@@ -87,8 +85,8 @@ df %>%
   filter(is.na(x)) %>%
   select(-x) %>% View()
 
-lapply("ZAF", function(x){
-  orderly::orderly_pull_archive("aaa_inputs_orderly_pull", id = paste0('latest(parameter:iso3 == "', x, '")'), remote = "naomi_2021")
+lapply("SSD", function(x){
+  orderly::orderly_pull_archive("aaa_areas_pull", id = paste0('latest(parameter:iso3 == "', x, '")'), remote = "naomi_2021")
 })
 
 

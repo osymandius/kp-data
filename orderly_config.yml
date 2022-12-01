@@ -1,13 +1,13 @@
 remote:
-  main:
+  inference:
     driver: orderlyweb::orderlyweb_remote
     args:
       host: hiv-orderly.dide.ic.ac.uk
       port: 443
-      prefix: fertility
+      prefix: inference-data
       token: $ORDERLYWEB_GITHUB_TOKEN
-    primary: true
-    master_only: true
+    # primary: true
+    default_branch: main
   real:
     driver: orderly.sharepoint::orderly_remote_sharepoint
     args:

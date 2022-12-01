@@ -25,6 +25,8 @@ packages:
 parameters:
   iso3:
     default: ~
+  version:
+    default: 2021
 
 # global_resources:
 #   resources/org_iso_mapping.csv: org_iso_mapping.csv
@@ -192,12 +194,12 @@ depends:
       depends/zwe_areas.geojson: zwe_areas.geojson
 
   # aaa_data_population_gpw:
-  #   id: latest(parameter:iso3 == iso3)
+  #   id: latest(parameter:iso3 == iso3 && parameter:version == 2021)
   #   use:
   #     depends/population_gpw_naomi.csv: population_gpw_naomi.csv
 
   # aaa_data_population_worldpop:
-  #   id: latest(parameter:iso3 == iso3)
+  #   id: latest(parameter:iso3 == iso3 && parameter:version == 2021)
   #   use:
   #     depends/population_worldpop_naomi.csv: population_worldpop_naomi.csv
 

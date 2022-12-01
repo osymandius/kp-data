@@ -2,7 +2,7 @@ script: script.R
 
 artefacts:
   - data:
-      description: 2021 spectrum file pulled from ADR
+      description: 2022 spectrum file pulled from ADR
       filenames:
         - spectrum_file.zip
 
@@ -17,6 +17,8 @@ sources:
 parameters:
   iso3:
     default: ~
+  version:
+    default: 2022
 
 packages:
   - httr

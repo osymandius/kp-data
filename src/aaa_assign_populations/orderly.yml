@@ -17,6 +17,8 @@ artefacts:
 parameters:
   iso3:
     default: ~
+  version:
+    default: 2022
 
 packages:
   - naomi
@@ -34,17 +36,17 @@ sources:
 
 depends:
   aaa_areas_pull:
-    id: latest(parameter:iso3 == iso3)
+    id: latest(parameter:iso3 == iso3 && parameter:version == version)
     use:
       depends/naomi_areas.geojson: naomi_areas.geojson
 
   aaa_scale_pop:
-    id: latest(parameter:iso3 == iso3)
+    id: latest(parameter:iso3 == iso3 && parameter:version == version)
     use:
       depends/interpolated_population.csv: interpolated_population.csv
   
-  aaa_download_worldpop:
-    id: latest(parameter:iso3 == iso3)
+  aaa_download_constrained_worldpop:
+    id: latest(parameter:iso3 == iso3 && parameter:version == version)
     use:
       depends/interpolated_city_population.csv: interpolated_city_population.csv
       depends/city_province_map.csv: city_province_map.csv

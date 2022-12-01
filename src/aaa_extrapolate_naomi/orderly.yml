@@ -33,6 +33,8 @@ artefacts:
 parameters:
   iso3:
     default: ~
+  version:
+    default: 2022
 
 packages:
   - naomi
@@ -48,19 +50,19 @@ global_resources:
 
 depends:
   aaa_areas_pull:
-    id: latest(parameter:iso3 == iso3)
+    id: latest(parameter:iso3 == iso3 && parameter:version == version)
     use:
       depends/naomi_areas.geojson: naomi_areas.geojson
   aaa_get_spectrum:
-    id: latest(parameter:iso3 == iso3)
+    id: latest(parameter:iso3 == iso3 && parameter:version == version)
     use:
       depends/spectrum_file.zip: spectrum_file.zip
   # aaa_outputs_adr_pull:
-  #   id: latest(parameter:iso3 == iso3)
+  #   id: latest(parameter:iso3 == iso3 && parameter:version == version)
   #   use:
   #     depends/naomi_output.zip: naomi_output.zip
   aaa_assign_province:
-    id: latest(parameter:iso3 == iso3)
+    id: latest(parameter:iso3 == iso3 && parameter:version == version)
     use:
       depends/prev_assigned_province.csv: prev_assigned_province.csv
       depends/art_assigned_province.csv: art_assigned_province.csv

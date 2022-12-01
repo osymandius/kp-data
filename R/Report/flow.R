@@ -20,13 +20,15 @@ pse_inputs <- pse_total_dat %>%
 
 pse_simple_deduplication <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/2021_11_28_pse_distinct.csv", show_col_types = FALSE)
 
-pse_spreadsheet_extract <- lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/PSE/Edited/", full.names = TRUE, pattern = "csv"), read_csv, na= "", show_col_types = FALSE)
+# pse_spreadsheet_extract <- lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/PSE/Edited/", full.names = TRUE, pattern = "csv"), read_csv, na= "", show_col_types = FALSE)
+# 
+# pse_spreadsheet_extract <- c(pse_spreadsheet_extract, 
+#               lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/PSE/Edited/", full.names = TRUE, pattern = "xlsx"), readxl::read_xlsx)
+# ) %>%
+#   lapply(type_convert) %>%
+#   bind_rows()
 
-pse_spreadsheet_extract <- c(pse_spreadsheet_extract, 
-              lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/PSE/Edited/", full.names = TRUE, pattern = "xlsx"), readxl::read_xlsx)
-) %>%
-  lapply(type_convert) %>%
-  bind_rows()
+pse_spreadsheet_extract <- read_csv("~/Imperial College London/Key population data - WP - General/Combined data/PSE/Edited/combined_pse2.csv")
 
 write_csv(pse_spreadsheet_extract, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_spreadsheet_extract.csv")
 
@@ -136,14 +138,15 @@ pse_spreadsheet_extract <- pse_spreadsheet_extract %>%
 
 truly_checked <- pse_spreadsheet_extract %>%
   filter(data_checked == "yes",
-         year > 2009
+         year > 2009,
+         source_found != "private"
   ) %>%
   mutate(data_checked = "Yes")
 
 mapped_place <- pse_spreadsheet_extract %>%
   filter(str_detect(method, "apping|PLACE"),
          data_checked == "remove",
-         source_found %in% c("yes", "private"),
+         source_found %in% c("yes"),
          is.na(duplicate_of),
          !country.name == area_name,
          year > 2009) %>%
@@ -181,12 +184,14 @@ pse_cleaned_text <- pse_cleaned_data %>%
 pse_clean_labels <- collapse(pse_cleaned_text)
 
 pse_id <- lapply(ssa_iso3, function(x){
-  orderly::orderly_search(name = "aaa_assign_populations", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
+  orderly::orderly_search(name = "aaa_assign_populations", query = paste0('latest(parameter:iso3 == "', x, '" && parameter:version == 2022)'), draft = FALSE)
 })
+
+pse_id <- c(pse_id[!is.na(pse_id)], orderly::orderly_search(name = "aaa_assign_populations", query = paste0('latest(parameter:iso3 == "COD")'), draft = FALSE))
 
 setwd(rprojroot::find_rstudio_root_file())
 
-pse_final <- lapply(paste0("archive/aaa_assign_populations/", pse_id[!is.na(pse_id)], "/pse_prevalence.csv"),
+pse_final <- lapply(paste0("archive/aaa_assign_populations/", pse_id, "/pse_prevalence.csv"),
        read_csv, show_col_types = FALSE) %>%
   bind_rows() %>%
   filter(is.na(x),
@@ -283,55 +288,60 @@ saveRDS(pse_final_text, "R/Report/R objects for report/PSE/pse_final_count_text.
 write_csv(pse_final, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_final_sourced.csv")
 saveRDS(pse_inputs_text, "R/Report/R objects for report/PSE/pse_input_count_text.rds")
 # 
-# pal <- wesanderson::wes_palette("Zissou1", 9, "continuous")
-# 
-# pse_final <- read.csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_final_sourced.csv")
-# 
-# pse_cleaned_data %>%
-#   filter(str_detect(method, regex("enumeration|delphi|wisdom|WOTC|WODC", ignore_case = TRUE))) %>%
-#   filter(source_found == "yes") %>% 
-#   mutate(method = "Non-empirical") %>%
-#   bind_rows(pse_final) %>%
-#   filter(year > 2009) %>%
-#   mutate(year = plyr::round_any(year, 3, floor),
-#          year = paste0(year, "-", year+2),
-#          # year = ifelse(year == "2019-2021", "2019-2020", year)
-#          ) %>%
-#   filter(year != "2007-2009") %>%
-#   distinct(kp, method, year, ref) %>%
-#   group_by(kp, method, year) %>%
-#   count() %>%
-#   # mutate(simple_method = ifelse(method %in% c("2S-CRC", "3S-CRC", "SS-PSE", "Object/event multiplier", "Service multiplier"), 1, 0)) %>%
-#   # group_by(year) %>%
-#   # count(simple_method)
-#   mutate(method = factor(method,
-#                          levels= c("3S-CRC", "SS-PSE", "2S-CRC", "Object/event multiplier", "Multiple methods - empirical", "Service multiplier", "PLACE/Mapping", "Multiple methods - mixture", "Non-empirical"))) %>%
-#   ggplot(aes(x=year, y=n)) +
-#   geom_col(aes(fill=method), position = "fill") +
-#   scale_fill_manual(values = pal)+
-#   scale_y_continuous(labels = scales::label_percent()) +
-#   facet_wrap(~kp, nrow=1) +
-#   moz.utils::standard_theme() +
-#   labs(x=element_blank(), y=element_blank(), fill=element_blank()) +
-#   coord_cartesian(clip = "off", ylim = c(0,1)) +
-#   geom_text(data = method_counts, aes(y=1.1, label = n)) +
-#   theme(strip.text = element_text(face = "bold", size=13),
-#         strip.text.x = element_text(margin = margin(b=20)),
-#         axis.text.x = element_text(angle = 20, hjust = 1))
-#   
-# 
-# method_counts <- pse_spreadsheet_extract %>%
-#   filter(str_detect(method, regex("enumeration|delphi|wisdom|WOTC|WODC", ignore_case = TRUE))) %>%
-#   filter(source_found == "yes") %>% 
-#   mutate(method = "Non-empirical") %>%
-#   bind_rows(pse_final) %>%
-#   mutate(year = plyr::round_any(year, 3, floor),
-#          year = paste0(year, "-", year+2),
-#          # year = ifelse(year == "2019-2021", "2019-2020", year)
-#          ) %>%
-#   filter(year != "2007-2009") %>%
-#   distinct(year, ref, kp) %>%
-#   count(year, kp)
+pal <- wesanderson::wes_palette("Zissou1", 10, "continuous")
+
+pse_final <- read.csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_final_sourced.csv")
+pse_cleaned_data <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_spreadsheet_cleaned_sourced.csv")
+
+method_counts <- pse_spreadsheet_extract %>%
+  filter(str_detect(method, regex("enumeration|delphi|wisdom|WOTC|WODC", ignore_case = TRUE))) %>%
+  filter(source_found == "yes") %>%
+  mutate(method = "Non-empirical") %>%
+  bind_rows(pse_final) %>%
+  mutate(year = plyr::round_any(year, 3, floor),
+         year = paste0(year, "-", year+2),
+         # year = ifelse(year == "2019-2021", "2019-2022", year)
+  ) %>%
+  filter(year != "2007-2009") %>%
+  distinct(year, ref, kp) %>%
+  count(year, kp)
+
+fig2 <- pse_spreadsheet_extract %>%
+  filter(str_detect(method, regex("enumeration|delphi|wisdom|WOTC|WODC", ignore_case = TRUE))) %>%
+  filter(source_found == "yes") %>%
+  mutate(method = "Non-empirical") %>%
+  bind_rows(pse_final) %>%
+  filter(year > 2009) %>%
+  mutate(year = plyr::round_any(year, 3, floor),
+         year = paste0(year, "-", year+2),
+         # year = ifelse(year == "2019-2021", "2019-2020", year)
+         ) %>%
+  filter(year != "2007-2009") %>%
+  distinct(kp, method, year, ref) %>%
+  group_by(kp, method, year) %>%
+  count() %>%
+  # mutate(simple_method = ifelse(method %in% c("2S-CRC", "3S-CRC", "SS-PSE", "Object/event multiplier", "Service multiplier"), 1, 0)) %>%
+  # group_by(year) %>%
+  # count(simple_method)
+  mutate(method = factor(method,
+                         levels= c("3S-CRC", "SS-PSE", "2S-CRC", "Object multiplier", "Event multiplier", "Multiple methods - empirical", "Service multiplier", "PLACE/Mapping", "Multiple methods - mixture", "Non-empirical"))) %>%
+  ggplot(aes(x=year, y=n)) +
+  geom_col(aes(fill=method), position = "fill") +
+  scale_fill_manual(values = pal)+
+  scale_y_continuous(labels = scales::label_percent()) +
+  facet_wrap(~kp, nrow=1) +
+  moz.utils::standard_theme() +
+  labs(x=element_blank(), y=element_blank(), fill=element_blank()) +
+  coord_cartesian(clip = "off", ylim = c(0,1)) +
+  geom_text(data = method_counts, aes(y=1.1, label = n)) +
+  theme(strip.text = element_text(face = "bold", size=13),
+        strip.text.x = element_text(margin = margin(b=20)),
+        axis.text.x = element_text(angle = 20, hjust = 1))
+
+png("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Figs/Fig 5 prevalence.png", width = 1100, height = 800)
+fig2
+dev.off()
+
 
 pse_flow <- grViz("
 digraph a_nice_graph {
@@ -407,13 +417,15 @@ pse_flow %>%
 
 ### Prevalence
 
-prev_spreadsheet_extract <- lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/HIV prevalence/Edited/", full.names = TRUE, pattern = "csv"), read_csv, na= "", show_col_types = FALSE)
+# prev_spreadsheet_extract <- lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/HIV prevalence/Edited/", full.names = TRUE, pattern = "csv"), read_csv, na= "", show_col_types = FALSE)
+# 
+# prev_spreadsheet_extract <- c(prev_spreadsheet_extract, 
+#               lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/HIV prevalence/Edited/", full.names = TRUE, pattern = "xlsx"), readxl::read_xlsx)
+# ) %>%
+#   lapply(type_convert) %>%
+#   bind_rows()
 
-prev_spreadsheet_extract <- c(prev_spreadsheet_extract, 
-              lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/HIV prevalence/Edited/", full.names = TRUE, pattern = "xlsx"), readxl::read_xlsx)
-) %>%
-  lapply(type_convert) %>%
-  bind_rows()
+prev_spreadsheet_extract <- read_csv("~/Imperial College London/Key population data - WP - General/Combined data/HIV prevalence/Edited/combined_prev3.csv")
 
 prev_spreadsheet_extract <-  prev_spreadsheet_extract %>%
   mutate(prev = ifelse(prev > 1, prev/100, prev),
@@ -555,6 +567,7 @@ prev_spreadsheet_extract <- prev_spreadsheet_extract %>%
 
 prev_checked <- prev_spreadsheet_extract %>%
   filter(data_checked == "yes",
+         source_found != "private",
          year > 2009
   ) %>%
   mutate(data_checked = "Yes")
@@ -594,10 +607,12 @@ prev_clean_labels <- collapse(prev_cleaned_text)
 setwd(rprojroot::find_rstudio_root_file())
 
 prev_id <- lapply(ssa_iso3, function(x){
-  orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
+  orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "', x, '" && parameter:version == 2022)'), draft = FALSE)
 })
 
-prev_final <- lapply(paste0("archive/aaa_extrapolate_naomi/", prev_id[!is.na(prev_id)], "/prev.csv"),
+prev_id <- c(prev_id[!is.na(prev_id)], orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "COD")'), draft = FALSE))
+
+prev_final <- lapply(paste0("archive/aaa_extrapolate_naomi/", prev_id, "/prev.csv"),
                     function(x) {read_csv(x) %>% select(-any_of("...1"))}) %>%
   bind_rows()
 
@@ -697,13 +712,15 @@ prev_flow %>%
 
 #### ART coverage
 
-art_spreadsheet_extract <- lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/ART coverage/Edited/", full.names = TRUE, pattern = "csv"), read_csv, na= "", show_col_types = FALSE)
+# art_spreadsheet_extract <- lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/ART coverage/Edited/", full.names = TRUE, pattern = "csv"), read_csv, na= "", show_col_types = FALSE)
+# 
+# art_spreadsheet_extract <- c(art_spreadsheet_extract, 
+#                               lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/ART coverage/Edited/", full.names = TRUE, pattern = "xlsx"), readxl::read_xlsx)
+# ) %>%
+#   lapply(type_convert) %>%
+#   bind_rows()
 
-art_spreadsheet_extract <- c(art_spreadsheet_extract, 
-                              lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/ART coverage/Edited/", full.names = TRUE, pattern = "xlsx"), readxl::read_xlsx)
-) %>%
-  lapply(type_convert) %>%
-  bind_rows()
+art_spreadsheet_extract <- read_csv("~/Imperial College London/Key population data - WP - General/Combined data/ART coverage/Edited/art_merged.csv")
 
 art_spreadsheet_extract <-  art_spreadsheet_extract %>%
   rename(art = art_coverage) %>%
@@ -819,6 +836,7 @@ art_spreadsheet_extract <- art_spreadsheet_extract %>%
 
 art_checked <- art_spreadsheet_extract %>%
   filter(data_checked == "yes",
+         source_found != "private",
          year > 2009
   ) %>%
   mutate(data_checked = "Yes")
@@ -863,8 +881,10 @@ art_clean_labels <- collapse(art_cleaned_text)
 setwd(rprojroot::find_rstudio_root_file())
 
 art_id <- lapply(ssa_iso3, function(x){
-  orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
+  orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "', x, '" && parameter:version == 2022)'), draft = FALSE)
 })
+
+art_id <- c(art_id[!is.na(art_id)], orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "COD")'), draft = FALSE))
 
 art_final <- lapply(paste0("archive/aaa_extrapolate_naomi/", art_id[!is.na(art_id)], "/art.csv"),
                      function(x) {read_csv(x) %>% select(-any_of("...1"))}) %>%

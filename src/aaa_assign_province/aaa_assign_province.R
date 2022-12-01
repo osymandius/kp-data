@@ -21,7 +21,7 @@ cities_areas <- merge_cities %>%
   st_join(areas %>% filter(area_level == admin1_lvl) %>% select(area_id) %>% st_make_valid(), largest=TRUE) %>%
   bind_rows(areas)
   
-sharepoint <- sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
+sharepoint <- spud::sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
 
 prev_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/HIV prevalence", "prev_clean_sourced.csv")
 prev <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = prev_path)
@@ -47,7 +47,7 @@ art <- read_csv(art, show_col_types = FALSE) %>%
 dat <- list("prev" = prev, "art" = art)
 
 # dat <- list("prev" = prev)
-# 
+# # 
 # x <- prev
 
 out <- lapply(dat, function(x) {

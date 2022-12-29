@@ -28,7 +28,7 @@ pse_simple_deduplication <- read_csv("~/Imperial College London/HIV Inference Gr
 #   lapply(type_convert) %>%
 #   bind_rows()
 
-pse_spreadsheet_extract <- read_csv("~/Imperial College London/Key population data - WP - General/Combined data/PSE/Edited/combined_pse2.csv")
+pse_spreadsheet_extract <- read_csv("~/Documents/GitHub/kp-data-private/data/pse.csv")
 
 write_csv(pse_spreadsheet_extract, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_spreadsheet_extract.csv")
 
@@ -170,7 +170,9 @@ pse_cleaned_data <- bind_rows(truly_checked, mapped_place) %>%
 pse_cleaned_data <- pse_cleaned_data %>%
   mutate(area_name = str_replace(area_name, " and", ","))
 
-write_csv(pse_cleaned_data, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_spreadsheet_cleaned_sourced.csv")
+setwd(rprojroot::find_rstudio_root_file())
+
+write_csv(pse_cleaned_data, "src/aaa_assign_populations/pse_cleaned_sourced_data.csv")
 
 pse_cleaned_text <- pse_cleaned_data %>%
   count(kp) %>%
@@ -338,7 +340,7 @@ fig2 <- pse_spreadsheet_extract %>%
         strip.text.x = element_text(margin = margin(b=20)),
         axis.text.x = element_text(angle = 20, hjust = 1))
 
-png("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Figs/Fig 5 prevalence.png", width = 1100, height = 800)
+# png("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Figs/Fig 5 prevalence.png", width = 1100, height = 800)
 fig2
 dev.off()
 
@@ -425,7 +427,7 @@ pse_flow %>%
 #   lapply(type_convert) %>%
 #   bind_rows()
 
-prev_spreadsheet_extract <- read_csv("~/Imperial College London/Key population data - WP - General/Combined data/HIV prevalence/Edited/combined_prev3.csv")
+prev_spreadsheet_extract <- read_csv("~/Documents/GitHub/kp-data-private/data/prevalence.csv")
 
 prev_spreadsheet_extract <-  prev_spreadsheet_extract %>%
   mutate(prev = ifelse(prev > 1, prev/100, prev),
@@ -591,7 +593,7 @@ prev_cleaned_data <- bind_rows(prev_checked) %>%
          )) %>%
   filter(kp %in% c("FSW", "MSM", "PWID", "TG"))
 
-write_csv(prev_cleaned_data, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_clean_sourced.csv")
+write_csv(prev_cleaned_data, "src/aaa_assign_province/prev_clean_sourced.csv")
 
 prev_cleaned_text <- prev_cleaned_data %>%
   count(kp) %>%
@@ -720,7 +722,7 @@ prev_flow %>%
 #   lapply(type_convert) %>%
 #   bind_rows()
 
-art_spreadsheet_extract <- read_csv("~/Imperial College London/Key population data - WP - General/Combined data/ART coverage/Edited/art_merged.csv")
+art_spreadsheet_extract <- read_csv("~/Documents/GitHub/kp-data-private/data/art.csv")
 
 art_spreadsheet_extract <-  art_spreadsheet_extract %>%
   rename(art = art_coverage) %>%
@@ -865,7 +867,7 @@ art_cleaned_data <- bind_rows(art_checked) %>%
          ) %>%
   filter(kp %in% c("FSW", "MSM", "PWID", "TG"))
 
-write_csv(art_cleaned_data, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_clean_sourced.csv")
+write_csv(art_cleaned_data, "src/aaa_assign_province/art_clean_sourced.csv")
 
 art_cleaned_text <- art_cleaned_data %>%
   count(kp) %>%

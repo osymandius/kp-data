@@ -44,6 +44,8 @@ packages:
 
 resources:
   - merge_cities.geojson
+  - prev_clean_sourced.csv
+  - art_clean_sourced.csv
 
 depends:
   aaa_areas_pull:

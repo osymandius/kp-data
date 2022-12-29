@@ -1,5 +1,5 @@
 remote:
-  inference:
+  inference-web:
     driver: orderlyweb::orderlyweb_remote
     args:
       host: hiv-orderly.dide.ic.ac.uk

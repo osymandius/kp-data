@@ -14,3 +14,7 @@ orderly_envir.yml
 backup
 metadata
 PEPFAR data
+urban-rural-ratio
+urban-rural-ratio.R
+*.so
+*.o

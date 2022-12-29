@@ -1,0 +1,285 @@
+iso3,country.name,method,kp,area_name,year,art_lower,art,art_upper,denominator,ref,link,dataset_id,uid,data_checked,source_found,duplicate_of,age_group,is_aggregate
+AGO,Angola,lab,FSW,Angola,2017,NA,0.18,NA,NA,2017 PLACE,NA,NA,NA,Yes,yes,NA,NA,NA
+AGO,Angola,lab,MSM,Angola,2017,NA,0.44,NA,NA,2017 PLACE,NA,NA,NA,Yes,yes,NA,NA,NA
+AGO,Angola,lab,TG,Angola,2017,NA,0.55,NA,NA,2017 PLACE,NA,NA,NA,Yes,yes,NA,NA,NA
+BFA,Burkina Faso,NA,FSW,Bobo Diouslasso,2013,NA,0.557,NA,115,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,NA,Yes,yes,NA,NA,NA
+BFA,Burkina Faso,NA,FSW,Ouagadougou,2013,NA,0.226,NA,31,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,NA,Yes,yes,NA,NA,NA
+BFA,Burkina Faso,NA,MSM,Bobo Diouslasso,2013,NA,0.063,NA,16,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,NA,Yes,yes,NA,NA,NA
+BFA,Burkina Faso,NA,MSM,Ouagadougou,2013,NA,0.25,NA,16,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,NA,Yes,yes,NA,NA,NA
+BWA,Botswana,selfreport,FSW,Maun,2017,NA,0.857,NA,260,BEHAVIORAL AND BIOLOGICAL SURVEILLANCE SURVEY OF HIV/STI AMONG SELECT HIGH-RISK SUB- POPULATIONS IN BOTSWANA- 2017,NA,KP Atlas_7aaecf76f8a43dcf4102e0b6b525ab56,9a000efb8b1e0eba92414ca6b1786492,Yes,yes,NA,NA,NA
+BWA,Botswana,selfreport,FSW,Palapye,2017,NA,0.902,NA,268,BEHAVIORAL AND BIOLOGICAL SURVEILLANCE SURVEY OF HIV/STI AMONG SELECT HIGH-RISK SUB- POPULATIONS IN BOTSWANA- 2017,NA,KP Atlas_7f07c53ba4d549444bb0d9bddad68926,ff1ff9975541f7f2079c71e1f390fd4c,Yes,yes,NA,NA,NA
+BWA,Botswana,selfreport,FSW,Gaberone,2017,NA,0.9259999999999999,NA,305,BEHAVIORAL AND BIOLOGICAL SURVEILLANCE SURVEY OF HIV/STI AMONG SELECT HIGH-RISK SUB- POPULATIONS IN BOTSWANA- 2017,NA,NA,NA,Yes,yes,NA,NA,NA
+BWA,Botswana,selfreport,FSW,Francistown,2017,NA,0.8370000000000001,NA,272,BEHAVIORAL AND BIOLOGICAL SURVEILLANCE SURVEY OF HIV/STI AMONG SELECT HIGH-RISK SUB- POPULATIONS IN BOTSWANA- 2017,NA,NA,NA,Yes,yes,NA,NA,NA
+BWA,Botswana,selfreport,FSW,Chobe,2017,NA,0.9309999999999999,NA,152,BEHAVIORAL AND BIOLOGICAL SURVEILLANCE SURVEY OF HIV/STI AMONG SELECT HIGH-RISK SUB- POPULATIONS IN BOTSWANA- 2017,NA,NA,NA,Yes,yes,NA,NA,NA
+BWA,Botswana,selfreport,MSM,Palapye,2017,NA,0.4,NA,NA,BEHAVIORAL AND BIOLOGICAL SURVEILLANCE SURVEY OF HIV/STI AMONG SELECT HIGH-RISK SUB- POPULATIONS IN BOTSWANA- 2017,NA,KP Atlas_b02f90211a1f0f35843e6636f84eb49d,329723ac89dced5ddde767ba0b779534,Yes,yes,NA,NA,NA
+BWA,Botswana,selfreport,MSM,Maun,2017,NA,0.4,NA,NA,BEHAVIORAL AND BIOLOGICAL SURVEILLANCE SURVEY OF HIV/STI AMONG SELECT HIGH-RISK SUB- POPULATIONS IN BOTSWANA- 2017,NA,KP Atlas_0fe5b3ab06eed402354ead9cf36aa2fe,28ac123c48d3a6e4e40200cfd5377973,Yes,yes,NA,NA,NA
+BWA,Botswana,selfreport,MSM,Gaberone,2017,NA,1,NA,NA,BEHAVIORAL AND BIOLOGICAL SURVEILLANCE SURVEY OF HIV/STI AMONG SELECT HIGH-RISK SUB- POPULATIONS IN BOTSWANA- 2017,NA,NA,NA,Yes,yes,NA,NA,NA
+BWA,Botswana,selfreport,MSM,Francistown,2017,NA,0.867,NA,NA,BEHAVIORAL AND BIOLOGICAL SURVEILLANCE SURVEY OF HIV/STI AMONG SELECT HIGH-RISK SUB- POPULATIONS IN BOTSWANA- 2017,NA,NA,NA,Yes,yes,NA,NA,NA
+BWA,Botswana,selfreport,MSM,Chobe,2017,NA,0.737,NA,NA,BEHAVIORAL AND BIOLOGICAL SURVEILLANCE SURVEY OF HIV/STI AMONG SELECT HIGH-RISK SUB- POPULATIONS IN BOTSWANA- 2017,NA,NA,NA,Yes,yes,NA,NA,NA
+CAF,Central African Republic,NA,MSM,Bangui,2010,NA,0.344827586,NA,29,Bouassa et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5967740/,NA,NA,Yes,yes,NA,NA,NA
+CIV,C√¥te d‚ÄôIvoire,lab,FSW,Katiola,2020,NA,0.8555555555555555,NA,26,"Enquête bio-comportementale et cartographique en direction des travailleuses de sexe dans cinq localités de la Côte d’Ivoire : Katiola, Yamoussoukro, Soubré, Aboisso, Agboville.",NA,NA,NA,Yes,yes,NA,NA,NA
+CIV,C√¥te d‚ÄôIvoire,lab,FSW,Agboville,2020,NA,0.3666666666666667,NA,6,"Enquête bio-comportementale et cartographique en direction des travailleuses de sexe dans cinq localités de la Côte d’Ivoire : Katiola, Yamoussoukro, Soubré, Aboisso, Agboville.",NA,NA,NA,Yes,yes,NA,NA,NA
+CIV,C√¥te d‚ÄôIvoire,lab,FSW,Soubre,2020,NA,0.1388888888888889,NA,8,"Enquête bio-comportementale et cartographique en direction des travailleuses de sexe dans cinq localités de la Côte d’Ivoire : Katiola, Yamoussoukro, Soubré, Aboisso, Agboville.",NA,NA,NA,Yes,yes,NA,NA,NA
+CIV,C√¥te d‚ÄôIvoire,lab,FSW,ABOISSO,2020,NA,0.6666666666666666,NA,10,"Enquête bio-comportementale et cartographique en direction des travailleuses de sexe dans cinq localités de la Côte d’Ivoire : Katiola, Yamoussoukro, Soubré, Aboisso, Agboville.",NA,NA,NA,Yes,yes,NA,NA,NA
+CIV,C√¥te d‚ÄôIvoire,lab,FSW,YAKRO,2020,NA,0.3666666666666667,NA,6,"Enquête bio-comportementale et cartographique en direction des travailleuses de sexe dans cinq localités de la Côte d’Ivoire : Katiola, Yamoussoukro, Soubré, Aboisso, Agboville.",NA,NA,NA,Yes,yes,NA,NA,NA
+CMR,Cameroon,selfreport,FSW,Ngaounder√©,2013,NA,0,NA,347,Antiretroviral Treatment Coverage for Men Who Have Sex With Men and Female Sex Workers Living With HIV in Cameroon,NA,KP Atlas_906a10ac2022e16d6d92a24769c3fe48,86e377569e1184232995a23722f7a6a9,Yes,yes,NA,NA,NA
+CMR,Cameroon,selfreport,FSW,Bamenda,2013,NA,0.039,NA,641,Antiretroviral Treatment Coverage for Men Who Have Sex With Men and Female Sex Workers Living With HIV in Cameroon,NA,KP Atlas_a25c5e8ec63a040025c80da17e3c6f5b,d978e8c5e7010bed9468cc52a5a1b03a,Yes,yes,NA,NA,NA
+CMR,Cameroon,selfreport,FSW,Bafoussam,2013,NA,0.052,NA,575,Antiretroviral Treatment Coverage for Men Who Have Sex With Men and Female Sex Workers Living With HIV in Cameroon,NA,KP Atlas_963cec2564217f5d3436beed148fd0d7,b8735882824b3fa53641251c60f2d2a5,Yes,yes,NA,NA,NA
+CMR,Cameroon,selfreport,FSW,Douala,2013,NA,0.09,NA,4443,Antiretroviral Treatment Coverage for Men Who Have Sex With Men and Female Sex Workers Living With HIV in Cameroon,NA,KP Atlas_ebe2317bd7df44765a25f364073ee3e1,32c72e20e165b5ca6374618c77cf2eb6,Yes,yes,NA,NA,NA
+CMR,Cameroon,selfreport,FSW,Bertoua,2013,NA,0.109,NA,202,Antiretroviral Treatment Coverage for Men Who Have Sex With Men and Female Sex Workers Living With HIV in Cameroon,NA,KP Atlas_22debcd1e0b5c79426e2d2ca8635b08c,3079556d4065bd026f09c47b18683aa6,Yes,yes,NA,NA,NA
+CMR,Cameroon,selfreport,FSW,Yaound√©,2013,NA,0.122,NA,4238,Antiretroviral Treatment Coverage for Men Who Have Sex With Men and Female Sex Workers Living With HIV in Cameroon,NA,KP Atlas_aade4306d8746b267633e49dc93bcf92,26399a22dd114f9be2aa70b0c890673c,Yes,yes,NA,NA,NA
+CMR,Cameroon,selfreport,FSW,Kribi,2013,NA,0.143,NA,140,Antiretroviral Treatment Coverage for Men Who Have Sex With Men and Female Sex Workers Living With HIV in Cameroon,NA,KP Atlas_a338e7a4484e035264b06e4fef0ed010,b6c76d18e14127418cbdd8affb8fd4e9,Yes,yes,NA,NA,NA
+CMR,Cameroon,selfreport,FSW,Cameroon,2013,NA,0.642,NA,81,HIV Prevention for Populations at Risk in Cameroon,NA,NA,NA,Yes,yes,NA,NA,NA
+CMR,Cameroon,selfreport,FSW,Yaound√©,2016,NA,0.813768,NA,84.952,2016 BBS,NA,NA,NA,Yes,yes,NA,NA,NA
+CMR,Cameroon,selfreport,FSW,Douala,2016,NA,0.88,NA,90.486,2016 BBS,NA,NA,NA,Yes,yes,NA,NA,NA
+CMR,Cameroon,selfreport,FSW,Bertoua,2016,NA,0.594,NA,38,2016 BBS,NA,NA,NA,Yes,yes,NA,NA,NA
+CMR,Cameroon,selfreport,FSW,Bamenda,2016,NA,0.935714,NA,81.84,2016 BBS,NA,NA,NA,Yes,yes,NA,NA,NA
+CMR,Cameroon,selfreport,FSW,Kribi,2016,NA,0.414,NA,34.161,2016 BBS,NA,NA,NA,Yes,yes,NA,NA,NA
+CMR,Cameroon,selfreport,FSW,Bertoua,2016,NA,0.4002,NA,8.534,2016 BBS,NA,NA,NA,Yes,yes,NA,NA,NA
+CMR,Cameroon,selfreport,MSM,Bamenda,2013,NA,0,NA,434,Antiretroviral Treatment Coverage for Men Who Have Sex With Men and Female Sex Workers Living With HIV in Cameroon,NA,KP Atlas_e66568fcdf143e05eedfd6aaff564550,2a85db818ca3649f21031055e8a27117,Yes,yes,NA,NA,NA
+CMR,Cameroon,selfreport,MSM,Bertoua,2013,NA,0,NA,148,Antiretroviral Treatment Coverage for Men Who Have Sex With Men and Female Sex Workers Living With HIV in Cameroon,NA,KP Atlas_acbba417c1a02be8db15af9a74f68714,5cd0d3d4a6b598e3a5db2323b748061a,Yes,yes,NA,NA,NA
+CMR,Cameroon,selfreport,MSM,Ngaounder√©,2013,NA,0.012,NA,257,Antiretroviral Treatment Coverage for Men Who Have Sex With Men and Female Sex Workers Living With HIV in Cameroon,NA,KP Atlas_faed6d83d3ae4486f56143316f2cf03b,b500b62679c920550b564aa3d87d56d2,Yes,yes,NA,NA,NA
+CMR,Cameroon,selfreport,MSM,Kribi,2013,NA,0.082,NA,98,Antiretroviral Treatment Coverage for Men Who Have Sex With Men and Female Sex Workers Living With HIV in Cameroon,NA,KP Atlas_afcc6b73827ad557fc9d5758c4ad5c44,9460d60a6bec9ff887cc912783e5f805,Yes,yes,NA,NA,NA
+CMR,Cameroon,selfreport,MSM,Yaound√©,2013,NA,0.094,NA,2987,Antiretroviral Treatment Coverage for Men Who Have Sex With Men and Female Sex Workers Living With HIV in Cameroon,NA,KP Atlas_4a4cbbc2de31be892d7fb5db7467315f,ab86f0e0771e080536e3a8379c616081,Yes,yes,NA,NA,NA
+CMR,Cameroon,selfreport,MSM,Bafoussam,2013,NA,0.205,NA,381,Antiretroviral Treatment Coverage for Men Who Have Sex With Men and Female Sex Workers Living With HIV in Cameroon,NA,KP Atlas_8cd0c589161c717053e0b21678c923c0,2c493876dba7c3402643dbd1233472e1,Yes,yes,NA,NA,NA
+CMR,Cameroon,selfreport,MSM,Douala,2013,NA,0.227,NA,3138,Antiretroviral Treatment Coverage for Men Who Have Sex With Men and Female Sex Workers Living With HIV in Cameroon,NA,KP Atlas_cd76bf061b9a977282c5afad74356e88,f59b2fffebd6b47a3f20a0ae1550a5cc,Yes,yes,NA,NA,NA
+CMR,Cameroon,selfreport,MSM,Cameroon,2013,NA,0.755,NA,94,HIV Prevention for Populations at Risk in Cameroon,NA,NA,NA,Yes,yes,NA,NA,NA
+CMR,Cameroon,selfreport,MSM,Yaound√©,2016,NA,0.553637,NA,83.232,2016 BBS,NA,NA,NA,Yes,yes,NA,NA,NA
+CMR,Cameroon,selfreport,MSM,Douala,2016,NA,0.7440000000000001,NA,55.224,2016 BBS,NA,NA,NA,Yes,yes,NA,NA,NA
+CMR,Cameroon,selfreport,MSM,Kribi,2016,NA,0.625,NA,11.424,2016 BBS,NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,NA,FSW,Kongo-Central,2016,NA,0.075,NA,240,Rapport annuel 2016,NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,NA,FSW,Tshopo,2016,NA,0.067,NA,134,Rapport annuel 2016,NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,NA,FSW,Sud-Kivu,2016,NA,0.4,NA,25,Rapport annuel 2016,NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,NA,FSW,Ituri,2016,NA,1,NA,4,Rapport annuel 2016,NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,NA,FSW,Kinshasa,2016,NA,0.889,NA,323,Rapport annuel 2016,NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,lab,FSW,Bas-Uélé,2019,0.19,0.45111111111111113,0.6977777777777777,19,"ENQUÊTE DE SURVEILLANCE BIO-COMPORTEMENTALE AUPRÈS DES POPULATIONS CLES À RISQUE DE L’INFECTION PAR LE VIH DANS 14 PROVINCES, 2018-2019",NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,lab,FSW,Haut-Katanga,2019,0.11888888888888888,0.2866666666666667,0.4533333333333333,26,"ENQUÊTE DE SURVEILLANCE BIO-COMPORTEMENTALE AUPRÈS DES POPULATIONS CLES À RISQUE DE L’INFECTION PAR LE VIH DANS 14 PROVINCES, 2018-2019",NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,lab,FSW,Haut-Uélé,2019,0.15444444444444447,0.2988888888888888,0.44888888888888884,38,"ENQUÊTE DE SURVEILLANCE BIO-COMPORTEMENTALE AUPRÈS DES POPULATIONS CLES À RISQUE DE L’INFECTION PAR LE VIH DANS 14 PROVINCES, 2018-2019",NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,lab,FSW,Ituri,2019,0.5088888888888888,0.6611111111111111,0.8288888888888889,18,"ENQUÊTE DE SURVEILLANCE BIO-COMPORTEMENTALE AUPRÈS DES POPULATIONS CLES À RISQUE DE L’INFECTION PAR LE VIH DANS 14 PROVINCES, 2018-2019",NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,lab,FSW,Kasaï-Oriental,2019,0.2966666666666667,0.4655555555555555,0.6388888888888888,51,"ENQUÊTE DE SURVEILLANCE BIO-COMPORTEMENTALE AUPRÈS DES POPULATIONS CLES À RISQUE DE L’INFECTION PAR LE VIH DANS 14 PROVINCES, 2018-2019",NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,lab,FSW,Kongo-Central,2019,0.39777777777777773,0.6411111111111112,0.8544444444444445,18,"ENQUÊTE DE SURVEILLANCE BIO-COMPORTEMENTALE AUPRÈS DES POPULATIONS CLES À RISQUE DE L’INFECTION PAR LE VIH DANS 14 PROVINCES, 2018-2019",NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,lab,FSW,Kwilu,2019,0.12000000000000001,0.29,0.44666666666666666,15,"ENQUÊTE DE SURVEILLANCE BIO-COMPORTEMENTALE AUPRÈS DES POPULATIONS CLES À RISQUE DE L’INFECTION PAR LE VIH DANS 14 PROVINCES, 2018-2019",NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,lab,FSW,Lomami,2019,0.4766666666666666,0.6122222222222222,0.7333333333333334,37,"ENQUÊTE DE SURVEILLANCE BIO-COMPORTEMENTALE AUPRÈS DES POPULATIONS CLES À RISQUE DE L’INFECTION PAR LE VIH DANS 14 PROVINCES, 2018-2019",NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,lab,FSW,Lualaba,2019,0.06333333333333334,0.27666666666666667,0.35,28,"ENQUÊTE DE SURVEILLANCE BIO-COMPORTEMENTALE AUPRÈS DES POPULATIONS CLES À RISQUE DE L’INFECTION PAR LE VIH DANS 14 PROVINCES, 2018-2019",NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,lab,FSW,Maniema,2019,0.39444444444444443,0.5866666666666667,0.7944444444444444,25,"ENQUÊTE DE SURVEILLANCE BIO-COMPORTEMENTALE AUPRÈS DES POPULATIONS CLES À RISQUE DE L’INFECTION PAR LE VIH DANS 14 PROVINCES, 2018-2019",NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,lab,FSW,Nord-Kivu,2019,0.5155555555555555,0.6644444444444444,0.8122222222222222,54,"ENQUÊTE DE SURVEILLANCE BIO-COMPORTEMENTALE AUPRÈS DES POPULATIONS CLES À RISQUE DE L’INFECTION PAR LE VIH DANS 14 PROVINCES, 2018-2019",NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,lab,FSW,Sud-Kivu,2019,0.3644444444444444,0.5499999999999999,0.7411111111111112,36,"ENQUÊTE DE SURVEILLANCE BIO-COMPORTEMENTALE AUPRÈS DES POPULATIONS CLES À RISQUE DE L’INFECTION PAR LE VIH DANS 14 PROVINCES, 2018-2019",NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,lab,FSW,Tshopo,2019,0.33555555555555555,0.49444444444444446,0.6655555555555556,40,"ENQUÊTE DE SURVEILLANCE BIO-COMPORTEMENTALE AUPRÈS DES POPULATIONS CLES À RISQUE DE L’INFECTION PAR LE VIH DANS 14 PROVINCES, 2018-2019",NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,NA,MSM,Kongo-Central,2016,NA,0.13269999999999998,NA,196,Rapport annuel 2016,NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,NA,MSM,Tshopo,2016,NA,0.102,NA,137,Rapport annuel 2016,NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,NA,MSM,Sud-Kivu,2016,NA,0.35100000000000003,NA,37,Rapport annuel 2016,NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,NA,MSM,Kinshasa,2016,NA,0.87,NA,308,Rapport annuel 2016,NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,lab,MSM,Kinshasa,2019,0.5644444444444444,0.8244444444444444,0.9877777777777778,83,"ENQUÊTE DE SURVEILLANCE BIO-COMPORTEMENTALE AUPRÈS DES POPULATIONS CLES À RISQUE DE L’INFECTION PAR LE VIH DANS 14 PROVINCES, 2018-2019",NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,lab,MSM,Haut-Katanga,2019,0.2866666666666667,0.5588888888888889,0.8355555555555555,13,"ENQUÊTE DE SURVEILLANCE BIO-COMPORTEMENTALE AUPRÈS DES POPULATIONS CLES À RISQUE DE L’INFECTION PAR LE VIH DANS 14 PROVINCES, 2018-2019",NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,lab,MSM,Ituri,2019,0.05111111111111111,0.2777777777777778,0.7766666666666667,4,"ENQUÊTE DE SURVEILLANCE BIO-COMPORTEMENTALE AUPRÈS DES POPULATIONS CLES À RISQUE DE L’INFECTION PAR LE VIH DANS 14 PROVINCES, 2018-2019",NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,lab,MSM,Kongo-Central,2019,0.6622222222222222,1.0466666666666666,1.0911111111111111,10,"ENQUÊTE DE SURVEILLANCE BIO-COMPORTEMENTALE AUPRÈS DES POPULATIONS CLES À RISQUE DE L’INFECTION PAR LE VIH DANS 14 PROVINCES, 2018-2019",NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,NA,PWID,Kongo-Central,2016,NA,0.025,NA,40,Rapport annuel 2016,NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,NA,PWID,Kinshasa,2016,NA,0.6509999999999999,NA,43,Rapport annuel 2016,NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,lab,PWID,Kinshasa,2019,0.38888888888888884,0.6866666666666666,0.9855555555555555,26,"ENQUÊTE DE SURVEILLANCE BIO-COMPORTEMENTALE AUPRÈS DES POPULATIONS CLES À RISQUE DE L’INFECTION PAR LE VIH DANS 14 PROVINCES, 2018-2019",NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,lab,PWID,Ituri,2019,0.48000000000000004,0.7933333333333334,1.0755555555555556,8,"ENQUÊTE DE SURVEILLANCE BIO-COMPORTEMENTALE AUPRÈS DES POPULATIONS CLES À RISQUE DE L’INFECTION PAR LE VIH DANS 14 PROVINCES, 2018-2019",NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,lab,PWID,Kongo-Central,2019,NA,1.1111111111111112,NA,2,"ENQUÊTE DE SURVEILLANCE BIO-COMPORTEMENTALE AUPRÈS DES POPULATIONS CLES À RISQUE DE L’INFECTION PAR LE VIH DANS 14 PROVINCES, 2018-2019",NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,NA,TG,Sud-Kivu,2016,NA,0,NA,1,Rapport annuel 2016,NA,NA,NA,Yes,yes,NA,NA,NA
+COD,Congo - Kinshasa,NA,TG,Kinshasa,2016,NA,0.33299999999999996,NA,3,Rapport annuel 2016,NA,NA,NA,Yes,yes,NA,NA,NA
+GMB,Gambia,lab,FSW,The Gambia,2017,NA,0.28490028444444443,NA,39,2017 IBBS,NA,NA,NA,Yes,yes,NA,NA,NA
+GMB,Gambia,lab,MSM,The Gambia,2017,NA,0.12820512777777776,NA,52,2017 IBBS,NA,NA,NA,Yes,yes,NA,NA,NA
+HTI,Haiti,selfreport,FSW,Haiti,2016,NA,0.2386,NA,NA,2017 PLACE,NA,NA,NA,Yes,yes,NA,NA,NA
+HTI,Haiti,selfreport,MSM,Haiti,2016,NA,0.2174,NA,NA,2017 PLACE,NA,NA,NA,Yes,yes,NA,NA,NA
+HTI,Haiti,selfreport,TG,Haiti,2016,NA,0.2453,NA,NA,2017 PLACE,NA,NA,NA,Yes,yes,NA,NA,NA
+KEN,Kenya,NA,FSW,Nairobi,2012,NA,0.989,NA,1392,Achwoka,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7332043/,NA,NA,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,FSW,Thika,2015,NA,0.667,NA,39,Polling Booth Survey 2016,NA,KP Atlas_2de34cffdab52967442a106141cd5b87,0baa3bc14cd7e0f5443533e0768a1bc1,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,FSW,Bungoma,2015,NA,0.708,NA,48,Polling Booth Survey 2016,NA,KP Atlas_7b6f751e9ad9650435e6fe0abf46b98c,49bfb9fff02748966973141ed9b0d1b2,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,FSW,Kitui,2015,NA,0.75,NA,48,Polling Booth Survey 2016,NA,KP Atlas_916287e357d3887508bfc311c5c2d520,529eda09d3b85da778535d52f8dcc458,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,FSW,Nyeri,2015,NA,0.808,NA,52,Polling Booth Survey 2016,NA,KP Atlas_c9e125d77e64ed3603d2a2d46df7a9c6,c0c8defdb79ddc27f2ba1ed177f3c8c1,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,FSW,Nakuru,2015,NA,0.636,NA,55,Polling Booth Survey 2016,NA,KP Atlas_b5160618850671a0c2fbd4e252612d04,639265f85e613b1421de6a34240a84a6,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,FSW,Mombasa,2015,NA,0.9,NA,60,Polling Booth Survey 2016,NA,KP Atlas_0a5c76b295ae3b2cee74285089f85750,44495094e6ec4742806c14458fd1a93c,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,FSW,Meru,2015,NA,0.688,NA,64,Polling Booth Survey 2016,NA,KP Atlas_0eac0e0c72ecd0f88215a7c927a0a6f2,88f70b2c360dc7d1a61bdb2f8e7e7550,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,FSW,Nairobi City,2015,NA,0.723,NA,83,Polling Booth Survey 2016,NA,KP Atlas_96dc49eb86be7fc0601a91200407b5f7,bb4e352a26f32c7f5f88b0fd2c0657bb,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,FSW,Eldoret,2015,NA,0.852,NA,88,Polling Booth Survey 2016,NA,KP Atlas_7d380a19eed856df3aa3c82610476c62,00a1c29cef744413742952e986cd2825,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,FSW,Homa Bay,2015,NA,0.806,NA,155,Polling Booth Survey 2016,NA,KP Atlas_0aab839992282f22c90bed1c8be65d80,ab568b73e589e1b24e65febc425b4294,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,FSW,Kisumu,2015,NA,0.909,NA,187,Polling Booth Survey 2016,NA,KP Atlas_04213a8b510cd7c06b694f7e7ee356ee,b18ee34dbd4e8fd26433cba94a990cf9,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,FSW,Mombasa,2017,NA,0.473,NA,91,Polling Booth Survey 2017,NA,KP Atlas_e2d04f4653c99cf1bdc895acb915c34d,0d50d0919cbd9f5ef5334e737b33adc3,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,FSW,Kitui,2017,NA,0.512,NA,41,Polling Booth Survey 2017,NA,KP Atlas_bd9e38cb79262fe6b0b56a816bce3b3b,50a34ffe84550eda10fe678b678fe522,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,FSW,Nakuru,2017,NA,0.585,NA,65,Polling Booth Survey 2017,NA,KP Atlas_7232df7bb6032471451055ddfb2014e7,b1fb7104685ba8e3b124eb9a9838e071,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,FSW,Nairobi,2017,NA,0.645,NA,710,Polling Booth Survey 2017,NA,GF_613e7078e7ec93942b66393d970bf7eb,1bd89bedd936e6a9b4c17cc9499b61a5,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,FSW,Thika,2017,NA,0.649,NA,57,Polling Booth Survey 2017,NA,KP Atlas_699965c3785148068df35d908839d247,7004cc333e452104443c0c969a9e326b,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,FSW,Nyeri,2017,NA,0.657,NA,67,Polling Booth Survey 2017,NA,KP Atlas_544310dec1eea0b9c663a2808d1b72ca,8bd3934a67d92706527be97b6350f8fe,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,FSW,Kenya,2017,NA,0.73,NA,1095,Polling Booth Survey 2017,NA,KP Atlas_a3d4bc9cc3f3f002f401ae4c78e56ea8,f7740b9c9140453c7c42d2950aff3342,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,FSW,Kilifi,2017,NA,0.735,NA,68,Polling Booth Survey 2017,NA,KP Atlas_3d3cd41b9c9dd55f25d3acbd6c3b7fc9,0654ddd187fee84472efc23b74361c88,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,FSW,Meru,2017,NA,0.743,NA,70,Polling Booth Survey 2017,NA,KP Atlas_774091b0c4c0e91566481fbf877c04c1,39981096e1a13f0b6035b4214b2c58b6,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,FSW,Turkana,2017,NA,0.83,NA,224,Polling Booth Survey 2017,NA,GF_3e3f264bb6c2ca9250b1cb5869081633,3c797677460caa932774e68078397502,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,FSW,Eldoret,2017,NA,0.831,NA,77,Polling Booth Survey 2017,NA,KP Atlas_e430d7e0b563584ed2941d6b6bfb6475,3bb43c69097207f4532dd6cf58d75052,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,FSW,Kisumu,2017,NA,0.839,NA,143,Polling Booth Survey 2017,NA,KP Atlas_8a9fc7d8aedc7ce7cf66ee05174dd98d,3264a59c5bdae9fa94d951b2e08b0434,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,FSW,Homa Bay,2017,NA,0.881,NA,134,Polling Booth Survey 2017,NA,KP Atlas_6d78309f3b86e5a30acf28d2d8ea1fa1,77a3c864d6f025daaf3bcb9bab4551fa,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,FSW,Bungoma,2017,NA,0.974,NA,39,Polling Booth Survey 2017,NA,KP Atlas_a7685ba9d19b9a250d2554b3a6395859,5d4212baa07f45fd179592bee63b3255,Yes,yes,NA,NA,NA
+KEN,Kenya,NA,MSM,Nairobi,2012,NA,1,NA,86,Achwoka,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7332043/,NA,NA,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,MSM,Nakuru,2015,NA,0.4,NA,15,Polling Booth Survey 2016,NA,KP Atlas_fe1acdea17987a0d047f0d69a46e3322,f5064c429e9438e9c634bc285277d739,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,MSM,Kisumu,2015,NA,0.75,NA,48,Polling Booth Survey 2016,NA,KP Atlas_4557c8b1b0e8ec18e091e3bce49cfb31,9d932c31330bfbc6a40757eaaf1346d2,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,MSM,Thika,2015,NA,0.725,NA,51,Polling Booth Survey 2016,NA,KP Atlas_b271b04ab771254604653307b98d18c5,ecfcc90045a28fc14b23ba6c551960dc,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,MSM,Mombasa,2015,NA,0.703,NA,64,Polling Booth Survey 2016,NA,KP Atlas_e53137a1fec8f90df787eef881fcf704,585eea9b456c818b691e7010264acc82,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,MSM,Nairobi City,2015,NA,0.703,NA,91,Polling Booth Survey 2016,NA,KP Atlas_e893a4d1ea2eb911e5a23ab31ca52eba,cb41f73d533920645f56fd5571b14dc5,Yes,yes,NA,NA,NA
+KEN,Kenya,NA,MSM,Kisumu,2016,NA,0.7,NA,20,HPTN 075,https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,NA,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,MSM,Mombasa,2017,NA,0.42857,NA,246,Polling Booth Survey 2017,NA,GF_8b92e36f6765a7d04f0126421f700dbb,26dc0fb2907c20fc8ceab3f402c1b9c2,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,MSM,Kilifi,2017,NA,0.44,NA,227,Polling Booth Survey 2017,NA,GF_5228799fd083cd5c4dcba53722ca903d,43d40230c49d26d1392f9fb2e3aaaf08,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,MSM,Kisumu,2017,NA,0.625,NA,314,Polling Booth Survey 2017,NA,GF_320366d7f01661774eca63814b2cf831,73676ae323e1ffbfd1464f79348b35b7,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,MSM,Kenya,2017,NA,0.628,NA,274,Polling Booth Survey 2017,NA,KP Atlas_8c4b927cd84a0988c1bc44e54327eca0,f9feb9d8ed7e085309b180e2f941f0c8,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,MSM,Nairobi,2017,NA,0.67857,NA,315,Polling Booth Survey 2017,NA,GF_8f9b619df5c00140c0d6f1aa90ff60b7,1a09babdd334112dc714e1617b944db3,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,MSM,Nakuru,2017,NA,0.72,NA,275,Polling Booth Survey 2017,NA,GF_3b3c973435735aec6cb3bb5a5e33c409,ff150553f7c42af4a2ac9ec24c719478,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,MSM,Thika,2017,NA,0.741379,NA,58,Polling Booth Survey 2017,NA,KP Atlas_400f8891b5422db00c8567632216bb31,864bfdc8fb276babb6dbfdb918373fc1,Yes,yes,NA,NA,NA
+KEN,Kenya,NA,MSM,Nairobi,2017,NA,0.701986755,NA,151,Smith et al,NA,NA,NA,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,MSM,Nairobi,2017,NA,0.693548387,NA,186,Fearon et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7527758/#jia225603-sup-0001,NA,NA,Yes,yes,NA,NA,NA
+KEN,Kenya,NA,MSM,Kenya,2019,NA,0.323,NA,201,Bhattacharjee et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7319161/,NA,NA,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,MSM,"Malindi, Mtwapa",2019,NA,0.962,NA,56,Dijkstra,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8186249/#sup1,NA,NA,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,MSM,Nairobi,2021,NA,0.706,NA,34,Henok,https://journals.lww.com/aidsonline/Fulltext/2021/06010/Rectal_microbiota_diversity_in_Kenyan_MSM_is.10.aspx,NA,NA,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,PWID,Malindi,2015,NA,0.481,NA,27,Polling Booth Survey 2016,NA,KP Atlas_9b025dd7f595ca58e847b673ffc8fb28,55e072b04290e0090d36919334c73225,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,PWID,Mombasa,2015,NA,0.638,NA,58,Polling Booth Survey 2016,NA,KP Atlas_fde70579d8e4d6c265333160c9696f47,fad7b0fdd5795081caed48728a4f947a,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,PWID,Nairobi City,2015,NA,0.741,NA,58,Polling Booth Survey 2016,NA,KP Atlas_08c9fa3343948448a87cd9f5b1f4c00f,f95eff90f47450e699eea62575c6d1af,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,PWID,Kisumu,2015,NA,0.71,NA,62,Polling Booth Survey 2016,NA,KP Atlas_1cacb07813a04f41a26a9ece340b9d2b,89aa16382eda9cfa6958e3c41ea124c1,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,PWID,Nairobi,2017,NA,0.61,NA,410,Polling Booth Survey 2017,NA,GF_a1d80e4948a4d3f9604d3768c59f3e39,8d7fbecb2ac3ca2f61172545180927c5,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,PWID,Mombasa,2017,NA,0.618,NA,329,Polling Booth Survey 2017,NA,GF_5afe73697cf20c31626f46a68f2581fd,8e1576d007cece802a4fa601c69c5f06,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,PWID,Kenya,2017,NA,0.676,NA,216,Polling Booth Survey 2017,NA,KP Atlas_c4d6d0aaf33e5e44a0609e2202e82f72,1925ca5f09d26abebca9aff36a4ae1a5,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,PWID,Kisumu,2017,NA,0.75,NA,213,Polling Booth Survey 2017,NA,GF_7cf656c80da05aa1db91682781e1ae37,ab57c341b8b74203753730246a807abb,Yes,yes,NA,NA,NA
+KEN,Kenya,selfreport,PWID,Kilifi,2017,NA,0.839,NA,175,Polling Booth Survey 2017,NA,GF_11ab9a1c2cfbd5e9bb03cc0d2eea5c6e,0d3953221e47a13520b715d7a294e7b7,Yes,yes,NA,NA,NA
+KEN,Kenya,lab,TG,Nairobi,2017,NA,0.642857143,NA,28,Smith et al,NA,NA,NA,Yes,yes,NA,NA,NA
+KEN,Kenya,lab,TG,Kisumu,2016,NA,0.625,NA,8,HPTN 075,https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,NA,Yes,yes,NA,NA,NA
+MLI,Mali,lab,MSM,Bamako,2015,NA,0.44973545,NA,42,Hakim 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+MLI,Mali,lab,MSM,Bamako,2019,NA,0.6144444444444443,NA,47,Cartographie et Estimation de la taille des Professionnelles de Sexe (PS) et des Hommes ayant des rapports Sexuels avec d’autres Hommes (HSH) couplées à l’étude bio-comportementale chez les HSH en matière de VIH au Mali `,NA,NA,NA,Yes,yes,NA,NA,NA
+MLI,Mali,lab,MSM,Kayes,2019,NA,0.46222222222222226,NA,24,Cartographie et Estimation de la taille des Professionnelles de Sexe (PS) et des Hommes ayant des rapports Sexuels avec d’autres Hommes (HSH) couplées à l’étude bio-comportementale chez les HSH en matière de VIH au Mali `,NA,NA,NA,Yes,yes,NA,NA,NA
+MLI,Mali,lab,MSM,Koulikoro,2019,NA,0.1933333333333333,NA,23,Cartographie et Estimation de la taille des Professionnelles de Sexe (PS) et des Hommes ayant des rapports Sexuels avec d’autres Hommes (HSH) couplées à l’étude bio-comportementale chez les HSH en matière de VIH au Mali `,NA,NA,NA,Yes,yes,NA,NA,NA
+MLI,Mali,lab,MSM,Mopti,2019,NA,0.94,NA,13,Cartographie et Estimation de la taille des Professionnelles de Sexe (PS) et des Hommes ayant des rapports Sexuels avec d’autres Hommes (HSH) couplées à l’étude bio-comportementale chez les HSH en matière de VIH au Mali `,NA,NA,NA,Yes,yes,NA,NA,NA
+MLI,Mali,lab,MSM,Segou,2019,NA,0.5055555555555555,NA,11,Cartographie et Estimation de la taille des Professionnelles de Sexe (PS) et des Hommes ayant des rapports Sexuels avec d’autres Hommes (HSH) couplées à l’étude bio-comportementale chez les HSH en matière de VIH au Mali `,NA,NA,NA,Yes,yes,NA,NA,NA
+MLI,Mali,lab,MSM,Sikasso,2019,NA,0.6055555555555556,NA,11,Cartographie et Estimation de la taille des Professionnelles de Sexe (PS) et des Hommes ayant des rapports Sexuels avec d’autres Hommes (HSH) couplées à l’étude bio-comportementale chez les HSH en matière de VIH au Mali `,NA,NA,NA,Yes,yes,NA,NA,NA
+MLI,Mali,selfreport,MSM,Bamako,2019,NA,0.875,NA,16,Koyalta et al.,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8252282/,NA,NA,Yes,yes,NA,NA,NA
+MLI,Mali,lab,TG,Bamako,2015,NA,0.18018018,NA,37,Hakim 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+MLI,Mali,NA,TG,Mali,2019,NA,1,NA,9,ANALYSE DE LA SITUATION DES PERSONNES TRANSGENRES AU MALI EN RELATION AVEC L’INFECTION A VIH ET LE SIDA,NA,NA,NA,Yes,yes,NA,NA,NA
+MOZ,Mozambique,selfreport,FSW,Nampula,2012,NA,0.273,NA,11,"The Integrated Biological and Behavioral Survey among Female Sex Workers, Mozambique 2011–2012",NA,KP Atlas_896eeac60202d5fd827d08332479fb1a,cf8b56fcd7fc70b433bd26599dace8bb,Yes,yes,NA,NA,NA
+MOZ,Mozambique,selfreport,FSW,Cidade de Maputo,2012,NA,0.49,NA,49,"The Integrated Biological and Behavioral Survey among Female Sex Workers, Mozambique 2011–2012",NA,KP Atlas_a800745773acfca1d861b289c35bdcd2,3808cc2aa2e2244bb025b63aa8e25baa,Yes,yes,NA,NA,NA
+MOZ,Mozambique,selfreport,FSW,Beira,2012,NA,0.548,NA,31,"The Integrated Biological and Behavioral Survey among Female Sex Workers, Mozambique 2011–2012",NA,KP Atlas_3a45503881b090e7d2ee7c24bf937330,df1bf1f80789d4662654a0da91eca9e0,Yes,yes,NA,NA,NA
+MOZ,Mozambique,lab,FSW,Mozambique,2017,NA,0.65,NA,NA,2017 PLACE,NA,NA,NA,Yes,yes,NA,NA,NA
+MOZ,Mozambique,lab,MSM,Mozambique,2017,NA,0.22,NA,NA,2017 PLACE,NA,NA,NA,Yes,yes,NA,NA,NA
+MOZ,Mozambique,selfreport,PWID,Cidade de Maputo,2016,0.345,0.479,0.6,123,2014 BBS,NA,KP Atlas_e06e5aea386e6fae91d427ac8cdc17b0,aee4998f796c65b1d6eaddd5edec46b5,Yes,yes,NA,NA,NA
+MOZ,Mozambique,lab,TG,Mozambique,2017,NA,0.39,NA,NA,2017 PLACE,NA,NA,NA,Yes,yes,NA,NA,NA
+MWI,Malawi,selfreport,FSW,Lilongwe,2017,NA,0.69,NA,NA,2017 PLACE,NA,NA,NA,Yes,yes,NA,NA,NA
+MWI,Malawi,selfreport,FSW,Mzuzu,2017,NA,0.67,NA,NA,2017 PLACE,NA,NA,NA,Yes,yes,NA,NA,NA
+MWI,Malawi,selfreport,FSW,Blantyre,2017,NA,0.36,NA,NA,2017 PLACE,NA,NA,NA,Yes,yes,NA,NA,NA
+MWI,Malawi,selfreport,FSW,Mangochi,2017,NA,0.84,NA,NA,2017 PLACE,NA,NA,NA,Yes,yes,NA,NA,NA
+MWI,Malawi,selfreport,FSW,Machinga,2017,NA,0.78,NA,NA,2017 PLACE,NA,NA,NA,Yes,yes,NA,NA,NA
+MWI,Malawi,selfreport,FSW,Zomba,2017,NA,0.81,NA,NA,2017 PLACE,NA,NA,NA,Yes,yes,NA,NA,NA
+MWI,Malawi,selfreport,FSW,Malawi,2020,NA,0.91,NA,NA,2019/20 BBS,NA,NA,NA,Yes,yes,NA,NA,NA
+MWI,Malawi,lab,MSM,Mangochi,2014,NA,0,NA,71,2014 HIV Prevalence and Sociobehavioral Characteristics Among Men Who Have Sex with Men Across Seven Sites in Malawi,NA,NA,NA,Yes,yes,NA,NA,NA
+MWI,Malawi,lab,MSM,Mulanje,2014,NA,0,NA,86,2014 HIV Prevalence and Sociobehavioral Characteristics Among Men Who Have Sex with Men Across Seven Sites in Malawi,NA,NA,NA,Yes,yes,NA,NA,NA
+MWI,Malawi,lab,MSM,Nkhata Bay,2014,NA,0,NA,76,2014 HIV Prevalence and Sociobehavioral Characteristics Among Men Who Have Sex with Men Across Seven Sites in Malawi,NA,NA,NA,Yes,yes,NA,NA,NA
+MWI,Malawi,lab,MSM,Lilongwe,2014,NA,0.039,NA,49,2014 HIV Prevalence and Sociobehavioral Characteristics Among Men Who Have Sex with Men Across Seven Sites in Malawi,NA,NA,NA,Yes,yes,NA,NA,NA
+MWI,Malawi,lab,MSM,Lilongwe,2014,NA,0.039,NA,49,"2014 HIV Prevalence and Sociobehavioral Characteristics among Men Who Have Sex with Men in Blantyre, Lilongwe, and Mzuzu, Malawi",NA,NA,NA,Yes,yes,NA,NA,NA
+MWI,Malawi,lab,MSM,Blantyre,2016,NA,0.333,NA,15,HPTN 075,https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,NA,Yes,yes,NA,NA,NA
+MWI,Malawi,selfreport,MSM,Zomba,2017,NA,0.57,NA,NA,2017 PLACE,NA,NA,NA,Yes,yes,NA,NA,NA
+MWI,Malawi,selfreport,MSM,Malawi,2020,NA,0.925,NA,NA,2019/20 BBS,NA,NA,NA,Yes,yes,NA,NA,NA
+MWI,Malawi,lab,TG,Blantyre,2016,NA,0.417,NA,12,HPTN 075,https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,NA,Yes,yes,NA,NA,NA
+"NAM",Namibia,selfreport,FSW,Windhoek,2014,NA,0.252,NA,103,Integrated Biological and Behavioral Surveillance Studies among Female Sex Workers in Namibia,NA,GF_87c0abcbe984655663365f224b2746f7,b921d91440065db671e9a4c400bcd57b,Yes,yes,NA,NA,NA
+"NAM",Namibia,selfreport,FSW,Oshikango,2014,NA,0.338,NA,77,Integrated Biological and Behavioral Surveillance Studies among Female Sex Workers in Namibia,NA,GF_9007bdfcbad2ce5201d6b13850e16128,712394d4d852aae55fc5084318fcab65,Yes,yes,NA,NA,NA
+"NAM",Namibia,selfreport,FSW,Katima Mulilo,2014,NA,0.362,NA,177,Integrated Biological and Behavioral Surveillance Studies among Female Sex Workers in Namibia,NA,GF_2af94728873ff0a3e2a49398fbf5c9f1,5f403f019bea02ad94c04c7427f49491,Yes,yes,NA,NA,NA
+"NAM",Namibia,selfreport,FSW,Walvis Bay/Swakopmund,2014,NA,0.369,NA,130,Integrated Biological and Behavioral Surveillance Studies among Female Sex Workers in Namibia,NA,GF_549a2c4467b79430847df4d30efc5b32,e5d7f1e19293f7db287dc05888450fc6,Yes,yes,NA,NA,NA
+"NAM",Namibia,selfreport,MSM,Windhoek,2013,NA,0.102,NA,59,Integrated Biological and Behavioral Surveillance Studies among Men who have Sex with Men in Namibia (2014),NA,GF_7f62011976aaad3330c15d1b595bed9f,7d500f477c6ccb42b8d4c6bbd63a1742,Yes,yes,NA,NA,NA
+"NAM",Namibia,selfreport,MSM,Oshakati,2013,NA,0.118,NA,17,Integrated Biological and Behavioral Surveillance Studies among Men who have Sex with Men in Namibia (2014),NA,GF_3310a9bfcf815efdbcd07fc66b0ff650,1dcc26d540e6c328e8cd716a705fddcf,Yes,yes,NA,NA,NA
+"NAM",Namibia,selfreport,MSM,Walvis Bay/Swakopmund,2013,NA,0.151,NA,53,Integrated Biological and Behavioral Surveillance Studies among Men who have Sex with Men in Namibia (2014),NA,GF_dee25776150a89db4009f500cf8a8b09,671509512caf52a013ff5b39b750d311,Yes,yes,NA,NA,NA
+"NAM",Namibia,selfreport,MSM,Keetmanshoop,2013,NA,0.227,NA,44,Integrated Biological and Behavioral Surveillance Studies among Men who have Sex with Men in Namibia (2014),NA,GF_a93b37c75601f34b9cc723d26542c663,eaa784b12994a1f1ab5e581284e8a0c2,Yes,yes,NA,NA,NA
+NGA,Nigeria,lab,FSW,Nigeria,2020,NA,0.238698,NA,939,2020 BBS,NA,NA,NA,Yes,yes,NA,NA,NA
+NGA,Nigeria,selfreport,MSM,Abuja and Lagos,2019,NA,0.737572254,NA,865,Ramadhani,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7527771/,NA,NA,Yes,yes,NA,NA,NA
+NGA,Nigeria,lab,MSM,Nigeria,2020,NA,0.33831,NA,887,2020 BBS,NA,NA,NA,Yes,yes,NA,NA,NA
+NGA,Nigeria,lab,PWID,Nigeria,2020,NA,0.080563,NA,608,2020 BBS,NA,NA,NA,Yes,yes,NA,NA,NA
+NGA,Nigeria,lab,TG,Nigeria,2020,NA,0.161204,NA,1172,2020 BBS,NA,NA,NA,Yes,yes,NA,NA,NA
+RWA,Rwanda,selfreport,FSW,Rwanda,2015,NA,0.696976,NA,413,Biological &Behavioral Surveillance among Female Sexual Workers in Rwanda in 2015,NA,NA,NA,Yes,yes,NA,NA,NA
+RWA,Rwanda,lab,MSM,Kigali,2018,NA,0.5648148144444445,NA,74,"Behavioral and Biological Assessment and Population Size Estimation for Men who have Sex with Men (MSM) in Kigali, Rwanda, 2018",https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7527755/,NA,NA,Yes,yes,NA,NA,NA
+SEN,Senegal,selfreport,FSW,Senegal,2013,NA,0.425,NA,40,Achieving an AIDS-Free Generation in Senegal,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5147043/,NA,NA,Yes,yes,NA,NA,NA
+SEN,Senegal,lab,FSW,Senegal,2019,NA,0.5555555555555556,NA,NA,ENQUÊTE NATIONALE DE SURVEILLANCE COMBINEE DES IST ET DU VIH/SIDA (ENSC 2019),NA,NA,NA,Yes,yes,NA,NA,NA
+SEN,Senegal,selfreport,MSM,Senegal,2013,NA,0.105,NA,219,Achieving an AIDS-Free Generation in Senegal,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5147043/,NA,NA,Yes,yes,NA,NA,NA
+SSD,South Sudan,selfreport,FSW,Juba,2016,NA,0.710784314,NA,204,A Bio-Behavioral HIV Survey of Female Sex Workers in South Sudan,NA,NA,NA,Yes,yes,NA,NA,NA
+SSD,South Sudan,selfreport,FSW,Nimule,2017,NA,0.448979592,NA,98,A Bio-Behavioral HIV Survey of Female Sex Workers in Nimule South Sudan,NA,NA,NA,Yes,yes,NA,NA,NA
+SSD,South Sudan,lab,FSW,Yambio,2019,NA,0.723404255,NA,94,"BIO-BEHAVIOUR SURVEY AMONG FEMALE SEX WORKERS IN YAMBIO, SOUTH SUDAN EAGLE 11 SURVEY, 2019",NA,KP Atlas_bf2ae5739b9ffddaa430ebfef762f7a2,b14831399940d8ce8235084c19b82776,Yes,yes,NA,NA,NA
+SSD,South Sudan,lab,FSW,Wau,2019,NA,0.442307692,NA,52,"BIO-BEHAVIOUR SURVEY AMONG FEMALE SEX WORKERS IN WAU, SOUTH SUDAN EAGLE 11 SURVEY, 2019",NA,KP Atlas_ec4e80370b8da49e131929923f9b8bfb,e5d59d3241e8386325ee91cfe3b67b02,Yes,yes,NA,NA,NA
+SWZ,Eswatini,lab,FSW,eSwatini,2020,NA,0.836982968,NA,411,2020 BBS,NA,NA,NA,Yes,yes,NA,NA,NA
+SWZ,Eswatini,lab,MSM,eSwatini,2020,NA,0.548672566,NA,113,2020 BBS,NA,NA,NA,Yes,yes,NA,NA,NA
+SWZ,Eswatini,lab,TG,eSwatini,2020,NA,0.714285714,NA,7,2020 BBS,NA,NA,NA,Yes,yes,NA,NA,NA
+TGO,Togo,NA,FSW,Lom√©,2013,NA,0.147,NA,96,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,KP Atlas_b5afbcd155431e2bf04fc6c0c76c5ec3,6eb0299cf58109641e9cfd8987674128,Yes,yes,NA,NA,NA
+TGO,Togo,NA,FSW,Kara,2013,NA,0.182,NA,33,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,NA,Yes,yes,NA,NA,NA
+TGO,Togo,NA,MSM,Lom√©,2013,NA,0.062,NA,65,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,NA,Yes,yes,NA,NA,NA
+TGO,Togo,NA,MSM,Kara,2013,NA,0,NA,2,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,NA,Yes,yes,NA,NA,NA
+TZA,Tanzania,lab,FSW,Zanzibar,2019,NA,0.670212766,NA,94,"Integrated behavioural and biological surveillance survey among key populations in zanzibar, 2018-2021",NA,NA,NA,Yes,yes,NA,NA,NA
+TZA,Tanzania,lab,MSM,Zanzibar,2019,NA,0.481481481,NA,27,"Integrated behavioural and biological surveillance survey among key populations in zanzibar, 2018-2020",NA,NA,NA,Yes,yes,NA,NA,NA
+TZA,Tanzania,Self-Report,PWID,Dar es Salaam,2016,NA,0.63076923,NA,64,"The hepatitis C cascade of care in people who inject drugs in Dar es Salaam, Tanzania",https://onlinelibrary.wiley.com/doi/10.1111/jvh.12966,NA,NA,Yes,yes,NA,NA,NA
+TZA,Tanzania,lab,PWID,Zanzibar,2019,NA,0.388888889,NA,18,"Integrated behavioural and biological surveillance survey among key populations in zanzibar, 2018-2019",NA,NA,NA,Yes,yes,NA,NA,NA
+UGA,Uganda,lab,FSW,Kampala,2012,NA,0.4090177133333333,NA,345,Doshi 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+UGA,Uganda,selfreport,FSW,"Masaka, Mpigi, Kalungu, Lwengo, Rakai, Kyotera and Lyantonde",2020,NA,0.840909091,NA,NA,Kyaterekera Study,Self-Reported Adherence to Antiretroviral Therapy (ART) Among Women Engaged in Commercial Sex Work in Southern Uganda - PubMed (nih.gov),NA,NA,Yes,yes,NA,NA,NA
+UGA,Uganda,selfreport,MSM,Kampala,2013,NA,0.152,NA,79,Hladik,https://link.springer.com/article/10.1007/s10461-016-1535-2,NA,NA,Yes,yes,NA,NA,NA
+ZAF,South Africa,lab,FSW,Cape Town,2018,NA,0.303876,NA,290,SAHMS II,NA,NA,NA,Yes,yes,NA,NA,NA
+ZAF,South Africa,lab,FSW,Johannesburg,2018,NA,0.607439,NA,331,SAHMS II,NA,NA,NA,Yes,yes,NA,NA,NA
+ZAF,South Africa,lab,FSW,Cape Town,2019,NA,0.41602,NA,274,SAMHMS 2019,NA,NA,NA,Yes,yes,NA,NA,NA
+ZAF,South Africa,lab,FSW,Johannesburg,2019,NA,0.550275,NA,316,SAMHMS 2019,NA,NA,NA,Yes,yes,NA,NA,NA
+ZAF,South Africa,lab,FSW,Mahikeng LM,2019,NA,0.457912,NA,159,SAMHMS 2019,NA,NA,NA,Yes,yes,NA,NA,NA
+ZAF,South Africa,NA,MSM,Cape Town,2012,NA,0.52,NA,88,Rebe et al 2015,https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0138315#sec013,NA,NA,Yes,yes,NA,NA,NA
+ZAF,South Africa,NA,MSM,Gert Sibande,2013,NA,0.136,NA,110,Lane et al 2014,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4234301/,NA,NA,Yes,yes,NA,NA,NA
+ZAF,South Africa,NA,MSM,Ehlanzeni,2013,NA,0.096,NA,62,Lane et al 2014,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4234301/,NA,NA,Yes,yes,NA,NA,NA
+ZAF,South Africa,lab,MSM,Cape Town,2016,NA,0.194,NA,31,HPTN 075,https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,NA,Yes,yes,NA,NA,NA
+ZAF,South Africa,lab,MSM,Soweto,2016,NA,0.271,NA,59,HPTN 075,https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,NA,Yes,yes,NA,NA,NA
+ZAF,South Africa,NA,MSM,Johannesburg,2016,NA,0.618,NA,646,Rees,https://journals.lww.com/stdjournal/Fulltext/2017/12000/Utilization_of_Sexually_Transmitted_Infection.10.aspx,NA,NA,Yes,yes,NA,NA,NA
+ZAF,South Africa,selfreport,MSM,Johannesburg,2019,0.171,0.3,0.43,118,Fearon,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7299351/,NA,NA,Yes,yes,NA,NA,NA
+ZAF,South Africa,lab,PWID,Tshwane MM,2017,NA,0.17222222222222222,NA,303,TipVal 2017,NA,NA,NA,Yes,yes,NA,NA,NA
+ZAF,South Africa,lab,PWID,Cape Town,2017,NA,0.4011111111111111,NA,36,TipVal 2017,NA,NA,NA,Yes,yes,NA,NA,NA
+ZAF,South Africa,lab,TG,Cape Town,2016,NA,0.385,NA,13,HPTN 075,https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,NA,Yes,yes,NA,NA,NA
+ZAF,South Africa,lab,TG,Soweto,2016,NA,0.28,NA,25,HPTN 075,https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,NA,Yes,yes,NA,NA,NA
+ZAF,South Africa,lab,TG,Johannesburg,2019,NA,0.44,NA,NA,Cloete et al 2021,NA,NA,NA,Yes,yes,NA,NA,NA
+ZAF,South Africa,lab,TG,Buffalo City,2019,NA,0.19,NA,NA,Cloete et al 2021,NA,NA,NA,Yes,yes,NA,NA,NA
+ZAF,South Africa,lab,TG,Cape Town,2019,NA,0.26,NA,NA,Cloete et al 2021,NA,NA,NA,Yes,yes,NA,NA,NA
+ZMB,Zambia,selfreport,FSW,Lusaka,2017,0.728,0.821,0.914,118,2016–2017 INTEGRATED BIOLOGICAL AND BEHAVIOURAL SURVEY AMONG FEMALE SEX WORKERS IN ZAMBIA,NA,GF_7ee2cdf8f31eccaff7c603c705186a90,ada55a0ea82ff5f5e428d1faa86b1d22,Yes,yes,NA,NA,NA
+ZMB,Zambia,selfreport,FSW,Ndola,2017,0.729,0.829,0.93,63,2016–2017 INTEGRATED BIOLOGICAL AND BEHAVIOURAL SURVEY AMONG FEMALE SEX WORKERS IN ZAMBIA,NA,GF_b23f53ccfc9e497419abf81696c47fe1,d3def6bd02fa65ac65e43ad8e1664227,Yes,yes,NA,NA,NA
+ZMB,Zambia,selfreport,FSW,Solwezi,2017,0.773,0.855,0.936,86,2016–2017 INTEGRATED BIOLOGICAL AND BEHAVIOURAL SURVEY AMONG FEMALE SEX WORKERS IN ZAMBIA,NA,GF_362cb0e852b347186d7cf1e5d4720e4d,7ceeacd293d7fed7f12e98796ec295c2,Yes,yes,NA,NA,NA
+ZMB,Zambia,selfreport,FSW,Livingstone,2017,0.846,0.898,0.951,123,2016–2017 INTEGRATED BIOLOGICAL AND BEHAVIOURAL SURVEY AMONG FEMALE SEX WORKERS IN ZAMBIA,NA,GF_2d22254b791e38e60e20c631d87ed4dc,acf22aa7cce038889b74a9c88a12761d,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Bindura,2013,NA,0.4413,NA,114,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Chinhoyi,2013,NA,0.5032,NA,114,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Chipinge,2013,NA,0.3881,NA,114,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Chivhu,2013,NA,0.34119999999999995,NA,114,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Gutu,2013,NA,0.4164,NA,114,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Gwanda,2013,NA,0.34299999999999997,NA,114,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Hwange,2013,NA,0.48210000000000003,NA,114,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Juru,2013,NA,0.43579999999999997,NA,114,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Kadoma,2013,NA,0.47090000000000004,NA,114,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Kariba,2013,NA,0.5138,NA,114,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Magunje,2013,NA,0.37520000000000003,NA,114,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Marondera,2013,NA,0.34509999999999996,NA,114,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Ngundu,2013,NA,0.3825,NA,114,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Zvishavane,2013,NA,0.4374,NA,114,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Bindura,2016,NA,0.6768000000000001,NA,181,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Bulawayo,2016,NA,0.7092,NA,181,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Chinhoyi,2016,NA,0.7216,NA,181,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Chipinge,2016,NA,0.6545000000000001,NA,181,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Chivhu,2016,NA,0.6095,NA,181,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Gutu,2016,NA,0.703,NA,181,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Gwanda,2016,NA,0.6678000000000001,NA,181,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Harare,2016,NA,0.6555,NA,181,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Hwange,2016,NA,0.6008,NA,181,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Juru,2016,NA,0.6241,NA,181,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Kadoma,2016,NA,0.847,NA,181,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Kariba,2016,NA,0.6706,NA,181,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Magunje,2016,NA,0.7508,NA,181,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Maronder,2016,NA,0.6461,NA,181,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Ngundu,2016,NA,0.6515000000000001,NA,181,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Shamva,2016,NA,0.5625,NA,181,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,lab,FSW,Zvishava,2016,NA,0.6557,NA,181,Cowan 2018,NA,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,selfreport,MSM,Harare,2019,NA,0.278,NA,54,IBBS 2019,NA,NA,NA,Yes,yes,NA,Y020_024,NA
+ZWE,Zimbabwe,selfreport,MSM,Harare,2019,NA,0.357,NA,70,IBBS 2019,NA,NA,NA,Yes,yes,NA,Y025_034,NA
+ZWE,Zimbabwe,selfreport,MSM,Bulawayo,2019,NA,0.444,NA,27,IBBS 2019,NA,NA,NA,Yes,yes,NA,Y020_024,NA
+ZWE,Zimbabwe,selfreport,MSM,Bulawayo,2019,NA,0.443,NA,79,IBBS 2019,NA,NA,NA,Yes,yes,NA,Y025_034,NA
+ZWE,Zimbabwe,selfreport,MSM,Bulawayo,2019,NA,0.618,NA,55,IBBS 2019,NA,NA,NA,Yes,yes,NA,Y015_049,NA
+ZWE,Zimbabwe,selfreport,MSM,Bulawayo,2019,NA,0.5,NA,30,IBBS 2019,NA,NA,NA,Yes,yes,NA,Y050_999,NA
+ZWE,Zimbabwe,selfreport,MSM,Harare,2019,NA,0.926,NA,27,IBBS 2019,NA,NA,NA,Yes,yes,NA,Y025_034,NA
+ZWE,Zimbabwe,selfreport,MSM,Bulawayo,2019,NA,0.972,NA,36,IBBS 2019,NA,NA,NA,Yes,yes,NA,Y025_034,NA
+ZWE,Zimbabwe,selfreport,MSM,Bulawayo,2019,NA,1,NA,34,IBBS 2019,NA,NA,NA,Yes,yes,NA,Y015_049,NA
+ZWE,Zimbabwe,selfreport,MSM,Harare and Bulawayo,2019,0.57,0.64,0.7,248,Harris et al,https://www.sciencedirect.com/science/article/pii/S2352301821002976,NA,NA,Yes,yes,NA,NA,NA
+ZWE,Zimbabwe,selfreport,TG,Harare and Bulawayo,2019,0.45,0.55,0.66,92,Harris et al,https://www.sciencedirect.com/science/article/pii/S2352301821002976,NA,NA,Yes,yes,NA,NA,NA
+BEN,Benin,selfreport,FSW,Benin,2017,NA,0.21879525,NA,77,Alary supplementary,NA,NA,NA,Yes,yes,NA,NA,NA
+BEN,Benin,lab,FSW,Benin,2017,NA,0.12279180111111111,NA,77,Alary supplementary,NA,NA,NA,Yes,yes,NA,NA,NA
+TZA,Tanzania,selfreport,PWID,Mwanza,2022,NA,0.83,NA,25,BBS 2022,NA,NA,NA,Yes,yes,NA,NA,NA
+TZA,Tanzania,selfreport,PWID,Mbeya,2022,NA,0.8,NA,70,BBS 2022,NA,NA,NA,Yes,yes,NA,NA,NA
+TZA,Tanzania,selfreport,PWID,Dodoma,2022,NA,0.68,NA,42,BBS 2022,NA,NA,NA,Yes,yes,NA,NA,NA
+ERI,Eritrea,selfreport,FSW,Asmara City,2019,NA,0.0758,NA,264,2019 BBS,NA,NA,NA,Yes,yes,NA,NA,NA
+ERI,Eritrea,selfreport,FSW,Central Highlands,2019,NA,0.085,NA,117,2019 BBS,NA,NA,NA,Yes,yes,NA,NA,NA
+ERI,Eritrea,selfreport,FSW,Western Lowlands,2019,NA,0.178,NA,313,2019 BBS,NA,NA,NA,Yes,yes,NA,NA,NA

@@ -47,7 +47,7 @@ spectrum_ratio <- spectrum %>%
             population = sum(totpop)) %>%
   pivot_longer(-c(sex, year), names_to = "indicator") %>%
   group_by(sex, indicator) %>%
-  mutate(ratio = value/value[year == 2020],
+  mutate(ratio = value/value[year == 2021],
          age_group = "Y015_049")
 
 if(iso3 != "SSD") {

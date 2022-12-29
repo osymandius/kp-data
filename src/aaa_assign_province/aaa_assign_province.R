@@ -21,11 +21,11 @@ cities_areas <- merge_cities %>%
   st_join(areas %>% filter(area_level == admin1_lvl) %>% select(area_id) %>% st_make_valid(), largest=TRUE) %>%
   bind_rows(areas)
   
-sharepoint <- spud::sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
+# sharepoint <- spud::sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
 
-prev_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/HIV prevalence", "prev_clean_sourced.csv")
-prev <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = prev_path)
-prev <- read_csv(prev, show_col_types = FALSE) %>%
+# prev_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/HIV prevalence", "prev_clean_sourced.csv")
+# prev <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = prev_path)
+prev <- read_csv("prev_clean_sourced.csv", show_col_types = FALSE) %>%
   rename(value = prev) %>%
   mutate(iso3 = countrycode(country.name, "country.name", "iso3c"))
 # 
@@ -36,9 +36,9 @@ prev <- read_csv(prev, show_col_types = FALSE) %>%
 #   select(-idx) %>%
 #   ungroup()
 
-art_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/ART coverage", "art_clean_sourced.csv")
-art <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = art_path)
-art <- read_csv(art, show_col_types = FALSE) %>%
+# art_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/ART coverage", "art_clean_sourced.csv")
+# art <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = art_path)
+art <- read_csv("art_clean_sourced.csv", show_col_types = FALSE) %>%
   rename(value = art) %>%
   mutate(iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
   left_join(naomi::get_age_groups() %>% select(age_group_label, age_group)) %>%

@@ -3,6 +3,9 @@ iso3_c <- iso3
 areas <- read_sf("depends/naomi_areas.geojson")%>%
   mutate(iso3 = iso3_c)
 
+area_lvl_mapping <- read_csv("resources/iso_mapping_fit.csv", show_col_types = FALSE)
+admin1_lvl <- area_lvl_mapping$admin1_level[area_lvl_mapping$iso3 == iso3_c]
+
 # merge_cities <- read_sf("depends/")
 
 population <- read.csv("depends/interpolated_population.csv") %>%
@@ -63,7 +66,7 @@ population <- bind_rows(
 # pse <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = pse_path)
 # pse <- read_csv(pse)
 # pse <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE", "pse_spreadsheet_cleaned_sourced.csv") 
-pse <- read_csv("pse_cleaned_sourced_data.csv")
+pse <- read_csv("pse_cleaned_sourced_data.csv", show_col_types = FALSE)
 
 pse <- pse %>%
   mutate(iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
@@ -219,14 +222,19 @@ if(nrow(pse)) {
     
     best_matches <- bind_rows(best_matches_cities, best_matches_naomi)
     
+    province_name <- paste0("area_name", admin1_lvl)
+    province_id <- paste0("area_id", admin1_lvl)
+    
     area_reshape <- spread_areas(areas) %>%
-      dplyr::select(area_name1, starts_with("area_id")) %>%
+      dplyr::select(all_of(province_name), starts_with("area_id")) %>%
       st_drop_geometry() %>%
-      mutate(province_area_id = area_id1) %>%
-      pivot_longer(-c(province_area_id, area_name1)) %>%
-      dplyr::select(-name, area_id = value, province = area_name1, province_area_id) %>%
+      mutate(province_area_id = eval(parse(text=province_id))) %>%
+      pivot_longer(-c(province_area_id, all_of(province_name))) %>%
+      dplyr::select(-name, area_id = value, province = all_of(province_name), province_area_id) %>%
       distinct(province, province_area_id, area_id) %>%
-      filter(area_id != iso3) %>%
+      left_join(areas %>% select(area_id, area_level) %>% st_drop_geometry()) %>%
+      filter(area_level >= admin1_lvl) %>%
+      select(-area_level) %>%
       bind_rows(read_csv("depends/city_province_map.csv") %>%
                   dplyr::select(-area_name) %>%
                   rename(
@@ -256,18 +264,16 @@ if(nrow(pse)) {
       summarise(population = sum(population))
     
     pse <- pse %>%
-      filter(iso3 == iso3_c)
-    
-    pse <- pse %>%
       filter(is.na(population_proportion)) %>%
       select(-c(prop_lower:prop_upper)) %>%
+      left_join(row_populations) %>%
+      mutate(population_proportion = pse/population,
+             prop_lower = NA,
+             prop_upper = NA) %>%
       bind_rows(
         pse %>%
           filter(!is.na(population_proportion)) %>%
-          left_join(row_populations) %>%
-          mutate(population_proportion = pse/population,
-                 prop_lower = NA,
-                 prop_upper = NA)
+          left_join(row_populations)
       )
     
     pse <- pse %>%

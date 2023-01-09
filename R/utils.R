@@ -18,8 +18,8 @@ id <- map(ssa_iso3, ~possibly_pull("aaa_download_constrained_worldpop", id = pas
 id <- map(area_tasks, ~possibly_pull(.x, id = paste0('latest(parameter:version == "', 2021, '")'), recursive = FALSE, remote = "naomi_2021"))
 
 ### Assign populations
-id <- map(ssa_iso3, ~possibly_run("aaa_assign_populations", parameters = data.frame(iso3 = .x)))
-id <- orderly::orderly_batch("aaa_extrapolate_naomi", data.frame(iso3 = c("AGO", "BWA", "KEN", "UGA"), version = 2022))
+id <- map("MWI", ~possibly_run("aaa_assign_populations", parameters = data.frame(iso3 = .x)))
+id <- orderly::orderly_batch("aaa_extrapolate_naomi", data.frame(iso3 = ssa_iso3[ssa_iso3 != "COD"], version = 2022))
 # names(id) <- ssa_iso3
 lapply(id$id[id$success == TRUE], orderly_commit)
 
@@ -37,7 +37,7 @@ orderly_dev_start_oli("aaa_extrapolate_naomi", data.frame(iso3 = "MOZ"))
 
 ### Extrapolate Naomi
 id <- map(ssa_iso3, ~possibly_run("aaa_extrapolate_naomi", parameters = data.frame(iso3 = .x)))
-id <- orderly_batch("aaa_extrapolate_naomi", parameters = data.frame(iso3 = ssa_iso3, version = 2022))
+id <- orderly_batch("aaa_assign_populations", parameters = data.frame(iso3 = ssa_iso3[ssa_iso3 != "COD"], version = 2022))
 # names(id) <- ssa_iso3
 lapply(id %>% compact(), orderly_commit)
 

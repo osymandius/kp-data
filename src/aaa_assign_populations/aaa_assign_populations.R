@@ -242,6 +242,22 @@ if(nrow(pse)) {
                     area_id = city_id)
       )
     
+    if(admin1_lvl > 1) {
+      area_reshape <- area_reshape %>%
+        bind_rows(areas %>%
+                    st_drop_geometry() %>%
+                    filter(area_level < admin1_lvl) %>%
+                    rename(province_area_id = parent_area_id) %>%
+                    select(area_id, province_area_id) %>%
+                    mutate(province_area_id = ifelse(is.na(province_area_id), iso3, province_area_id)) %>%
+                    left_join(areas %>%
+                                st_drop_geometry() %>%
+                                select(area_id, area_name),
+                              by = c("province_area_id" = "area_id")) %>%
+                    rename(province = area_name)
+        )
+    }
+    
     row_populations <- best_matches %>%
       left_join(area_reshape) %>%
       mutate(sex = case_when(

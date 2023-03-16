@@ -28,7 +28,8 @@ pse_simple_deduplication <- read_csv("~/Imperial College London/HIV Inference Gr
 #   lapply(type_convert) %>%
 #   bind_rows()
 
-pse_spreadsheet_extract <- read_csv("~/Documents/GitHub/kp-data-private/data/pse.csv")
+pse_spreadsheet_extract <- read_csv("~/Documents/GitHub/kp-data-private/data/dat.csv") %>%
+  filter(indicator == "pse")
 
 write_csv(pse_spreadsheet_extract, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_spreadsheet_extract.csv")
 
@@ -189,7 +190,9 @@ pse_id <- lapply(ssa_iso3, function(x){
   orderly::orderly_search(name = "aaa_assign_populations", query = paste0('latest(parameter:iso3 == "', x, '" && parameter:version == 2022)'), draft = FALSE)
 })
 
-pse_id <- c(pse_id[!is.na(pse_id)], orderly::orderly_search(name = "aaa_assign_populations", query = paste0('latest(parameter:iso3 == "COD")'), draft = FALSE))
+# pse_id <- c(pse_id[!is.na(pse_id)], orderly::orderly_search(name = "aaa_assign_populations", query = paste0('latest(parameter:iso3 == "COD")'), draft = FALSE))
+
+pse_id <- id$id
 
 setwd(rprojroot::find_rstudio_root_file())
 

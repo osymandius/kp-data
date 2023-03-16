@@ -71,7 +71,7 @@ pse <- read_csv("pse_cleaned_sourced_data.csv", show_col_types = FALSE)
 pse <- pse %>%
   mutate(iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
   filter(iso3 == iso3_c) %>%
-  dplyr::select(iso3:pse_upper, prop_lower, population_proportion, prop_upper, area_level, ref, data_checked, uid) %>%
+  dplyr::select(iso3:count_upper, prop_lower, prop_estimate, prop_upper, area_level, ref, data_checked, uid, -province) %>%
   mutate(sex = case_when(
     kp %in% c("FSW", "TG") ~ "female",
     kp == "MSM" ~ "male",
@@ -280,15 +280,15 @@ if(nrow(pse)) {
       summarise(population = sum(population))
     
     pse <- pse %>%
-      filter(is.na(population_proportion)) %>%
+      filter(is.na(prop_estimate)) %>%
       select(-c(prop_lower:prop_upper)) %>%
       left_join(row_populations) %>%
-      mutate(population_proportion = pse/population,
+      mutate(prop_estimate = count_estimate/population,
              prop_lower = NA,
              prop_upper = NA) %>%
       bind_rows(
         pse %>%
-          filter(!is.na(population_proportion)) %>%
+          filter(!is.na(prop_estimate)) %>%
           left_join(row_populations)
       )
     
@@ -358,7 +358,7 @@ if(nrow(pse)) {
           ) ~ "Multiple methods - empirical",
           TRUE ~ method
         )) %>%
-      dplyr::select(all_of(c("country.name", "data_checked", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "province", "province_area_id", "year", "pse_lower", "pse", "pse_upper", "population", "prop_lower", "population_proportion", "prop_upper", "sample", "notes", "ref", "link")))
+      dplyr::select(all_of(c("country.name", "data_checked", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "province", "province_area_id", "year", "count_lower", "count_estimate", "count_upper", "population", "prop_lower", "prop_estimate", "prop_upper", "sample", "notes", "ref", "link")))
       # arrange(country.name, kp, year)
     
     

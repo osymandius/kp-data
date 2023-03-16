@@ -979,6 +979,8 @@ kplhiv_art <- Map(function(prev, pse, art, pop) {
   }, prev_mod[c("FSW", "MSM", "PWID")], pse_mod, art_mod, pop_l) %>%
   setNames(c("FSW", "MSM", "PWID"))
 
+saveRDS(kplhiv_art, "~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/kplhiv_art.rds")
+
 region_pop <- pop %>%
   left_join(region) %>%
   filter(sex == "both") %>%
@@ -1165,8 +1167,8 @@ bind_rows(
     filter(indicator == "kplhiv") %>%
     mutate(denominator = 19393000)
 )
-  mutate(across(lower:upper, ~100*(.x/denominator))) %>%
-  arrange(kp)
+  # mutate(across(lower:upper, ~100*(.x/denominator))) %>%
+  # arrange(kp)
 
 ######
 
@@ -1231,7 +1233,7 @@ kplhiv_proportion_plot <- kplhiv_art %>%
   bind_rows(remaining_num) %>%
   # filter(iso3 != "ZAF",
   #        indicator == "kplhiv") %>%
-  ggplot(aes(x=fct_rev(fct_relevel(iso3, levels = plot_order)), y=median, fill=fct_rev(kp))) +
+  ggplot(aes(x=fct_rev(fct_relevel(iso3, plot_order)), y=median, fill=fct_rev(kp))) +
   geom_col(position = "fill") +
   standard_theme() +
   scale_y_continuous(labels = scales::label_percent()) +
@@ -1258,7 +1260,7 @@ kplhiv_proportion_plot <- kplhiv_art %>%
   filter(kp != "Remainder") %>%
   # filter(iso3 != "ZAF",
   #        indicator == "kplhiv") %>%
-  ggplot(aes(x=fct_rev(fct_relevel(iso3, levels = plot_order)), y=median, fill=fct_rev(kp))) +
+  ggplot(aes(x=fct_rev(fct_relevel(iso3, plot_order)), y=median, fill=fct_rev(kp))) +
   geom_col(position = "stack") +
   standard_theme() +
   scale_y_continuous(labels = scales::label_percent()) +

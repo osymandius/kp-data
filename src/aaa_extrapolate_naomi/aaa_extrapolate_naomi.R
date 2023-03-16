@@ -3,8 +3,7 @@ spectrum <- extract_pjnz_naomi("depends/spectrum_file.zip")
 
 areas <- read_sf("depends/naomi_areas.geojson")
 
-lvl_map <- read.csv("resources/iso_mapping_fit.csv")
-admin1_lvl <- lvl_map$admin1_level[lvl_map$iso3 == iso3]
+admin1_lvl <- filter(read_csv("resources/iso_mapping_fit.csv", show_col_types = FALSE), iso3 == iso3_c)$admin1_level
 
 prev <- read_csv("depends/prev_assigned_province.csv", show_col_types = FALSE) %>%
   mutate(indicator = "HIV prevalence",
@@ -25,7 +24,7 @@ if(nrow(art))
     group_by(row_id) %>%
     mutate(province = ifelse(length(unique(province)) > 1, NA_character_, province))
 
-dat <- list("prev" = prev, "art" = art)
+dat <- list("prev" = prev %>% select(-area_level), "art" = art %>% select(-area_level))
 
 ###########
 
@@ -145,6 +144,8 @@ if(iso3 != "SSD") {
   
   out <- lapply(dat, function(x) {
     
+    # x <- dat$art
+    
     if(nrow(x)) {
       anonymised_dat <- x %>%
         select(!contains(c("Column", "..."))) %>%
@@ -177,7 +178,7 @@ if(iso3 != "SSD") {
   area_indicators <- indicators %>%
     filter(age_group == "Y015_049",
            indicator %in% c("prevalence", "art_coverage"),
-           area_level == 1,
+           area_level %in% c(0, admin1_lvl),
            calendar_quarter == unique(indicators$calendar_quarter)[2]) %>%
     select(area_id, sex, indicator, mean)
   
@@ -242,16 +243,14 @@ write_csv(area_indicators, "area_indicators.csv")
 
 if(nrow(prev)) {
   workbook_export_prev <- prev %>%
-    distinct(iso3, data_checked, country.name, method, kp, area_name, province, year, prev_lower, value, prev_upper, denominator, ref, link) %>%
+    distinct(iso3, data_checked, country.name, method, kp, area_name, province, year, prop_lower, value, prop_upper, denominator, ref, link) %>%
     mutate(indicator = "HIV prevalence") %>%
-    rename(prop_lower = prev_lower,
-           prop = value,
-           prop_upper = prev_upper) %>%
+    rename(prop_estimate = value) %>%
     mutate(
       surveillance_type = NA,
-      pse_lower = NA,
-      pse = NA,
-      pse_upper = NA,
+      count_lower = NA,
+      count_estimate = NA,
+      count_upper = NA,
       population = NA,
       sex= case_when(
         kp %in%  c("FSW", "TG") ~ "female",
@@ -262,10 +261,10 @@ if(nrow(prev)) {
       notes = NA,
       link = NA,
       prop_lower = round(prop_lower, 3),
-      prop = round(prop, 3),
+      prop_estimate = round(prop_estimate, 3),
       prop_upper = round(prop_upper, 3)
     ) %>%
-    select(all_of(c("country.name", "data_checked", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "province", "year", "pse_lower", "pse", "pse_upper", "population", "prop_lower", "prop", "prop_upper", "denominator", "notes", "ref", "link")))
+    select(all_of(c("country.name", "data_checked", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "province", "year", "count_lower", "count_estimate", "count_upper", "population", "prop_lower", "prop_estimate", "prop_upper", "denominator", "notes", "ref", "link")))
 } else {
   workbook_export_prev <- data.frame(x = character())
 }
@@ -273,16 +272,14 @@ if(nrow(prev)) {
 if(nrow(art)) {
   workbook_export_art <- art %>%
     ungroup() %>%
-    distinct(iso3, data_checked, country.name, method, kp, area_name, province, year, art_lower, value, art_upper, denominator, ref, link) %>%
+    distinct(iso3, data_checked, country.name, method, kp, area_name, province, year, prop_lower, value, prop_upper, denominator, ref, link) %>%
     mutate(indicator = "ART coverage") %>%
-    rename(prop_lower = art_lower,
-           prop = value,
-           prop_upper = art_upper) %>%
+    rename(prop_estimate = value) %>%
     mutate(
       surveillance_type = NA,
-      pse_lower = NA,
-      pse = NA,
-      pse_upper = NA,
+      count_lower = NA,
+      count_estimate = NA,
+      count_upper = NA,
       population = NA,
       sex= case_when(
         kp %in%  c("FSW", "TG") ~ "female",
@@ -293,10 +290,10 @@ if(nrow(art)) {
       notes = NA,
       link = NA,
       prop_lower = round(prop_lower, 3),
-      prop = round(prop, 3),
+      prop_estimate = round(prop_estimate, 3),
       prop_upper = round(prop_upper, 3)
     ) %>%
-    select(all_of(c("country.name", "data_checked", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "province", "year", "pse_lower", "pse", "pse_upper", "population", "prop_lower", "prop", "prop_upper", "denominator", "notes", "ref", "link")))
+    select(all_of(c("country.name", "data_checked", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "province", "year", "count_lower", "count_estimate", "count_upper", "population", "prop_lower", "prop_estimate", "prop_upper", "denominator", "notes", "ref", "link")))
 } else {
   workbook_export_art <- data.frame(x = character())
 }

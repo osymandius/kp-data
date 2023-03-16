@@ -26,7 +26,7 @@ cities_areas <- merge_cities %>%
 # prev_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/HIV prevalence", "prev_clean_sourced.csv")
 # prev <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = prev_path)
 prev <- read_csv("prev_clean_sourced.csv", show_col_types = FALSE) %>%
-  rename(value = prev) %>%
+  rename(value = prop_estimate) %>%
   mutate(iso3 = countrycode(country.name, "country.name", "iso3c"))
 # 
 # prev <- read_csv("msm_tg.csv") %>%
@@ -39,7 +39,7 @@ prev <- read_csv("prev_clean_sourced.csv", show_col_types = FALSE) %>%
 # art_path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Analytical datasets/key-populations/ART coverage", "art_clean_sourced.csv")
 # art <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = art_path)
 art <- read_csv("art_clean_sourced.csv", show_col_types = FALSE) %>%
-  rename(value = art) %>%
+  rename(value = prop_estimate) %>%
   mutate(iso3 = countrycode(country.name, "country.name", "iso3c")) %>%
   left_join(naomi::get_age_groups() %>% select(age_group_label, age_group)) %>%
   select(-age_group_label)

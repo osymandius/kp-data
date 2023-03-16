@@ -140,7 +140,8 @@ pse_spreadsheet_extract <- pse_spreadsheet_extract %>%
 truly_checked <- pse_spreadsheet_extract %>%
   filter(data_checked == "yes",
          year > 2009,
-         source_found != "private"
+         # source_found != "private"
+         # is.na(ethic)
   ) %>%
   mutate(data_checked = "Yes")
 
@@ -150,7 +151,9 @@ mapped_place <- pse_spreadsheet_extract %>%
          source_found %in% c("yes"),
          is.na(duplicate_of),
          !country.name == area_name,
-         year > 2009) %>%
+         year > 2009
+         # is.na(ethic)
+         ) %>%
   mutate(data_checked = "Yes")
 
 unknown <- pse_spreadsheet_extract %>%
@@ -173,7 +176,7 @@ pse_cleaned_data <- pse_cleaned_data %>%
 
 setwd(rprojroot::find_rstudio_root_file())
 
-write_csv(pse_cleaned_data, "src/aaa_assign_populations/pse_cleaned_sourced_data.csv")
+write_csv(pse_cleaned_data %>% select(-c(indicator, ethic)), "src/aaa_assign_populations/pse_cleaned_sourced_data.csv")
 
 pse_cleaned_text <- pse_cleaned_data %>%
   count(kp) %>%
@@ -200,7 +203,7 @@ pse_final <- lapply(paste0("archive/aaa_assign_populations/", pse_id, "/pse_prev
        read_csv, show_col_types = FALSE) %>%
   bind_rows() %>%
   filter(is.na(x),
-         !is.na(population_proportion),
+         !is.na(prop_estimate),
          method != "Extrapolation from 2S-CRC"
   ) %>%
   mutate(
@@ -295,8 +298,10 @@ saveRDS(pse_inputs_text, "R/Report/R objects for report/PSE/pse_input_count_text
 # 
 pal <- wesanderson::wes_palette("Zissou1", 10, "continuous")
 
+pse_spreadsheet_extract <- read_csv("~/Documents/GitHub/kp-data-private/data/dat.csv") %>%
+  filter(indicator == "pse")
 pse_final <- read.csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_final_sourced.csv")
-pse_cleaned_data <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_spreadsheet_cleaned_sourced.csv")
+pse_cleaned_data <- read_csv("src/aaa_assign_populations/pse_cleaned_sourced_data.csv")
 
 method_counts <- pse_spreadsheet_extract %>%
   filter(str_detect(method, regex("enumeration|delphi|wisdom|WOTC|WODC", ignore_case = TRUE))) %>%
@@ -430,12 +435,13 @@ pse_flow %>%
 #   lapply(type_convert) %>%
 #   bind_rows()
 
-prev_spreadsheet_extract <- read_csv("~/Documents/GitHub/kp-data-private/data/prevalence.csv")
+prev_spreadsheet_extract <- read_csv("~/Documents/GitHub/kp-data-private/data/dat.csv") %>%
+  filter(indicator == "prevalence")
 
 prev_spreadsheet_extract <-  prev_spreadsheet_extract %>%
-  mutate(prev = ifelse(prev > 1, prev/100, prev),
-         prev_upper = ifelse(prev_upper > 1, prev_upper/100, prev_upper),
-         prev_lower = ifelse(prev_lower > 1, prev_lower/100, prev_lower),
+  mutate(prop_estimate = ifelse(prop_estimate > 1, prop_estimate/100, prop_estimate),
+         prop_upper = ifelse(prop_upper > 1, prop_upper/100, prop_upper),
+         prop_lower = ifelse(prop_lower > 1, prop_lower/100, prop_lower),
          age_group = case_when(
            age_group %in% c("15-24") ~ "Y015_024",
            age_group %in% c("18-24", "19-24", "20-24") ~ "Y020_024",
@@ -572,7 +578,7 @@ prev_spreadsheet_extract <- prev_spreadsheet_extract %>%
 
 prev_checked <- prev_spreadsheet_extract %>%
   filter(data_checked == "yes",
-         source_found != "private",
+         # source_found != "private",
          year > 2009
   ) %>%
   mutate(data_checked = "Yes")
@@ -615,10 +621,10 @@ prev_id <- lapply(ssa_iso3, function(x){
   orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "', x, '" && parameter:version == 2022)'), draft = FALSE)
 })
 
-prev_id <- c(prev_id[!is.na(prev_id)], orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "COD")'), draft = FALSE))
+prev_id <- id$id
 
 prev_final <- lapply(paste0("archive/aaa_extrapolate_naomi/", prev_id, "/prev.csv"),
-                    function(x) {read_csv(x) %>% select(-any_of("...1"))}) %>%
+                    function(x) {read_csv(x, show_col_types = FALSE) %>% select(-any_of("...1"))}) %>%
   bind_rows()
 
 prev_final_text <- prev_final %>%
@@ -725,13 +731,13 @@ prev_flow %>%
 #   lapply(type_convert) %>%
 #   bind_rows()
 
-art_spreadsheet_extract <- read_csv("~/Documents/GitHub/kp-data-private/data/art.csv")
+art_spreadsheet_extract <- read_csv("~/Documents/GitHub/kp-data-private/data/dat.csv") %>%
+  filter(indicator == "art")
 
 art_spreadsheet_extract <-  art_spreadsheet_extract %>%
-  rename(art = art_coverage) %>%
-  mutate(art = ifelse(art > 1, art/100, art),
-         art_upper = ifelse(art_upper > 1, art_upper/100, art_upper),
-         art_lower = ifelse(art_lower > 1, art_lower/100, art_lower),
+  mutate(prop_estimate = ifelse(prop_estimate > 1, prop_estimate/100, prop_estimate),
+         prop_upper = ifelse(prop_upper > 1, prop_upper/100, prop_upper),
+         prop_lower = ifelse(prop_lower > 1, prop_lower/100, prop_lower),
          age_group = case_when(
            age_group %in% c("15-24") ~ "Y015_024",
            age_group %in% c("18-24", "19-24", "20-24") ~ "Y020_024",
@@ -841,7 +847,7 @@ art_spreadsheet_extract <- art_spreadsheet_extract %>%
 
 art_checked <- art_spreadsheet_extract %>%
   filter(data_checked == "yes",
-         source_found != "private",
+         # source_found != "private",
          year > 2009
   ) %>%
   mutate(data_checked = "Yes")
@@ -857,9 +863,9 @@ art_remove_label$unsourced <- paste0("Unsourced (n = ", nrow(art_unknown), ")")
 
 art_cleaned_data <- bind_rows(art_checked) %>%
   mutate(kp = ifelse(kp == "TGW", "TG", kp),
-         art = ifelse(method == "VLS" & !is.na(method), art/.9, art),
-         art_lower = ifelse(method == "VLS" & !is.na(method), art_lower/.9, art_lower),
-         art_upper = ifelse(method == "VLS" & !is.na(method), art_upper/.9, art_upper),
+         prop_estimate = ifelse(method == "VLS" & !is.na(method), prop_estimate/.9, prop_estimate),
+         prop_lower = ifelse(method == "VLS" & !is.na(method), prop_lower/.9, prop_lower),
+         prop_upper = ifelse(method == "VLS" & !is.na(method), prop_upper/.9, prop_upper),
          method = ifelse(method == "VLS" & !is.na(method), "Lab", method),
          method = case_when(
            method %in% c("Lab") ~ "lab",
@@ -889,10 +895,10 @@ art_id <- lapply(ssa_iso3, function(x){
   orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "', x, '" && parameter:version == 2022)'), draft = FALSE)
 })
 
-art_id <- c(art_id[!is.na(art_id)], orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "COD")'), draft = FALSE))
+art_id <- id$id
 
 art_final <- lapply(paste0("archive/aaa_extrapolate_naomi/", art_id[!is.na(art_id)], "/art.csv"),
-                     function(x) {read_csv(x) %>% select(-any_of("...1"))}) %>%
+                     function(x) {read_csv(x, show_col_types = FALSE) %>% select(-any_of("...1"))}) %>%
   bind_rows()
 
 art_final_text <- art_final %>%

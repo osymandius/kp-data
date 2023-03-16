@@ -163,7 +163,8 @@ national_matched_genpop <- data.frame(kp = c("FSW", "MSM", "PWID", "TG")) %>%
     long_nd %>%
       filter(age_group == "Y015_049",
              area_level == 0,
-             indicator %in% c("prevalence", "art_coverage"))
+             indicator %in% c("prevalence", "art_coverage")),
+    multiple = "all"
   )
 
 long_nd <- long_nd %>%
@@ -181,7 +182,8 @@ genpop_pred <- data.frame(kp = c("FSW", "MSM", "PWID", "TG")) %>%
   left_join(
     long_nd %>%
       filter(age_group == "Y015_049",
-             indicator %in% c("prevalence", "art_coverage"))
+             indicator %in% c("prevalence", "art_coverage")),
+    multiple = "all"
   ) %>%
   mutate(logit_gen_var = logit(mean)) %>%
   left_join(region) %>%
@@ -209,12 +211,10 @@ spatial.prec.prior <- list(prec= list(prior = "normal", param = c(-0.75, 6.25)))
 
 prec.prior <- list(prec= list(prior = "normal", param = c(3,3)))
 
-prev_mod <- lapply(c("FSW", "PWID"), function(kp_id) {
+                   
+fit_prevalence_model <- function(kp_id) {
   
   out <- list()
-  
-  # prev_df <- prev_df %>% filter(kp == "FSW")
-  kp_id <- "PWID"
   
   int <- prev_df %>%
     ungroup() %>%
@@ -327,7 +327,9 @@ prev_inla <- prev_inla %>%
   out$prev_fixed <- prev_fixed
   out
   
-})
+}
+
+prev_mod <- lapply(c("FSW", "PWID"), fit_prevalence_model)
 
 names(prev_mod) <- c("FSW", "PWID")
 
@@ -529,9 +531,7 @@ df_logit_art <- data.frame(logit_gen_art = logit(seq(0.01, 0.99, 0.01)),
 
 ###
 
-art_mod <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
-  
-  # kp_id <- "PWID"
+fit_art_model <- function(kp_id) {
   
   int <- art_df %>%
     ungroup() %>%
@@ -638,7 +638,9 @@ art_mod <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
   out$art_samples <- art_samples
   out
   
-})
+}
+
+art_mod <- lapply(c("FSW", "MSM", "PWID"), fit_art_model)
 
 names(art_mod) <- c("FSW", "MSM", "PWID")
 
@@ -673,9 +675,7 @@ pse_dat <- pse_dat %>%
   
 method.iid.prec.prior <- list(prec= list(prior = "normal", param = c(4, 1)))
 
-pse_mod <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
-  
-  # kp_id <- "FSW"
+fit_pse_model <- function(kp_id) {
     
     pse_inla <- df_logit_prev %>%
       filter(!is.na(area_id)) %>%
@@ -788,7 +788,9 @@ pse_mod <- lapply(c("FSW", "MSM", "PWID"), function(kp_id) {
     out$pse_fixed <- pse_fixed
     out
     
-})
+}
+
+pse_mod <- lapply(c("FSW", "MSM", "PWID"), fit_pse_model)
 
 names(pse_mod) <- c("FSW", "MSM", "PWID")
 
@@ -833,10 +835,10 @@ urban_proportion <- areas %>%
 
 kplhiv_art <- Map(function(prev, pse, art, pop) {
   # 
-  prev_s <- prev_mod$FSW$prev_samples[1:577,]
-  pse_s <- pse_mod$FSW$pse_samples
-  art_s <- art_mod$FSW$art_samples[1:577,]
-  pop <- pop_l$FSW
+  # prev_s <- prev_mod$FSW$prev_samples[1:577,]
+  # pse_s <- pse_mod$FSW$pse_samples
+  # art_s <- art_mod$FSW$art_samples[1:577,]
+  # pop <- pop_l$FSW
   
   # 1 to 577?
   prev_s <- prev$prev_samples[1:577,]

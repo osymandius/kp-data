@@ -810,13 +810,10 @@ fit_pse_model <- function(kp_id) {
 
 pse_mod <- lapply(c("FSW", "MSM", "PWID"), fit_pse_model)
 
-debugonce(fit_pse_model)
-foo <- fit_pse_model("FSW")
-
 names(pse_mod) <- c("FSW", "MSM", "PWID")
 
 pse_res <- lapply(pse_mod, "[[", "pse") %>%
-  bind_rows(.id = "kp")
+  bind_rows(.id = "kp")s
 
 pse_fixed <- lapply(pse_mod, "[[", "pse_fixed") %>%
   bind_rows(.id = "kp")
@@ -1332,7 +1329,7 @@ write_csv(pse_fixed, "~/Imperial College London/HIV Inference Group - WP - Docum
 write_csv(kplhiv_art %>%
             lapply("[[", "country") %>%
             bind_rows(.id = "kp") %>%
-            filter(indicator == "pse"), "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_estimates.csv")
+            filter(indicator == "pse_urban"), "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_estimates.csv")
 
 #####
 

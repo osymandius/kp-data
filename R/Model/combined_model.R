@@ -138,20 +138,36 @@ naomi_dat <- readRDS("~/Downloads/naomi_dat.rds")
 long_nd <- lapply(naomi_dat, "[[", "indicators") %>%
   bind_rows(.id = "iso3")
 
+ssd_dat <- read_csv("R/Report/R objects for report/ssd.csv") %>%
+  mutate(age_group = "Y015_049") %>%
+  select(-c(plhiv, art)) %>%
+  pivot_longer(c(population, prevalence, art_coverage), names_to = "indicator", values_to = "mean")
+
+long_nd <- long_nd %>%
+  bind_rows(ssd_dat %>%
+              mutate(iso3 = "SSD",
+                     calendar_quarter = "CY2021Q4"))
+
 areas <- lapply(naomi_dat, "[[", "areas") %>%
-  lapply(sf::st_make_valid)
+  lapply(sf::st_make_valid) %>%
+  lapply(select, -name)
+
+ssd_areas <- read_sf("~/Documents/GitHub/inference-data/archive/ssd_data_areas/20221213-090601-27a97a7c/ssd_areas.geojson") %>%
+  select(colnames(areas[[1]])) %>%
+  sf::st_make_valid()
+
+areas <- c(areas, "SSD" = list(ssd_areas))
 
 lvl_map <- read.csv("global/iso_mapping_fit.csv")
 admin1_lvl <- lvl_map %>% select(iso3, admin1_level)
 
-levels <- admin1_lvl %>%
-  filter(iso3 %in% names(naomi_dat)) %>%
-  arrange(iso3) %>%
-  pull(admin1_level)
-
+# levels <- admin1_lvl %>%
+#   filter(iso3 %in% c(names(naomi_dat), "SSD")) %>%
+#   pull(admin1_level)
+# 
 # debugonce(dfertility::make_adjacency_matrix)
-# adj <- dfertility::make_adjacency_matrix(areas, levels)
-# spdep::nb2INLA("admin1_level_adj.adj", adj)
+# dfertility::make_adjacency_matrix(areas, levels)
+# spdep::nb2INLA("admin1_level_adj.adj", nb)
 
 areas <- areas %>%
   do.call(rbind, .) %>%
@@ -163,8 +179,7 @@ national_matched_genpop <- data.frame(kp = c("FSW", "MSM", "PWID", "TG")) %>%
     long_nd %>%
       filter(age_group == "Y015_049",
              area_level == 0,
-             indicator %in% c("prevalence", "art_coverage")),
-    multiple = "all"
+             indicator %in% c("prevalence", "art_coverage"))
   )
 
 long_nd <- long_nd %>%
@@ -176,6 +191,7 @@ areas <- areas %>%
   filter(area_level == admin1_level) %>%
   select(iso3, area_id, geometry) %>%
   mutate(id.area = row_number())
+
 
 genpop_pred <- data.frame(kp = c("FSW", "MSM", "PWID", "TG")) %>%
   mutate(sex = c("female", "male", "both", "female")) %>%
@@ -805,7 +821,7 @@ pse_fixed <- lapply(pse_mod, "[[", "pse_fixed") %>%
 
 pop <- long_nd %>%
   filter(indicator == "population",
-         age_group_label == "15-49") %>%
+         age_group == "Y015_049") %>%
   select(iso3, area_id, sex, mean) %>%
   mutate(year = 2021,
          kp = case_when(
@@ -835,15 +851,15 @@ urban_proportion <- areas %>%
 
 kplhiv_art <- Map(function(prev, pse, art, pop) {
   # 
-  # prev_s <- prev_mod$FSW$prev_samples[1:577,]
+  # prev_s <- prev_mod$FSW$prev_samples[1:587,]
   # pse_s <- pse_mod$FSW$pse_samples
-  # art_s <- art_mod$FSW$art_samples[1:577,]
+  # art_s <- art_mod$FSW$art_samples[1:587,]
   # pop <- pop_l$FSW
   
-  # 1 to 577?
-  prev_s <- prev$prev_samples[1:577,]
+  # 1 to 587?
+  prev_s <- prev$prev_samples[1:587,]
   pse_s <- pse$pse_samples
-  art_s <- art$art_samples[1:577,]
+  art_s <- art$art_samples[1:587,]
   
   # pop_curr <- pop %>%
   #   mutate(iso3 = factor(iso3, levels = ssa_iso3)) %>%
@@ -855,6 +871,10 @@ kplhiv_art <- Map(function(prev, pse, art, pop) {
   pse_count_samples <- (invlogit(pse_s) * pop$mean * urban_proportion$urban_proportion) + (pop$mean * rural_pse_s * (1-urban_proportion$urban_proportion))
   kplhiv_samples <- invlogit(prev_s) * pse_count_samples
   kpart_samples <- kplhiv_samples * invlogit(art_s)
+  
+  urban_pop <- pop %>%
+    left_join(urban_proportion) %>%
+    mutate(urban_pop = mean * urban_proportion)
   
   # kplhiv_qtls <- apply(kplhiv_samples, 1, quantile, c(0.025, 0.5, 0.975))
   
@@ -868,8 +888,12 @@ kplhiv_art <- Map(function(prev, pse, art, pop) {
     cbind(pse_count_samples)
   
   pse <- df %>%
-    mutate(indicator = "pse") %>%
+    mutate(indicator = "pse_urban") %>%
     cbind(invlogit(pse_s))
+  
+  pse_urban_count <- df %>%
+    mutate(indicator = "pse_urban_count") %>%
+    cbind(invlogit(pse_s) * urban_pop$urban_pop)
   
   plhiv <- df %>%
     mutate(indicator = "kplhiv") %>%
@@ -907,12 +931,16 @@ kplhiv_art <- Map(function(prev, pse, art, pop) {
   
   #### Country res
   
-  country_res <- bind_rows(pse_count, plhiv, art) %>%
+  country_res <- bind_rows(pse_count, pse_urban_count, plhiv, art) %>%
     group_by(indicator, iso3) %>%
     summarise(across(as.character(1:1000), sum)) %>%
     ungroup()
   
   pse_count_samples_nat <- filter(country_res, indicator == "pse_count") %>%
+    select(all_of(as.character(1:1000))) %>%
+    as.matrix()
+  
+  pse_urban_count_samples_nat <- filter(country_res, indicator == "pse_urban_count") %>%
     select(all_of(as.character(1:1000))) %>%
     as.matrix()
   
@@ -924,19 +952,20 @@ kplhiv_art <- Map(function(prev, pse, art, pop) {
     select(all_of(as.character(1:1000))) %>%
     as.matrix()
   
-  nat_pop <- pop %>%
+  nat_pop <- urban_pop %>%
     group_by(iso3) %>%
-    summarise(mean = sum(mean)) %>%
-    pull(mean)
+    summarise(nat_pop = sum(mean),
+              nat_urban_pop = sum(urban_pop))
   
-  pse_samples_nat <- pse_count_samples_nat / nat_pop
+  pse_samples_nat <- pse_count_samples_nat / nat_pop$nat_pop
+  pse_urban_samples_nat <- pse_urban_count_samples_nat / nat_pop$nat_urban_pop
   prev_samples_nat <- kplhiv_samples_nat / pse_count_samples_nat
   art_cov_samples_nat <- kpart_samples_nat / kplhiv_samples_nat
   
   nat_val <- crossing(select(country_res, iso3),
-                      indicator = c("pse", "prev", "art_cov")) %>%
+                      indicator = c("pse_urban", "prev", "art_cov")) %>%
     arrange(indicator) %>%
-    cbind(rbind(art_cov_samples_nat, prev_samples_nat, pse_samples_nat))
+    cbind(rbind(art_cov_samples_nat, prev_samples_nat, pse_urban_samples_nat))
   
   country_res <- country_res %>% bind_rows(nat_val)
   

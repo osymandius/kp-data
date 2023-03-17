@@ -662,14 +662,14 @@ pse_dat <- pse_dat %>%
   )
 
 pse_dat <- pse_dat %>%
-  filter(population_proportion != 0, !is.na(population_proportion), population_proportion < 1) %>%
+  filter(prop_estimate != 0, !is.na(prop_estimate), prop_estimate < 1) %>%
   left_join(region %>% dplyr::select(region, iso3)) %>%
   mutate(
-    logit_proportion = logit(population_proportion),
+    logit_proportion = logit(prop_estimate),
     fe_method = factor(fe_method, levels=c("empirical", unique(pse_dat$fe_method)[unique(pse_dat$fe_method) != "empirical" & !is.na(unique(pse_dat$fe_method))])),
   ) %>%
   ungroup %>%
-  dplyr::select(iso3, area_id = province_area_id, year, kp, fe_method, method, logit_proportion, population_proportion, ref) %>%
+  dplyr::select(iso3, area_id = province_area_id, year, kp, fe_method, method, logit_proportion, prop_estimate, ref) %>%
   filter(iso3 != "LBR",
          !(iso3 == "BFA" & kp == "PWID"))
   

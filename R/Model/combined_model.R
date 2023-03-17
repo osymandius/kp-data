@@ -717,13 +717,15 @@ fit_pse_model <- function(kp_id) {
 
     pse_inla <- pse_inla %>%
       filter(area_id != iso3) %>%
-      bind_rows(nat_level_obs)
+      bind_rows(nat_level_obs) %>%
+      mutate(id.iso3 = multi.utils::to_int(iso3))
     
     pse_formula <- logit_proportion ~ 
       f(id.area, model = "besag", scale.model = TRUE, graph = "admin1_level_adj.adj", hyper=prec.prior) +
       fe_method +
       f(id.method, model = "iid", hyper = prec.prior) +
       f(id.ref, model = "iid", hyper = prec.prior) +
+      # f(id.iso3, model = "iid", hyper = prec.prior) +
       f(id.ref.nat, model = "iid", hyper = prec.prior)
     
     pse_fit <- INLA::inla(pse_formula,
@@ -808,6 +810,9 @@ fit_pse_model <- function(kp_id) {
 
 pse_mod <- lapply(c("FSW", "MSM", "PWID"), fit_pse_model)
 
+debugonce(fit_pse_model)
+foo <- fit_pse_model("FSW")
+
 names(pse_mod) <- c("FSW", "MSM", "PWID")
 
 pse_res <- lapply(pse_mod, "[[", "pse") %>%
@@ -854,17 +859,19 @@ kplhiv_art <- Map(function(prev, pse, art, pop) {
   # prev_s <- prev_mod$FSW$prev_samples[1:587,]
   # pse_s <- pse_mod$FSW$pse_samples
   # art_s <- art_mod$FSW$art_samples[1:587,]
+  # 
+  # ids <- art_mod$FSW$art %>% filter(!is.na(area_id)) %>% pull(area_id)
   # pop <- pop_l$FSW
+  # pop <- pop[match(ids, pop$area_id), ]
   
   # 1 to 587?
   prev_s <- prev$prev_samples[1:587,]
   pse_s <- pse$pse_samples
   art_s <- art$art_samples[1:587,]
+  ids <- art$art %>% filter(!is.na(area_id)) %>% pull(area_id)
+  pop <- pop[match(ids, pop$area_id), ]
   
-  # pop_curr <- pop %>%
-  #   mutate(iso3 = factor(iso3, levels = ssa_iso3)) %>%
-  #   arrange(iso3)
-  
+
   urban_prop_s <- matrix(rep(rbeta(1000, 5, 3), nrow(pse_s)), nrow = nrow(pse_s), byrow = TRUE)
   rural_pse_s <- invlogit(pse_s) * urban_prop_s
 
@@ -883,8 +890,8 @@ kplhiv_art <- Map(function(prev, pse, art, pop) {
     select(iso3, area_id, region) %>%
     distinct()
   
-  pse_count <- df %>%
-    mutate(indicator = "pse_count") %>%
+  pse_nat_count <- df %>%
+    mutate(indicator = "pse_nat_count") %>%
     cbind(pse_count_samples)
   
   pse <- df %>%
@@ -931,12 +938,12 @@ kplhiv_art <- Map(function(prev, pse, art, pop) {
   
   #### Country res
   
-  country_res <- bind_rows(pse_count, pse_urban_count, plhiv, art) %>%
+  country_res <- bind_rows(pse_nat_count, pse_urban_count, plhiv, art) %>%
     group_by(indicator, iso3) %>%
     summarise(across(as.character(1:1000), sum)) %>%
     ungroup()
   
-  pse_count_samples_nat <- filter(country_res, indicator == "pse_count") %>%
+  pse_count_samples_nat <- filter(country_res, indicator == "pse_nat_count") %>%
     select(all_of(as.character(1:1000))) %>%
     as.matrix()
   
@@ -963,9 +970,9 @@ kplhiv_art <- Map(function(prev, pse, art, pop) {
   art_cov_samples_nat <- kpart_samples_nat / kplhiv_samples_nat
   
   nat_val <- crossing(select(country_res, iso3),
-                      indicator = c("pse_urban", "prev", "art_cov")) %>%
+                      indicator = c("pse_nat", "pse_urban", "prev", "art_cov")) %>%
     arrange(indicator) %>%
-    cbind(rbind(art_cov_samples_nat, prev_samples_nat, pse_urban_samples_nat))
+    cbind(rbind(art_cov_samples_nat, prev_samples_nat, pse_samples_nat, pse_urban_samples_nat))
   
   country_res <- country_res %>% bind_rows(nat_val)
   
@@ -1070,9 +1077,9 @@ bind_rows(
 
 ########################
 
-prev_s <- rbind(prev_mod$FSW$prev_samples[1:577,], prev_mod$MSM$prev_samples[1:577,], prev_mod$PWID$prev_samples[1:577,])
+prev_s <- rbind(prev_mod$FSW$prev_samples[1:587,], prev_mod$MSM$prev_samples[1:587,], prev_mod$PWID$prev_samples[1:587,])
 pse_s <- rbind(pse_mod$FSW$pse_samples, pse_mod$MSM$pse_samples, pse_mod$PWID$pse_samples)
-art_s <- rbind(art_mod$FSW$art_samples[1:577,], art_mod$MSM$art_samples[1:577,], art_mod$PWID$art_samples[1:577,])
+art_s <- rbind(art_mod$FSW$art_samples[1:587,], art_mod$MSM$art_samples[1:587,], art_mod$PWID$art_samples[1:587,])
 
 pop_curr <- pop %>%
   mutate(area_id = factor(area_id),
@@ -1166,7 +1173,7 @@ colnames(region_res) <- c("indicator", "region",   "lower", "median", "upper")
 
 bind_rows(
   region_res %>%
-    filter(indicator == "pse_count") %>%
+    filter(indicator == "pse_nat_count") %>%
     left_join(region_pop %>% rename(denominator = population)),
   region_res %>%
     filter(indicator == "kplhiv") %>%
@@ -1254,30 +1261,6 @@ remaining_num <- kplhiv_art %>%
 
 plot_order <- c("SEN", "GMB", "GNB", "GIN", "SLE", "LBR", "MLI", "BFA", "CIV", "GHA", "TGO", "BEN", "NER", "NGA", "CMR", "TCD", "CAF", "SSD", "ETH", "GAB", "COG", "GNQ", "COD", "UGA", "KEN", "RWA", "BDI", "TZA", "AGO", "ZMB", "MWI", "MOZ", "BWA", "ZWE", "NAM", "SWZ", "LSO", "ZAF")
 
-
-kplhiv_proportion_plot <- kplhiv_art %>%
-  lapply("[[", "country") %>%
-  bind_rows(.id = "kp") %>%
-  filter(indicator == "kplhiv") %>%
-  bind_rows(remaining_num) %>%
-  # filter(iso3 != "ZAF",
-  #        indicator == "kplhiv") %>%
-  ggplot(aes(x=fct_rev(fct_relevel(iso3, plot_order)), y=median, fill=fct_rev(kp))) +
-  geom_col(position = "fill") +
-  standard_theme() +
-  scale_y_continuous(labels = scales::label_percent()) +
-  scale_x_discrete(labels = ~countrycode::countrycode(.x, "iso3c", "country.name")) +
-  theme(legend.position = "right") +
-  scale_fill_manual(values = 
-                      c(
-                        wesanderson::wes_palette("Zissou1")[1],
-                        wesanderson::wes_palette("Moonrise2")[2],
-                        wesanderson::wes_palette("Zissou1")[4],
-                        wesanderson::wes_palette("Rushmore1")[3]
-                        
-                      )) +
-  labs(x=element_blank(), y="Proportion of total PLHIV", fill=element_blank()) +
-  coord_flip()
 
 kplhiv_proportion_plot <- kplhiv_art %>%
   lapply("[[", "country") %>%

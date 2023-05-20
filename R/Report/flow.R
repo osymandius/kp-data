@@ -12,9 +12,12 @@ collapse <- function(...) {paste0(..., collapse = "\n")}
 
 pse_remove_label <- list()
 
-pse_total_dat <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/2021_11_28_pse_all_data.csv", show_col_types = FALSE)
+pse_total_dat <- read_csv("~/Documents/GitHub/kp-data-private/data/complete_dat.csv", show_col_types = F) %>%
+  filter(indicator == "pse")
 
 pse_inputs <- pse_total_dat %>%
+  separate(dataset_id, sep = "_", into=c("dataset", NA), remove = F) %>%
+  mutate(dataset = ifelse(dataset == "KP", "KP_Atlas", dataset)) %>%
   filter(!dataset %in% c("Goals_Nat", "Optima")) %>%
   count(dataset, kp) 
 
@@ -28,7 +31,7 @@ pse_simple_deduplication <- read_csv("~/Imperial College London/HIV Inference Gr
 #   lapply(type_convert) %>%
 #   bind_rows()
 
-pse_spreadsheet_extract <- read_csv("~/Documents/GitHub/kp-data-private/data/dat.csv", show_col_types = F) %>%
+pse_spreadsheet_extract <- read_csv("~/Documents/GitHub/kp-data-private/data/complete_dat.csv", show_col_types = F) %>%
   filter(indicator == "pse")
 
 write_csv(pse_spreadsheet_extract, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_spreadsheet_extract.csv")
@@ -101,23 +104,23 @@ pse_spreadsheet_extract <- pse_spreadsheet_extract %>%
 
 #Remove extrapolated values
 pse_remove_label$model <- pse_spreadsheet_extract %>%
-  filter(str_detect(method, regex("extrapolat|modelled", ignore_case = TRUE))) %>%
+  filter(simple_method == "Modelled") %>%
   nrow()
 
 pse_remove_label$model <- paste0("Extrapolated/modelled data (n = ", pse_remove_label$model, ")")
 
 pse_spreadsheet_extract <- pse_spreadsheet_extract %>%
-  filter(!(str_detect(method, regex("extrapolat|modelled", ignore_case = TRUE)) & data_checked != "yes") | is.na(method))
+  filter(simple_method != "Modelled")
 
 #Remove non-empirical methods
 pse_remove_label$non_emp <- pse_spreadsheet_extract %>%
-  filter(str_detect(method, regex("enumeration|delphi|wisdom|WOTC|WODC", ignore_case = TRUE))) %>%
+  filter(simple_method == "Non-empirical") %>%
   nrow()
 
 pse_remove_label$non_emp <- paste0("Non-empirical methods (n = ", pse_remove_label$non_emp, ")")
 
 pse_spreadsheet_extract <- pse_spreadsheet_extract %>%
-  filter(!str_detect(method, regex("enumeration|delphi|wisdom|WOTC|WODC", ignore_case = TRUE)) | is.na(method))
+  filter(simple_method != "Non-empirical")
 
 # #Remove outliers
 # pse_remove_label$outlier <- NA
@@ -206,70 +209,69 @@ pse_final <- lapply(paste0("archive/aaa_assign_populations/", pse_id, "/pse_prev
          !is.na(prop_estimate),
          method != "Extrapolation from 2S-CRC"
   ) %>%
-  mutate(
-    iso3 = countrycode(country.name, "country.name", "iso3c"),
-    method = case_when(
-      method == "" ~ NA_character_,
-      method %in% c("Programmatic mapping", "programmatic mapping", "Hotspot mapping", "PLACE", "Enumeration/mapping", "Mapping", "Mapping and enumeration") ~ "PLACE/Mapping",
-      method %in% c("Unique object", "Unique object multiplier", "Unique Object Multiploer") ~ "Object multiplier",
-      method %in% c("Service Multiplier", "Service multiplier", "Multiplier") ~ "Service multiplier",
-      method %in% c("Unique event multiplier", "Unique event", "Event multiplier") ~ "Event multiplier",
-      method %in% c("Capture - recapture", "CRC", "2S-CEC") ~ "2S-CRC",
-      method %in% c("Wisdom of Crowds, unique object distribution, social event and successive-sampling methods",
-                    "Service multiplier, Unique Object , Literature SS-PSE(RDS-A), Unique event & Consensus approach-Modified Delphi",
-                    "Mapping, Enumeration and literature review",
-                    "Consensus and mapping",
-                    "Unique object, WODM, service multiplier, social multiplier, 2S-CRC",
-                    "Wisdom of Crowds, unique object multiplier, social events and SS-PSE",
-                    "WODC, unique object, service, social, 2S-CRC",
-                    "Wisdom of the masses and capture-recapture",
-                    "Wisdom of the masses and social multiplier",
-                    "Triangulation of the follow methods unique object multiplier, wisdom of the masses,  capture â€“ recapture  and multiplier",
-                    "Unique Object multiplier et wisdom of the masses, NSUM and capture-recapture",
-                    "Unique object multiplier, Census, Respondent driven sampling survey and service multiplier method",
-                    "Unique object multiplier, social event, wisdom of the masses and NSUM",
-                    "WODC, unique object, service, social",
-                    "Literature review (meta-analysis model for surveys) and Delphi method",
-                    "Literature review (meta-analysis) and Delphi method",
-                    "Literature review and individual interviews",
-                    "Delphi method and consensus",
-                    "Consensus of % adult population and population growth",
-                    "Consensus (service, literature, unique object, mapping, WOTC)",
-                    "Median of unique object, WOTC",
-                    "Median of unique object, WOTC, 2S-CRC",
-                    "Programme data",
-                    "RDS",
-                    "Snowball",
-                    "Triangulation",
-                    "Social event, wisdom of the crowds, capture-recapture, unique object multiplier and service multiplier",
-                    "Wisdom of the masses, unique object multiplier and social event"
-                    
-      ) ~ "Multiple methods - mixture",
-      method %in% c("Service multiplier, unique object multiplier,  literature review, RDSAnalyst  SS-PSE Method",
-                    "Unique object multiplier, service multiplier, event multiplier",
-                    "Bayesian synthesis - multiplier and SS-PSE",
-                    "Unique object and special event multiplier",
-                    "Unique object, social, service, 2S-CRC",
-                    "Capture-recapture, unique object multiplier and register multiplier",
-                    "Capture-recapture and NSUM",
-                    "Multiplier, capture-recapture and social event",
-                    "Unique object, event and service multipliers, SS-PSE, and a synthesis of the methods using the Anchored Multiplier",
-                    "Unique object, service multiplier and NSUM",
-                    "Unique object, social, service",
-                    "Consensus (SS-PSE, unique object, multiplier, 1% recommendation)",
-                    "Consensus (SS-PSE, unique object, multiplier)",
-                    "Social event, unique object multiplier and service multiplier",
-                    "Bayesian synthesis (SS-PSE, literature, something else)"
-                    
-                    
-      ) ~ "Multiple methods - empirical",
-      TRUE ~ method
-    ),
-    simple_method = case_when(
-      method %in% c("2S-CRC", "3S-CRC", "Multiple methods - empirical", "Object/event multiplier", "Service multiplier", "SS-PSE") ~ "empirical",
-      method %in% c("Multiple methods - mixture", "PLACE/Mapping") ~ "nonempirical",
-      TRUE ~ method
-    ))
+  mutate(iso3 = countrycode(country.name, "country.name", "iso3c"))
+    # method = case_when(
+    #   method == "" ~ NA_character_,
+    #   method %in% c("Programmatic mapping", "programmatic mapping", "Hotspot mapping", "PLACE", "Enumeration/mapping", "Mapping", "Mapping and enumeration") ~ "PLACE/Mapping",
+    #   method %in% c("Unique object", "Unique object multiplier", "Unique Object Multiploer") ~ "Object multiplier",
+    #   method %in% c("Service Multiplier", "Service multiplier", "Multiplier") ~ "Service multiplier",
+    #   method %in% c("Unique event multiplier", "Unique event", "Event multiplier") ~ "Event multiplier",
+    #   method %in% c("Capture - recapture", "CRC", "2S-CEC") ~ "2S-CRC",
+    #   method %in% c("Wisdom of Crowds, unique object distribution, social event and successive-sampling methods",
+    #                 "Service multiplier, Unique Object , Literature SS-PSE(RDS-A), Unique event & Consensus approach-Modified Delphi",
+    #                 "Mapping, Enumeration and literature review",
+    #                 "Consensus and mapping",
+    #                 "Unique object, WODM, service multiplier, social multiplier, 2S-CRC",
+    #                 "Wisdom of Crowds, unique object multiplier, social events and SS-PSE",
+    #                 "WODC, unique object, service, social, 2S-CRC",
+    #                 "Wisdom of the masses and capture-recapture",
+    #                 "Wisdom of the masses and social multiplier",
+    #                 "Triangulation of the follow methods unique object multiplier, wisdom of the masses,  capture â€“ recapture  and multiplier",
+    #                 "Unique Object multiplier et wisdom of the masses, NSUM and capture-recapture",
+    #                 "Unique object multiplier, Census, Respondent driven sampling survey and service multiplier method",
+    #                 "Unique object multiplier, social event, wisdom of the masses and NSUM",
+    #                 "WODC, unique object, service, social",
+    #                 "Literature review (meta-analysis model for surveys) and Delphi method",
+    #                 "Literature review (meta-analysis) and Delphi method",
+    #                 "Literature review and individual interviews",
+    #                 "Delphi method and consensus",
+    #                 "Consensus of % adult population and population growth",
+    #                 "Consensus (service, literature, unique object, mapping, WOTC)",
+    #                 "Median of unique object, WOTC",
+    #                 "Median of unique object, WOTC, 2S-CRC",
+    #                 "Programme data",
+    #                 "RDS",
+    #                 "Snowball",
+    #                 "Triangulation",
+    #                 "Social event, wisdom of the crowds, capture-recapture, unique object multiplier and service multiplier",
+    #                 "Wisdom of the masses, unique object multiplier and social event"
+    #                 
+    #   ) ~ "Multiple methods - mixture",
+    #   method %in% c("Service multiplier, unique object multiplier,  literature review, RDSAnalyst  SS-PSE Method",
+    #                 "Unique object multiplier, service multiplier, event multiplier",
+    #                 "Bayesian synthesis - multiplier and SS-PSE",
+    #                 "Unique object and special event multiplier",
+    #                 "Unique object, social, service, 2S-CRC",
+    #                 "Capture-recapture, unique object multiplier and register multiplier",
+    #                 "Capture-recapture and NSUM",
+    #                 "Multiplier, capture-recapture and social event",
+    #                 "Unique object, event and service multipliers, SS-PSE, and a synthesis of the methods using the Anchored Multiplier",
+    #                 "Unique object, service multiplier and NSUM",
+    #                 "Unique object, social, service",
+    #                 "Consensus (SS-PSE, unique object, multiplier, 1% recommendation)",
+    #                 "Consensus (SS-PSE, unique object, multiplier)",
+    #                 "Social event, unique object multiplier and service multiplier",
+    #                 "Bayesian synthesis (SS-PSE, literature, something else)"
+    #                 
+    #                 
+    #   ) ~ "Multiple methods - empirical",
+    #   TRUE ~ method
+    # ),
+    # simple_method = case_when(
+    #   method %in% c("2S-CRC", "3S-CRC", "Multiple methods - empirical", "Object/event multiplier", "Service multiplier", "SS-PSE") ~ "empirical",
+    #   method %in% c("Multiple methods - mixture", "PLACE/Mapping") ~ "nonempirical",
+    #   TRUE ~ method
+    # ))
 
 # bad_match <- lapply(paste0("archive/aaa_assign_populations/", pse_id[!is.na(pse_id)], "/bad_match_error.csv"),
 #        read_csv) %>%

@@ -107,19 +107,19 @@ summary_table <- pse_tab %>%
   mutate(region = factor(region, levels = c("SSA", "ESA", "WCA"))) %>%
   arrange(region) %>%
   select(region, kp, pse_n, pse_prop, prev_n, prev_prop, art_n, art_prop)
-  kable(
-    align='c',linesep='',booktabs=TRUE,escape=FALSE,
-    col.names = linebreak(c("Region", "KP", rep(c("Data\npoints", "Countries with\ndata (\\%; n/N)"), 3)), align = "c"),
-    caption = "Availability of population size, HIV prevalence, and ART coverage data by key population and region") %>%
-  add_header_above(.,
-    c(" " = 1,
-      " " = 1,
-      "PSE" = 2,
-      "HIV prevalence" = 2,
-      "ART coverage" = 2),
-    escape = FALSE
-    ) %>%
-  kable_styling(position = "center")
+  # kable(
+  #   align='c',linesep='',booktabs=TRUE,escape=FALSE,
+  #   col.names = linebreak(c("Region", "KP", rep(c("Data\npoints", "Countries with\ndata (\\%; n/N)"), 3)), align = "c"),
+  #   caption = "Availability of population size, HIV prevalence, and ART coverage data by key population and region") %>%
+  # add_header_above(.,
+  #   c(" " = 1,
+  #     " " = 1,
+  #     "PSE" = 2,
+  #     "HIV prevalence" = 2,
+  #     "ART coverage" = 2),
+  #   escape = FALSE
+  #   ) %>%
+  # kable_styling(position = "center")
   
 write_csv(summary_table, "~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Figs/Table 1 summary table.csv")
 
@@ -152,14 +152,14 @@ msm_region_proportions <- pse_final %>%
   filter(kp == "MSM") %>%
   mutate(iso3 = countrycode::countrycode(country.name, "country.name", "iso3c")) %>%
   left_join(region) %>%
-  mutate(under_1 = ifelse(population_proportion < 0.01, 1, 0)) %>%
+  mutate(under_1 = ifelse(prop_estimate < 0.01, 1, 0)) %>%
   group_proportion(c("region", "under_1"))
 
 msm_u1 <- pse_final %>%
   filter(kp == "MSM") %>%
   mutate(iso3 = countrycode::countrycode(country.name, "country.name", "iso3c")) %>%
   left_join(region) %>%
-  ggplot(aes(x=region, y=population_proportion)) +
+  ggplot(aes(x=region, y=prop_estimate)) +
   geom_boxplot() +
   scale_y_continuous(labels = scales::label_percent(), limits = c(0,.1), breaks = c(0, 0.01, 0.025, 0.05, 0.075, 0.1)) +
   geom_hline(aes(yintercept = 0.01), color="red", linetype = 2, size=1) +
@@ -249,7 +249,13 @@ cname_recode <- c("Central African Republic" = "Cen. Afr. Repub.",
                   "Congo - Kinshasa" = "Dem. Rep. Congo",
                   "Congo - Brazzaville" = "Rep. Congo")
 
-pse_estimates <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_estimates.csv") %>%
+pse_estimates <- 
+  read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_estimates.csv") %>%
+  # kplhiv_art %>% 
+  # lapply("[[", "country") %>%
+  # bind_rows(.id = "kp") %>%
+  # filter(indicator == "pse_urban") %>%
+
   mutate(
     area_name = countrycode::countrycode(iso3, "iso3c", "country.name") %>%
       recode(!!!cname_recode)
@@ -309,11 +315,6 @@ ssd_boundary <- read_sf("~/Documents/GitHub/kp-data/R/Report/R objects for repor
 
 ssd_boundary_simple <- rmapshaper::ms_simplify(ssd_boundary, 0.05)
 
-gridExtra::grid.arrange(
-  ggplot(ssd_boundary) + geom_sf() + ggtitle("Original"),
-  ggplot(ssd_boundary_simple) + geom_sf() + ggtitle("Simplified")
-)
-
 
 geographies <- read_sf("~/Documents/GitHub/kp-data/R/Report/R objects for report/Longitude_Graticules_and_World_Countries_Boundaries-shp/99bfd9e7-bb42-4728-87b5-07f8c8ac631c2020328-1-1vef4ev.lu5nk.shp") %>%
   bind_rows(
@@ -343,6 +344,7 @@ pal <- wesanderson::wes_palette("Zissou1", 100, type = "continuous")
 
 
 fig3a_tag_color <- c("FSW" = "black", "MSM" = NA, "PWID" = NA)
+
 
 make_pse_map <- function(x) {
   pse_estimates %>%
@@ -392,9 +394,9 @@ fig3b <- pse_estimates %>%
   geom_jitter(
     data = pse_data_overlay %>%
       filter(!kp %in% c("TG", "TGW", "SW"),
-             population_proportion < 1,
-             population_proportion != 0), 
-    aes(x=iso3_idx, y=population_proportion),
+             prop_estimate < 1,
+             prop_estimate != 0), 
+    aes(x=iso3_idx, y=prop_estimate),
     alpha = 0.2, width = 0.35, size = 0.25
   ) +
   geom_segment(aes(x = xmin, xend = xmax, y = median, yend = median, color=has_data), size=1) +
@@ -472,8 +474,7 @@ prev_estimates <- read_csv("~/Imperial College London/HIV Inference Group - WP -
          fit = median)
 
 prev_country_estimates <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_national_matched_estimates.csv", show_col_types = FALSE) %>%
-  mutate(provincial_value = invlogit(logit_gen_prev),
-         logit_fit = logit(median),
+  mutate(logit_fit = logit(median),
          logit_lower = logit(lower),
          logit_upper = logit(upper),
          fit = median,
@@ -580,8 +581,7 @@ art_estimates <- read_csv("~/Imperial College London/HIV Inference Group - WP - 
          fit = median)
 
 art_country_estimates <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_national_matched_estimates.csv", show_col_types = FALSE) %>%
-  mutate(provincial_value = invlogit(logit_gen_art),
-         logit_fit = logit(median),
+  mutate(logit_fit = logit(median),
          logit_lower = logit(lower),
          logit_upper = logit(upper),
          fit = median)
@@ -684,3 +684,29 @@ png("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidatio
 art_fig
 dev.off()
 
+crossing(iso3 = ssa_iso3,
+         kp = c("FSW", "MSM", "PWID", "TG")) %>%
+  left_join(pse_final %>%
+              ungroup() %>%
+              group_by(iso3, kp) %>%
+              filter(year == max(year)) %>%
+              distinct(iso3, kp, year) %>%
+              rename(pse = year)) %>%
+  left_join(
+    prev_final %>%
+      ungroup() %>%
+      group_by(iso3, kp) %>%
+      filter(year == max(year)) %>%
+      distinct(iso3, kp, year) %>%
+      rename(prevalence = year) %>%
+      left_join(
+        art_final %>%
+          ungroup() %>%
+          group_by(iso3, kp) %>%
+          filter(year == max(year)) %>%
+          distinct(iso3, kp, year) %>%
+          rename(art_coverage = year)
+      )
+  ) %>%
+  pivot_wider(names_from = "kp", values_from = c("pse", "prevalence", "art_coverage")) %>%
+  write_csv("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Figs/data availability.csv", na="")

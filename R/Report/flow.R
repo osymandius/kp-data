@@ -28,7 +28,7 @@ pse_simple_deduplication <- read_csv("~/Imperial College London/HIV Inference Gr
 #   lapply(type_convert) %>%
 #   bind_rows()
 
-pse_spreadsheet_extract <- read_csv("~/Documents/GitHub/kp-data-private/data/dat.csv") %>%
+pse_spreadsheet_extract <- read_csv("~/Documents/GitHub/kp-data-private/data/dat.csv", show_col_types = F) %>%
   filter(indicator == "pse")
 
 write_csv(pse_spreadsheet_extract, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_spreadsheet_extract.csv")
@@ -195,7 +195,7 @@ pse_id <- lapply(ssa_iso3, function(x){
 
 # pse_id <- c(pse_id[!is.na(pse_id)], orderly::orderly_search(name = "aaa_assign_populations", query = paste0('latest(parameter:iso3 == "COD")'), draft = FALSE))
 
-pse_id <- id$id
+# pse_id <- id$id
 
 setwd(rprojroot::find_rstudio_root_file())
 
@@ -210,7 +210,7 @@ pse_final <- lapply(paste0("archive/aaa_assign_populations/", pse_id, "/pse_prev
     iso3 = countrycode(country.name, "country.name", "iso3c"),
     method = case_when(
       method == "" ~ NA_character_,
-      method %in% c("Programmatic mapping", "Hotspot mapping", "PLACE", "Enumeration/mapping", "Mapping", "Mapping and enumeration") ~ "PLACE/Mapping",
+      method %in% c("Programmatic mapping", "programmatic mapping", "Hotspot mapping", "PLACE", "Enumeration/mapping", "Mapping", "Mapping and enumeration") ~ "PLACE/Mapping",
       method %in% c("Unique object", "Unique object multiplier", "Unique Object Multiploer") ~ "Object multiplier",
       method %in% c("Service Multiplier", "Service multiplier", "Multiplier") ~ "Service multiplier",
       method %in% c("Unique event multiplier", "Unique event", "Event multiplier") ~ "Event multiplier",
@@ -314,16 +314,19 @@ method_counts <- pse_spreadsheet_extract %>%
   ) %>%
   filter(year != "2007-2009") %>%
   distinct(year, ref, kp) %>%
-  count(year, kp)
+  count(year, kp) %>%
+  mutate(kp = ifelse(kp == "TG", "TGW", kp))
 
 fig2 <- pse_spreadsheet_extract %>%
   filter(str_detect(method, regex("enumeration|delphi|wisdom|WOTC|WODC", ignore_case = TRUE))) %>%
   filter(source_found == "yes") %>%
-  mutate(method = "Non-empirical") %>%
-  bind_rows(pse_final) %>%
+  mutate(method = "Non-empirical",
+         kp = ifelse(kp == "TG", "TGW", kp)) %>%
+  bind_rows(pse_final %>% mutate(kp = ifelse(kp == "TG", "TGW", kp))) %>%
   filter(year > 2009) %>%
   mutate(year = plyr::round_any(year, 3, floor),
          year = paste0(year, "-", year+2),
+         method = ifelse(method == "programmatic mapping", "PLACE/Mapping", method)
          # year = ifelse(year == "2019-2021", "2019-2020", year)
          ) %>%
   filter(year != "2007-2009") %>%
@@ -348,7 +351,7 @@ fig2 <- pse_spreadsheet_extract %>%
         strip.text.x = element_text(margin = margin(b=20)),
         axis.text.x = element_text(angle = 20, hjust = 1))
 
-# png("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Figs/Fig 5 prevalence.png", width = 1100, height = 800)
+png("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Figs/Fig 2 PSE methods over time.png", width = 800, height = 400)
 fig2
 dev.off()
 
@@ -621,7 +624,7 @@ prev_id <- lapply(ssa_iso3, function(x){
   orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "', x, '" && parameter:version == 2022)'), draft = FALSE)
 })
 
-prev_id <- id$id
+# prev_id <- id$id
 
 prev_final <- lapply(paste0("archive/aaa_extrapolate_naomi/", prev_id, "/prev.csv"),
                     function(x) {read_csv(x, show_col_types = FALSE) %>% select(-any_of("...1"))}) %>%
@@ -895,7 +898,7 @@ art_id <- lapply(ssa_iso3, function(x){
   orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "', x, '" && parameter:version == 2022)'), draft = FALSE)
 })
 
-art_id <- id$id
+# art_id <- id$id
 
 art_final <- lapply(paste0("archive/aaa_extrapolate_naomi/", art_id[!is.na(art_id)], "/art.csv"),
                      function(x) {read_csv(x, show_col_types = FALSE) %>% select(-any_of("...1"))}) %>%

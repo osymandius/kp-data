@@ -33,21 +33,21 @@ if(iso3 != "SSD") {
 population <- population %>%
   bind_rows(city_population)
 
-# population <- population %>%
-#   mutate(msm_age = ifelse(age_group %in% c("Y015_019", "Y020_024", "Y025_029"), 1, 0)) %>%
-#   filter(msm_age == 1) %>%
-#   group_by(area_id, area_name, year, sex) %>%
-#   summarise(population = sum(population)) %>%
-#   mutate(age_group = "Y015_029") %>%
-#   bind_rows(
-#     population %>%
-#       five_year_to_15to49("population") %>%
-#       sex_aggregation("population")
-#   )
-
 population <- population %>%
-  five_year_to_15to49("population") %>%
-  sex_aggregation("population")
+  mutate(msm_age = ifelse(age_group %in% c("Y015_019", "Y020_024", "Y025_029"), 1, 0)) %>%
+  filter(msm_age == 1) %>%
+  group_by(area_id, area_name, year, sex) %>%
+  summarise(population = sum(population)) %>%
+  mutate(age_group = "Y015_029") %>%
+  bind_rows(
+    population %>%
+      five_year_to_15to49("population") %>%
+      sex_aggregation("population")
+  )
+
+# population <- population %>%
+#   five_year_to_15to49("population") %>%
+#   sex_aggregation("population")
 
 extrap_pop <- population %>%
   filter(year %in% 2015:2020, !is.na(population)) %>%
@@ -265,11 +265,11 @@ if(nrow(pse)) {
         kp %in% c("MSM", "TGM") ~ "male",
         kp %in% c("FSW", "SW", "TG", "TGW") ~ "female"
       ),
-      # age_group = case_when(
-      #   kp %in% c("PWID", "FSW", "SW") ~ "Y015_049",
-      #   kp %in% c("MSM", "TG", "TGW", "TGM") ~ "Y015_029"
-      # )
-      age_group = "Y015_049"
+      age_group = case_when(
+        kp %in% c("PWID", "FSW", "SW") ~ "Y015_049",
+        kp %in% c("MSM", "TG", "TGW", "TGM") ~ "Y015_029"
+      )
+      # age_group = "Y015_049"
       ) %>%
       type_convert() %>%
       left_join(population %>% ungroup() %>% dplyr::select(area_id, year, sex, age_group, population) %>% type_convert()) %>%
@@ -358,7 +358,7 @@ if(nrow(pse)) {
           ) ~ "Multiple methods - empirical",
           TRUE ~ method
         )) %>%
-      dplyr::select(all_of(c("country.name", "data_checked", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "province", "province_area_id", "year", "count_lower", "count_estimate", "count_upper", "population", "prop_lower", "prop_estimate", "prop_upper", "sample", "notes", "ref", "link")))
+      dplyr::select(all_of(c("country.name", "data_checked", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "province", "province_area_id", "year", "count_lower", "count_estimate", "count_upper", "population", "prop_lower", "prop_estimate", "prop_upper", "sample", "notes", "study_idx", "ref", "link")))
       # arrange(country.name, kp, year)
     
     

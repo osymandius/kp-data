@@ -138,7 +138,7 @@ if(iso3 != "SSD") {
            age_group_label,
            age_group,
            # lower, 
-           mean, 
+           mean
            # upper
     )
   
@@ -223,7 +223,7 @@ if(iso3 != "SSD") {
 if(nrow(out$prev)) {
   out_prev_model <- out$prev %>%
     filter(across(any_of("is_aggregate"), is.na)) %>%
-    select(iso3, area_id, year, kp, age_group, method, denominator, has_age, value, provincial_value, ratio, ref)
+    select(iso3, area_id, year, kp, age_group, method, denominator, has_age, value, provincial_value, ratio, study_idx)
 } else {
   out_prev_model <- data.frame(x = character()) 
 }
@@ -231,15 +231,15 @@ if(nrow(out$prev)) {
 if(nrow(out$art)) {
   out_art_model <- out$art %>%
     filter(across(any_of("is_aggregate"), is.na)) %>%
-    select(iso3, area_id, year, kp, method, age_group, has_age, value, denominator, provincial_value, ratio, ref)
+    select(iso3, area_id, year, kp, method, age_group, has_age, value, denominator, provincial_value, ratio, study_idx)
 } else {
   out_art_model <- data.frame(x = character()) 
 }
 
-write_csv(df, "extrapolated_naomi.csv")
-write_csv(out_prev_model, "prev.csv")
-write_csv(out_art_model, "art.csv")
-write_csv(area_indicators, "area_indicators.csv")
+write_csv(df, "extrapolated_naomi.csv", na = "")
+write_csv(out_prev_model, "prev.csv", na = "")
+write_csv(out_art_model, "art.csv", na = "")
+write_csv(area_indicators, "area_indicators.csv", na = "")
 
 if(nrow(prev)) {
   workbook_export_prev <- prev %>%

@@ -162,8 +162,8 @@ out <- lapply(dat, function(x) {
 
 })
 
-write_csv(out$prev$bad_match_error, "prev_bad_match_error.csv")
-write_csv(out$prev$assigned_province, "prev_assigned_province.csv")
+write_csv(out$prev$bad_match_error, "prev_bad_match_error.csv", na = "")
+write_csv(out$prev$assigned_province, "prev_assigned_province.csv", na = "")
 
-write_csv(out$art$bad_match_error, "art_bad_match_error.csv")
-write_csv(out$art$assigned_province, "art_assigned_province.csv")
+write_csv(out$art$bad_match_error, "art_bad_match_error.csv", na = "")
+write_csv(out$art$assigned_province, "art_assigned_province.csv", na = "")

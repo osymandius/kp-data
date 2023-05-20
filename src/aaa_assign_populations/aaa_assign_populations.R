@@ -265,11 +265,11 @@ if(nrow(pse)) {
         kp %in% c("MSM", "TGM") ~ "male",
         kp %in% c("FSW", "SW", "TG", "TGW") ~ "female"
       ),
-      age_group = case_when(
-        kp %in% c("PWID", "FSW", "SW") ~ "Y015_049",
-        kp %in% c("MSM", "TG", "TGW", "TGM") ~ "Y015_029"
-      )
-      # age_group = "Y015_049"
+      # age_group = case_when(
+      #   kp %in% c("PWID", "FSW", "SW") ~ "Y015_049",
+      #   kp %in% c("MSM", "TG", "TGW", "TGM") ~ "Y015_029"
+      # )
+      age_group = "Y015_049"
       ) %>%
       type_convert() %>%
       left_join(population %>% ungroup() %>% dplyr::select(area_id, year, sex, age_group, population) %>% type_convert()) %>%
@@ -302,6 +302,7 @@ if(nrow(pse)) {
         age_group = NA,
         notes = NA,
         link = NA) %>%
+      select(-method) %>%
       rename(method = simple_method) %>%
       dplyr::select(all_of(c("country.name", "data_checked", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "province", "province_area_id", "year", "count_lower", "count_estimate", "count_upper", "population", "prop_lower", "prop_estimate", "prop_upper", "sample", "notes", "study_idx", "ref", "link")))
       # arrange(country.name, kp, year)

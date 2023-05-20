@@ -156,10 +156,10 @@ if(iso3 != "SSD") {
         ),
         has_age = ifelse(!is.na(age_group), 1, 0),
         age_group = case_when(
-          (is.na(age_group) | !age_group %in% unique(filtered_indicators$age_group)) & !kp %in% c("TG", "TGW", "MSM") ~ "Y015_049",
-          (is.na(age_group) | !age_group %in% unique(filtered_indicators$age_group)) & kp %in% c("TG", "TGW", "MSM") ~ "Y015_029"
-          # is.na(age_group) | !age_group %in% unique(filtered_indicators$age_group) ~ "Y015_049",
-          # TRUE ~ as.character(age_group)
+          # (is.na(age_group) | !age_group %in% unique(filtered_indicators$age_group)) & !kp %in% c("TG", "TGW", "MSM") ~ "Y015_049",
+          # (is.na(age_group) | !age_group %in% unique(filtered_indicators$age_group)) & kp %in% c("TG", "TGW", "MSM") ~ "Y015_029"
+          is.na(age_group) | !age_group %in% unique(filtered_indicators$age_group) ~ "Y015_049",
+          TRUE ~ as.character(age_group)
         )) %>%
         left_join(df %>% select(-any_of("area_name"))) %>%
         group_by(row_id) %>%

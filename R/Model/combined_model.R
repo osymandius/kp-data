@@ -37,7 +37,7 @@ convert_logis_labels <- function(x) {
   paste0(round(plogis(x)*100, 1), "%")
 }
 
-prev_dat <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_final_sourced_15-29.csv")
+prev_dat <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_final_sourced.csv")
 
 imp_denomin <- prev_dat %>%
   filter(!is.na(denominator),
@@ -137,8 +137,8 @@ long_nd <- lapply(naomi_dat, "[[", "indicators") %>%
 ssd_dat <- read_csv("R/Report/R objects for report/ssd.csv") %>%
   mutate(age_group = "Y015_049") %>%
   select(-c(plhiv, art)) %>%
-  pivot_longer(c(population, prevalence, art_coverage), names_to = "indicator", values_to = "mean") %>%
-  mutate(age_group = ifelse(sex == "male", "Y015_029", age_group))
+  pivot_longer(c(population, prevalence, art_coverage), names_to = "indicator", values_to = "mean")
+  # mutate(age_group = ifelse(sex == "male", "Y015_029", age_group))
 
 areas <- lapply(naomi_dat, "[[", "areas") %>%
   lapply(sf::st_make_valid) %>%
@@ -157,25 +157,25 @@ areas <- areas %>%
   do.call(rbind, .) %>%
   separate(area_id, 3, remove = FALSE, into = c("iso3", NA))
 
-male_15_29 <- long_nd %>%
-  filter(age_group_label %in% c("15-24", "25-29"),
-         indicator %in% c("plhiv", "population", "art_current_residents"),
-         sex == "male") %>%
-  select(iso3, area_id, area_level, area_name, sex, indicator, age_group, mean) %>%
-  pivot_wider(names_from = indicator, values_from = mean) %>%
-  group_by(iso3, area_id, area_name, area_level, sex) %>%
-  summarise(prevalence = sum(plhiv)/sum(population),
-            art_coverage = sum(art_current_residents)/sum(plhiv),
-            population = sum(population)) %>%
-  mutate(age_group_label = "15-29",
-         age_group = "Y015_029")
-
-long_nd <- long_nd %>%
-  filter(sex != "male") %>%
-  bind_rows(
-    male_15_29 %>%
-      pivot_longer(cols = c("prevalence", "art_coverage", "population"), names_to = "indicator", values_to = "mean")
-  )
+# male_15_29 <- long_nd %>%
+#   filter(age_group_label %in% c("15-24", "25-29"),
+#          indicator %in% c("plhiv", "population", "art_current_residents"),
+#          sex == "male") %>%
+#   select(iso3, area_id, area_level, area_name, sex, indicator, age_group, mean) %>%
+#   pivot_wider(names_from = indicator, values_from = mean) %>%
+#   group_by(iso3, area_id, area_name, area_level, sex) %>%
+#   summarise(prevalence = sum(plhiv)/sum(population),
+#             art_coverage = sum(art_current_residents)/sum(plhiv),
+#             population = sum(population)) %>%
+#   mutate(age_group_label = "15-29",
+#          age_group = "Y015_029")
+# 
+# long_nd <- long_nd %>%
+#   filter(sex != "male") %>%
+#   bind_rows(
+#     male_15_29 %>%
+#       pivot_longer(cols = c("prevalence", "art_coverage", "population"), names_to = "indicator", values_to = "mean")
+#   )
 
 long_nd <- long_nd %>%
   bind_rows(ssd_dat %>%
@@ -186,7 +186,9 @@ national_matched_genpop <- data.frame(kp = c("FSW", "MSM", "PWID", "TG")) %>%
   mutate(sex = c("female", "male", "both", "female")) %>%
   left_join(
     long_nd %>%
-      filter(age_group %in% c("Y015_049", "Y015_029"),
+      filter(age_group %in% c("Y015_049"
+                              # , "Y015_029"
+                              ),
              area_level == 0,
              indicator %in% c("prevalence", "art_coverage"))
   )
@@ -213,7 +215,9 @@ genpop_pred <- data.frame(kp = c("FSW", "MSM", "PWID", "TG")) %>%
   mutate(sex = c("female", "male", "both", "female")) %>%
   left_join(
     long_nd %>%
-      filter(age_group %in% c("Y015_049", "Y015_029"),
+      filter(age_group %in% c("Y015_049"
+                              # "Y015_029"
+                              ),
              indicator %in% c("prevalence", "art_coverage")),
     multiple = "all"
   ) %>%
@@ -252,10 +256,10 @@ fit_prevalence_model <- function(kp_id) {
     ungroup() %>%
     mutate(method = ifelse(is.na(method), "selfreport", as.character(method))) %>%
     filter(kp == kp_id) %>%
-    group_by(ref) %>%
+    group_by(study_idx) %>%
     mutate(id.ref = cur_group_id()) %>%
     ungroup() %>%
-    filter(!is.na(ref)) %>%
+    filter(!is.na(study_idx)) %>%
     mutate(obs_iid = row_number())
   
   prev_inla <- df_logit_prev %>% 
@@ -373,7 +377,7 @@ prev_mod_msm_tg <- lapply("MSM", function(kp_id) {
     ungroup() %>%
     mutate(method = ifelse(is.na(method), "selfreport", as.character(method))) %>%
     filter(kp %in% c("MSM", "TG")) %>%
-    group_by(ref) %>%
+    group_by(study_idx) %>%
     mutate(id.ref = cur_group_id()) %>%
     ungroup() 
   
@@ -513,7 +517,7 @@ prev_fixed <- lapply(prev_mod, "[[", "prev_fixed") %>%
 
 #### ART
 
-art_dat <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_final_15-29.csv", show_col_types = FALSE)
+art_dat <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_final.csv", show_col_types = FALSE)
 
 imp_art_denomin <- art_dat %>%
   filter(!is.na(denominator),
@@ -568,11 +572,11 @@ fit_art_model <- function(kp_id) {
   int <- art_df %>%
     ungroup() %>%
     mutate(method = ifelse(is.na(method), "selfreport", as.character(method))) %>%
-    group_by(ref) %>%
+    group_by(study_idx) %>%
     filter(kp == kp_id) %>%
     # filter(kp == kp_id) %>%
     mutate(id.ref = cur_group_id(),
-           id.ref = ifelse(is.na(ref), NA, id.ref),
+           id.ref = ifelse(is.na(study_idx), NA, id.ref),
            # id.iso3 = cur_group_id(),
            logit_gen_art2 = logit_gen_art) %>%
     ungroup()
@@ -701,7 +705,7 @@ pse_dat <- pse_dat %>%
     fe_method = factor(fe_method, levels=c("empirical", unique(pse_dat$fe_method)[unique(pse_dat$fe_method) != "empirical" & !is.na(unique(pse_dat$fe_method))])),
   ) %>%
   ungroup %>%
-  dplyr::select(iso3, area_id = province_area_id, year, kp, fe_method, method, logit_proportion, prop_estimate, ref) %>%
+  dplyr::select(iso3, area_id = province_area_id, year, kp, fe_method, method, logit_proportion, prop_estimate, study_idx) %>%
   filter(iso3 != "LBR",
          !(iso3 == "BFA" & kp == "PWID"))
   
@@ -716,9 +720,9 @@ fit_pse_model <- function(kp_id) {
     # pse_inla <- data.frame(iso3 = ssa_iso3) %>%  
       bind_rows(pse_dat %>%
                   filter(kp == kp_id) %>%
-                  group_by(ref) %>%
+                  group_by(study_idx) %>%
                   mutate(id.ref = cur_group_id(),
-                         id.ref = ifelse(is.na(ref), NA, id.ref)) %>%
+                         id.ref = ifelse(is.na(study_idx), NA, id.ref)) %>%
                   ungroup %>%
                   arrange(fe_method) %>%
                   mutate(id.method = as.numeric(fct_inorder(method)))) %>%
@@ -844,8 +848,9 @@ pse_fixed <- lapply(pse_mod, "[[", "pse_fixed") %>%
 
 pop <- long_nd %>%
   filter(indicator == "population",
-         (age_group == "Y015_049" & sex %in% c("female", "both")) | 
-           (age_group == "Y015_029" & sex == "male")
+         age_group == "Y015_049"
+         # (age_group == "Y015_049" & sex %in% c("female", "both")) | 
+           # (age_group == "Y015_029" & sex == "male")
          ) %>%
   select(iso3, area_id, sex, mean) %>%
   mutate(year = 2021,
@@ -1054,7 +1059,7 @@ kplhiv_art <- Map(function(prev, pse, art, pop) {
   }, prev_mod[c("FSW", "MSM", "PWID")], pse_mod, art_mod, pop_l) %>%
   setNames(c("FSW", "MSM", "PWID"))
 
-saveRDS(kplhiv_art, "~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/kplhiv_art_15-29.rds")
+saveRDS(kplhiv_art, "~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/kplhiv_art.rds")
 
 region_pop <- pop %>%
   left_join(region) %>%

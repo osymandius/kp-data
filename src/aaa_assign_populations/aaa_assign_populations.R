@@ -102,7 +102,7 @@ if(nrow(pse)) {
                   mutate(iso3 = iso3_c) %>%
                   dplyr::select(iso3, area_name, area_level, area_id) %>% 
                   st_drop_geometry(), by=c("iso3", "area_level"))  %>%
-      mutate(dist = stringdist::stringdist(value, tolower(area_name))) %>%
+      mutate(dist = stringdist(value, tolower(area_name))) %>%
       group_by(idx) %>%
       filter(dist == min(dist)) 
     

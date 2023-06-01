@@ -1,0 +1,40 @@
+script: aaa_pjnz.R
+
+parameters:
+  version:
+    default: "2022"
+  iso3:
+    default: ~
+  resource_type:
+    default: "country-estimates-22"
+
+artefacts:
+  - data:
+      description: Zip file of spectrum file/s needed for Naomi model run
+      filenames:
+        - naomi_pjnz.zip
+
+packages:
+  - dplyr
+  - naomi.utils
+  - readr
+  - spud
+  - zip
+  - httr
+  - jsonlite
+  - ckanr
+  - naomi.utils
+  - readr
+  - stringr
+
+global_resources:
+  resources/org_iso_mapping.csv: org_iso_mapping.csv
+
+sources:
+  - pjnz_paths.R
+
+depends:
+  aaa_meta_pjnz_files:
+    id: latest(parameter:version == 2022)
+    use:
+      depends/meta-pjnz-files.csv: meta-pjnz-files.csv

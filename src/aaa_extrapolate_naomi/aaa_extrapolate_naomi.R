@@ -1,5 +1,5 @@
 iso3_c <- iso3
-spectrum <- extract_pjnz_naomi("depends/spectrum_file.zip")
+spectrum <- extract_pjnz_naomi("depends/naomi_pjnz.zip")
 
 areas <- read_sf("depends/naomi_areas.geojson")
 

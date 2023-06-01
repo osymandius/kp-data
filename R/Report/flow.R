@@ -300,7 +300,7 @@ saveRDS(pse_inputs_text, "R/Report/R objects for report/PSE/pse_input_count_text
 # 
 pal <- wesanderson::wes_palette("Zissou1", 10, "continuous")
 
-pse_spreadsheet_extract <- read_csv("~/Documents/GitHub/kp-data-private/data/dat.csv") %>%
+pse_spreadsheet_extract <- read_csv("~/Documents/GitHub/kp-data-private/data/complete_dat.csv") %>%
   filter(indicator == "pse")
 pse_final <- read.csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_final_sourced.csv")
 pse_cleaned_data <- read_csv("src/aaa_assign_populations/pse_cleaned_sourced_data.csv")
@@ -440,7 +440,7 @@ pse_flow %>%
 #   lapply(type_convert) %>%
 #   bind_rows()
 
-prev_spreadsheet_extract <- read_csv("~/Documents/GitHub/kp-data-private/data/dat.csv") %>%
+prev_spreadsheet_extract <- read_csv("~/Documents/GitHub/kp-data-private/data/complete_dat.csv") %>%
   filter(indicator == "prevalence")
 
 prev_spreadsheet_extract <-  prev_spreadsheet_extract %>%
@@ -736,7 +736,7 @@ prev_flow %>%
 #   lapply(type_convert) %>%
 #   bind_rows()
 
-art_spreadsheet_extract <- read_csv("~/Documents/GitHub/kp-data-private/data/dat.csv") %>%
+art_spreadsheet_extract <- read_csv("~/Documents/GitHub/kp-data-private/data/complete_dat.csv") %>%
   filter(indicator == "art")
 
 art_spreadsheet_extract <-  art_spreadsheet_extract %>%

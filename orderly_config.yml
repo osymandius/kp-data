@@ -14,6 +14,14 @@ remote:
       url: https://imperiallondon.sharepoint.com
       site: HIVInferenceGroup-WP
       path: Shared Documents/orderly/kp-data
+  naomi-orderly-web:
+    driver: orderlyweb::orderlyweb_remote
+    args:
+      host: hiv-orderly.dide.ic.ac.uk
+      port: 443
+      prefix: naomi
+      token: $ORDERLYWEB_GITHUB_TOKEN
+    default_branch: master 
   fertility:
     driver: orderly.sharepoint::orderly_remote_sharepoint
     args:

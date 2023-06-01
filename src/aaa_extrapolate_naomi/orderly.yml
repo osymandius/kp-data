@@ -53,10 +53,14 @@ depends:
     id: latest(parameter:iso3 == iso3 && parameter:version == version)
     use:
       depends/naomi_areas.geojson: naomi_areas.geojson
-  aaa_get_spectrum:
+  # aaa_get_spectrum:
+  #   id: latest(parameter:iso3 == iso3 && parameter:version == version)
+  #   use:
+  #     depends/spectrum_file.zip: spectrum_file.zip
+  aaa_data_pjnz:
     id: latest(parameter:iso3 == iso3 && parameter:version == version)
     use:
-      depends/spectrum_file.zip: spectrum_file.zip
+      depends/naomi_pjnz.zip: naomi_pjnz.zip
   # aaa_outputs_adr_pull:
   #   id: latest(parameter:iso3 == iso3 && parameter:version == version)
   #   use:

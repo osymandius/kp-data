@@ -1,0 +1,19 @@
+script: script.R
+
+parameters:
+  version:
+    default: "2022"
+
+
+artefacts:
+  - data:
+      description: list of 2022 PJNZ files from sites/HIVInferenceGroup-WP/Shared Documents/Data/Spectrum files/2022 final restricted/EPP-Gen
+      filenames: meta-pjnz-files.csv
+
+displayname: Table of PJNZ files and attributions
+
+packages:
+  - dplyr
+  - eppasm
+  - naomi.utils
+  - readr

@@ -30,6 +30,7 @@ packages:
   - spud
   - countrycode
   - moz.utils
+  - stringdist
 
 sources:
   - kp_population_functions.R

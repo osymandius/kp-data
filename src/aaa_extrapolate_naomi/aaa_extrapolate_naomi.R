@@ -12,17 +12,16 @@ prev <- read_csv("depends/prev_assigned_province.csv", show_col_types = FALSE) %
 
 if(nrow(prev))
   prev <- prev %>%
-    left_join(areas %>% select(area_id, province = area_name) %>% st_drop_geometry())
+    left_join(areas %>% select(matched_province_area_id = area_id, province = area_name) %>% st_drop_geometry())
 
 art <- read_csv("depends/art_assigned_province.csv", show_col_types = FALSE) %>%
   mutate(indicator = "ART coverage",
-         iso3 = iso3)
+         iso3 = iso3) %>%
+  select(-province)
 
 if(nrow(art))
   art <- art %>%
-    left_join(areas %>% select(area_id, province = area_name) %>% st_drop_geometry()) %>%
-    group_by(row_id) %>%
-    mutate(province = ifelse(length(unique(province)) > 1, NA_character_, province))
+    left_join(areas %>% select(matched_province_area_id = area_id, province = area_name) %>% st_drop_geometry())
 
 dat <- list("prev" = prev %>% select(-area_level), "art" = art %>% select(-area_level))
 
@@ -144,7 +143,7 @@ if(iso3 != "SSD") {
   
   out <- lapply(dat, function(x) {
     
-    # x <- dat$art
+    # x <- dat$prev
     
     if(nrow(x)) {
       anonymised_dat <- x %>%
@@ -161,7 +160,7 @@ if(iso3 != "SSD") {
           is.na(age_group) | !age_group %in% unique(filtered_indicators$age_group) ~ "Y015_049",
           TRUE ~ as.character(age_group)
         )) %>%
-        left_join(df %>% select(-any_of("area_name"))) %>%
+        left_join(df %>% select(-any_of("area_name")) %>% rename(matched_province_area_id = area_id)) %>%
         group_by(row_id) %>%
         mutate(province = ifelse(length(unique(province)) > 1, NA_character_, province)) %>%
         rename(provincial_value = mean) %>%
@@ -312,8 +311,11 @@ if(nrow(out$prev)) {
            year,
            indicator,
            method,
-           area = area_name,
-           province,
+           area_name,
+           matched_area_name,
+           area_id,
+           matched_province = province,
+           matched_province_area_id, 
            age_group,
            age_group_analysis,
            proportion_estimate = value,
@@ -337,8 +339,11 @@ if(nrow(out$art)) {
            year,
            indicator,
            method,
-           area = area_name,
-           province,
+           area_name,
+           matched_area_name,
+           area_id,
+           matched_province = province,
+           matched_province_area_id, 
            age_group,
            age_group_analysis,
            proportion_estimate = value,

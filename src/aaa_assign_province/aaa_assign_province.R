@@ -18,8 +18,17 @@ merge_cities <- merge_cities %>%
   st_make_valid()
 
 cities_areas <- merge_cities %>%
-  st_join(areas %>% filter(area_level == admin1_lvl) %>% select(area_id) %>% st_make_valid(), largest=TRUE) %>%
-  bind_rows(areas)
+  st_join(areas %>% filter(area_level == admin1_lvl) %>% select(matched_province_area_id = area_id) %>% st_make_valid(), largest=TRUE) %>%
+  st_drop_geometry() %>%
+  bind_rows(
+    areas %>%
+      select(area_id, area_name, area_level, geometry) %>%
+      st_make_valid() %>%
+      st_join(areas %>% filter(area_level == admin1_lvl) %>% select(matched_province_area_id = area_id) %>% st_make_valid(), largest=TRUE) %>%
+      st_drop_geometry() %>%
+      mutate(matched_province_area_id = ifelse(area_level == 0, area_id, matched_province_area_id),
+             iso3 = iso3_c)
+  )
   
 # sharepoint <- spud::sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
 
@@ -127,34 +136,39 @@ out <- lapply(dat, function(x) {
     bad_match_error <- data.frame(iso3 = iso3_c, x = "No bad matches")
   }
   
-  
-  
-  best_matches <- best_matches %>%
-    select(row_id, idx, area_id, area_level, geometry) %>%
-    mutate(area_level = case_when(
-      str_detect(area_id, "_1_") ~ as.integer(1),
-      TRUE ~ as.integer(area_level)
-    ))
-  
-  naomi_to_admin1 <- best_matches %>%
-    filter(area_level > admin1_lvl) %>%
-    st_as_sf() %>%
-    st_make_valid() %>%
-    select(-c(area_id, area_level)) %>%
-    st_join(areas %>% filter(area_level == admin1_lvl) %>% select(area_id) %>% st_make_valid(), largest=TRUE)
-  
-  assigned_province <- best_matches %>%
-    # filter(!row_id %in% naomi_to_admin1$row_id) %>%
-    filter(!idx %in% naomi_to_admin1$idx) %>%
-    bind_rows(naomi_to_admin1) %>%
-    select(row_id, idx, area_id) %>%
-    arrange(row_id, idx)
-  
   x <- x %>%
-    select(-any_of("idx")) %>%
-    left_join(assigned_province) %>%
-    # select(row_id, kp, year, age_group, area_id, value, denominator, ref) %>%
+    left_join(
+      best_matches %>%
+                select(row_id, area_id, matched_area_name = area_name, matched_province_area_id)
+      ) %>%
     filter(!is.na(area_id))
+  
+  # best_matches <- best_matches %>%
+  #   select(row_id, idx, area_id, area_level, geometry) %>%
+  #   mutate(area_level = case_when(
+  #     str_detect(area_id, "_1_") ~ as.integer(1),
+  #     TRUE ~ as.integer(area_level)
+  #   ))
+  # 
+  # naomi_to_admin1 <- best_matches %>%
+  #   filter(area_level > admin1_lvl) %>%
+  #   st_as_sf() %>%
+  #   st_make_valid() %>%
+  #   select(-c(area_id, area_level)) %>%
+  #   st_join(areas %>% filter(area_level == admin1_lvl) %>% select(area_id) %>% st_make_valid(), largest=TRUE)
+  # 
+  # assigned_province <- best_matches %>%
+  #   # filter(!row_id %in% naomi_to_admin1$row_id) %>%
+  #   filter(!idx %in% naomi_to_admin1$idx) %>%
+  #   bind_rows(naomi_to_admin1) %>%
+  #   select(row_id, idx, area_id) %>%
+  #   arrange(row_id, idx)
+  # 
+  # x <- x %>%
+  #   select(-any_of("idx")) %>%
+  #   left_join(assigned_province) %>%
+  #   # select(row_id, kp, year, age_group, area_id, value, denominator, ref) %>%
+  #   filter(!is.na(area_id))
   
   out <- list("assigned_province" = x, "bad_match_error" = bad_match_error)
   

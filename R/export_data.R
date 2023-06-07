@@ -21,14 +21,18 @@ dat <- bind_rows(
            proportion_lower = count_lower/population,
            proportion_upper = count_upper/population,
            age_group_analysis = "Y015_049") %>%
-    rename(area = area_name,
-           country = country.name,
-           proportion_estimate = prop_estimate),
+    rename(country = country.name,
+           proportion_estimate = prop_estimate,
+           matched_province = province,
+           matched_province_area_id = province_area_id,
+           # study_area = area_name
+           ),
   prev_data_input %>% 
     mutate(indicator = "prevalence"),
   art_data_input %>% 
     mutate(indicator = "art_coverage")
 )
+
 
 dat <- dat %>%
   mutate(iso3 = countrycode::countrycode(country, "country.name", "iso3c")) %>%
@@ -39,11 +43,10 @@ dat <- dat %>%
          year,
          indicator,
          method,
-         study_area = area,
-         area_match,
+         study_area = area_name,
          matched_area_id = area_id,
-         matched_province = province,
-         matched_province_area_id = province_area_id, 
+         matched_province,
+         matched_province_area_id, 
          age_group,
          age_group_analysis,
          count_estimate,

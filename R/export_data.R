@@ -1,4 +1,9 @@
-pse <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_final_sourced.csv")
+pse_id <- lapply(ssa_iso3, function(x){
+  orderly::orderly_search(name = "aaa_assign_populations", query = paste0('latest(parameter:iso3 == "', x, '" && parameter:version == 2022)'), draft = FALSE)
+})
+
+pse <- lapply(pse_id, function(x) read_csv(paste0("archive/aaa_assign_populations/", x, "/pse_prevalence.csv"), show_col_types = FALSE)) %>%
+  bind_rows()
 
 prev_id <- lapply(ssa_iso3, function(x){
   orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "', x, '" && parameter:version == 2022)'), draft = FALSE)
@@ -26,6 +31,7 @@ dat <- bind_rows(
 )
 
 dat <- dat %>%
+  mutate(iso3 = countrycode::countrycode(country, "country.name", "iso3c")) %>%
   select(study_idx, 
          iso3,
          country,
@@ -33,8 +39,11 @@ dat <- dat %>%
          year,
          indicator,
          method,
-         area,
-         province,
+         study_area = area,
+         area_match,
+         matched_area_id = area_id,
+         matched_province = province,
+         matched_province_area_id = province_area_id, 
          age_group,
          age_group_analysis,
          count_estimate,
@@ -51,6 +60,10 @@ dat <- dat %>%
          across(c(starts_with("proportion"), provincial_value, ratio), ~round(.x, 3)),
          sample_size = round(sample_size, 0),
          population = round(population, 0))
+
+dat %>%
+  filter(indicator == "prevalence") %>%
+  rename(provincial_prevalence = provincial_value)
 
 write_csv(dat, "~/Downloads/sharing_dat_test.csv", na = "")
 
@@ -94,6 +107,9 @@ int <- tempdir()
 write_csv(province_meta, file.path(int, "province_meta.csv"))
 write_sf(areas, file.path(int, "naomi_areas.geojson"))
 
-grump <- read_sf("archive/aaa_download_constrained_worldpop/20230123-162942-a6966a85/merge_cities.geojson")
+grump_old <- read_sf("../../archive/aaa_download_constrained_worldpop/20230123-162942-a6966a85/merge_cities.geojson")
 
 write_sf(grump, file.path(int, "grump_city_boundaries.geojson"))
+
+orderly_graph("aaa_extrapolate_naomi", id = "20230605-164137-696b26fa", show_all = T, direction = "upstream")
+

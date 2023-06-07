@@ -220,7 +220,7 @@ if(nrow(pse)) {
       bad_match_error <- data.frame(iso3 = iso3_c, x = "No bad matches")
     }
     
-    best_matches <- bind_rows(best_matches_cities %>% mutate(area_match = "GRUMP"), best_matches_naomi %>% mutate(area_match = "Naomi"))
+    best_matches <- bind_rows(best_matches_cities, best_matches_naomi)
     
     province_name <- paste0("area_name", admin1_lvl)
     province_id <- paste0("area_id", admin1_lvl)
@@ -276,11 +276,26 @@ if(nrow(pse)) {
       group_by(row_id) %>%
       mutate(province = ifelse(length(unique(province)) > 1, NA_character_, province),
              province_area_id = ifelse(length(unique(province)) > 1, NA_character_, province_area_id)) %>%
-      group_by(row_id, area_match, province, province_area_id) %>%
+      group_by(row_id, area_id, province, province_area_id) %>%
       summarise(population = sum(population))
     
-    if(!all.equal(row_populations$row_id, unique(row_populations$row_id))) {
-      stop("Mixing Naomi and GRUMP populations")
+    row_populations <- row_populations %>%
+      group_by(row_id) %>%
+      mutate(population = sum(population)) %>%
+      group_by(row_id) %>%
+      mutate(rn = paste0("split_", row_number())) %>%
+      pivot_wider(names_from = rn, values_from = area_id) %>%
+      unite("area_id", starts_with("split"), sep = "; ") %>%
+      mutate(area_id = str_remove_all(area_id, "; NA|NA; ")) %>%
+      mutate(area_match = case_when(
+               !str_detect(area_id, iso3) & str_detect(area_id, "GRUMP") ~ "GRUMP",
+               str_detect(area_id, iso3) & !str_detect(area_id, "GRUMP") ~ "Naomi",
+               str_detect(area_id, iso3) & str_detect(area_id, "GRUMP") ~ "Both"
+             ))
+      
+    
+    if(all.equal(row_populations$row_id, unique(row_populations$row_id)) != TRUE) {
+      stop("Mixing Naomi and GRUMP populations or multiple area names")
     }
     
     pse <- pse %>%
@@ -308,7 +323,7 @@ if(nrow(pse)) {
         link = NA) %>%
       select(-method) %>%
       rename(method = simple_method) %>%
-      dplyr::select(all_of(c("country.name", "data_checked", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "province", "province_area_id", "year", "count_lower", "count_estimate", "count_upper", "area_match", "population", "prop_lower", "prop_estimate", "prop_upper", "sample", "notes", "study_idx", "ref", "link")))
+      dplyr::select(all_of(c("country.name", "data_checked", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "area_match", "area_id", "province", "province_area_id", "year", "count_lower", "count_estimate", "count_upper", "population", "prop_lower", "prop_estimate", "prop_upper", "sample", "notes", "study_idx", "ref", "link")))
       # arrange(country.name, kp, year)
     
     

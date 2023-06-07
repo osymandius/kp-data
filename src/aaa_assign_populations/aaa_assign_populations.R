@@ -117,14 +117,15 @@ if(nrow(pse)) {
         group_by(idx) %>%
         filter(dist == min(dist))
   
-    assigned_areas_idx <- min_dist_cities %>%
-      filter(n() == 1, dist<3) %>%
-      pull(idx)
+    grump_match <- min_dist_cities %>%
+      filter(n() == 1, dist<3)
+    
+    # assigned_areas_idx <- grump_match$idx
   
     min_dist_naomi <- pse_areas %>%
       filter(is.na(area_level)) %>%
       dplyr::select(-area_level) %>%
-      filter(!idx %in% assigned_areas_idx) %>%
+      filter(!idx %in% grump_match$idx) %>%
       full_join(areas %>%
                   mutate(iso3 = iso3_c) %>%
                   dplyr::select(iso3, area_name, area_level, area_id) %>%
@@ -174,7 +175,6 @@ if(nrow(pse)) {
       warning("\nArea name matched several Naomi area IDs. The finest area level has been chosen\nThis is likely a district sharing the same name as its province. Check.\n")
       
     }
-    
   
     ## NAOMI PRIORITY
     # assigned_areas_idx <- sort(best_matches_naomi$idx)
@@ -220,7 +220,7 @@ if(nrow(pse)) {
       bad_match_error <- data.frame(iso3 = iso3_c, x = "No bad matches")
     }
     
-    best_matches <- bind_rows(best_matches_cities, best_matches_naomi)
+    best_matches <- bind_rows(best_matches_cities %>% mutate(area_match = "GRUMP"), best_matches_naomi %>% mutate(area_match = "Naomi"))
     
     province_name <- paste0("area_name", admin1_lvl)
     province_id <- paste0("area_id", admin1_lvl)
@@ -276,8 +276,12 @@ if(nrow(pse)) {
       group_by(row_id) %>%
       mutate(province = ifelse(length(unique(province)) > 1, NA_character_, province),
              province_area_id = ifelse(length(unique(province)) > 1, NA_character_, province_area_id)) %>%
-      group_by(row_id, province, province_area_id) %>%
+      group_by(row_id, area_match, province, province_area_id) %>%
       summarise(population = sum(population))
+    
+    if(!all.equal(row_populations$row_id, unique(row_populations$row_id))) {
+      stop("Mixing Naomi and GRUMP populations")
+    }
     
     pse <- pse %>%
       filter(is.na(prop_estimate)) %>%
@@ -304,7 +308,7 @@ if(nrow(pse)) {
         link = NA) %>%
       select(-method) %>%
       rename(method = simple_method) %>%
-      dplyr::select(all_of(c("country.name", "data_checked", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "province", "province_area_id", "year", "count_lower", "count_estimate", "count_upper", "population", "prop_lower", "prop_estimate", "prop_upper", "sample", "notes", "study_idx", "ref", "link")))
+      dplyr::select(all_of(c("country.name", "data_checked", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "province", "province_area_id", "year", "count_lower", "count_estimate", "count_upper", "area_match", "population", "prop_lower", "prop_estimate", "prop_upper", "sample", "notes", "study_idx", "ref", "link")))
       # arrange(country.name, kp, year)
     
     

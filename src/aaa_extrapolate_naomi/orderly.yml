@@ -29,6 +29,14 @@ artefacts:
       description: ART coverage export for KP workbook
       filenames:
         - workbook_export_art.csv
+  - data:
+      description: HIV prevalence export for data sharing
+      filenames:
+        - data_sharing_prev.csv
+  - data:
+      description: ART coverage export for data sharing
+      filenames:
+        - data_sharing_art.csv
 
 parameters:
   iso3:

@@ -13,11 +13,7 @@ region <- read.csv("~/Documents/GitHub/fertility_orderly/global/region.csv")
 ssa_names <- c("Angola", "Botswana", "Eswatini", "Ethiopia", "Kenya", "Lesotho",  "Malawi", "Mozambique", "Namibia", "Rwanda", "South Africa", "South Sudan", "Uganda", "United Republic of Tanzania", "Zambia", "Zimbabwe", "Benin", "Burkina Faso", "Burundi", "Cameroon", "Central African Republic", "Chad", "Congo", "Côte d'Ivoire", "Democratic Republic of the Congo", "Equatorial Guinea", "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Liberia", "Mali", "Niger", "Nigeria", "Senegal", "Sierra Leone", "Togo")
 ssa_iso3 <- sort(countrycode(ssa_names, "country.name", "iso3c"))
 
-grey <- read_sf("~/Downloads/Longitude_Graticules_and_World_Countries_Boundaries-shp/99bfd9e7-bb42-4728-87b5-07f8c8ac631c2020328-1-1vef4ev.lu5nk.shp") %>%
-  filter(CNTRY_NAME %in% c("Western Sahara", "Mauritania", "Morocco", "Algeria", "Libya", "Tunisia", "Egypt", "Equatorial Guinea", "Somalia", "Djibouti", "Eritrea")) %>%
-  bind_rows(read_sf("~/Downloads/sdn_adm_cbs_nic_ssa_20200831_shp/sdn_admbnda_adm0_cbs_nic_ssa_20200831.shp"))
-  # bind_rows(read_sf("~/Downloads/ssd_admbnda_imwg_nbs_shp/ssd_admbnda_adm0_imwg_nbs_20180817.shp"))
-  # st_crop(xmin=-180, xmax=180, ymin=-35, ymax=90)
+grey <- read_sf("~/Documents/GitHub/distn-kp-infections/inputs/grey.geojson")
 
 geographies <- read_sf("national_areas.geojson")
 
@@ -73,35 +69,34 @@ prev_df <- prev_dat %>%
   )
 
 # naomi_dat <- lapply(ssa_iso3[ssa_iso3 != "SSD"], function(iso3) {
-  
 #   message(iso3)
-#   
+# 
 #   sharepoint <- spud::sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
 #   folder <- sharepoint$folder(site = Sys.getenv("SHAREPOINT_SITE"), path = "Shared Documents/Data/Spectrum files/2022 naomi preliminary")
-#   
+# 
 #   if(iso3 == "MOZ") {
 #     folder <- sharepoint$folder(site = Sys.getenv("SHAREPOINT_SITE"), path = "Shared Documents/Data/Spectrum files/2021 naomi")
 #   }
-#   
+# 
 #   path <- filter(folder$list(),
 #                  str_detect(name, fixed(iso3, ignore_case=TRUE)),
 #                  str_detect(name, "zip"))$name
-#   
-#   
+# 
+# 
 #   if(length(path) > 1)
 #     stop("More than one Naomi fit found")
-#   
+# 
 #   if(length(path) == 0)
 #     stop("No Naomi fit found")
-#   
+# 
 #   if(iso3 != "MOZ") {
 #     path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Data/Spectrum files/2022 naomi preliminary", path)
 #   } else {
 #     path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Data/Spectrum files/2021 naomi", path)
 #   }
-#   
+# 
 #   indicators <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = path)
-#   
+# 
 #   tmpd <- tempfile()
 #   on.exit(unlink(tmpd))
 #   utils::unzip(indicators, exdir = tmpd)
@@ -112,19 +107,19 @@ prev_df <- prev_dat %>%
 #   out$meta_area <- read_sf(list.files(tmpd, full.names = TRUE, pattern = "boundaries.geojson"))
 #   out$meta_indicator <- read.csv(list.files(tmpd, full.names = TRUE, pattern = "meta_indicator.csv"))
 #   class(out) <- "naomi_output"
-#   
+# 
 #   indicators <- add_output_labels(out)
-#   
+# 
 #   time_point <- unique(indicators$calendar_quarter)[2]
-#   
+# 
 #   indicators <- filter(indicators, calendar_quarter == time_point)
 #   areas <- out$meta_area
-#   
+# 
 #   out <- list()
 #   out$indicators <- indicators
 #   out$areas <- areas
 #   out
-#   
+# 
 # })
 # names(naomi_dat) <- ssa_iso3[ssa_iso3 != "SSD"]
 # saveRDS(naomi_dat, "~/Downloads/naomi_dat.rds")
@@ -144,7 +139,7 @@ areas <- lapply(naomi_dat, "[[", "areas") %>%
   lapply(sf::st_make_valid) %>%
   lapply(select, -name)
 
-ssd_areas <- read_sf("~/Documents/GitHub/inference-data/archive/ssd_data_areas/20221213-090601-27a97a7c/ssd_areas.geojson") %>%
+ssd_areas <- read_sf("archive/ssd_data_areas/20221213-090608-a0ded228/ssd_areas.geojson") %>%
   select(colnames(areas[[1]])) %>%
   sf::st_make_valid()
 

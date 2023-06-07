@@ -301,3 +301,55 @@ if(nrow(art)) {
 
 write_csv(workbook_export_prev, "workbook_export_prev.csv", na = "")
 write_csv(workbook_export_art, "workbook_export_art.csv", na = "")
+
+if(nrow(out$prev)) {
+  out_prev_data_sharing <- out$prev %>%
+    mutate(age_group_analysis = age_group,
+           age_group = ifelse(has_age == 1, age_group, NA)) %>%
+    select(study_idx, 
+           country = country.name,
+           kp,
+           year,
+           indicator,
+           method,
+           area = area_name,
+           province,
+           age_group,
+           age_group_analysis,
+           proportion_estimate = value,
+           proportion_lower = prop_lower,
+           proportion_upper = prop_upper,
+           sample_size = denominator,
+           provincial_value,
+           ratio)
+  
+} else {
+  out_prev_data_sharing <- data.frame(x = character()) 
+}
+
+if(nrow(out$art)) {
+  out_art_data_sharing <- out$art %>%
+    mutate(age_group_analysis = age_group,
+           age_group = ifelse(has_age == 1, age_group, NA)) %>%
+    select(study_idx, 
+           country = country.name,
+           kp,
+           year,
+           indicator,
+           method,
+           area = area_name,
+           province,
+           age_group,
+           age_group_analysis,
+           proportion_estimate = value,
+           proportion_lower = prop_lower,
+           proportion_upper = prop_upper,
+           sample_size = denominator,
+           provincial_value,
+           ratio)
+} else {
+  out_art_data_sharing <- data.frame(x = character()) 
+}
+
+write_csv(out_prev_data_sharing, "data_sharing_prev.csv", na = "")
+write_csv(out_art_data_sharing, "data_sharing_art.csv", na = "")

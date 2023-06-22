@@ -1167,6 +1167,8 @@ art_s <- rbind(art_mod$FSW$art_samples[169:761,], art_mod$MSM$art_samples[169:76
 pop_curr <- pop %>%
   left_join(admin1_lvl) %>%
   filter(area_level == admin1_level) %>%
+  left_join(areas %>% select(area_id, id.area) %>% st_drop_geometry()) %>%
+  arrange(id.area) %>%
   mutate(area_id = factor(area_id),
          kp = factor(kp, levels = c("FSW","MSM", "PWID"))) %>%
   arrange(kp, area_id)

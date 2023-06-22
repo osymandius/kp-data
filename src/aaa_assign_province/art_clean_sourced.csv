@@ -80,13 +80,16 @@ COD,Congo - Kinshasa,art,lab,NA,FSW,Maniema,NA,NA,NA,2019,NA,NA,NA,0.39444444444
 COD,Congo - Kinshasa,art,lab,NA,FSW,Nord-Kivu,NA,NA,NA,2019,NA,NA,NA,0.5155555555555555,0.6644444444444444,0.8122222222222222,54,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,NA,Yes,yes,NA,NA,NA,58
 COD,Congo - Kinshasa,art,lab,NA,FSW,Sud-Kivu,NA,NA,NA,2019,NA,NA,NA,0.3644444444444444,0.5499999999999999,0.7411111111111112,36,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,NA,Yes,yes,NA,NA,NA,58
 COD,Congo - Kinshasa,art,lab,NA,FSW,Tshopo,NA,NA,NA,2019,NA,NA,NA,0.33555555555555555,0.49444444444444446,0.6655555555555556,40,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,NA,Yes,yes,NA,NA,NA,58
-ERI,Eritrea,art,selfreport,NA,FSW,Asmara City,NA,NA,NA,2019,NA,NA,NA,NA,0.0758,NA,264,"2019 BBS (HIV, HBsAg, HCV Ab and Syphilis Prevalence and HIV 
+ERI,Eritrea,art,selfreport,NA,FSW,Asmara,NA,NA,NA,2019,NA,NA,NA,NA,0.0758,NA,264,"2019 BBS (HIV, HBsAg, HCV Ab and Syphilis Prevalence and HIV 
 Risk Behaviors Survey among Commercial Sex Workers 
 in Eritrea-2019)",NA,NA,NA,Yes,yes,NA,NA,NA,310
 ERI,Eritrea,art,selfreport,NA,FSW,Central Highlands,NA,NA,NA,2019,NA,NA,NA,NA,0.085,NA,117,"2019 BBS (HIV, HBsAg, HCV Ab and Syphilis Prevalence and HIV 
 Risk Behaviors Survey among Commercial Sex Workers 
 in Eritrea-2019)",NA,NA,NA,Yes,yes,NA,NA,NA,310
 ERI,Eritrea,art,selfreport,NA,FSW,Western Lowlands,NA,NA,NA,2019,NA,NA,NA,NA,0.178,NA,313,"2019 BBS (HIV, HBsAg, HCV Ab and Syphilis Prevalence and HIV 
+Risk Behaviors Survey among Commercial Sex Workers 
+in Eritrea-2019)",NA,NA,NA,Yes,yes,NA,NA,NA,310
+ERI,Eritrea,art,selfreport,NA,FSW,Eastern Lowlands,NA,NA,NA,2019,NA,NA,NA,NA,0.295,NA,61,"2019 BBS (HIV, HBsAg, HCV Ab and Syphilis Prevalence and HIV 
 Risk Behaviors Survey among Commercial Sex Workers 
 in Eritrea-2019)",NA,NA,NA,Yes,yes,NA,NA,NA,310
 GMB,Gambia,art,lab,NA,FSW,The Gambia,NA,NA,NA,2017,NA,NA,NA,NA,0.28490028444444443,NA,39,BBS 2017,NA,NA,NA,Yes,yes,NA,NA,NA,94
@@ -96,26 +99,26 @@ HTI,Haiti,art,selfreport,NA,MSM,Haiti,NA,NA,NA,2016,NA,NA,NA,NA,0.2174,NA,NA,201
 HTI,Haiti,art,selfreport,NA,TG,Haiti,NA,NA,NA,2016,NA,NA,NA,NA,0.2453,NA,NA,2017 PLACE,NA,NA,NA,Yes,yes,NA,NA,NA,NA
 KEN,Kenya,art,NA,NA,FSW,Nairobi,NA,NA,NA,2012,NA,NA,NA,NA,0.989,NA,1392,Achwoka et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7332043/,NA,NA,Yes,yes,NA,NA,NA,119
 KEN,Kenya,art,NA,NA,MSM,Nairobi,NA,NA,NA,2012,NA,NA,NA,NA,1,NA,86,Achwoka et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7332043/,NA,NA,Yes,yes,NA,NA,NA,119
-KEN,Kenya,art,selfreport,NA,FSW,Bungoma,NA,NA,NA,2015,NA,NA,NA,NA,0.708,NA,48,2017 Polling Booth Survey,NA,KP Atlas_7b6f751e9ad9650435e6fe0abf46b98c,49bfb9fff02748966973141ed9b0d1b2,Yes,yes,NA,NA,NA,111
-KEN,Kenya,art,selfreport,NA,FSW,Eldoret,NA,NA,NA,2015,NA,NA,NA,NA,0.852,NA,88,2017 Polling Booth Survey,NA,KP Atlas_7d380a19eed856df3aa3c82610476c62,00a1c29cef744413742952e986cd2825,Yes,yes,NA,NA,NA,111
-KEN,Kenya,art,selfreport,NA,FSW,Homa Bay,NA,NA,NA,2015,NA,NA,NA,NA,0.806,NA,155,2017 Polling Booth Survey,NA,KP Atlas_0aab839992282f22c90bed1c8be65d80,ab568b73e589e1b24e65febc425b4294,Yes,yes,NA,NA,NA,111
-KEN,Kenya,art,selfreport,NA,FSW,Kisumu,NA,NA,NA,2015,NA,NA,NA,NA,0.909,NA,187,2017 Polling Booth Survey,NA,KP Atlas_04213a8b510cd7c06b694f7e7ee356ee,b18ee34dbd4e8fd26433cba94a990cf9,Yes,yes,NA,NA,NA,111
-KEN,Kenya,art,selfreport,NA,MSM,Kisumu,NA,NA,NA,2015,NA,NA,NA,NA,0.75,NA,48,2017 Polling Booth Survey,NA,KP Atlas_4557c8b1b0e8ec18e091e3bce49cfb31,9d932c31330bfbc6a40757eaaf1346d2,Yes,yes,NA,NA,NA,111
-KEN,Kenya,art,selfreport,NA,PWID,Kisumu,NA,NA,NA,2015,NA,NA,NA,NA,0.71,NA,62,2017 Polling Booth Survey,NA,KP Atlas_1cacb07813a04f41a26a9ece340b9d2b,89aa16382eda9cfa6958e3c41ea124c1,Yes,yes,NA,NA,NA,111
-KEN,Kenya,art,selfreport,NA,FSW,Kitui,NA,NA,NA,2015,NA,NA,NA,NA,0.75,NA,48,2017 Polling Booth Survey,NA,KP Atlas_916287e357d3887508bfc311c5c2d520,529eda09d3b85da778535d52f8dcc458,Yes,yes,NA,NA,NA,111
-KEN,Kenya,art,selfreport,NA,PWID,Malindi,NA,NA,NA,2015,NA,NA,NA,NA,0.481,NA,27,2017 Polling Booth Survey,NA,KP Atlas_9b025dd7f595ca58e847b673ffc8fb28,55e072b04290e0090d36919334c73225,Yes,yes,NA,NA,NA,111
-KEN,Kenya,art,selfreport,NA,FSW,Meru,NA,NA,NA,2015,NA,NA,NA,NA,0.688,NA,64,2017 Polling Booth Survey,NA,KP Atlas_0eac0e0c72ecd0f88215a7c927a0a6f2,88f70b2c360dc7d1a61bdb2f8e7e7550,Yes,yes,NA,NA,NA,111
-KEN,Kenya,art,selfreport,NA,FSW,Mombasa,NA,NA,NA,2015,NA,NA,NA,NA,0.9,NA,60,2017 Polling Booth Survey,NA,KP Atlas_0a5c76b295ae3b2cee74285089f85750,44495094e6ec4742806c14458fd1a93c,Yes,yes,NA,NA,NA,111
-KEN,Kenya,art,selfreport,NA,MSM,Mombasa,NA,NA,NA,2015,NA,NA,NA,NA,0.703,NA,64,2017 Polling Booth Survey,NA,KP Atlas_e53137a1fec8f90df787eef881fcf704,585eea9b456c818b691e7010264acc82,Yes,yes,NA,NA,NA,111
-KEN,Kenya,art,selfreport,NA,PWID,Mombasa,NA,NA,NA,2015,NA,NA,NA,NA,0.638,NA,58,2017 Polling Booth Survey,NA,KP Atlas_fde70579d8e4d6c265333160c9696f47,fad7b0fdd5795081caed48728a4f947a,Yes,yes,NA,NA,NA,111
-KEN,Kenya,art,selfreport,NA,FSW,Nairobi City,NA,NA,NA,2015,NA,NA,NA,NA,0.723,NA,83,2017 Polling Booth Survey,NA,KP Atlas_96dc49eb86be7fc0601a91200407b5f7,bb4e352a26f32c7f5f88b0fd2c0657bb,Yes,yes,NA,NA,NA,111
-KEN,Kenya,art,selfreport,NA,MSM,Nairobi City,NA,NA,NA,2015,NA,NA,NA,NA,0.703,NA,91,2017 Polling Booth Survey,NA,KP Atlas_e893a4d1ea2eb911e5a23ab31ca52eba,cb41f73d533920645f56fd5571b14dc5,Yes,yes,NA,NA,NA,111
-KEN,Kenya,art,selfreport,NA,PWID,Nairobi City,NA,NA,NA,2015,NA,NA,NA,NA,0.741,NA,58,2017 Polling Booth Survey,NA,KP Atlas_08c9fa3343948448a87cd9f5b1f4c00f,f95eff90f47450e699eea62575c6d1af,Yes,yes,NA,NA,NA,111
-KEN,Kenya,art,selfreport,NA,FSW,Nakuru,NA,NA,NA,2015,NA,NA,NA,NA,0.636,NA,55,2017 Polling Booth Survey,NA,KP Atlas_b5160618850671a0c2fbd4e252612d04,639265f85e613b1421de6a34240a84a6,Yes,yes,NA,NA,NA,111
-KEN,Kenya,art,selfreport,NA,MSM,Nakuru,NA,NA,NA,2015,NA,NA,NA,NA,0.4,NA,15,2017 Polling Booth Survey,NA,KP Atlas_fe1acdea17987a0d047f0d69a46e3322,f5064c429e9438e9c634bc285277d739,Yes,yes,NA,NA,NA,111
-KEN,Kenya,art,selfreport,NA,FSW,Nyeri,NA,NA,NA,2015,NA,NA,NA,NA,0.808,NA,52,2017 Polling Booth Survey,NA,KP Atlas_c9e125d77e64ed3603d2a2d46df7a9c6,c0c8defdb79ddc27f2ba1ed177f3c8c1,Yes,yes,NA,NA,NA,111
-KEN,Kenya,art,selfreport,NA,FSW,Thika,NA,NA,NA,2015,NA,NA,NA,NA,0.667,NA,39,2017 Polling Booth Survey,NA,KP Atlas_2de34cffdab52967442a106141cd5b87,0baa3bc14cd7e0f5443533e0768a1bc1,Yes,yes,NA,NA,NA,111
-KEN,Kenya,art,selfreport,NA,MSM,Thika,NA,NA,NA,2015,NA,NA,NA,NA,0.725,NA,51,2017 Polling Booth Survey,NA,KP Atlas_b271b04ab771254604653307b98d18c5,ecfcc90045a28fc14b23ba6c551960dc,Yes,yes,NA,NA,NA,111
+KEN,Kenya,art,selfreport,NA,FSW,Bungoma,NA,NA,NA,2015,NA,NA,NA,NA,0.708,NA,48,"Second National Assessment of Key Populations in Kenya: Polling Booth Survey Report, June 2016",NA,KP Atlas_7b6f751e9ad9650435e6fe0abf46b98c,49bfb9fff02748966973141ed9b0d1b2,Yes,yes,NA,NA,NA,329
+KEN,Kenya,art,selfreport,NA,FSW,Eldoret,NA,NA,NA,2015,NA,NA,NA,NA,0.852,NA,88,"Second National Assessment of Key Populations in Kenya: Polling Booth Survey Report, June 2016",NA,KP Atlas_7d380a19eed856df3aa3c82610476c62,00a1c29cef744413742952e986cd2825,Yes,yes,NA,NA,NA,329
+KEN,Kenya,art,selfreport,NA,FSW,Homa Bay,NA,NA,NA,2015,NA,NA,NA,NA,0.806,NA,155,"Second National Assessment of Key Populations in Kenya: Polling Booth Survey Report, June 2016",NA,KP Atlas_0aab839992282f22c90bed1c8be65d80,ab568b73e589e1b24e65febc425b4294,Yes,yes,NA,NA,NA,329
+KEN,Kenya,art,selfreport,NA,FSW,Kisumu,NA,NA,NA,2015,NA,NA,NA,NA,0.909,NA,187,"Second National Assessment of Key Populations in Kenya: Polling Booth Survey Report, June 2016",NA,KP Atlas_04213a8b510cd7c06b694f7e7ee356ee,b18ee34dbd4e8fd26433cba94a990cf9,Yes,yes,NA,NA,NA,329
+KEN,Kenya,art,selfreport,NA,MSM,Kisumu,NA,NA,NA,2015,NA,NA,NA,NA,0.75,NA,48,"Second National Assessment of Key Populations in Kenya: Polling Booth Survey Report, June 2016",NA,KP Atlas_4557c8b1b0e8ec18e091e3bce49cfb31,9d932c31330bfbc6a40757eaaf1346d2,Yes,yes,NA,NA,NA,329
+KEN,Kenya,art,selfreport,NA,PWID,Kisumu,NA,NA,NA,2015,NA,NA,NA,NA,0.71,NA,62,"Second National Assessment of Key Populations in Kenya: Polling Booth Survey Report, June 2016",NA,KP Atlas_1cacb07813a04f41a26a9ece340b9d2b,89aa16382eda9cfa6958e3c41ea124c1,Yes,yes,NA,NA,NA,329
+KEN,Kenya,art,selfreport,NA,FSW,Kitui,NA,NA,NA,2015,NA,NA,NA,NA,0.75,NA,48,"Second National Assessment of Key Populations in Kenya: Polling Booth Survey Report, June 2016",NA,KP Atlas_916287e357d3887508bfc311c5c2d520,529eda09d3b85da778535d52f8dcc458,Yes,yes,NA,NA,NA,329
+KEN,Kenya,art,selfreport,NA,PWID,Malindi,NA,NA,NA,2015,NA,NA,NA,NA,0.481,NA,27,"Second National Assessment of Key Populations in Kenya: Polling Booth Survey Report, June 2016",NA,KP Atlas_9b025dd7f595ca58e847b673ffc8fb28,55e072b04290e0090d36919334c73225,Yes,yes,NA,NA,NA,329
+KEN,Kenya,art,selfreport,NA,FSW,Meru,NA,NA,NA,2015,NA,NA,NA,NA,0.688,NA,64,"Second National Assessment of Key Populations in Kenya: Polling Booth Survey Report, June 2016",NA,KP Atlas_0eac0e0c72ecd0f88215a7c927a0a6f2,88f70b2c360dc7d1a61bdb2f8e7e7550,Yes,yes,NA,NA,NA,329
+KEN,Kenya,art,selfreport,NA,FSW,Mombasa,NA,NA,NA,2015,NA,NA,NA,NA,0.9,NA,60,"Second National Assessment of Key Populations in Kenya: Polling Booth Survey Report, June 2016",NA,KP Atlas_0a5c76b295ae3b2cee74285089f85750,44495094e6ec4742806c14458fd1a93c,Yes,yes,NA,NA,NA,329
+KEN,Kenya,art,selfreport,NA,MSM,Mombasa,NA,NA,NA,2015,NA,NA,NA,NA,0.703,NA,64,"Second National Assessment of Key Populations in Kenya: Polling Booth Survey Report, June 2016",NA,KP Atlas_e53137a1fec8f90df787eef881fcf704,585eea9b456c818b691e7010264acc82,Yes,yes,NA,NA,NA,329
+KEN,Kenya,art,selfreport,NA,PWID,Mombasa,NA,NA,NA,2015,NA,NA,NA,NA,0.638,NA,58,"Second National Assessment of Key Populations in Kenya: Polling Booth Survey Report, June 2016",NA,KP Atlas_fde70579d8e4d6c265333160c9696f47,fad7b0fdd5795081caed48728a4f947a,Yes,yes,NA,NA,NA,329
+KEN,Kenya,art,selfreport,NA,FSW,Nairobi City,NA,NA,NA,2015,NA,NA,NA,NA,0.723,NA,83,"Second National Assessment of Key Populations in Kenya: Polling Booth Survey Report, June 2016",NA,KP Atlas_96dc49eb86be7fc0601a91200407b5f7,bb4e352a26f32c7f5f88b0fd2c0657bb,Yes,yes,NA,NA,NA,329
+KEN,Kenya,art,selfreport,NA,MSM,Nairobi City,NA,NA,NA,2015,NA,NA,NA,NA,0.703,NA,91,"Second National Assessment of Key Populations in Kenya: Polling Booth Survey Report, June 2016",NA,KP Atlas_e893a4d1ea2eb911e5a23ab31ca52eba,cb41f73d533920645f56fd5571b14dc5,Yes,yes,NA,NA,NA,329
+KEN,Kenya,art,selfreport,NA,PWID,Nairobi City,NA,NA,NA,2015,NA,NA,NA,NA,0.741,NA,58,"Second National Assessment of Key Populations in Kenya: Polling Booth Survey Report, June 2016",NA,KP Atlas_08c9fa3343948448a87cd9f5b1f4c00f,f95eff90f47450e699eea62575c6d1af,Yes,yes,NA,NA,NA,329
+KEN,Kenya,art,selfreport,NA,FSW,Nakuru,NA,NA,NA,2015,NA,NA,NA,NA,0.636,NA,55,"Second National Assessment of Key Populations in Kenya: Polling Booth Survey Report, June 2016",NA,KP Atlas_b5160618850671a0c2fbd4e252612d04,639265f85e613b1421de6a34240a84a6,Yes,yes,NA,NA,NA,329
+KEN,Kenya,art,selfreport,NA,MSM,Nakuru,NA,NA,NA,2015,NA,NA,NA,NA,0.4,NA,15,"Second National Assessment of Key Populations in Kenya: Polling Booth Survey Report, June 2016",NA,KP Atlas_fe1acdea17987a0d047f0d69a46e3322,f5064c429e9438e9c634bc285277d739,Yes,yes,NA,NA,NA,329
+KEN,Kenya,art,selfreport,NA,FSW,Nyeri,NA,NA,NA,2015,NA,NA,NA,NA,0.808,NA,52,"Second National Assessment of Key Populations in Kenya: Polling Booth Survey Report, June 2016",NA,KP Atlas_c9e125d77e64ed3603d2a2d46df7a9c6,c0c8defdb79ddc27f2ba1ed177f3c8c1,Yes,yes,NA,NA,NA,329
+KEN,Kenya,art,selfreport,NA,FSW,Thika,NA,NA,NA,2015,NA,NA,NA,NA,0.667,NA,39,"Second National Assessment of Key Populations in Kenya: Polling Booth Survey Report, June 2016",NA,KP Atlas_2de34cffdab52967442a106141cd5b87,0baa3bc14cd7e0f5443533e0768a1bc1,Yes,yes,NA,NA,NA,329
+KEN,Kenya,art,selfreport,NA,MSM,Thika,NA,NA,NA,2015,NA,NA,NA,NA,0.725,NA,51,"Second National Assessment of Key Populations in Kenya: Polling Booth Survey Report, June 2016",NA,KP Atlas_b271b04ab771254604653307b98d18c5,ecfcc90045a28fc14b23ba6c551960dc,Yes,yes,NA,NA,NA,329
 KEN,Kenya,art,NA,NA,MSM,Kisumu,NA,NA,NA,2016,NA,NA,NA,NA,0.7,NA,20,HPTN 075 (Sandfort et al),https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,NA,Yes,yes,NA,NA,NA,113
 KEN,Kenya,art,lab,NA,TG,Kisumu,NA,NA,NA,2016,NA,NA,NA,NA,0.625,NA,8,HPTN 075 (Sandfort et al),https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,NA,Yes,yes,NA,NA,NA,113
 KEN,Kenya,art,selfreport,NA,FSW,Bungoma,NA,NA,NA,2017,NA,NA,NA,NA,0.974,NA,39,2017 Polling Booth Survey,NA,KP Atlas_a7685ba9d19b9a250d2554b3a6395859,5d4212baa07f45fd179592bee63b3255,Yes,yes,NA,NA,NA,111
@@ -197,7 +200,7 @@ NGA,Nigeria,art,lab,NA,FSW,Nigeria,NA,NA,NA,2020,NA,NA,NA,NA,0.238698,NA,939,BBS
 NGA,Nigeria,art,lab,NA,MSM,Nigeria,NA,NA,NA,2020,NA,NA,NA,NA,0.33831,NA,887,BBS 2020,NA,NA,NA,Yes,yes,NA,NA,NA,164
 NGA,Nigeria,art,lab,NA,PWID,Nigeria,NA,NA,NA,2020,NA,NA,NA,NA,0.080563,NA,608,BBS 2020,NA,NA,NA,Yes,yes,NA,NA,NA,164
 NGA,Nigeria,art,lab,NA,TG,Nigeria,NA,NA,NA,2020,NA,NA,NA,NA,0.161204,NA,1172,BBS 2020,NA,NA,NA,Yes,yes,NA,NA,NA,164
-RWA,Rwanda,art,selfreport,NA,FSW,Rwanda,NA,NA,NA,2015,NA,NA,NA,NA,0.696976,NA,413,Biological &Behavioral Surveillance among Female Sexual Workers in Rwanda in 2015,NA,NA,NA,Yes,yes,NA,NA,NA,170
+RWA,Rwanda,art,selfreport,NA,FSW,Rwanda,NA,NA,NA,2015,NA,NA,NA,NA,0.696976,NA,413,Biological &Behavioral Surveillance among Female Sexual Workers in Rwanda in 2015,NA,NA,NA,Yes,yes,NA,NA,NA,325
 RWA,Rwanda,art,lab,NA,MSM,Kigali,NA,NA,NA,2018,NA,NA,NA,NA,0.5648148144444445,NA,74,"HIV infection and engagement in HIV care cascade among men who have sex with men and transgender women in Kigali, Rwanda: a cross-sectional study",https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7527755/,NA,NA,Yes,yes,NA,NA,NA,168
 SEN,Senegal,art,selfreport,NA,FSW,Senegal,NA,NA,NA,2013,NA,NA,NA,NA,0.425,NA,40,Potential Impact of Integrated Stigma Mitigation Interventions in Improving HIV/AIDS Service Delivery and Uptake for Key Populations in Senegal,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5147043/,NA,NA,Yes,yes,NA,NA,NA,183
 SEN,Senegal,art,selfreport,NA,MSM,Senegal,NA,NA,NA,2013,NA,NA,NA,NA,0.105,NA,219,Potential Impact of Integrated Stigma Mitigation Interventions in Improving HIV/AIDS Service Delivery and Uptake for Key Populations in Senegal,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5147043/,NA,NA,Yes,yes,NA,NA,NA,183
@@ -293,3 +296,15 @@ ZWE,Zimbabwe,art,selfreport,NA,MSM,Harare,NA,NA,Y025_034,2019,NA,NA,NA,NA,0.357,
 ZWE,Zimbabwe,art,selfreport,NA,MSM,Harare,NA,NA,Y025_034,2019,NA,NA,NA,NA,0.926,NA,27,IBBS 2020,NA,NA,NA,Yes,yes,NA,NA,NA,270
 ZWE,Zimbabwe,art,selfreport,NA,MSM,Harare and Bulawayo,NA,NA,NA,2019,NA,NA,NA,0.57,0.64,0.7,248,Harris et al,https://www.sciencedirect.com/science/article/pii/S2352301821002976,NA,NA,Yes,yes,NA,NA,NA,262
 ZWE,Zimbabwe,art,selfreport,NA,TG,Harare and Bulawayo,NA,NA,NA,2019,NA,NA,NA,0.45,0.55,0.66,92,Harris et al,https://www.sciencedirect.com/science/article/pii/S2352301821002976,NA,NA,Yes,yes,NA,NA,NA,262
+ZWE,Zimbabwe,art,selfreport,Self-report,PWID,"Bulawayo Harare Manicaland Mashonaland 
+Central
+Mashonaland 
+West",NA,NA,NA,2022,NA,NA,NA,NA,0.925,NA,57,Situational Analysis of Drugs,https://idpc.net/publications/2022/12/zimbabwe-situational-analysis-of-drug-use-in-five-provinces-to-inform-hiv-and-tb-programming-for,NA,NA,Yes,yes,NA,NA,NA,271
+BEN,Benin,art,selfreport,NA,FSW,"Alibori, Atacora, Atlantique, Borgou, Collines, Couffo, Donga, Littoral, Mono, Oueme, Plateau, Zou",NA,NA,NA,2021,NA,NA,NA,NA,0.282,NA,85,2021 ESDG,NA,NA,NA,Yes,yes,NA,NA,NA,321
+COG,Congo - Brazzaville,art,selfreport,NA,MSM,"Brazzaville, Pointe-Noire",NA,NA,NA,2018,NA,NA,NA,NA,0.014,NA,74,"ENQUETE COMPORTEMENTALE COUPLEE A LA SEROLOGIE VIH CHEZ LES HOMMES AYANT DES RAPPORTS SEXUELS AVEC LES HOMMES, LES PROFESSIONNELLES DE SEXE, LES CONSOMMATEURS DE DROGUES INJECTABLES ET LES DETENUS EN REPUBLIQUE DU CONGO",NA,NA,NA,Yes,yes,NA,NA,NA,327
+COG,Congo - Brazzaville,art,selfreport,NA,FSW,"Brazzaville, Pointe-Noire, Dolisie, Ouesso, Pokola",NA,NA,NA,2018,NA,NA,NA,NA,0.0545,NA,55,NA,NA,NA,NA,Yes,yes,NA,NA,NA,327
+GIN,Guinea,art,selfreport,NA,MSM,Guinea,NA,NA,NA,2022,NA,NA,NA,NA,0.0168,NA,119,2022 ESCOMB,NA,NA,NA,Yes,private,NA,NA,NA,324
+GIN,Guinea,art,lab,NA,MSM,Guinea,NA,NA,NA,2022,NA,NA,NA,NA,0.29333333333333333,NA,159,2022 ESCOMB,NA,NA,NA,Yes,private,NA,NA,NA,324
+GIN,Guinea,art,selfreport,NA,FSW,Guinea,NA,NA,NA,2022,NA,NA,NA,NA,0.122,NA,98,2022 ESCOMB,NA,NA,NA,Yes,private,NA,NA,NA,324
+GIN,Guinea,art,lab,NA,FSW,Guinea,NA,NA,NA,2022,NA,NA,NA,NA,0.39682222222222224,NA,98,2022 ESCOMB,NA,NA,NA,Yes,private,NA,NA,NA,324
+GIN,Guinea,art,selfreport,NA,PWID,Conakry,NA,NA,NA,2022,NA,NA,NA,NA,0.5,NA,2,2022 ESCOMB,NA,NA,NA,Yes,private,NA,NA,NA,324

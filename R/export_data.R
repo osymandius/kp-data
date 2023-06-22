@@ -2,8 +2,7 @@ library(XLConnect)
 library(tidyverse)
 library(stringi)
 
-ssa_names <- c("Angola", "Botswana", "Eswatini", "Ethiopia", "Kenya", "Lesotho",  "Malawi", "Mozambique", "Namibia", "Rwanda", "South Africa", "South Sudan", "Uganda", "United Republic of Tanzania", "Zambia", "Zimbabwe", "Benin", "Burkina Faso", "Burundi", "Cameroon", "Central African Republic", "Chad", "Congo", "Côte d'Ivoire", "Democratic Republic of the Congo", "Equatorial Guinea", "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Liberia", "Mali", "Niger", "Nigeria", "Senegal", "Sierra Leone", "Togo")
-ssa_iso3 <- countrycode::countrycode(ssa_names, "country.name", "iso3c")
+ssa_iso3 <- moz.utils::ssa_iso3()
 
 export_data_sharing <- function(purpose) {
   
@@ -104,7 +103,7 @@ export_data_sharing <- function(purpose) {
     distinct() %>%
     mutate(across(where(is.character), ~iconv(.x, to="UTF-8")))
   
-  sources$year <- unlist(sources$year)
+  sources$year <- as.character(sources$year)
   
   ### BOUNDARY FILES AND AREA HIERARCHIES
   
@@ -141,6 +140,8 @@ export_data_sharing <- function(purpose) {
   
   int <- tempdir()
   
+  lapply(file.path(tempdir(), c("orderly_id.csv", "naomi_areas.geojson", "grump_city_boundaries.geojson", "province_meta.csv", "dataset.xlsx")), file.remove)
+  
   write_csv(orderly_id, file.path(int, "orderly_id.csv"))
   write_csv(province_meta, file.path(int, "province_meta.csv"))
   write_sf(areas, file.path(int, "naomi_areas.geojson"))
@@ -151,7 +152,7 @@ export_data_sharing <- function(purpose) {
   wb <- XLConnect::loadWorkbook("~/Imperial College London/HIV Inference Group - WP - Documents/Data/KP/Aggregate data/Data sharing/data_sharing_template.xlsx")
   
   writeWorksheet(wb, zip_name, "Process Overview", startRow = 3, startCol = 1, header = F)
-  writeWorksheet(wb, dat, "Data")
+  writeWorksheet(wb, dat, "Data", header = F)
   writeWorksheet(wb, country_estimates, "Estimates")
   writeWorksheet(wb, sources, "Source List")
   
@@ -165,6 +166,7 @@ export_data_sharing <- function(purpose) {
   
 }
 
-export_data_sharing("Function test")
+setwd("~/Documents/GitHub/kp-data/")
+export_data_sharing("Imperial feedback II")
 
 

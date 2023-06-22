@@ -198,7 +198,7 @@ pse_id <- lapply(ssa_iso3, function(x){
 
 # pse_id <- c(pse_id[!is.na(pse_id)], orderly::orderly_search(name = "aaa_assign_populations", query = paste0('latest(parameter:iso3 == "COD")'), draft = FALSE))
 
-# pse_id <- id$id
+# pse_id <- id$id[id$success != "FALSE"]
 
 setwd(rprojroot::find_rstudio_root_file())
 
@@ -622,36 +622,6 @@ prev_clean_labels <- collapse(prev_cleaned_text)
 
 setwd(rprojroot::find_rstudio_root_file())
 
-prev_id <- lapply(ssa_iso3, function(x){
-  orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "', x, '" && parameter:version == 2022)'), draft = FALSE)
-})
-
-# prev_id <- id$id
-
-prev_final <- lapply(paste0("archive/aaa_extrapolate_naomi/", prev_id, "/prev.csv"),
-                    function(x) {read_csv(x, show_col_types = FALSE) %>% select(-any_of("...1"))}) %>%
-  bind_rows()
-
-prev_final_text <- prev_final %>%
-  mutate(kp = ifelse(kp == "TGW", "TG", kp)) %>%
-  filter(kp %in% c("FSW", "MSM", "PWID", "TG")) %>%
-  count(kp) %>%
-  mutate(n = paste0("n = ", n)) %>%
-  pivot_wider(names_from = kp, values_from = n) %>%
-  mutate(across(everything(), ~paste0(cur_column(), " ", .x)),
-         n = paste0("(n = ", nrow(prev_final), ")"),
-         name = "Final HIV prevalence data") %>%
-  select(name, n, everything())
-
-prev_remove_label$denom <- nrow(prev_cleaned_data) - nrow(prev_final)
-prev_remove_label$denom <- paste0("No area match (n = ", prev_remove_label$denom, ")")
-
-prev_final_labels <- collapse(prev_final_text)
-
-saveRDS(prev_final_text, "R/Report/R objects for report/Prevalence/prev_count_text.rds")
-write_csv(prev_final, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_final_sourced.csv")
-saveRDS(prev_inputs_text, "R/Report/R objects for report/Prevalence/prev_input_count_text.rds")
-
 # subgraph input_cluster {
 #   node [fontname = Helvetica, fontcolor = darkslategray, shape = rectangle, color = darkslategray];
 #   inp_gam [label = '@@1-1'];
@@ -896,13 +866,39 @@ art_clean_labels <- collapse(art_cleaned_text)
 
 setwd(rprojroot::find_rstudio_root_file())
 
-art_id <- lapply(ssa_iso3, function(x){
+prev_id <- lapply(ssa_iso3, function(x){
   orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "', x, '" && parameter:version == 2022)'), draft = FALSE)
 })
 
+# prev_id <- id$id
+
+prev_final <- lapply(paste0("archive/aaa_extrapolate_naomi/", prev_id, "/prev.csv"),
+                     function(x) {read_csv(x, show_col_types = FALSE) %>% select(-any_of("...1"))}) %>%
+  bind_rows()
+
+prev_final_text <- prev_final %>%
+  mutate(kp = ifelse(kp == "TGW", "TG", kp)) %>%
+  filter(kp %in% c("FSW", "MSM", "PWID", "TG")) %>%
+  count(kp) %>%
+  mutate(n = paste0("n = ", n)) %>%
+  pivot_wider(names_from = kp, values_from = n) %>%
+  mutate(across(everything(), ~paste0(cur_column(), " ", .x)),
+         n = paste0("(n = ", nrow(prev_final), ")"),
+         name = "Final HIV prevalence data") %>%
+  select(name, n, everything())
+
+prev_remove_label$denom <- nrow(prev_cleaned_data) - nrow(prev_final)
+prev_remove_label$denom <- paste0("No area match (n = ", prev_remove_label$denom, ")")
+
+prev_final_labels <- collapse(prev_final_text)
+
+saveRDS(prev_final_text, "R/Report/R objects for report/Prevalence/prev_count_text.rds")
+write_csv(prev_final, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_final_sourced.csv")
+saveRDS(prev_inputs_text, "R/Report/R objects for report/Prevalence/prev_input_count_text.rds")
+
 # art_id <- id$id
 
-art_final <- lapply(paste0("archive/aaa_extrapolate_naomi/", art_id[!is.na(art_id)], "/art.csv"),
+art_final <- lapply(paste0("archive/aaa_extrapolate_naomi/", prev_id[!is.na(prev_id)], "/art.csv"),
                      function(x) {read_csv(x, show_col_types = FALSE) %>% select(-any_of("...1"))}) %>%
   bind_rows()
 

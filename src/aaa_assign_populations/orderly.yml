@@ -48,7 +48,7 @@ depends:
       depends/naomi_areas.geojson: naomi_areas.geojson
 
   aaa_scale_pop:
-    id: latest(parameter:iso3 == iso3 && parameter:version == version)
+    id: latest(parameter:iso3 == iso3 && parameter:version == version && parameter:source == "WPP2022")
     use:
       depends/interpolated_population.csv: interpolated_population.csv
   

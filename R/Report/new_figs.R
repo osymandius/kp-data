@@ -4,12 +4,11 @@ library(countrycode)
 library(knitr)
 library(sf)
 library(kableExtra)
+library(moz.utils)
 
-region <- read.csv("R/Report/R objects for report/region.csv") %>%
-  mutate(iso3 = toupper(iso3))
-
-ssa_names <- c("Angola", "Botswana", "Eswatini", "Ethiopia", "Kenya", "Lesotho",  "Malawi", "Mozambique", "Namibia", "Rwanda", "South Africa", "South Sudan", "Uganda", "United Republic of Tanzania", "Zambia", "Zimbabwe", "Benin", "Burkina Faso", "Burundi", "Cameroon", "Central African Republic", "Chad", "Congo", "Côte d'Ivoire", "Democratic Republic of the Congo", "Equatorial Guinea", "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Liberia", "Mali", "Niger", "Nigeria", "Senegal", "Sierra Leone", "Togo")
-ssa_iso3 <- countrycode(ssa_names, "country.name", "iso3c")
+region <- region()
+ssa_names <- ssa_names()
+ssa_iso3 <- ssa_iso3()
 
 group_proportion <- function(df, variables) {
   df %>%

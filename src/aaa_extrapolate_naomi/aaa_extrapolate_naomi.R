@@ -48,7 +48,7 @@ spectrum_ratio <- spectrum %>%
   mutate(ratio = value/value[year == 2021],
          age_group = "Y015_049")
 
-if(iso3 != "SSD") {
+if(!iso3 %in% c("SSD", "ERI")) {
   
   sharepoint <- spud::sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
   folder <- sharepoint$folder(site = Sys.getenv("SHAREPOINT_SITE"), path = "Shared Documents/Data/Spectrum files/2022 naomi preliminary")
@@ -143,7 +143,7 @@ if(iso3 != "SSD") {
   
   out <- lapply(dat, function(x) {
     
-    # x <- dat$prev
+    # x <- dat$art
     
     if(nrow(x)) {
       anonymised_dat <- x %>%
@@ -162,10 +162,18 @@ if(iso3 != "SSD") {
         )) %>%
         left_join(df %>% select(-any_of("area_name")) %>% rename(matched_province_area_id = area_id)) %>%
         group_by(row_id) %>%
-        mutate(province = ifelse(length(unique(province)) > 1, NA_character_, province)) %>%
+        mutate(
+          matched_province_area_id = ifelse(length(unique(province)) > 1, iso3_c, matched_province_area_id),
+          province = ifelse(length(unique(province)) > 1, countrycode::countrycode(iso3_c, "iso3c", "country.name"), province),
+          rn = paste0("split_", row_number())) %>%
+        group_by(row_id, matched_province_area_id) %>%
+        mutate(mean = median(mean)) %>%
+        pivot_wider(names_from = rn, values_from = c(area_id, matched_area_name)) %>%
+        unite("area_id", starts_with("area_id_split"), sep = "; ") %>%
+        unite("matched_area_name", starts_with("matched_area_name_split"), sep = "; ") %>%
+        mutate(area_id = str_remove_all(area_id, "; NA|NA; "),
+               matched_area_name = str_remove_all(matched_area_name, "; NA|NA; ")) %>%
         rename(provincial_value = mean) %>%
-        group_by(across(-provincial_value)) %>%
-        summarise(provincial_value = median(provincial_value)) %>%
         mutate(ratio = value/provincial_value) %>%
         ungroup()
     } else {
@@ -183,8 +191,8 @@ if(iso3 != "SSD") {
   
 } else {
   
-  dat$prev$area_id <- "SSD"
-  dat$art$area_id <- "SSD"
+  dat$prev$area_id <- iso3_c
+  dat$art$area_id <- iso3_c
   
   df <- spectrum_ratio %>%
     mutate(indicator = case_when(
@@ -222,7 +230,7 @@ if(iso3 != "SSD") {
 if(nrow(out$prev)) {
   out_prev_model <- out$prev %>%
     filter(across(any_of("is_aggregate"), is.na)) %>%
-    select(iso3, area_id, year, kp, age_group, method, denominator, has_age, value, provincial_value, ratio, study_idx)
+    select(iso3, area_id = matched_province_area_id, year, kp, age_group, method, denominator, has_age, value, provincial_value, ratio, study_idx)
 } else {
   out_prev_model <- data.frame(x = character()) 
 }
@@ -230,7 +238,7 @@ if(nrow(out$prev)) {
 if(nrow(out$art)) {
   out_art_model <- out$art %>%
     filter(across(any_of("is_aggregate"), is.na)) %>%
-    select(iso3, area_id, year, kp, method, age_group, has_age, value, denominator, provincial_value, ratio, study_idx)
+    select(iso3, area_id = matched_province_area_id, year, kp, method, age_group, has_age, value, denominator, provincial_value, ratio, study_idx)
 } else {
   out_art_model <- data.frame(x = character()) 
 }

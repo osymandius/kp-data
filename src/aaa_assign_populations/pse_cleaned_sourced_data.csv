@@ -297,6 +297,10 @@ GMB,Gambia,"Unique object, WODM, service multiplier, social multiplier, 2S-CRC",
 COD,Congo - Kinshasa,"WODC, unique object, service, social",Multiple methods - mixture,MSM,Kinshasa,NA,NA,NA,2017,NA,4403,NA,NA,NA,NA,NA,"Méthodes d’estimation de la taille en RDC (MSM, PS, UDI)",NA,GF_cb756fca4b993cd15cb5e5455740a1a2,f5a1370120b6a6e8277bc7573fd36d65,Yes,yes,NA,NA,63,372
 COD,Congo - Kinshasa,"WODC, unique object, service, social, 2S-CRC",Multiple methods - mixture,FSW,Kinshasa,NA,NA,NA,2017,NA,3941,NA,NA,NA,NA,NA,"Méthodes d’estimation de la taille en RDC (MSM, PS, UDI)",NA,GF_c348255ee5c85e205d6235ec05707551,643384da1cc2de0f3160b9c8976388f9,Yes,yes,NA,NA,63,373
 COD,Congo - Kinshasa,"WODC, unique object, service, social, 2S-CRC",Multiple methods - mixture,PWID,Kinshasa,NA,NA,NA,2017,NA,3381,NA,NA,NA,NA,NA,"Méthodes d’estimation de la taille en RDC (MSM, PS, UDI)",NA,GF_cfd2ddd15aee614284cbe5f47f5762da,e639cfe075a9b1076c43092eec60f908,Yes,yes,NA,NA,63,374
+AGO,Angola,Multiplier,Multiplier,FSW,Benguela,NA,NA,NA,2015,2768,3277,3786,NA,NA,NA,NA,"Prevalencia Do VIH, Factores Biologicos E Comportamentais Da Infeccao Entre As Profissionais Do Sexo (MTS) Em Angola",NA,NA,NA,Yes,yes,NA,NA,2,375
+AGO,Angola,Multiplier,Multiplier,FSW,Benguela,NA,NA,NA,2015,5310,5695,6080,NA,NA,NA,NA,"Prevalencia Do VIH, Factores Biologicos E Comportamentais Da Infeccao Entre As Profissionais Do Sexo (MTS) Em Angola",NA,NA,NA,Yes,yes,NA,NA,2,376
+AGO,Angola,Multiplier,Multiplier,FSW,Kilamba Kiaxi,NA,NA,NA,2015,748,994,1240,NA,NA,NA,NA,"Prevalencia Do VIH, Factores Biologicos E Comportamentais Da Infeccao Entre As Profissionais Do Sexo (MTS) Em Angola",NA,NA,NA,Yes,yes,NA,NA,2,377
+AGO,Angola,Multiplier,Multiplier,FSW,Lobito,NA,NA,NA,2015,1364,1767,2170,NA,NA,NA,NA,"Prevalencia Do VIH, Factores Biologicos E Comportamentais Da Infeccao Entre As Profissionais Do Sexo (MTS) Em Angola",NA,NA,NA,Yes,yes,NA,NA,2,378
 RWA,Rwanda,Multiplier,Multiplier,FSW,Kigali City,NA,NA,NA,2010,1916,2253,2524,NA,NA,NA,NA,Mutagoma et al,NA,CDC_667fac9fa6acc861c5e5d042cd3e5425,cdc2c31f0cd8d7e327933f7aa4ff8df2,Yes,yes,NA,NA,172,379
 GHA,Ghana,Service multiplier,Service multiplier,FSW,"Bono, Bono East, Ahafo",NA,NA,NA,2011,3228,3291,3353,NA,NA,NA,NA,2011 Mapping and Population Size Estimation of FSWs in Ghana,NA,GF_be1c8f85434062d024737ed7674ca58b,e9bce1f8bb3e1a8c39e7ca1509f10dd5,Yes,yes,NA,NA,80,380
 GHA,Ghana,Service multiplier,Service multiplier,FSW,Central,NA,NA,NA,2011,3191,3405,3619,NA,NA,NA,NA,2011 Mapping and Population Size Estimation of FSWs in Ghana,NA,GAM_6148d7e9055819b49357cc12d5426046,7a5aa99e300764503de79141eec28acf,Yes,yes,NA,NA,80,381
@@ -1568,15 +1572,15 @@ NGA,Nigeria,Programmatic mapping,PLACE/mapping,FSW,Taraba,2,NA,NA,2019,NA,4400,N
 NGA,Nigeria,Programmatic mapping,PLACE/mapping,MSM,Taraba,2,NA,NA,2019,NA,700,NA,NA,NA,NA,NA,Mapping and Size Estimation of Key Populations Nigeria,NA,GAM_4805f63f6db6c2dbfc69fdf5db840703,f62863a4f996640c0898eba97beaf7fc,Yes,yes,NA,NA,163,1776
 NGA,Nigeria,Programmatic mapping,PLACE/mapping,PWID,Taraba,2,NA,NA,2019,NA,1000,NA,NA,NA,NA,NA,Mapping and Size Estimation of Key Populations Nigeria,NA,GAM_b055774411a94db58758f7af2e5ed18e,ca932a537ae2cf8a9d80e772824ac70a,Yes,yes,NA,NA,163,1777
 BDI,Burundi,Service multiplier,Service multiplier,FSW,Bujumbura,NA,NA,NA,2021,NA,8799,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,1778
-BDI,Burundi,Service multiplier,Service multiplier,MSM,Bujumbura,NA,NA,NA,2021,NA,6452,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,1779
-BDI,Burundi,Service multiplier,Service multiplier,PWID,Bujumbura,NA,NA,NA,2021,NA,4215,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,1780
-BDI,Burundi,Service multiplier,Service multiplier,PWID,Bujumbura,NA,NA,NA,2021,NA,7556,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,1781
-BDI,Burundi,Service multiplier,Service multiplier,PWID,Bujumbura,NA,NA,NA,2021,NA,5667,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,1782
-BDI,Burundi,Service multiplier,Service multiplier,FSW,Gitega,NA,NA,NA,2021,NA,1017,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,1783
-BDI,Burundi,Service multiplier,Service multiplier,FSW,Makamba,NA,NA,NA,2021,NA,421,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,1784
-BDI,Burundi,Service multiplier,Service multiplier,FSW,Muyinga,NA,NA,NA,2021,NA,1416,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,1785
-BDI,Burundi,Service multiplier,Service multiplier,FSW,Ngozi,NA,NA,NA,2021,NA,7361,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,1786
-BDI,Burundi,Service multiplier,Service multiplier,FSW,Rumonge,NA,NA,NA,2021,NA,6000,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,1787
+BDI,Burundi,Service multiplier,Service multiplier,FSW,Gitega,NA,NA,NA,2021,NA,1017,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,1779
+BDI,Burundi,Service multiplier,Service multiplier,FSW,Rumonge; Makamba,NA,NA,NA,2021,NA,421,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,1780
+BDI,Burundi,Service multiplier,Service multiplier,FSW,Ngozi; Kirundo; Muyinga,NA,NA,NA,2021,NA,1416,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,1781
+BDI,Burundi,Service multiplier,Service multiplier,FSW,Ngozi; Kirundo; Muyinga,NA,NA,NA,2021,NA,7361,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,1782
+BDI,Burundi,Service multiplier,Service multiplier,FSW,Rumonge; Makamba,NA,NA,NA,2021,NA,6000,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,1783
+BDI,Burundi,Service multiplier,Service multiplier,MSM,Bujumbura,NA,NA,NA,2021,NA,6452,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,1784
+BDI,Burundi,SS-PSE,SS-PSE,MSM,Bujumbura,NA,NA,NA,2021,NA,879,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,1785
+BDI,Burundi,SS-PSE,SS-PSE,MSM,Kirundo,NA,NA,NA,2021,NA,458,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,1786
+BDI,Burundi,SS-PSE,SS-PSE,MSM,Makamba,NA,NA,NA,2021,NA,126,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,1787
 BWA,Botswana,Service multiplier,Service multiplier,MSM,Boteti,NA,NA,NA,2017,NA,225,NA,NA,NA,NA,NA,Mapping & Size Estimation of Select Key Populations in Botswana (2017),NA,NA,NA,Yes,yes,NA,NA,30,1788
 BWA,Botswana,Service multiplier,Service multiplier,MSM,Chobe,NA,NA,NA,2017,NA,18,NA,NA,NA,NA,NA,Mapping & Size Estimation of Select Key Populations in Botswana (2017),NA,NA,NA,Yes,yes,NA,NA,30,1790
 BWA,Botswana,Service multiplier,Service multiplier,MSM,Greater Francistown,NA,NA,NA,2017,NA,403,NA,NA,NA,NA,NA,Mapping & Size Estimation of Select Key Populations in Botswana (2017),NA,NA,NA,Yes,yes,NA,NA,30,1791
@@ -1776,6 +1780,50 @@ ZWE,Zimbabwe,SS-PSE,SS-PSE,MSM,Bulawayo,NA,NA,NA,2019,NA,1010,NA,NA,NA,NA,NA,IBB
 ZWE,Zimbabwe,SS-PSE,SS-PSE,TG,Bulawayo,NA,NA,NA,2019,NA,56,NA,NA,NA,NA,NA,IBBS 2020,NA,NA,NA,Yes,yes,NA,NA,270,1986
 ZWE,Zimbabwe,SS-PSE,SS-PSE,MSM,Harare,NA,NA,NA,2019,NA,4405,NA,NA,NA,NA,NA,IBBS 2020,NA,NA,NA,Yes,yes,NA,NA,270,1987
 ZWE,Zimbabwe,SS-PSE,SS-PSE,TG,Harare,NA,NA,NA,2019,NA,2550,NA,NA,NA,NA,NA,IBBS 2020,NA,NA,NA,Yes,yes,NA,NA,270,1988
+NAM,Namibia,Hotspot mapping,PLACE/mapping,FSW,Khomas region,NA,NA,NA,2017,NA,4371,NA,NA,NA,NA,NA,"Measuring Venue-Based
+Risk: A Programmatic
+Mapping Study of Key
+Populations in Khomas
+Region, Namibia",https://www.measureevaluation.org/resources/publications/tr-18-240/at_download/document,NA,NA,Yes,yes,NA,NA,307,1989
+NAM,Namibia,Hotspot mapping,PLACE/mapping,FSW,Khomas region,NA,NA,NA,2017,NA,1592,NA,NA,NA,NA,NA,"Measuring Venue-Based
+Risk: A Programmatic
+Mapping Study of Key
+Populations in Khomas
+Region, Namibia",https://www.measureevaluation.org/resources/publications/tr-18-240/at_download/document,NA,NA,Yes,yes,NA,NA,307,1990
+BEN,Benin,SS-PSE,SS-PSE,MSM,Cotonou,NA,NA,NA,2022,1214,2382,3945,NA,NA,NA,NA,2022 ESDG,NA,NA,NA,Yes,yes,NA,NA,322,1991
+BEN,Benin,SS-PSE,SS-PSE,MSM,Abomey-Calavi,NA,NA,NA,2022,556,1125,1985,NA,NA,NA,NA,2022 ESDG,NA,NA,NA,Yes,yes,NA,NA,322,1992
+BEN,Benin,SS-PSE,SS-PSE,MSM,Porto-Novo,NA,NA,NA,2022,986,1043,1060,NA,NA,NA,NA,2022 ESDG,NA,NA,NA,Yes,yes,NA,NA,322,1993
+BEN,Benin,SS-PSE,SS-PSE,MSM,Parakou,NA,NA,NA,2022,128,248,550,NA,NA,NA,NA,2022 ESDG,NA,NA,NA,Yes,yes,NA,NA,322,1994
+BEN,Benin,SS-PSE,SS-PSE,MSM,Natitingou,NA,NA,NA,2022,70,248,459,NA,NA,NA,NA,2022 ESDG,NA,NA,NA,Yes,yes,NA,NA,322,1995
+BEN,Benin,SS-PSE,SS-PSE,MSM,Lokossa,NA,NA,NA,2022,212,475,914,NA,NA,NA,NA,2022 ESDG,NA,NA,NA,Yes,yes,NA,NA,322,1996
+BEN,Benin,SS-PSE,SS-PSE,MSM,Abomey,NA,NA,NA,2022,311,765,790,NA,NA,NA,NA,2022 ESDG,NA,NA,NA,Yes,yes,NA,NA,322,1997
+BEN,Benin,SS-PSE,SS-PSE,PWID,Cotonou,NA,NA,NA,2022,148,206,319,NA,NA,NA,NA,2022 ESDG,NA,NA,NA,Yes,yes,NA,NA,322,1998
+BEN,Benin,SS-PSE,SS-PSE,PWID,Abomey-Calavi,NA,NA,NA,2022,80,134,277,NA,NA,NA,NA,2022 ESDG,NA,NA,NA,Yes,yes,NA,NA,322,1999
+BEN,Benin,SS-PSE,SS-PSE,PWID,Porto-Novo,NA,NA,NA,2022,101,193,424,NA,NA,NA,NA,2022 ESDG,NA,NA,NA,Yes,yes,NA,NA,322,2000
+BEN,Benin,SS-PSE,SS-PSE,PWID,Parakou,NA,NA,NA,2022,53,70,113,NA,NA,NA,NA,2022 ESDG,NA,NA,NA,Yes,yes,NA,NA,322,2001
+BEN,Benin,SS-PSE,SS-PSE,PWID,Natitingou,NA,NA,NA,2022,32,46,77,NA,NA,NA,NA,2022 ESDG,NA,NA,NA,Yes,yes,NA,NA,322,2002
+BEN,Benin,SS-PSE,SS-PSE,PWID,Grand-Popo,NA,NA,NA,2022,51,73,130,NA,NA,NA,NA,2022 ESDG,NA,NA,NA,Yes,yes,NA,NA,322,2003
+BEN,Benin,SS-PSE,SS-PSE,PWID,Abomey,NA,NA,NA,2022,48,82,167,NA,NA,NA,NA,2022 ESDG,NA,NA,NA,Yes,yes,NA,NA,322,2004
+GIN,Guinea,unique object multiplier,Object Multiplier,PWID,Conakry,NA,NA,NA,2022,NA,148,NA,NA,NA,NA,NA,2022 ESCOMB,NA,NA,NA,Yes,private,NA,NA,324,2005
+GIN,Guinea,Mapping and enumeration,PLACE/Mapping,PWID,Conakry,NA,NA,NA,2022,NA,220,NA,NA,NA,NA,NA,2022 ESCOMB,NA,NA,NA,Yes,private,NA,NA,324,2006
+GIN,Guinea,Mapping and enumeration,SS-PSE,PWID,Conakry,NA,NA,NA,2022,197,575,1502,NA,NA,NA,NA,2022 ESCOMB,NA,NA,NA,Yes,private,NA,NA,324,2007
+GIN,Guinea,Service Multiplier,Service Multiplier,PWID,Conakry,NA,NA,NA,2022,NA,294,NA,NA,NA,NA,NA,2022 ESCOMB,NA,NA,NA,Yes,private,NA,NA,324,2008
+BDI,Burundi,SS-PSE,SS-PSE,MSM,Mukungu,NA,NA,NA,2021,NA,440,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,2009
+BDI,Burundi,SS-PSE,SS-PSE,MSM,Gitega,NA,NA,NA,2021,NA,962,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,2010
+BDI,Burundi,SS-PSE,SS-PSE,MSM,Ngozi,NA,NA,NA,2021,NA,342,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,2011
+BDI,Burundi,SS-PSE,SS-PSE,MSM,Rumonge,NA,NA,NA,2021,NA,541,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,2012
+BDI,Burundi,SS-PSE,SS-PSE,MSM,Muyinga,NA,NA,NA,2021,NA,412,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,2013
+BDI,Burundi,Service multiplier,Service multiplier,PWID,Bujumbura,NA,NA,NA,2021,NA,4215,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,2014
+BDI,Burundi,Service multiplier,Service multiplier,PWID,Bujumbura,NA,NA,NA,2021,NA,7556,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,2015
+BDI,Burundi,Service multiplier,Service multiplier,PWID,Bujumbura,NA,NA,NA,2021,NA,5667,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,2016
+BDI,Burundi,SS-PSE,SS-PSE,FSW,Bujumbura,NA,NA,NA,2021,NA,1563,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,2017
+BDI,Burundi,SS-PSE,SS-PSE,FSW,Kirundo,NA,NA,NA,2021,NA,632,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,2018
+BDI,Burundi,SS-PSE,SS-PSE,FSW,Makamba,NA,NA,NA,2021,NA,452,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,2019
+BDI,Burundi,SS-PSE,SS-PSE,FSW,Mukungu,NA,NA,NA,2021,NA,463,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,2020
+BDI,Burundi,SS-PSE,SS-PSE,FSW,Gitega,NA,NA,NA,2021,NA,1588,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,2021
+BDI,Burundi,SS-PSE,SS-PSE,FSW,Ngozi,NA,NA,NA,2021,NA,819,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,2022
+BDI,Burundi,SS-PSE,SS-PSE,FSW,Rumonge,NA,NA,NA,2021,NA,668,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,2023
+BDI,Burundi,SS-PSE,SS-PSE,FSW,Muyinga,NA,NA,NA,2021,NA,642,NA,NA,NA,NA,NA,2021 BBS,NA,NA,NA,Yes,yes,NA,NA,7,2024
 GHA,Ghana,"Consensus (service, literature, unique object, mapping, WOTC)",Multiple methods - empirical,MSM,Accra/Tema,NA,NA,NA,2011,2878,4187,5499,NA,NA,NA,NA,2011 Men's Study,NA,GAM_0880841a27384928765bcae73e076c0d,5f0f14b52aa6942f9b1b2cc3aee7533d,Yes,yes,NA,NA,72,389
 GHA,Ghana,"Consensus (service, literature, unique object, mapping, WOTC)",Multiple methods - empirical,MSM,Cape Coast/Takoradi,NA,NA,NA,2011,NA,2058,NA,NA,NA,NA,NA,2011 Men's Study,NA,GAM_2b6ded3703b2aa5682def82b098dbcb2,1502417d081725c002702a51362f1982,Yes,yes,NA,NA,72,390
 GHA,Ghana,"Consensus (service, literature, unique object, mapping, WOTC)",Multiple methods - empirical,MSM,Koforidua,NA,NA,NA,2011,NA,1132,NA,NA,NA,NA,NA,2011 Men's Study,NA,GAM_5c6cc527a8701931b962941a88c589ba,7daaff1a67d4843a0fa32ccfa5f14cd1,Yes,yes,NA,NA,72,391

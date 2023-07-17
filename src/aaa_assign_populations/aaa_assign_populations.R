@@ -279,23 +279,30 @@ if(nrow(pse)) {
       group_by(row_id, area_id, province, province_area_id) %>%
       summarise(population = sum(population))
     
-    row_populations <- row_populations %>%
-      group_by(row_id) %>%
-      mutate(population = sum(population)) %>%
-      group_by(row_id) %>%
-      mutate(rn = paste0("split_", row_number())) %>%
-      pivot_wider(names_from = rn, values_from = area_id) %>%
-      unite("area_id", starts_with("split"), sep = "; ") %>%
-      mutate(area_id = str_remove_all(area_id, "; NA|NA; ")) %>%
-      mutate(area_match = case_when(
-               !str_detect(area_id, iso3) & str_detect(area_id, "GRUMP") ~ "GRUMP",
-               str_detect(area_id, iso3) & !str_detect(area_id, "GRUMP") ~ "Naomi",
-               str_detect(area_id, iso3) & str_detect(area_id, "GRUMP") ~ "Both"
-             ))
-      
     
-    if(all.equal(row_populations$row_id, unique(row_populations$row_id)) != TRUE) {
-      stop("Mixing Naomi and GRUMP populations or multiple area names")
+    if(nrow(row_populations) > 0) {
+      
+      row_populations <- row_populations %>%
+        group_by(row_id) %>%
+        mutate(population = sum(population)) %>%
+        group_by(row_id) %>%
+        mutate(rn = paste0("split_", row_number())) %>%
+        pivot_wider(names_from = rn, values_from = area_id) %>%
+        unite("area_id", starts_with("split"), sep = "; ") %>%
+        mutate(area_id = str_remove_all(area_id, "; NA|NA; ")) %>%
+        mutate(area_match = case_when(
+          !str_detect(area_id, iso3) & str_detect(area_id, "GRUMP") ~ "GRUMP",
+          str_detect(area_id, iso3) & !str_detect(area_id, "GRUMP") ~ "Naomi",
+          str_detect(area_id, iso3) & str_detect(area_id, "GRUMP") ~ "Both"
+        ))
+      
+      
+      if(all.equal(row_populations$row_id, unique(row_populations$row_id)) != TRUE) {
+        stop("Mixing Naomi and GRUMP populations or multiple area names")
+      }
+    } else {
+      row_populations <- row_populations %>%
+        mutate(area_match = NA)
     }
     
     pse <- pse %>%

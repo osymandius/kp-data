@@ -53,7 +53,7 @@ if(!iso3 %in% c("SSD", "ERI")) {
   sharepoint <- spud::sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
   folder <- sharepoint$folder(site = Sys.getenv("SHAREPOINT_SITE"), path = "Shared Documents/Data/Spectrum files/2022 naomi preliminary")
   
-  if(length(grep("MOZ|ZMB", ssa_iso3)) > 0) {
+  if(iso3 == "MOZ") {
     folder <- sharepoint$folder(site = Sys.getenv("SHAREPOINT_SITE"), path = "Shared Documents/Data/Spectrum files/2023 naomi final")
   }
   
@@ -69,10 +69,10 @@ if(!iso3 %in% c("SSD", "ERI")) {
   if(length(path) == 0)
     stop("No Naomi fit found")
   
-  if(length(grep("MOZ|ZMB", ssa_iso3)) == 0) {
-    path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Data/Spectrum files/2022 naomi preliminary", path)
-  } else {
+  if(iso3 == "MOZ") {
     path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Data/Spectrum files/2023 naomi final", path)
+  } else {
+    path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Data/Spectrum files/2022 naomi preliminary", path)
   }
     
   indicators <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = path)
@@ -260,7 +260,7 @@ if(nrow(prev)) {
       count_upper = NA,
       population = NA,
       sex= case_when(
-        kp %in%  c("FSW", "TG") ~ "female",
+        kp %in%  c("FSW", "TG", "TGW") ~ "female",
         kp == "MSM" ~ "male",
         kp == "PWID" ~ "both"
       ),
@@ -289,7 +289,7 @@ if(nrow(art)) {
       count_upper = NA,
       population = NA,
       sex= case_when(
-        kp %in%  c("FSW", "TG") ~ "female",
+        kp %in%  c("FSW", "TG", "TGW") ~ "female",
         kp == "MSM" ~ "male",
         kp == "PWID" ~ "both"
       ),

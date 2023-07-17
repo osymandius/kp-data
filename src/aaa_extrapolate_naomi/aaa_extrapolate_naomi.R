@@ -53,8 +53,8 @@ if(!iso3 %in% c("SSD", "ERI")) {
   sharepoint <- spud::sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
   folder <- sharepoint$folder(site = Sys.getenv("SHAREPOINT_SITE"), path = "Shared Documents/Data/Spectrum files/2022 naomi preliminary")
   
-  if(iso3 == "MOZ") {
-    folder <- sharepoint$folder(site = Sys.getenv("SHAREPOINT_SITE"), path = "Shared Documents/Data/Spectrum files/2021 naomi")
+  if(length(grep("MOZ|ZMB", ssa_iso3)) > 0) {
+    folder <- sharepoint$folder(site = Sys.getenv("SHAREPOINT_SITE"), path = "Shared Documents/Data/Spectrum files/2023 naomi final")
   }
   
   path <- filter(folder$list(),
@@ -69,10 +69,10 @@ if(!iso3 %in% c("SSD", "ERI")) {
   if(length(path) == 0)
     stop("No Naomi fit found")
   
-  if(iso3 != "MOZ") {
+  if(length(grep("MOZ|ZMB", ssa_iso3)) == 0) {
     path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Data/Spectrum files/2022 naomi preliminary", path)
   } else {
-    path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Data/Spectrum files/2021 naomi", path)
+    path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Data/Spectrum files/2023 naomi final", path)
   }
     
   indicators <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = path)

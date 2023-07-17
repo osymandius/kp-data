@@ -265,11 +265,11 @@ if(nrow(pse)) {
         kp %in% c("MSM", "TGM") ~ "male",
         kp %in% c("FSW", "SW", "TG", "TGW") ~ "female"
       ),
-      # age_group = case_when(
-      #   kp %in% c("PWID", "FSW", "SW") ~ "Y015_049",
-      #   kp %in% c("MSM", "TG", "TGW", "TGM") ~ "Y015_029"
-      # )
-      age_group = "Y015_049"
+      age_group = case_when(
+        kp %in% c("PWID", "FSW", "SW") ~ "Y015_049",
+        kp %in% c("MSM", "TG", "TGW", "TGM") ~ "Y015_029"
+      )
+      # age_group = "Y015_049"
       ) %>%
       type_convert() %>%
       left_join(population %>% ungroup() %>% dplyr::select(area_id, year, sex, age_group, population) %>% type_convert()) %>%

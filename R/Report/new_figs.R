@@ -3,7 +3,7 @@ library(DiagrammeR)
 library(countrycode)
 library(knitr)
 library(sf)
-library(kableExtra)
+# library(kableExtra)
 library(moz.utils)
 
 region <- region()
@@ -21,10 +21,9 @@ invlogit <- function(x) {exp(x)/(1+exp(x))}
 logit <- function(x) {log(x/(1-x))}
 
 pse_final <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_final_sourced.csv")
-
 prev_final <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_final_sourced.csv")
-
 art_final <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_final.csv")
+kplhiv_art <- readRDS("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/kplhiv_art.rds")
 
 mf <- crossing(region %>%
                  select(-four_region) %>%
@@ -127,25 +126,17 @@ pse_input_count_text <- readRDS("R/Report/R objects for report/PSE/pse_input_cou
          across(c("FSW", "MSM", "PWID", "TG"), ~str_trim(.x))
   )
 
+length(unique(pse_final$study_idx))
 
-pse_method <- pse_final %>%
-  distinct(country.name, ref, year, kp, method) %>%
-  mutate(year = plyr::round_any(year, 3),
-         year = paste0(year, "-", year+2)) %>%
-  count(country.name, ref, method, year, kp)
+pse_final %>%
+  filter(year %in% 2010:2012) %>%
+  distinct(study_idx, kp) %>%
+  count(kp)
 
-empirical_proportion <- pse_final %>%
-  mutate(year = plyr::round_any(year, 3),
-         year = paste0(year, "-", year+2)) %>%
-  filter(year %in% c("2013-2015", "2019-2021"), !is.na(method)) %>%
-  distinct(year, country.name, ref, year, kp, simple_method) %>%
-  count(simple_method, year) %>%
-  group_by(year) %>%
-  mutate(prop = round(100*n/sum(n))) %>%
-  filter(simple_method == "empirical")
-
-study_n_2012 <- filter(pse_method, year == "2010-2012") %>% group_by(kp) %>% summarise(n=sum(n))
-study_n_2021 <- filter(pse_method, year == "2019-2021") %>% group_by(kp) %>% summarise(n=sum(n))
+pse_final %>%
+  filter(year %in% 2018:2020) %>%
+  distinct(study_idx, kp) %>%
+  count(kp)
 
 msm_region_proportions <- pse_final %>%
   filter(kp == "MSM") %>%
@@ -154,73 +145,27 @@ msm_region_proportions <- pse_final %>%
   mutate(under_1 = ifelse(prop_estimate < 0.01, 1, 0)) %>%
   group_proportion(c("region", "under_1"))
 
+msm_region_proportions %>%
+  group_by(region) %>%
+  summarise(n = sum(n))
+
 msm_u1 <- pse_final %>%
   filter(kp == "MSM") %>%
   mutate(iso3 = countrycode::countrycode(country.name, "country.name", "iso3c")) %>%
   left_join(region) %>%
+  name_region(T) %>%
   ggplot(aes(x=region, y=prop_estimate)) +
   geom_boxplot() +
   scale_y_continuous(labels = scales::label_percent(), limits = c(0,.1), breaks = c(0, 0.01, 0.025, 0.05, 0.075, 0.1)) +
   geom_hline(aes(yintercept = 0.01), color="red", linetype = 2, size=1) +
   moz.utils::standard_theme() +
-  labs(x=element_blank(), y="MSM population proportion")
+  labs(x=element_blank(), y="Population size estimate proportion")
 
-png("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Supplementary figs/msm_u1.png", width = 400, height = 500)
+png("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Supplementary figs/S1 msm_u1.png", width = 400, height = 500)
 msm_u1
 dev.off()
 
-pse_method %>%
-  group_by(year, kp) %>%
-  summarise(n = sum(n)) %>%
-  ggplot(aes(x=year, y=n, fill=kp)) +
-    geom_col() +
-    moz.utils::standard_theme() +
-    labs(x=element_blank(), y="Number of studies", fill = element_blank()) +
-    scale_fill_manual(values = wesanderson::wes_palette("Zissou1")[c(1,2,3,5)])
-
-pal9 <- wesanderson::wes_palette("Zissou1", 9, type = "continuous")
-
-pse_study_counts <- pse_method %>%
-  filter(!is.na(method)) %>%
-  count(ref, method, kp, year) %>%
-  mutate(method = factor(method,
-                         levels= c("3S-CRC",
-                                   "SS-PSE",
-                                   "2S-CRC",
-                                   "Object multiplier",
-                                   "Event multiplier",
-                                   "Multiple methods - empirical",
-                                   "Service multiplier",
-                                   "PLACE/Mapping",
-                                   "Multiple methods - mixture"))) %>%
-  count(kp, year)
-
-pse_method %>%
-  filter(!is.na(method)) %>%
-  count(ref, method, kp, year) %>%
-  mutate(method = factor(method,
-                         levels= c("3S-CRC",
-                                   "SS-PSE",
-                                   "2S-CRC",
-                                   "Object multiplier",
-                                   "Event multiplier",
-                                   "Multiple methods - empirical",
-                                   "Service multiplier",
-                                   "PLACE/Mapping",
-                                   "Multiple methods - mixture"))) %>%
-  ggplot(aes(x=year, y=n)) +
-  geom_col(position = "fill", aes(fill=method)) +
-  geom_text(data = pse_study_counts, aes(y=1.1, label = n), size=5) +
-  scale_fill_manual(values = c("#3B9AB2", "#59A8BB", "#78B7C5", "#B1C177", "#EBCC2A", "#E5BD15", "#E1AF00", "#E96400", "#F21A00")) +
-  scale_y_continuous(labels = scales::label_percent()) +
-  facet_wrap(~kp, nrow=1) +
-  moz.utils::standard_theme() +
-  labs(x=element_blank(), y=element_blank(), fill=element_blank()) +
-  coord_cartesian(clip = "off", ylim = c(0,1)) +
-  theme(panel.background = element_rect(fill=NA, colour="black", size=1),
-        strip.text = element_text(face = "bold", margin = margin(0,0,30, 0)),
-        panel.grid = element_blank(),
-        axis.text.x = element_text(angle = 20, hjust = 1))
+length(unique(prev_final$study_idx))
 
 prev_input_count_text <- readRDS("R/Report/R objects for report/Prevalence/prev_input_count_text.rds") %>%
   mutate(across(c("FSW", "MSM", "PWID", "TG"), ~str_remove(.x, "FSW|MSM|PWID|TG")),
@@ -231,17 +176,51 @@ prev_denom <- prev_final %>%
   mutate(has_denominator = ifelse(!is.na(denominator), 1, 0)) %>% 
   group_proportion("has_denominator")
 
+prev_final %>%
+  group_proportion("method")
+
+length(unique(art_final$study_idx))
+
+art_final %>%
+  mutate(method = case_when(method == "Self-report" ~ "self-report",
+                            method == "vls" ~ "VLS",
+                            TRUE ~ method)) %>%
+  group_proportion("method")
+
 art_input_count_text <- readRDS("R/Report/R objects for report/ART coverage/art_input_count_text.rds") %>%
   mutate(across(c("FSW", "MSM", "PWID", "TG"), ~str_remove(.x, "FSW|MSM|PWID|TG")),
          across(c("FSW", "MSM", "PWID", "TG"), ~str_trim(.x))
   )
 
-art_denom <- art_final %>% 
+art_final %>% 
   mutate(has_denominator = ifelse(!is.na(denominator), 1, 0)) %>% 
   group_proportion("has_denominator")
 
+####################
+
+kplhiv_art %>%
+  lapply("[[", "country") %>%
+  bind_rows(.id = "kp") %>%
+  filter(indicator == "pse_urban") %>%
+  left_join(region) %>%
+  # bind_rows(mutate(., region = "SSA")) %>%
+  group_by(kp, region) %>%
+  reframe(calculate_quantile(median)) %>%
+  factor_region() %>%
+  arrange(kp, region) %>%
+  mutate(iqr = paste0(round(`0.25`, 2), "-", round(`0.75`, 2))) %>%
+  select(-c(`0.25`, `0.75`))
+
+pse_final %>%
+  mutate(iso3 = countrycode::countrycode(country.name, "country.name", "iso3c")) %>%
+  left_join(region) %>%
+  filter(kp == "PWID", region == "ESA") %>%
+  distinct(iso3)
+
 
 pse_method <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_fixed.csv")
+
+filter(pse_method, method == "PLACE/mapping")
 
 ## !! JE edit: recode country names
 cname_recode <- c("Central African Republic" = "Cen. Afr. Repub.",
@@ -298,36 +277,13 @@ pse_data_overlay <- pse_final %>%
   left_join(region) %>%
   filter(iso3 != "LBR")
 
-grey <- read_sf("~/Documents/GitHub/kp-data/R/Report/R objects for report/Longitude_Graticules_and_World_Countries_Boundaries-shp/99bfd9e7-bb42-4728-87b5-07f8c8ac631c2020328-1-1vef4ev.lu5nk.shp") %>%
-  filter(CNTRY_NAME %in% c("Western Sahara", "Mauritania", "Morocco", "Algeria", "Libya", "Tunisia", "Egypt", "Equatorial Guinea", "Somalia", "Djibouti", "Eritrea")) %>%
-  bind_rows(read_sf("~/Documents/GitHub/kp-data/R/Report/R objects for report/sdn_adm_cbs_nic_ssa_20200831_shp/sdn_admbnda_adm0_cbs_nic_ssa_20200831.shp")) %>%
-  bind_rows(read_sf("~/Documents/GitHub/kp-data/R/Report/R objects for report/ssd_admbnda_imwg_nbs_shp/ssd_admbnda_adm0_imwg_nbs_20180817.shp"))
-
+grey <- read_sf(grey_areas())
 
 
 ## !! JE edit: South Sudan boundaries very large vs. rest of boundaries. Reducing
 ##             to make plot size more manageable.
 
-ssa_boundary <- read_sf("~/Documents/GitHub/kp-data/R/Report/R objects for report/Longitude_Graticules_and_World_Countries_Boundaries-shp/99bfd9e7-bb42-4728-87b5-07f8c8ac631c2020328-1-1vef4ev.lu5nk.shp")
-
-ssd_boundary <- read_sf("~/Documents/GitHub/kp-data/R/Report/R objects for report/ssd_admbnda_imwg_nbs_shp/ssd_admbnda_adm0_imwg_nbs_20180817.shp")
-
-ssd_boundary_simple <- rmapshaper::ms_simplify(ssd_boundary, 0.05)
-
-
-geographies <- read_sf("~/Documents/GitHub/kp-data/R/Report/R objects for report/Longitude_Graticules_and_World_Countries_Boundaries-shp/99bfd9e7-bb42-4728-87b5-07f8c8ac631c2020328-1-1vef4ev.lu5nk.shp") %>%
-  bind_rows(
-    ssd_boundary_simple %>%
-      transmute(CNTRY_NAME = "South Sudan")
-  ) %>%
-  mutate(iso3 = countrycode(CNTRY_NAME, "country.name", "iso3c"),
-         area_name = countrycode(iso3, "iso3c", "country.name")) %>%
-  filter(iso3 %in% ssa_iso3)
-
-geographies <- geographies %>%
-  arrange(iso3) %>%
-  mutate(id.iso3 = as.numeric(factor(iso3))) %>%
-  select(iso3, area_name, id.iso3) %>%
+geographies <- read_sf(national_areas()) %>%
   st_make_valid()
 
 ## JE: trim Prince Edward Islands from map
@@ -337,15 +293,19 @@ bbox <- c(xmin = -17.5327797,
           xmax = 51.4113159179688, 
           ymax = 37.3404121398926)
 
-geographies <- st_crop(geographies, bbox)
+geographies <- st_crop(geographies, bbox) %>%
+  mutate(iso3 = area_id)
 
 pal <- wesanderson::wes_palette("Zissou1", 100, type = "continuous")
 
 
-fig3a_tag_color <- c("FSW" = "black", "MSM" = NA, "PWID" = NA)
+fig3a_tag_color <- c("FSW" = "black", "MSM" = NA, "PWID" = NA, "TG" = NA)
 
 
 make_pse_map <- function(x) {
+  
+  kp_name <- c("FSW" = "Female sex workers",  "MSM" = "Men who have sex with men", "PWID" = "People who inject drugs" , "TG" = "Transwomen")
+  
   pse_estimates %>%
     filter(kp == x) %>%
     left_join(select(geographies, iso3)) %>%
@@ -354,7 +314,7 @@ make_pse_map <- function(x) {
     geom_sf(aes(geometry = geometry, fill=median), size = 0.15) +
     # viridis::scale_fill_viridis(labels = scales::label_percent()) +
     scale_fill_gradientn(colours = pal, labels = scales::label_percent()) +
-    labs(fill = "KPSE\nproportion ", title = x) +
+    labs(fill = "KPSE\nproportion ", title = kp_name[x]) +
     coord_sf(datum = NA, expand = FALSE) +
     theme_minimal(6) +
     theme(
@@ -375,8 +335,9 @@ make_pse_map <- function(x) {
 fig3a_fsw <- make_pse_map("FSW")
 fig3a_msm <- make_pse_map("MSM")
 fig3a_pwid <- make_pse_map("PWID")
+fig3a_tg <- make_pse_map("TG")
 
-fig3a <- gridExtra::arrangeGrob(fig3a_fsw, fig3a_msm, fig3a_pwid, nrow = 1)
+fig3a <- gridExtra::arrangeGrob(fig3a_fsw, fig3a_msm, fig3a_pwid, fig3a_tg, nrow = 1)
 
 fig3a_pos <- ggpubr::ggarrange(fig3a_fsw, fig3a_msm)
 ggpubr::ggarrange(fig3a_pos, fig3a_pwid, nrow=2)
@@ -389,28 +350,32 @@ ggpubr::ggarrange(fig3a_fsw, fig3a_msm, fig3a_pwid, nrow=1)
 ## * Dimension: height = 5.5in, width = 6in
 
 fig3b <- pse_estimates %>%
+  mutate(kp = ifelse(kp == "TG", "TGW", kp)) %>%
+  name_kp() %>%
   ggplot() +
   geom_jitter(
     data = pse_data_overlay %>%
-      filter(!kp %in% c("TG", "TGW", "SW"),
+      mutate(kp = ifelse(kp == "TG", "TGW", kp)) %>%
+      filter(kp != "SW",
              prop_estimate < 1,
-             prop_estimate != 0), 
+             prop_estimate != 0) %>%
+      name_kp(),
     aes(x=iso3_idx, y=prop_estimate),
     alpha = 0.2, width = 0.35, size = 0.25
   ) +
   geom_segment(aes(x = xmin, xend = xmax, y = median, yend = median, color=has_data), size=1) +
   geom_rect(aes(xmin = xmin, xmax = xmax, ymin = lower, ymax = upper, fill=has_data), alpha=0.3, show.legend = FALSE) +
-  geom_hline(data = data.frame(yintercept = 0.01, kp = "MSM", iso3 = c("AGO", "ZWE")), linetype = "11", size = 0.5, aes(yintercept = yintercept), color="red") +
-  scale_color_manual(values = c(wesanderson::wes_palette("Zissou1")[c(4,1)])) +
-  scale_fill_manual(values = wesanderson::wes_palette("Zissou1")[c(4,1)])  +
-  scale_x_continuous(breaks = 1:38, labels = iso3_sort$area_name) +
+  geom_hline(data = data.frame(yintercept = 0.01, kp = "MSM", iso3 = c("AGO", "ZWE")) %>% name_kp(), linetype = "11", size = 0.5, aes(yintercept = yintercept), color="red") +
+  scale_manual("color", 2) +
+  scale_manual("fill", 2) +
+  scale_x_continuous(breaks = 1:39, labels = iso3_sort$area_name) +
   facet_grid(kp ~ factor(four_region,
                          levels=c("Western", "Central", "Eastern", "Southern"),
                          labels = c("Western Africa", "Central Africa",
                                     "Eastern Africa", "Southern Africa")),
              scales = "free", space = "free_x") +
   scale_y_log10(breaks = scales::log_breaks(), labels = scales::label_percent(accuracy = 0.01)) +
-  coord_cartesian(ylim = c(0.00003, .1)) +
+  coord_cartesian(ylim = c(0.0001, .1)) +
   labs(x = element_blank(),
        y = "Population proportion",
        color = "Informed by:",
@@ -439,9 +404,21 @@ fig3b <- pse_estimates %>%
 
 fig3 <- gridExtra::arrangeGrob(fig3a, fig3b, ncol = 1, heights = c(2.7, 5))
 
-ggsave("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Figs/Fig 3.png", fig3, height = 7.7, width = 6)
+ggsave("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Figs/Fig 3 PSE.png", fig3, height = 10, width = 8)
 
+########################
 
+prev_final %>%
+  mutate(bigger = value > provincial_value) %>%
+  filter(!is.na(bigger)) %>%
+  group_by(kp, bigger) %>%
+  dplyr::summarise(n = n()) %>%
+  dplyr::mutate(prop = n/sum(n))
+
+prev_final %>%
+  filter(!is.na(provincial_value)) %>%
+  group_by(kp) %>%
+  count()
 
 prev_corr_fsw <- lm(logit(value) ~ logit(provincial_value), 
    data = prev_final %>% mutate(value = ifelse(value == 1, 0.99, value),
@@ -484,24 +461,28 @@ convert_logis_labels <- function(x) {
 }
 
 p1 <- prev_estimates %>%
+  name_region(F) %>%
   mutate(kp = ifelse(kp == "TG", "TGW", kp)) %>%
+  name_kp(F) %>%
   ggplot(aes(x=qlogis(provincial_value), y=logit_fit)) +
   geom_point(data = prev_final %>% 
                filter(kp %in% c("MSM", "PWID", "FSW", "TG")) %>%
                mutate(kp = ifelse(kp == "TG", "TGW", kp)) %>%
-               left_join(region), 
+               name_kp(F) %>%
+               left_join(region) %>%
+               name_region(F), 
              aes(y=qlogis(value), color=region), shape=16, stroke = 0, alpha = 0.4) +
   geom_line(aes(color=region), size=1) +
-  geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper, fill=region), alpha=0.3) +
-  geom_pointrange(data = prev_country_estimates, aes(ymin = logit_lower, ymax = logit_upper), size=0.2) +
+  geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper, fill=region), alpha=0.3, show.legend = F) +
+  geom_pointrange(data = prev_country_estimates %>% name_kp(F), aes(ymin = logit_lower, ymax = logit_upper), size=0.2) +
   geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
   # geom_text(data = data.frame(kp = c("FSW", "MSM", "PWID", "TG"), label = c("FSW", "MSM", "PWID", "TG")), aes(x=logit(0.25), y=logit(0.9), label = label)) +
   moz.utils::standard_theme() +
   scale_y_continuous(labels = convert_logis_labels) +
   scale_x_continuous(labels = convert_logis_labels, limits = c(NA, logit(0.4))) +
-  scale_color_manual(values = c(wesanderson::wes_palette("Zissou1")[c(4,1)])) +
-  scale_fill_manual(values = wesanderson::wes_palette("Zissou1")[c(4,1)])  +
-  labs(y = "KP HIV prevalence\n(logit scale)", x = "Total population HIV prevalence (logit scale)")+
+  scale_manual("color", 2) +
+  scale_manual("fill", 2) +
+  labs(color = element_blank(), y = "KP HIV prevalence (logit scale)", x = "Total population HIV prevalence (logit scale)")+
   theme(panel.border = element_rect(fill=NA, color="black"),
         legend.position = "right",
         axis.text = element_text(size = 14),
@@ -511,26 +492,30 @@ p1 <- prev_estimates %>%
   facet_wrap(~kp, nrow=1)
 
 p2 <- prev_estimates %>%
+  name_region(F) %>%
   mutate(kp = ifelse(kp == "TG", "TGW", kp)) %>%
+  name_kp(F) %>%
   ggplot(aes(x=provincial_value, y=fit)) +
   # geom_line(size=1) +
-  # geom_ribbon(aes(ymin = lower, ymax = upper), alpha=0.3) +
+  # geom_ribbon(aes(ymin = lower, ymax = upper), alpha=0.3, show.legend = F) +
   geom_point(data = prev_final %>% 
                filter(kp %in% c("MSM", "PWID", "FSW", "TG")) %>%
                mutate(kp = ifelse(kp == "TG", "TGW", kp)) %>%
-               left_join(region), 
+               name_kp(F) %>%
+               left_join(region) %>%
+               name_region(F), 
              aes(y=value, color=region), shape=16, stroke = 0, alpha = 0.4) +
   geom_line(aes(color=region), size=1) +
-  geom_ribbon(aes(ymin = lower, ymax = upper, fill=region), alpha=0.3) +
-  geom_pointrange(data = prev_country_estimates, aes(ymin = lower, ymax = upper), size=0.2) +
+  geom_ribbon(aes(ymin = lower, ymax = upper, fill=region), alpha=0.3, show.legend = F) +
+  geom_pointrange(data = prev_country_estimates %>% name_kp(F), aes(ymin = lower, ymax = upper), size=0.2) +
   geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
   # geom_text(data = data.frame(kp = c("FSW", "MSM", "PWID", "TG"), label = c("FSW", "MSM", "PWID", "TG")), aes(x=0.3, y=0.9, label = label)) +
   moz.utils::standard_theme() +
   scale_x_continuous(labels = scales::label_percent(accuracy = 1), limits = c(0,0.4)) +
   scale_y_continuous(labels = scales::label_percent(), limits = c(0,1)) +
-  scale_color_manual(values = c(wesanderson::wes_palette("Zissou1")[c(4,1)])) +
-  scale_fill_manual(values = wesanderson::wes_palette("Zissou1")[c(4,1)])  +
-  labs(y = "KP HIV prevalence", x = "Total population HIV prevalence")+
+  scale_manual("color", 2) +
+  scale_manual("fill", 2) +
+  labs(color = element_blank(), y = "KP HIV prevalence", x = "Total population HIV prevalence")+
   theme(panel.border = element_rect(fill=NA, color="black"),
         legend.position = "right",
         axis.text = element_text(size = 14),
@@ -540,25 +525,29 @@ p2 <- prev_estimates %>%
   facet_wrap(~kp, nrow=1)
 
 p3 <- prev_estimates %>%
+  name_region(F) %>%
   mutate(kp = ifelse(kp == "TG", "TGW", kp)) %>%
+  name_kp(F) %>%
   ggplot(aes(x=provincial_value, y=fit/provincial_value)) +
   # geom_line(size=1) +
-  # geom_ribbon(aes(ymin = lower, ymax = upper), alpha=0.3) +
+  # geom_ribbon(aes(ymin = lower, ymax = upper), alpha=0.3, show.legend = F) +
   geom_point(data = prev_final %>% 
                filter(kp %in% c("MSM", "PWID", "FSW", "TG")) %>%
                mutate(kp = ifelse(kp == "TG", "TGW", kp)) %>%
-               left_join(region), 
+               name_kp(F) %>%
+               left_join(region) %>%
+               name_region(F), 
              aes(y=value/provincial_value, color=region), shape=16, stroke = 0, alpha = 0.4) +
   geom_line(aes(color=region), size=1) +
-  geom_ribbon(aes(ymin = lower/provincial_value, ymax = upper/provincial_value, fill=region), alpha=0.3) +
+  geom_ribbon(aes(ymin = lower/provincial_value, ymax = upper/provincial_value, fill=region), alpha=0.3, show.legend = F) +
   # geom_text(data = data.frame(kp = c("FSW", "MSM", "PWID", "TG"), label = c("FSW", "MSM", "PWID", "TG")), aes(x=0.3, y=100, label = label)) +
   moz.utils::standard_theme() +
   scale_y_log10() +
   scale_x_continuous(labels = scales::label_percent(accuracy = 1), limits = c(0,0.4)) +
-  scale_color_manual(values = c(wesanderson::wes_palette("Zissou1")[c(4,1)])) +
-  scale_fill_manual(values = wesanderson::wes_palette("Zissou1")[c(4,1)])  +
+  scale_manual("color", 2) +
+  scale_manual("fill", 2) +
   geom_hline(aes(yintercept = 1), linetype = 2) +
-  labs(y="Prevalence ratio", x = "Total population HIV prevalence")+
+  labs(color = element_blank(), y="Prevalence ratio", x = "Total population HIV prevalence")+
   theme(panel.border = element_rect(fill=NA, color="black"),
         legend.position = "right",
         axis.text = element_text(size = 14),
@@ -567,7 +556,7 @@ p3 <- prev_estimates %>%
         strip.text = element_blank()) +
   facet_wrap(~kp, nrow=1)
 
-prev_fig <- ggpubr::ggarrange(p1, p2, p3, ncol=1, common.legend = TRUE, legend = "right")
+prev_fig <- ggpubr::ggarrange(p1, p2, p3, ncol=1, common.legend = TRUE, legend = "bottom")
 png("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Figs/Fig 5 prevalence.png", width = 1100, height = 800)
 prev_fig
 dev.off()
@@ -629,21 +618,24 @@ convert_logis_labels <- function(x) {
 
 p5 <- art_estimates %>%
   bind_rows() %>%
+  mutate(kp = ifelse(kp == "TG", "TGW", kp)) %>% name_kp(F) %>%
   # filter(model == "betabinomial") %>%
   ggplot(aes(x=qlogis(provincial_value), y=logit_fit)) +
     geom_point(data = art_final %>% 
-                 filter(kp %in% c("MSM", "PWID", "FSW")) %>%
-                 left_join(region), 
+                 filter(kp %in% c("MSM", "PWID", "FSW", "TG")) %>%
+                 mutate(kp = ifelse(kp == "TG", "TGW", kp)) %>% name_kp(F) %>%
+                 left_join(region) %>%
+                 name_region(F), 
                aes(y=qlogis(value), color=region), shape=16, stroke = 0, alpha = 0.6, size=2.5, show.legend = FALSE) +
     geom_line(size=1) +
     geom_ribbon(aes(ymin = logit_lower, ymax = logit_upper), alpha=0.2) +
-    geom_pointrange(data = art_country_estimates, aes(ymin = logit_lower, ymax = logit_upper), size=0.2) +
+    geom_pointrange(data = art_country_estimates %>% mutate(kp = ifelse(kp == "TG", "TGW", kp)) %>% name_kp(F), aes(ymin = logit_lower, ymax = logit_upper), size=0.2) +
     geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
     moz.utils::standard_theme() +
     scale_y_continuous(labels = convert_logis_labels, limits = c(logit(0.05), logit(0.95))) +
     scale_x_continuous(labels = convert_logis_labels, limits = c(logit(0.125), logit(0.95))) +
-    scale_color_manual(values = c(wesanderson::wes_palette("Zissou1")[c(4, 1)])) +
-    labs(y = "KP ART coverage\n(logit scale)", x = "Total population ART coverage (logit scale)")+
+    scale_manual("color", 2) +
+    labs(y = "KP ART coverage (logit scale)", x = "Total population ART coverage (logit scale)", color = element_blank())+
   theme(panel.border = element_rect(fill=NA, color="black"),
         panel.spacing = unit(2, "lines"),
         axis.text = element_text(size = 14),
@@ -654,34 +646,88 @@ p5 <- art_estimates %>%
 
 p6 <- art_estimates %>%
   bind_rows() %>%
+  mutate(kp = ifelse(kp == "TG", "TGW", kp)) %>% name_kp(F) %>%
   # filter(model == "betabinomial") %>%
   ggplot(aes(x=provincial_value, y=fit)) +
     geom_point(data = art_final %>% 
-                 filter(kp %in% c("MSM", "PWID", "FSW")) %>%
-                 left_join(region), 
+                 filter(kp %in% c("MSM", "PWID", "FSW", "TG")) %>%
+                 mutate(kp = ifelse(kp == "TG", "TGW", kp)) %>% name_kp(F) %>%
+                 left_join(region) %>%
+                 name_region(F), 
                aes(y=value, color=region), shape=16, stroke = 0, alpha = 0.6, size=2.5) +
     geom_line(size=1) +
     geom_ribbon(aes(ymin = lower, ymax = upper), alpha=0.2) +
-    geom_pointrange(data = art_country_estimates, aes(ymin = lower, ymax = upper), size=0.2) +
+    geom_pointrange(data = art_country_estimates %>% mutate(kp = ifelse(kp == "TG", "TGW", kp)) %>% name_kp(F), aes(ymin = lower, ymax = upper), size=0.2) +
     geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
     moz.utils::standard_theme() +
     scale_x_continuous(labels = scales::label_percent(accuracy = 1), limits = c(0.125,1)) +
     scale_y_continuous(labels = scales::label_percent(), limits = c(0,1)) +
-    scale_color_manual(values = c(wesanderson::wes_palette("Zissou1")[c(4,1)])) +
-    labs(y = "KP ART coverage", x = "Total population ART coverage")+
-  theme(panel.border = element_rect(fill=NA, color="black"),
-        panel.spacing = unit(2, "lines"),
-        axis.text = element_text(size = 14),
-        legend.title = element_text(size = 16),
-        legend.text = element_text(size = 16),
-        strip.text = element_blank()) +
-  facet_wrap(~kp, nrow=1)
+    scale_manual("color", 2) +
+    labs(y = "KP ART coverage", x = "Total population ART coverage", color = element_blank())+
+    theme(panel.border = element_rect(fill=NA, color="black"),
+          panel.spacing = unit(2, "lines"),
+          axis.text = element_text(size = 14),
+          legend.title = element_text(size = 16),
+          legend.text = element_text(size = 16),
+          strip.text = element_blank()) +
+    facet_wrap(~kp, nrow=1)
 
-art_fig <- ggpubr::ggarrange(p5, p6, ncol=1, common.legend = TRUE, legend = "right")
+art_fig <- ggpubr::ggarrange(p5, p6, ncol=1, common.legend = TRUE, legend = "bottom")
 
 png("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Figs/Fig 6 art coverage.png", width = 1000, height = 600)
 art_fig
 dev.off()
+
+prev_estimates %>%
+  mutate(provincial_value = round(provincial_value, 3)) %>%
+  filter(region == "ESA",
+         provincial_value %in% c(0.011, 0.151)) %>%
+  arrange(provincial_value, kp) %>%
+  select(kp, provincial_value, median, lower, upper) %>%
+  mutate(across(median:upper, ~.x*100),
+         across(median:upper, ~round(.x, 0)))
+
+art_estimates %>%
+  filter(provincial_value %in% c(0.4, 0.8)) %>%
+  arrange(provincial_value, kp) %>%
+  select(kp, provincial_value, median, lower, upper) %>%
+  mutate(across(median:upper, ~.x*100),
+         across(median:upper, ~round(.x, 0)),
+         across(median:upper, ~.x-(provincial_value*100)))
+
+#### Supplementary figs
+
+total_studies <- bind_rows(pse_final %>% mutate(indicator = "PSE"),
+          prev_final %>% mutate(indicator = "HIV prevalence"),
+          art_final %>% mutate(indicator = "ART coverage")) %>%
+  distinct(indicator, study_idx) %>%
+  arrange(study_idx)
+
+ethic <- googlesheets4::read_sheet("https://docs.google.com/spreadsheets/d/1murnx2dH0W_94gFFuJ-oSW0ugdmv8WPinmog0_V-0FI/edit#gid=1735078680") %>%
+  filter(`Study idx` %in% unique(total_studies$study_idx))
+
+ethic$year <- as.character(ethic$year)
+
+all_kp <- data.frame(kp = c("FSW", "MSM", "PWID", "TG")) %>%
+  bind_cols(ethic %>%
+              filter(kp == "ALL") %>%
+              select(`Study idx`, iso3, year, Study)
+  )
+
+ethic <- ethic %>% 
+  select(`Study idx`, iso3, year, kp, Study) %>%
+  filter(!`Study idx` %in% all_kp$`Study idx`) %>%
+  bind_rows(all_kp) %>%
+  rename(study_idx = `Study idx`)
+
+
+studies_used <- total_studies %>%
+  left_join(ethic) %>%
+  mutate(iso3 = countrycode(iso3, "iso3c", "country.name", custom_match = cc_plot()),
+         Study = str_to_title(Study)) %>%
+  select(-study_idx)
+
+write_csv(studies_used, "~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Supplementary figs/ST3 studies.csv")
 
 crossing(iso3 = ssa_iso3,
          kp = c("FSW", "MSM", "PWID", "TG")) %>%
@@ -708,4 +754,105 @@ crossing(iso3 = ssa_iso3,
       )
   ) %>%
   pivot_wider(names_from = "kp", values_from = c("pse", "prevalence", "art_coverage")) %>%
-  write_csv("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Figs/data availability.csv", na="")
+  write_csv("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Supplementary figs/data availability.csv", na="")
+
+crossing(iso3 = ssa_iso3,
+         kp = c("FSW", "MSM", "PWID", "TG")) %>%
+  left_join(pse_final %>%
+              ungroup() %>%
+              group_by(iso3, kp) %>%
+              filter(year == max(year)) %>%
+              distinct(iso3, kp, year) %>%
+              rename(pse = year)) %>%
+  left_join(
+    prev_final %>%
+      ungroup() %>%
+      group_by(iso3, kp) %>%
+      filter(year == max(year)) %>%
+      distinct(iso3, kp, year) %>%
+      rename(prevalence = year) %>%
+      left_join(
+        art_final %>%
+          ungroup() %>%
+          group_by(iso3, kp) %>%
+          filter(year == max(year)) %>%
+          distinct(iso3, kp, year) %>%
+          rename(art_coverage = year)
+      )
+  ) %>%
+  pivot_longer(-c(iso3, kp)) %>%
+  filter(!is.na(value)) %>%
+  mutate(foo = 1) %>%
+  group_by(iso3) %>%
+  summarise(tot = sum(foo)) %>%
+  ungroup() %>%
+  summarise(med = median(tot))
+
+## Supplementary country table figs
+
+kplhiv_art %>%
+  lapply("[[", "country") %>%
+  bind_rows(.id = "kp") %>%
+  filter(indicator == "pse_urban") %>%
+  left_join(region) %>%
+  bind_rows(
+    kplhiv_art %>%
+      lapply("[[", "region") %>%
+      bind_rows(.id = "kp") %>%
+      # distinct(indicator)
+      filter(indicator == "pse_urban") %>%
+      mutate(iso3 = "ZZZ")
+  ) %>%
+  mutate(across(lower:upper, ~round(100*.x, 2)),
+         text = paste0(median, " (", lower, ", ", upper, ")")) %>%
+  select(kp, region, iso3, text) %>%
+  pivot_wider(names_from = kp, values_from = text) %>%
+  factor_region() %>%
+  arrange(region, iso3) %>%
+  mutate(iso3 = countrycode::countrycode(iso3, "iso3c", "country.name", custom_match = cc_plot())) %>%
+  write_csv("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Supplementary figs/S7 urban PSE.csv")
+
+kplhiv_art %>%
+  lapply("[[", "country") %>%
+  bind_rows(.id = "kp") %>%
+  filter(indicator == "prev") %>%
+  left_join(region) %>%
+  bind_rows(
+    kplhiv_art %>%
+      lapply("[[", "region") %>%
+      bind_rows(.id = "kp") %>%
+      # distinct(indicator)
+      filter(indicator == "prev") %>%
+      mutate(iso3 = "ZZZ")
+  ) %>%
+  mutate(across(lower:upper, ~round(100*.x, 0)),
+         text = paste0(median, " (", lower, ", ", upper, ")")) %>%
+  select(kp, region, iso3, text) %>%
+  pivot_wider(names_from = kp, values_from = text) %>%
+  factor_region() %>%
+  arrange(region, iso3) %>%
+  mutate(iso3 = countrycode::countrycode(iso3, "iso3c", "country.name", custom_match = cc_plot())) %>%
+  write_csv("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Supplementary figs/S8 prevalence.csv")
+
+kplhiv_art %>%
+  lapply("[[", "country") %>%
+  bind_rows(.id = "kp") %>%
+  filter(indicator == "art_cov") %>%
+  left_join(region) %>%
+  bind_rows(
+    kplhiv_art %>%
+      lapply("[[", "region") %>%
+      bind_rows(.id = "kp") %>%
+      # distinct(indicator)
+      filter(indicator == "art_cov") %>%
+      mutate(iso3 = "ZZZ")
+  ) %>%
+  mutate(across(lower:upper, ~round(100*.x, 0)),
+         text = paste0(median, " (", lower, ", ", upper, ")")) %>%
+  select(kp, region, iso3, text) %>%
+  pivot_wider(names_from = kp, values_from = text) %>%
+  factor_region() %>%
+  arrange(region, iso3) %>%
+  mutate(iso3 = countrycode::countrycode(iso3, "iso3c", "country.name", custom_match = cc_plot())) %>%
+  write_csv("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Supplementary figs/S9 art coverage.csv")
+  

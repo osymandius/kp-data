@@ -4,8 +4,7 @@ library(countrycode)
 library(purrr)
 library(moz.utils)
 
-ssa_names <- c("Angola", "Botswana", "Eswatini", "Ethiopia", "Kenya", "Lesotho",  "Malawi", "Mozambique", "Namibia", "Rwanda", "South Africa", "South Sudan", "Uganda", "United Republic of Tanzania", "Zambia", "Zimbabwe", "Benin", "Burkina Faso", "Burundi", "Cameroon", "Central African Republic", "Chad", "Congo", "Côte d'Ivoire", "Democratic Republic of the Congo", "Equatorial Guinea", "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Liberia", "Mali", "Niger", "Nigeria", "Senegal", "Sierra Leone", "Togo")
-ssa_iso3 <- countrycode::countrycode(ssa_names, "country.name", "iso3c")
+ssa_iso3 <- moz.utils::ssa_iso3()
 
 possibly_run <- purrr::possibly(.f = orderly_run, otherwise = NULL)
 possibly_pull <- purrr::possibly(.f = orderly_pull_archive, otherwise = NA)
@@ -22,7 +21,7 @@ id <- map(area_tasks, ~possibly_pull(.x, id = paste0('latest(parameter:version =
 lapply(ssa_iso3, function(x) orderly_pull_dependencies("aaa_assign_populations", remote = "inference-web", parameters = paste0('latest(parameter:iso3 == "', x, '" && parameter:version == 2022)')))
 orderly_pull_dependencies("aaa_assign_populations", remote = "inference-web", parameters = paste0('latest(parameter:iso3 == "MWI" && parameter:version == 2022)'))
 
-id <- orderly::orderly_batch("aaa_extrapolate_naomi", data.frame(iso3 = ssa_iso3, version = 2022))
+id <- orderly::orderly_batch("aaa_assign_populations", data.frame(iso3 = ssa_iso3, version = 2022))
 # names(id) <- ssa_iso3
 lapply(id$id[id$success == TRUE], orderly_commit)
 

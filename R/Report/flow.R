@@ -3,8 +3,7 @@ library(DiagrammeR)
 library(countrycode)
 library(DiagrammeRsvg)
 
-ssa_names <- c("Angola", "Botswana", "Eswatini", "Ethiopia", "Kenya", "Lesotho",  "Malawi", "Mozambique", "Namibia", "Rwanda", "South Africa", "South Sudan", "Uganda", "United Republic of Tanzania", "Zambia", "Zimbabwe", "Benin", "Burkina Faso", "Burundi", "Cameroon", "Central African Republic", "Chad", "Congo", "Côte d'Ivoire", "Democratic Republic of the Congo", "Equatorial Guinea", "Gabon", "Gambia", "Ghana", "Guinea", "Guinea-Bissau", "Liberia", "Mali", "Niger", "Nigeria", "Senegal", "Sierra Leone", "Togo")
-ssa_iso3 <- countrycode(ssa_names, "country.name", "iso3c")
+ssa_iso3 <- moz.utils::ssa_iso3()
 
 collapse <- function(...) {paste0(..., collapse = "\n")}
 
@@ -12,47 +11,39 @@ collapse <- function(...) {paste0(..., collapse = "\n")}
 
 pse_remove_label <- list()
 
-pse_total_dat <- read_csv("~/Documents/GitHub/kp-data-private/data/complete_dat.csv", show_col_types = F) %>%
-  filter(indicator == "pse")
-
-pse_inputs <- pse_total_dat %>%
+pse_total_dat_original <- read_csv("~/Documents/GitHub/kp-data-private/data/complete_dat.csv", show_col_types = F) %>%
+  filter(indicator == "pse") %>%
+  mutate(kp = ifelse(kp == "TGW", "TG", kp)) %>%
+  filter(kp %in% c("FSW", "MSM", "PWID", "TG")) %>%
   separate(dataset_id, sep = "_", into=c("dataset", NA), remove = F) %>%
-  mutate(dataset = ifelse(dataset == "KP", "KP_Atlas", dataset)) %>%
-  filter(!dataset %in% c("Goals_Nat", "Optima")) %>%
+  mutate(dataset = ifelse(dataset == "KP", "KP_Atlas", dataset),
+         dataset = ifelse(is.na(dataset), "Surveillance review", dataset)) %>%
+  filter(!dataset %in% c("Goals_Nat", "Goals", "Optima")) 
+
+pse_inputs <- pse_total_dat_original %>%
   count(dataset, kp) 
 
-pse_simple_deduplication <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/2021_11_28_pse_distinct.csv", show_col_types = FALSE)
+# pse_simple_deduplication <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/2021_11_28_pse_distinct.csv", show_col_types = FALSE)
 
-# pse_spreadsheet_extract <- lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/PSE/Edited/", full.names = TRUE, pattern = "csv"), read_csv, na= "", show_col_types = FALSE)
+# write_csv(pse_spreadsheet_extract, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_spreadsheet_extract.csv")
 # 
-# pse_spreadsheet_extract <- c(pse_spreadsheet_extract, 
-#               lapply(list.files("~/Imperial College London/Key population data - WP - General/Combined data/PSE/Edited/", full.names = TRUE, pattern = "xlsx"), readxl::read_xlsx)
-# ) %>%
-#   lapply(type_convert) %>%
-#   bind_rows()
+# pse_remove_label$duplicates <- nrow(pse_total_dat) - nrow(pse_simple_deduplication) + pse_spreadsheet_extract %>%
+#                                                           filter(!is.na(duplicate_of)) %>%
+#                                                           nrow()
+# 
+pse_remove_label$duplicates <- ""
 
-pse_spreadsheet_extract <- read_csv("~/Documents/GitHub/kp-data-private/data/complete_dat.csv", show_col_types = F) %>%
-  filter(indicator == "pse")
+# pse_surveillance_review_input <- pse_spreadsheet_extract %>%
+#   mutate(iso3 = countrycode::countrycode(country.name, "country.name", "iso3c"),
+#          kp = ifelse(kp == "TGW", "TG", kp)) %>%
+#   filter(is.na(duplicate_of),
+#          !is.na(iso3),
+#          is.na(uid)) %>%
+#   count(kp) %>%
+#   mutate(dataset = "Surveillance review")
 
-write_csv(pse_spreadsheet_extract, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_spreadsheet_extract.csv")
-
-pse_remove_label$duplicates <- nrow(pse_total_dat) - nrow(pse_simple_deduplication) + pse_spreadsheet_extract %>%
-                                                          filter(!is.na(duplicate_of)) %>%
-                                                          nrow()
-
-pse_remove_label$duplicates <- paste0("Duplicated data (n = ", pse_remove_label$duplicates, ")")
-
-pse_surveillance_review_input <- pse_spreadsheet_extract %>%
-  mutate(iso3 = countrycode::countrycode(country.name, "country.name", "iso3c"),
-         kp = ifelse(kp == "TGW", "TG", kp)) %>%
-  filter(is.na(duplicate_of),
-         !is.na(iso3),
-         is.na(uid)) %>%
-  count(kp) %>%
-  mutate(dataset = "Surveillance review")
-
-pse_inputs <- pse_inputs %>%
-  bind_rows(pse_surveillance_review_input)
+# pse_inputs <- pse_inputs %>%
+#   bind_rows(pse_surveillance_review_input)
 
 pse_inputs <- pse_inputs %>%
   bind_rows(pse_inputs %>%
@@ -62,6 +53,7 @@ pse_inputs <- pse_inputs %>%
   filter(kp %in% c("FSW", "MSM", "PWID", "TG"))
 
 pse_inputs_total <- pse_inputs %>%
+  # filter(dataset != "Total") %>%
   group_by(dataset) %>%
   summarise(n = sum(n)) %>%
   mutate(n = paste0("(n = ", n, ")"))
@@ -85,7 +77,7 @@ pse_inputs_labels <- apply(pse_inputs_text, 1, collapse)
 ### Clean data
 
 # Remove duplicates
-pse_spreadsheet_extract <- pse_spreadsheet_extract %>%
+pse_total_dat <- pse_total_dat_original %>%
   mutate(iso3 = countrycode::countrycode(country.name, "country.name", "iso3c"),
          data_checked = tolower(data_checked),
          source_found = tolower(source_found)) %>%
@@ -93,33 +85,33 @@ pse_spreadsheet_extract <- pse_spreadsheet_extract %>%
          !is.na(iso3))
 
 #Remove non-specific area names
-pse_remove_label$nonspec <- pse_spreadsheet_extract %>%
+nonspec_nrow_pse <- pse_total_dat %>%
   filter(str_detect(area_name, regex("urban|rural|county|counties|districts|state|total", ignore_case = TRUE))) %>%
   nrow()
 
-pse_remove_label$nonspec <- paste0("Unspecific area name (n = ", pse_remove_label$nonspec, ")")
+pse_remove_label$nonspec <- paste0("Unspecific area name (n = ", nonspec_nrow_pse, ")")
 
-pse_spreadsheet_extract <- pse_spreadsheet_extract %>%
+pse_total_dat <- pse_total_dat %>%
   filter(!str_detect(area_name, regex("urban|rural|county|counties|districts|state|total", ignore_case = TRUE)))
 
 #Remove extrapolated values
-pse_remove_label$model <- pse_spreadsheet_extract %>%
+modelled_nrow_pse <- pse_total_dat %>%
   filter(simple_method == "Modelled") %>%
   nrow()
 
-pse_remove_label$model <- paste0("Extrapolated/modelled data (n = ", pse_remove_label$model, ")")
+pse_remove_label$model <- paste0("Extrapolated/modelled data (n = ", modelled_nrow_pse, ")")
 
-pse_spreadsheet_extract <- pse_spreadsheet_extract %>%
+pse_total_dat <- pse_total_dat %>%
   filter(simple_method != "Modelled")
 
 #Remove non-empirical methods
-pse_remove_label$non_emp <- pse_spreadsheet_extract %>%
+non_emp_nrow_pse <- pse_total_dat %>%
   filter(simple_method == "Non-empirical") %>%
   nrow()
 
-pse_remove_label$non_emp <- paste0("Non-empirical methods (n = ", pse_remove_label$non_emp, ")")
+pse_remove_label$non_emp <- paste0("Non-empirical methods (n = ", non_emp_nrow_pse, ")")
 
-pse_spreadsheet_extract <- pse_spreadsheet_extract %>%
+pse_total_dat <- pse_total_dat %>%
   filter(simple_method != "Non-empirical")
 
 # #Remove outliers
@@ -128,7 +120,7 @@ pse_spreadsheet_extract <- pse_spreadsheet_extract %>%
 # #Remove unconfirmed data
 # pse_remove_label$unconf <- NA
 
-# pse_spreadsheet_extract %>%
+# pse_total_dat %>%
 #   filter(!data_checked %in% c("yes", "remove"),
 #          (is.na(source_found) | source_found == "no"),
 #          year > 2009) %>%
@@ -136,11 +128,11 @@ pse_spreadsheet_extract <- pse_spreadsheet_extract %>%
 #   arrange(desc(n)) %>%
 #   View()
 
-pse_spreadsheet_extract <- pse_spreadsheet_extract %>%
+pse_total_dat <- pse_total_dat %>%
   ungroup() %>%
   mutate(idx = row_number())
 
-truly_checked <- pse_spreadsheet_extract %>%
+truly_checked <- pse_total_dat %>%
   filter(data_checked == "yes",
          year > 2009,
          # source_found != "private"
@@ -148,7 +140,7 @@ truly_checked <- pse_spreadsheet_extract %>%
   ) %>%
   mutate(data_checked = "Yes")
 
-mapped_place <- pse_spreadsheet_extract %>%
+mapped_place <- pse_total_dat %>%
   filter(str_detect(method, "apping|PLACE"),
          data_checked == "remove",
          source_found %in% c("yes"),
@@ -159,16 +151,16 @@ mapped_place <- pse_spreadsheet_extract %>%
          ) %>%
   mutate(data_checked = "Yes")
 
-unknown <- pse_spreadsheet_extract %>%
-  filter(
-    (is.na(data_checked) & source_found == "no")  | (is.na(data_checked) & is.na(source_found)),
-    year > 2009
-  ) %>%
-  mutate(data_checked = "No")
+pse_remove_label$unsourced <- paste0("Unsourced (n = ", nrow(pse_total_dat) - nrow(truly_checked) - nrow(mapped_place), ")")
+  
+duplicate_nrow <- nrow(pse_total_dat_original) -# Total data
+  (nonspec_nrow_pse + # non specific area name
+     modelled_nrow_pse + # modelled
+     non_emp_nrow_pse + # non empirical
+     nrow(pse_total_dat) - nrow(truly_checked) - nrow(mapped_place) + # Unsourced
+     nrow(bind_rows(truly_checked, mapped_place))) # Cleaned PSE data (the remiander)
 
-pse_remove_label$unsourced <- paste0("Unsourced (n = ", nrow(unknown), ")")
-# 
-# View(filter(pse_spreadsheet_extract, !idx %in% c(truly_checked$idx, mapped_place$idx, unknown$idx)) %>% select(data_checked, source_found, everything()) %>% filter(year > 2009))
+pse_remove_label$duplicates <- paste0("Duplicated data (n = ", duplicate_nrow, ")")
 
 pse_cleaned_data <- bind_rows(truly_checked, mapped_place) %>%
   mutate(kp = ifelse(kp == "TGW", "TG", kp)) %>%
@@ -300,55 +292,55 @@ saveRDS(pse_inputs_text, "R/Report/R objects for report/PSE/pse_input_count_text
 # 
 pal <- wesanderson::wes_palette("Zissou1", 10, "continuous")
 
-pse_spreadsheet_extract <- read_csv("~/Documents/GitHub/kp-data-private/data/complete_dat.csv") %>%
+pse_total_dat <- read_csv("~/Documents/GitHub/kp-data-private/data/complete_dat.csv") %>%
   filter(indicator == "pse")
 pse_final <- read.csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_final_sourced.csv")
 pse_cleaned_data <- read_csv("src/aaa_assign_populations/pse_cleaned_sourced_data.csv")
 
-method_counts <- pse_spreadsheet_extract %>%
-  filter(str_detect(method, regex("enumeration|delphi|wisdom|WOTC|WODC", ignore_case = TRUE))) %>%
-  filter(source_found == "yes") %>%
-  mutate(method = "Non-empirical") %>%
-  bind_rows(pse_final) %>%
-  mutate(year = plyr::round_any(year, 3, floor),
+method_counts <- pse_total_dat %>%
+  filter(year > 2009, source_found == "yes") %>%
+  mutate(
+    year = ifelse(year == 2022, 2021, year),
+    year = plyr::round_any(year, 3, floor),
          year = paste0(year, "-", year+2),
          # year = ifelse(year == "2019-2021", "2019-2022", year)
   ) %>%
-  filter(year != "2007-2009") %>%
-  distinct(year, ref, kp) %>%
+  distinct(year, kp, study_idx) %>%
   count(year, kp) %>%
   mutate(kp = ifelse(kp == "TG", "TGW", kp))
 
-fig2 <- pse_spreadsheet_extract %>%
-  filter(str_detect(method, regex("enumeration|delphi|wisdom|WOTC|WODC", ignore_case = TRUE))) %>%
-  filter(source_found == "yes") %>%
-  mutate(method = "Non-empirical",
-         kp = ifelse(kp == "TG", "TGW", kp)) %>%
-  bind_rows(pse_final %>% mutate(kp = ifelse(kp == "TG", "TGW", kp))) %>%
-  filter(year > 2009) %>%
-  mutate(year = plyr::round_any(year, 3, floor),
+fig2 <- pse_total_dat %>%
+  filter(year > 2009, source_found == "yes") %>%
+  mutate(
+    year = ifelse(year == 2022, 2021, year),
+    year = plyr::round_any(year, 3, floor),
          year = paste0(year, "-", year+2),
-         method = ifelse(method == "programmatic mapping", "PLACE/Mapping", method)
-         # year = ifelse(year == "2019-2021", "2019-2020", year)
-         ) %>%
-  filter(year != "2007-2009") %>%
-  distinct(kp, method, year, ref) %>%
-  group_by(kp, method, year) %>%
+         simple_method = ifelse(str_detect(simple_method, "multiplier|Multiplier"), "Multiplier", simple_method),
+         simple_method = ifelse(str_detect(simple_method, "Modelled"), "Modelled/extrapolated", simple_method),
+         kp = ifelse(kp == "TG", "TGW", kp)
+         # year = ifelse(year == "2019-2021", "2019-2022", year)
+  ) %>%
+  filter(!is.na(simple_method)) %>%
+  distinct(kp, simple_method, year, study_idx) %>%
+  group_by(kp, simple_method, year) %>%
   count() %>%
+  name_kp(F) %>%
+  # ungroup() %>%
+  # distinct(simple_method)
   # mutate(simple_method = ifelse(method %in% c("2S-CRC", "3S-CRC", "SS-PSE", "Object/event multiplier", "Service multiplier"), 1, 0)) %>%
   # group_by(year) %>%
   # count(simple_method)
-  mutate(method = factor(method,
-                         levels= c("3S-CRC", "SS-PSE", "2S-CRC", "Object multiplier", "Event multiplier", "Multiple methods - empirical", "Service multiplier", "PLACE/Mapping", "Multiple methods - mixture", "Non-empirical"))) %>%
+  mutate(simple_method = factor(simple_method,
+                         levels= c("3S-CRC", "SS-PSE", "2S-CRC", "Multiplier", "Multiple methods - empirical", "NSUM", "PLACE/mapping", "Multiple methods - mixture", "Modelled/extrapolated", "Non-empirical"))) %>%
   ggplot(aes(x=year, y=n)) +
-  geom_col(aes(fill=method), position = "fill") +
+  geom_col(aes(fill=simple_method), position = "fill") +
   scale_fill_manual(values = pal)+
   scale_y_continuous(labels = scales::label_percent()) +
   facet_wrap(~kp, nrow=1) +
   moz.utils::standard_theme() +
   labs(x=element_blank(), y=element_blank(), fill=element_blank()) +
   coord_cartesian(clip = "off", ylim = c(0,1)) +
-  geom_text(data = method_counts, aes(y=1.1, label = n)) +
+  geom_text(data = method_counts %>% name_kp(F), aes(y=1.1, label = n)) +
   theme(strip.text = element_text(face = "bold", size=13),
         strip.text.x = element_text(margin = margin(b=20)),
         axis.text.x = element_text(angle = 20, hjust = 1))
@@ -440,10 +432,10 @@ pse_flow %>%
 #   lapply(type_convert) %>%
 #   bind_rows()
 
-prev_spreadsheet_extract <- read_csv("~/Documents/GitHub/kp-data-private/data/complete_dat.csv") %>%
+prev_total_dat_original <- read_csv("~/Documents/GitHub/kp-data-private/data/complete_dat.csv") %>%
   filter(indicator == "prevalence")
 
-prev_spreadsheet_extract <-  prev_spreadsheet_extract %>%
+prev_total_dat_original <-  prev_total_dat_original %>%
   mutate(prop_estimate = ifelse(prop_estimate > 1, prop_estimate/100, prop_estimate),
          prop_upper = ifelse(prop_upper > 1, prop_upper/100, prop_upper),
          prop_lower = ifelse(prop_lower > 1, prop_lower/100, prop_lower),
@@ -465,44 +457,41 @@ prev_spreadsheet_extract <-  prev_spreadsheet_extract %>%
          ),
          data_checked = tolower(data_checked),
          source_found = tolower(source_found)
-  )
-
-write_csv(prev_spreadsheet_extract, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_spreadsheet_extract.csv")
+  ) %>%
+  separate(dataset_id, sep = "_", into=c("dataset", NA), remove = F) %>%
+  mutate(dataset = ifelse(dataset == "KP", "KP_Atlas", dataset),
+         dataset = ifelse(is.na(dataset), "Surveillance review", dataset)) %>%
+  filter(!dataset %in% c("Goals_Nat", "Goals", "Optima input"),
+         year > 2009,
+         kp != "SW",
+         kp != "TGM") %>%
+  mutate(kp = ifelse(str_detect(kp, "TG"), "TGW", kp))
 
 prev_remove_label <- list()
 
-prev_total_dat <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/2021_11_24_prev_all_data.csv")
-
-prev_inputs <- prev_total_dat %>%
-  filter(!dataset %in% c("Goals_Nat", "Optima input")) %>%
+prev_inputs <- prev_total_dat_original %>%
   count(dataset, kp) 
 
-prev_simple_deduplication <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/2021_11_24_prev_deduplicated.csv")
+prev_remove_label$duplicates <- ""
 
-prev_remove_label$duplicates <- nrow(prev_total_dat) - nrow(prev_simple_deduplication) + prev_spreadsheet_extract %>%
-  filter(!is.na(duplicate_of) | !is.na(is_aggregate)) %>%
-  nrow()
-
-prev_remove_label$duplicates <- paste0("Duplicated data (n = ", prev_remove_label$duplicates, ")")
-
-prev_surveillance_review_input <- prev_spreadsheet_extract %>%
-  mutate(iso3 = countrycode::countrycode(country.name, "country.name", "iso3c"),
-         kp = ifelse(kp %in% c("TGW", "TGM", "TGW/GQ"), "TG", kp)) %>%
-  filter(is.na(duplicate_of),
-         !is.na(iso3),
-         is.na(uid)) %>%
-  count(kp) %>%
-  mutate(dataset = "Surveillance review")
-
-prev_inputs <- prev_inputs %>%
-  bind_rows(prev_surveillance_review_input)
+# prev_surveillance_review_input <- prev_total_dat %>%
+#   mutate(iso3 = countrycode::countrycode(country.name, "country.name", "iso3c"),
+#          kp = ifelse(kp %in% c("TGW", "TGM", "TGW/GQ"), "TG", kp)) %>%
+#   filter(is.na(duplicate_of),
+#          !is.na(iso3),
+#          is.na(uid)) %>%
+#   count(kp) %>%
+#   mutate(dataset = "Surveillance review")
+# 
+# prev_inputs <- prev_inputs %>%
+#   bind_rows(prev_surveillance_review_input)
 
 prev_inputs <- prev_inputs %>%
   bind_rows(prev_inputs %>%
               group_by(kp) %>%
               summarise(n = sum(n)) %>%
               mutate(dataset = "Total")) %>%
-  filter(kp %in% c("FSW", "MSM", "PWID", "TG"),
+  filter(kp %in% c("FSW", "MSM", "PWID", "TGW"),
          !dataset %in% c("Goals_Nat", "Optima input"))
 
 prev_inputs_total <- prev_inputs %>%
@@ -511,7 +500,7 @@ prev_inputs_total <- prev_inputs %>%
   mutate(n = paste0("(n = ", n, ")"))
 
 prev_inputs_text <- crossing(dataset = prev_inputs$dataset,
-                            kp = c("FSW", "MSM", "PWID", "TG")) %>%
+                            kp = c("FSW", "MSM", "PWID", "TGW")) %>%
   left_join(prev_inputs) %>%
   mutate(n = replace_na(n, 0),
          n = paste0("n = ", n)) %>%
@@ -528,26 +517,26 @@ prev_inputs_labels <- apply(prev_inputs_text, 1, collapse)
 
 ## Clean prevalence data
 
-prev_spreadsheet_extract <- prev_spreadsheet_extract %>%
+prev_total_dat <- prev_total_dat_original %>%
   mutate(iso3 = countrycode::countrycode(country.name, "country.name", "iso3c")) %>%
   filter(is.na(duplicate_of),
          is.na(is_aggregate),
          !is.na(iso3))
 
 # Remove non-specific area names
-prev_remove_label$nonspec <- prev_spreadsheet_extract %>%
+nonspec_nrow_prev <- prev_total_dat %>%
   filter(str_detect(area_name, regex("urban|rural|county|counties|districts|state|total", ignore_case = TRUE))) %>%
   nrow()
 
-prev_remove_label$nonspec <- paste0("Unspecific area name (n = ", prev_remove_label$nonspec, ")")
+prev_remove_label$nonspec <- paste0("Unspecific area name (n = ", nonspec_nrow_prev, ")")
 
-prev_spreadsheet_extract <- prev_spreadsheet_extract %>%
+prev_total_dat <- prev_total_dat %>%
   filter(!str_detect(area_name, regex("urban|rural|county|counties|districts|state|total", ignore_case = TRUE)))
 
 # Remove outliers
 # prev_remove_label$unconf <- NA
 
-# prev_spreadsheet_extract %>%
+# prev_total_dat %>%
 #   filter(!data_checked %in% c("yes", "remove"),
 #          !(data_checked == "no" & iso3 == "ZWE"),
 #          (is.na(source_found) | source_found == "no"),
@@ -555,7 +544,7 @@ prev_spreadsheet_extract <- prev_spreadsheet_extract %>%
 #   count(iso3, kp, year) %>%
 #   arrange(desc(n)) %>% 
 #   left_join(
-#     prev_spreadsheet_extract %>%
+#     prev_total_dat %>%
 #       filter(!data_checked %in% c("yes", "remove"),
 #              !(data_checked == "no" & iso3 == "ZWE"),
 #              (is.na(source_found) | source_found == "no"),
@@ -567,7 +556,7 @@ prev_spreadsheet_extract <- prev_spreadsheet_extract %>%
 #   mutate(country = countrycode(iso3, "iso3c", "country.name")) %>%
 #   write_csv("~/Downloads/missing_prev.csv", na = "")
 # 
-# prev_spreadsheet_extract %>%
+# prev_total_dat %>%
 #   filter(!data_checked %in% c("yes", "remove"),
 #          !(data_checked == "no" & iso3 == "ZWE"),
 #          (is.na(source_found) | source_found == "no"),
@@ -577,35 +566,35 @@ prev_spreadsheet_extract <- prev_spreadsheet_extract %>%
 #   mutate(country = countrycode(iso3, "iso3c", "country.name")) %>%
 #   write_csv("~/Downloads/missing_prev_iso.csv", na = "")
 # 
-prev_spreadsheet_extract <- prev_spreadsheet_extract %>%
+prev_total_dat <- prev_total_dat %>%
   ungroup() %>%
   mutate(idx = row_number())
 
-prev_checked <- prev_spreadsheet_extract %>%
+prev_checked <- prev_total_dat %>%
   filter(data_checked == "yes",
          # source_found != "private",
          year > 2009
   ) %>%
   mutate(data_checked = "Yes")
 
-prev_unknown <- prev_spreadsheet_extract %>%
-  filter(
-    (is.na(data_checked) & source_found == "no")  | (is.na(data_checked) & is.na(source_found)),
-    year > 2009
-  ) %>%
-  mutate(data_checked = "No")
-
-prev_remove_label$unsourced <- paste0("Unsourced (n = ", nrow(prev_unknown), ")")
+unsourced_nrow_prev <- nrow(prev_total_dat) - nrow(prev_checked)
+prev_remove_label$unsourced <- paste0("Unsourced (n = ", unsourced_nrow_prev , ")")
 
 prev_cleaned_data <- bind_rows(prev_checked) %>%
-  mutate(kp = ifelse(kp == "TGW", "TG", kp),
-         method = case_when(
+  mutate(method = case_when(
            method %in% c("Lab") ~ "lab",
-           method %in%c("Self report", "self-report", "Self-report") ~ "selfreport",
-           method == "Unknown" ~ "selfreport",
+           str_detect(method, "elf") ~ "selfreport",
+           is.na(method) ~ "selfreport",
            TRUE ~ method
          )) %>%
-  filter(kp %in% c("FSW", "MSM", "PWID", "TG"))
+  filter(kp %in% c("FSW", "MSM", "PWID", "TGW"))
+
+duplicate_nrow_prev <- nrow(prev_total_dat_original) -# Total data
+  (nonspec_nrow_prev + # non specific area name
+     unsourced_nrow_prev + # Unsourced
+     nrow(prev_cleaned_data)) # Cleaned prev data (the remiander)
+
+prev_remove_label$duplicates <- paste0("Duplicated data (n = ", duplicate_nrow_prev, ")")
 
 write_csv(prev_cleaned_data, "src/aaa_assign_province/prev_clean_sourced.csv")
 
@@ -629,70 +618,7 @@ setwd(rprojroot::find_rstudio_root_file())
 #   inp_gf [label = '@@1-3'];
 #   inp_cdc [label = '@@1-4'];
 #   inp_surv [label = '@@1-5'];
-# }
-
-prev_flow <- grViz("
-digraph a_nice_graph {
-  
-    subgraph cluster_0 {
-    # style=filled;
-    # color=lightgrey;
-  node [fontname = Helvetica, fontcolor = darkslategray,shape = rectangle, color = darkslategray]
-    inp_gam [label = '@@1-1']
-    inp_atlas [label = '@@1-2'];
-    inp_gf [label = '@@1-3'];
-    inp_cdc [label = '@@1-4'];
-    inp_surv [label = '@@1-5'];
-    
-  node [shape=none, width=0, height=0, label='']
-    p0
-    
-    edge [dir = none, style=invis]
-      p0 -> inp_cdc;
-      {rank = same; inp_gam -> p0 -> inp_atlas};
-      {rank = same; inp_gf -> inp_cdc -> inp_surv};
-  
-    label = 'Data sources';
-    }
-    
-  node [fontname = Helvetica, fontcolor = darkslategray,shape = rectangle, color = darkslategray]
-  inp_total [label = '@@1-6']
-  m1_dedup [label = '@@2-1']
-  m2_nonspec [label = '@@2-2']
-  m3_unsourced [label = '@@2-3']
-  clean [label = '@@3']
-  c1_denom [label = '@@2-6']
-  final [label = '@@4']
-    
-  node [shape=none, width=0, height=0, label='']
-  p3 -> clean;
-  p6 -> final;
-  {rank=same; p1 -> m1_dedup};
-  {rank=same; p2 -> m2_nonspec};
-  {rank=same; p3 -> m3_unsourced};
-  {rank=same; p6 -> c1_denom};
-  
-  inp_cdc -> inp_total;
-
-  edge [dir = none]
-    inp_total -> p1;
-    p1 -> p2;
-    p2 -> p3;
-    clean -> p6;
-    
-}
-
-[1]: prev_inputs_labels
-[2]: unlist(prev_remove_label)
-[3]: prev_clean_labels
-[4]: prev_final_labels
-")
-
-
-prev_flow %>%
-  export_svg %>% 
-  charToRaw %>% 
-  rsvg::rsvg_png("R/Report/R objects for report/Prevalence/prev_flowchart.png")
+# 
 
 
 
@@ -706,10 +632,10 @@ prev_flow %>%
 #   lapply(type_convert) %>%
 #   bind_rows()
 
-art_spreadsheet_extract <- read_csv("~/Documents/GitHub/kp-data-private/data/complete_dat.csv") %>%
+art_total_dat_original <- read_csv("~/Documents/GitHub/kp-data-private/data/complete_dat.csv") %>%
   filter(indicator == "art")
 
-art_spreadsheet_extract <-  art_spreadsheet_extract %>%
+art_total_dat_original <-  art_total_dat_original %>%
   mutate(prop_estimate = ifelse(prop_estimate > 1, prop_estimate/100, prop_estimate),
          prop_upper = ifelse(prop_upper > 1, prop_upper/100, prop_upper),
          prop_lower = ifelse(prop_lower > 1, prop_lower/100, prop_lower),
@@ -730,44 +656,29 @@ art_spreadsheet_extract <-  art_spreadsheet_extract %>%
          ),
          data_checked = tolower(data_checked),
          source_found = tolower(source_found)
-  )
-
-write_csv(art_spreadsheet_extract, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_spreadsheet_extract.csv")
+  ) %>%
+  separate(dataset_id, sep = "_", into=c("dataset", NA), remove = F) %>%
+  mutate(dataset = ifelse(dataset == "KP", "KP_Atlas", dataset),
+         dataset = ifelse(is.na(dataset), "Surveillance review", dataset)) %>%
+  filter(!dataset %in% c("Goals_Nat", "Goals", "Optima input"),
+         year > 2009,
+         kp != "SW",
+         kp != "TGM") %>%
+  mutate(kp = ifelse(str_detect(kp, "TG"), "TGW", kp))
 
 art_remove_label <- list()
 
-art_total_dat <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_all_data.csv")
-
-art_inputs <- art_total_dat %>%
-  filter(!dataset %in% c("Goals_Nat", "Optima input")) %>%
+art_inputs <- art_total_dat_original %>%
   count(dataset, kp) 
 
-art_simple_deduplication <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_deduplicated.csv")
-
-art_remove_label$duplicates <- nrow(art_total_dat) - nrow(art_simple_deduplication) + art_spreadsheet_extract %>%
-  filter(!is.na(duplicate_of) | !is.na(is_aggregate)) %>%
-  nrow()
-
-art_remove_label$duplicates <- paste0("Duplicated data (n = ", art_remove_label$duplicates, ")")
-
-art_surveillance_review_input <- art_spreadsheet_extract %>%
-  mutate(iso3 = countrycode::countrycode(country.name, "country.name", "iso3c"),
-         kp = ifelse(kp %in% c("TGW", "TGM", "TGW/GQ"), "TG", kp)) %>%
-  filter(is.na(duplicate_of),
-         !is.na(iso3),
-         is.na(uid)) %>%
-  count(kp) %>%
-  mutate(dataset = "Surveillance review")
-
-art_inputs <- art_inputs %>%
-  bind_rows(art_surveillance_review_input)
+art_remove_label$duplicates <- ""
 
 art_inputs <- art_inputs %>%
   bind_rows(art_inputs %>%
               group_by(kp) %>%
               summarise(n = sum(n)) %>%
               mutate(dataset = "Total")) %>%
-  filter(kp %in% c("FSW", "MSM", "PWID", "TG"),
+  filter(kp %in% c("FSW", "MSM", "PWID", "TGW"),
          !dataset %in% c("Goals_Nat", "Optima input"))
 
 art_inputs_total <- art_inputs %>%
@@ -776,7 +687,7 @@ art_inputs_total <- art_inputs %>%
   mutate(n = paste0("(n = ", n, ")"))
 
 art_inputs_text <- crossing(dataset = art_inputs$dataset,
-                             kp = c("FSW", "MSM", "PWID", "TG")) %>%
+                             kp = c("FSW", "MSM", "PWID", "TGW")) %>%
   left_join(art_inputs) %>%
   mutate(n = replace_na(n, 0),
          n = paste0("n = ", n)) %>%
@@ -793,26 +704,26 @@ art_inputs_labels <- apply(art_inputs_text, 1, collapse)
 
 ## Clean artalence data
 
-art_spreadsheet_extract <- art_spreadsheet_extract %>%
+art_total_dat <- art_total_dat_original %>%
   mutate(iso3 = countrycode::countrycode(country.name, "country.name", "iso3c")) %>%
   filter(is.na(duplicate_of),
          is.na(is_aggregate),
          !is.na(iso3))
 
 # Remove non-specific area names
-art_remove_label$nonspec <- art_spreadsheet_extract %>%
+nonspec_nrow_art <- art_total_dat %>%
   filter(str_detect(area_name, regex("urban|rural|county|counties|districts|state|total", ignore_case = TRUE))) %>%
   nrow()
 
-art_remove_label$nonspec <- paste0("Unspecific area name (n = ", art_remove_label$nonspec, ")")
+art_remove_label$nonspec <- paste0("Unspecific area name (n = ", nonspec_nrow_art, ")")
 
-art_spreadsheet_extract <- art_spreadsheet_extract %>%
+art_total_dat <- art_total_dat %>%
   filter(!str_detect(area_name, regex("urban|rural|county|counties|districts|state|total", ignore_case = TRUE)))
 
 # Remove outliers
 # art_remove_label$unconf <- NA
 
-# art_spreadsheet_extract %>%
+# art_total_dat %>%
 #   filter(!data_checked %in% c("yes", "remove"),
 #          (is.na(source_found) | source_found == "no"),
 #          year > 2009) %>%
@@ -820,36 +731,34 @@ art_spreadsheet_extract <- art_spreadsheet_extract %>%
 #   arrange(desc(n)) %>%
 #   View()
 
-art_checked <- art_spreadsheet_extract %>%
+art_checked <- art_total_dat %>%
   filter(data_checked == "yes",
          # source_found != "private",
          year > 2009
   ) %>%
   mutate(data_checked = "Yes")
 
-art_unknown <- art_spreadsheet_extract %>%
-  filter(
-    (is.na(data_checked) & source_found == "no")  | (is.na(data_checked) & is.na(source_found)),
-    year > 2009
-  ) %>%
-  mutate(data_checked = "No")
+unsourced_nrow_art <- nrow(art_total_dat) - nrow(art_checked)
+art_remove_label$unsourced <- paste0("Unsourced (n = ", unsourced_nrow_art, ")")
 
-art_remove_label$unsourced <- paste0("Unsourced (n = ", nrow(art_unknown), ")")
+art_selfself <- art_checked %>%
+  filter(
+    method == "self-self",
+    year > 2009
+  ) 
+
+art_remove_label$selfself <- paste0("Self-report HIV status (n = ", nrow(art_selfself), ")")
 
 art_cleaned_data <- bind_rows(art_checked) %>%
-  mutate(kp = ifelse(kp == "TGW", "TG", kp),
-         prop_estimate = ifelse(method == "VLS" & !is.na(method), prop_estimate/.9, prop_estimate),
-         prop_lower = ifelse(method == "VLS" & !is.na(method), prop_lower/.9, prop_lower),
-         prop_upper = ifelse(method == "VLS" & !is.na(method), prop_upper/.9, prop_upper),
-         method = ifelse(method == "VLS" & !is.na(method), "Lab", method),
-         method = case_when(
-           method %in% c("Lab") ~ "lab",
-           method %in%c("Self report", "self-report", "Self-report") ~ "selfreport",
-           method == "Unknown" ~ NA_character_,
-           TRUE ~ method
-         )
-         ) %>%
-  filter(kp %in% c("FSW", "MSM", "PWID", "TG"))
+  filter(method != "self-self") %>%
+  filter(kp %in% c("FSW", "MSM", "PWID", "TGW"))
+
+duplicate_nrow_art <- nrow(art_total_dat_original) -# Total data
+  (nonspec_nrow_art + # non specific area name
+     unsourced_nrow_art + # Unsourced
+     nrow(art_cleaned_data)) # Cleaned prev data (the remiander)
+
+art_remove_label$duplicates <- paste0("Duplicated data (n = ", duplicate_nrow_art, ")")
 
 write_csv(art_cleaned_data, "src/aaa_assign_province/art_clean_sourced.csv")
 
@@ -877,8 +786,8 @@ prev_final <- lapply(paste0("archive/aaa_extrapolate_naomi/", prev_id, "/prev.cs
   bind_rows()
 
 prev_final_text <- prev_final %>%
-  mutate(kp = ifelse(kp == "TGW", "TG", kp)) %>%
-  filter(kp %in% c("FSW", "MSM", "PWID", "TG")) %>%
+  mutate(kp = ifelse(kp == "TG", "TGW", kp)) %>%
+  filter(kp %in% c("FSW", "MSM", "PWID", "TGW")) %>%
   count(kp) %>%
   mutate(n = paste0("n = ", n)) %>%
   pivot_wider(names_from = kp, values_from = n) %>%
@@ -903,8 +812,8 @@ art_final <- lapply(paste0("archive/aaa_extrapolate_naomi/", prev_id[!is.na(prev
   bind_rows()
 
 art_final_text <- art_final %>%
-  mutate(kp = ifelse(kp == "TGW", "TG", kp)) %>%
-  filter(kp %in% c("FSW", "MSM", "PWID", "TG")) %>%
+  mutate(kp = ifelse(kp == "TG", "TGW", kp)) %>%
+  filter(kp %in% c("FSW", "MSM", "PWID", "TGW")) %>%
   count(kp) %>%
   mutate(n = paste0("n = ", n)) %>%
   pivot_wider(names_from = kp, values_from = n) %>%
@@ -928,6 +837,68 @@ saveRDS(art_final_text, "R/Report/R objects for report/ART coverage/art_count_te
 write_csv(art_final, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/ART coverage/art_final.csv")
 saveRDS(art_inputs_text, "R/Report/R objects for report/ART coverage/art_input_count_text.rds")
 
+prev_flow <- grViz("
+digraph a_nice_graph {
+  
+    subgraph cluster_0 {
+    # style=filled;
+    # color=lightgrey;
+  node [fontname = Helvetica, fontcolor = darkslategray,shape = rectangle, color = darkslategray]
+    inp_gam [label = '@@1-1']
+    inp_gf [label = '@@1-2'];
+    inp_cdc [label = '@@1-3'];
+    inp_surv [label = '@@1-4'];
+    
+  node [shape=none, width=0, height=0, label='']
+    p0
+    
+    edge [dir = none, style=invis]
+      p0 -> inp_surv;
+      {rank = same; inp_gf -> inp_atlas};
+      {rank = same; inp_cdc -> inp_surv};
+  
+    label = 'Data sources';
+    }
+    
+  node [fontname = Helvetica, fontcolor = darkslategray,shape = rectangle, color = darkslategray]
+  inp_total [label = '@@1-5']
+  m1_dedup [label = '@@2-1']
+  m2_nonspec [label = '@@2-2']
+  m3_unsourced [label = '@@2-3']
+  clean [label = '@@3']
+  c1_denom [label = '@@2-4']
+  final [label = '@@4']
+    
+  node [shape=none, width=0, height=0, label='']
+  p3 -> clean;
+  p6 -> final;
+  {rank=same; p1 -> m1_dedup};
+  {rank=same; p2 -> m2_nonspec};
+  {rank=same; p3 -> m3_unsourced};
+  {rank=same; p6 -> c1_denom};
+  
+  inp_surv -> inp_total;
+
+  edge [dir = none]
+    inp_total -> p1;
+    p1 -> p2;
+    p2 -> p3;
+    clean -> p6;
+    
+}
+
+[1]: prev_inputs_labels
+[2]: unlist(prev_remove_label)
+[3]: prev_clean_labels
+[4]: prev_final_labels
+")
+
+
+prev_flow %>%
+  export_svg %>% 
+  charToRaw %>% 
+  rsvg::rsvg_png("R/Report/R objects for report/Prevalence/prev_flowchart.png")
+
 art_flow <- grViz("
 digraph a_nice_graph {
   
@@ -950,16 +921,18 @@ digraph a_nice_graph {
   m1_dedup [label = '@@2-1']
   m2_nonspec [label = '@@2-2']
   m3_unsourced [label = '@@2-3']
+  m4_selfself [label = '@@2-4']
   clean [label = '@@3']
   c1_denom [label = '@@2-6']
   final [label = '@@4']
     
   node [shape=none, width=0, height=0, label='']
-  p3 -> clean;
+  p4 -> clean;
   p6 -> final;
   {rank=same; p1 -> m1_dedup};
   {rank=same; p2 -> m2_nonspec};
   {rank=same; p3 -> m3_unsourced};
+  {rank=same; p4 -> m4_selfself};
   {rank=same; p6 -> c1_denom};
   
   inp_gf -> inp_total;
@@ -968,6 +941,7 @@ digraph a_nice_graph {
     inp_total -> p1;
     p1 -> p2;
     p2 -> p3;
+    p3 -> p4;
     clean -> p6;
     
 }

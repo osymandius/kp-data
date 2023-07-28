@@ -13,8 +13,8 @@ pse_remove_label <- list()
 
 pse_total_dat_original <- read_csv("~/Documents/GitHub/kp-data-private/data/complete_dat.csv", show_col_types = F) %>%
   filter(indicator == "pse") %>%
-  mutate(kp = ifelse(kp == "TGW", "TG", kp)) %>%
-  filter(kp %in% c("FSW", "MSM", "PWID", "TG")) %>%
+  mutate(kp = ifelse(kp == "TG", "TGW", kp)) %>%
+  filter(kp %in% c("FSW", "MSM", "PWID", "TGW")) %>%
   separate(dataset_id, sep = "_", into=c("dataset", NA), remove = F) %>%
   mutate(dataset = ifelse(dataset == "KP", "KP_Atlas", dataset),
          dataset = ifelse(is.na(dataset), "Surveillance review", dataset)) %>%
@@ -50,7 +50,7 @@ pse_inputs <- pse_inputs %>%
               group_by(kp) %>%
               summarise(n = sum(n)) %>%
               mutate(dataset = "Total")) %>%
-  filter(kp %in% c("FSW", "MSM", "PWID", "TG"))
+  filter(kp %in% c("FSW", "MSM", "PWID", "TGW"))
 
 pse_inputs_total <- pse_inputs %>%
   # filter(dataset != "Total") %>%
@@ -59,7 +59,7 @@ pse_inputs_total <- pse_inputs %>%
   mutate(n = paste0("(n = ", n, ")"))
 
 pse_inputs_text <- crossing(dataset = pse_inputs$dataset,
-                        kp = c("FSW", "MSM", "PWID", "TG")) %>%
+                        kp = c("FSW", "MSM", "PWID", "TGW")) %>%
   left_join(pse_inputs) %>%
   mutate(n = replace_na(n, 0),
          n = paste0("n = ", n)) %>%
@@ -163,8 +163,8 @@ duplicate_nrow <- nrow(pse_total_dat_original) -# Total data
 pse_remove_label$duplicates <- paste0("Duplicated data (n = ", duplicate_nrow, ")")
 
 pse_cleaned_data <- bind_rows(truly_checked, mapped_place) %>%
-  mutate(kp = ifelse(kp == "TGW", "TG", kp)) %>%
-  filter(kp %in% c("FSW", "MSM", "PWID", "TG"))
+  mutate(kp = ifelse(kp == "TG", "TGW", kp)) %>%
+  filter(kp %in% c("FSW", "MSM", "PWID", "TGW"))
 
 pse_cleaned_data <- pse_cleaned_data %>%
   mutate(area_name = str_replace(area_name, " and", ","))
@@ -271,8 +271,8 @@ pse_final <- lapply(paste0("archive/aaa_assign_populations/", pse_id, "/pse_prev
 #   distinct(iso3, given_name)
 
 pse_final_text <- pse_final %>%
-  mutate(kp = ifelse(kp == "TGW", "TG", kp)) %>%
-  filter(kp %in% c("FSW", "MSM", "PWID", "TG")) %>%
+  mutate(kp = ifelse(kp == "TG", "TGW", kp)) %>%
+  filter(kp %in% c("FSW", "MSM", "PWID", "TGW")) %>%
   count(kp) %>%
   mutate(n = paste0("n = ", n)) %>%
   pivot_wider(names_from = kp, values_from = n) %>%

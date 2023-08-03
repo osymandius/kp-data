@@ -33,6 +33,7 @@ spec_dat <- lapply(paste0("archive/aaa_data_pjnz/", spec_id, "/naomi_pjnz.zip"),
 
 ssa_15to49 <- spec_dat %>%
   bind_rows() %>%
+  filter(spectrum_region_name != "Nigeria") %>% ## Remove national Nigeria file because all the subnational files are there too
   left_join(region) %>%
   filter(age %in% 15:49,
          year == 2021) %>%
@@ -291,18 +292,18 @@ long_nd <- long_nd %>%
   arrange(area_id)
 
 
-pop <- data.frame(kp = c("FSW", "MSM", "PWID", "TGW"),
-                  sex = c("female", "male", "both", "female"),
-                  # age_group = c("Y015_049", "Y015_029", "Y015_049", "Y015_029")
-                  age_group = "Y015_049"
-                  ) %>%
-  left_join(
-    long_nd %>%
-      filter(indicator == "population",
-      ) %>%
-      select(iso3, area_id, area_level, sex, age_group, mean) %>%
-      mutate(year = 2021)
-  )
+# pop <- data.frame(kp = c("FSW", "MSM", "PWID", "TGW"),
+#                   sex = c("female", "male", "both", "female"),
+#                   # age_group = c("Y015_049", "Y015_029", "Y015_049", "Y015_029")
+#                   age_group = "Y015_049"
+#                   ) %>%
+#   left_join(
+#     long_nd %>%
+#       filter(indicator == "population",
+#       ) %>%
+#       select(iso3, area_id, area_level, sex, age_group, mean) %>%
+#       mutate(year = 2021)
+#   )
 
 
 national_matched_genpop <- data.frame(kp = c("FSW", "MSM", "PWID", "TGW"),
@@ -471,14 +472,14 @@ prev_inla <- prev_inla %>%
   
   ident <- prev_inla[ind.effect, ]
   
-  qtls <- apply(prev_samples, 1, quantile, c(0.025, 0.5, 0.975))
+  qtls <- apply(prev_samples, 1, quantile, c(0.025, 0.975))
   
   prev <- ident %>%
     ungroup() %>%
     mutate(
       lower = qtls[1,],
-      median = qtls[2,],
-      upper = qtls[3,],
+      mean = rowMeans(prev_samples),
+      upper = qtls[2,],
       indicator = "prevalence"
     )
   
@@ -620,14 +621,14 @@ fit_msm_tg_prevalence_model <- function() {
     ungroup() %>%
     mutate(idx = row_number())
   
-  qtls <- apply(prev_samples, 1, quantile, c(0.025, 0.5, 0.975))
+  qtls <- apply(prev_samples, 1, quantile, c(0.025, 0.975))
   
   prev <- ident %>%
     ungroup() %>%
     mutate(
       lower = qtls[1,],
-      median = qtls[2,],
-      upper = qtls[3,],
+      mean = rowMeans(prev_samples),
+      upper = qtls[2,],
       indicator = "prevalence"
     )
   
@@ -654,8 +655,8 @@ fit_msm_tg_prevalence_model <- function() {
   
 }
 
-debugonce(fit_msm_tg_prevalence_model)
-fit_msm_tg_prevalence_model()
+# debugonce(fit_msm_tg_prevalence_model)
+# fit_msm_tg_prevalence_model()
 
 prev_mod_msm_tg <- list(fit_msm_tg_prevalence_model())
 
@@ -985,13 +986,13 @@ fit_art_model_all <- function() {
   
   ident <- art_inla[ind.effect, ]
   
-  qtls <- apply(art_samples, 1, quantile, c(0.025, 0.5, 0.975))
+  qtls <- apply(art_samples, 1, quantile, c(0.025, 0.975))
   
   art <- ident %>%
     mutate(
       lower = qtls[1,],
-      median = qtls[2,],
-      upper = qtls[3,],
+      mean = rowMeans(art_samples),
+      upper = qtls[2,],
       indicator = "art"
     )
   
@@ -1241,13 +1242,13 @@ fit_pse_model <- function(kp_id) {
     
     ident <- pse_inla[ind.effect, ]
     
-    qtls <- apply(pse_samples, 1, quantile, c(0.025, 0.5, 0.975))
+    qtls <- apply(pse_samples, 1, quantile, c(0.025, 0.975))
     
     pse <- ident %>%
       mutate(
         lower = qtls[1,],
-        median = qtls[2,],
-        upper = qtls[3,],
+        mean = rowMeans(pse_samples),
+        upper = qtls[2,],
         indicator = "pse"
       )
     
@@ -1354,12 +1355,32 @@ pse_random %>%
 
 #######
 
-pop_l <- pop %>%
+data.frame(kp = c("FSW", "MSM", "PWID", "TGW"),
+                             sex = c("female", "male", "both", "female"),
+                             # age_group = c("Y015_049", "Y015_029", "Y015_049", "Y015_029")
+                             age_group = "Y015_049"
+                             )
+
+scale_pop_id <- lapply(ssa_iso3, function(x){
+  orderly::orderly_search(name = "aaa_scale_pop", query = paste0('latest(parameter:iso3 == "', x, '" && parameter:version == 2022 && parameter:source == "WPP2022")'), draft = FALSE)
+})
+
+pop <- lapply(paste0("archive/aaa_scale_pop/", scale_pop_id, "/interpolated_population.csv"), read_csv, show_col_types = F) %>%
+  bind_rows() %>%
+  filter(year == 2021) %>%
+  separate(area_id, into = c("iso3", NA), sep = 3, remove = F) %>%
+  separate(area_id, into = c(NA, "area_level", NA), sep = "_", remove = F) %>%
+  mutate(area_level = ifelse(is.na(area_level), 0, area_level)) %>%
   left_join(admin1_lvl) %>%
   filter(area_level == admin1_level) %>%
+  five_year_to_15to49("population") %>%
+  sex_aggregation("population")
+
+pop_l <- pop %>%
   left_join(areas %>% select(area_id, id.area) %>% st_drop_geometry()) %>%
   arrange(id.area) %>%
   left_join(region) %>%
+  left_join(kp_to_sex() %>% filter(kp %in% c("FSW", "MSM", "PWID", "TGW"))) %>%
   group_by(kp) %>%
   group_split() %>%
   setNames(c("FSW", "MSM", "PWID", "TGW"))
@@ -1388,10 +1409,8 @@ kplhiv_art <- Map(function(prev, pse, art, pop) {
   # pop <- pop[match(ids, pop$area_id), ]
   # stopifnot(all.equal(prev_mod$FSW$prev[which(!is.na(prev_mod$FSW$prev$area_id)),] %>% pull(area_id), art_list$FSW$art[which(!is.na(art_list$FSW$art$area_id)),] %>% pull(area_id)))
   # stopifnot(all.equal(pse_mod$FSW$pse$area_id, prev_mod$FSW$prev[which(!is.na(prev_mod$FSW$prev$area_id)),] %>% pull(area_id)))
-  # message("Warning: Don't be an idiot")
-  
-  # which(!is.na(art_list$FSW$art$area_id))
-
+  # stopifnot(all.equal(pop$area_id, prev_mod$FSW$prev[which(!is.na(prev_mod$FSW$prev$area_id)),] %>% pull(area_id)))
+  # stop("Don't be an idiot")
 
   prev_s <- prev$prev_samples[which(!is.na(prev$prev$area_id)),]
   pse_s <- pse$pse_samples
@@ -1400,20 +1419,22 @@ kplhiv_art <- Map(function(prev, pse, art, pop) {
   pop <- pop[match(ids, pop$area_id), ]
   prev_continuous_results <- prev$prev %>% filter(is.na(iso3))
   art_continuous_results <- art$art %>% filter(is.na(iso3))
+
   stopifnot(all.equal(prev$prev[which(!is.na(prev$prev$area_id)),] %>% pull(area_id), art$art[which(!is.na(art$art$area_id)),] %>% pull(area_id)))
   stopifnot(all.equal(pse$pse$area_id, prev$prev[which(!is.na(prev$prev$area_id)),] %>% pull(area_id)))
+  stopifnot(all.equal(pop$area_id, prev$prev[which(!is.na(prev$prev$area_id)),] %>% pull(area_id)))
   
 
   urban_prop_s <- matrix(rep(rbeta(1000, 5, 3), nrow(pse_s)), nrow = nrow(pse_s), byrow = TRUE)
   rural_pse_s <- invlogit(pse_s) * urban_prop_s
 
-  pse_count_samples <- (invlogit(pse_s) * pop$mean * urban_proportion$urban_proportion) + (pop$mean * rural_pse_s * (1-urban_proportion$urban_proportion))
+  pse_count_samples <- (invlogit(pse_s) * pop$population * urban_proportion$urban_proportion) + (pop$population * rural_pse_s * (1-urban_proportion$urban_proportion))
   kplhiv_samples <- invlogit(prev_s) * pse_count_samples
   kpart_samples <- kplhiv_samples * invlogit(art_s)
   
   urban_pop <- pop %>%
     left_join(urban_proportion) %>%
-    mutate(urban_pop = mean * urban_proportion)
+    mutate(urban_pop = population * urban_proportion)
   
   # kplhiv_qtls <- apply(kplhiv_samples, 1, quantile, c(0.025, 0.5, 0.975))
   
@@ -1496,6 +1517,17 @@ kplhiv_art <- Map(function(prev, pse, art, pop) {
   
   pse_urban_region_samples <- pse_urban_count_samples_region/urban_pop_region
   
+  region_pop <- pop %>% 
+    group_by(region) %>% 
+    summarise(population = sum(population)) %>%
+    ungroup() %>%
+    bind_rows(mutate(., region = "SSA") %>%
+                group_by(region) %>%
+                summarise(population = sum(population))) %>%
+    pull(population)
+  
+  pse_samples_region <- pse_count_samples_region/region_pop
+  
   region_res <- region_res %>%
     bind_rows(
       data.frame(indicator = "prev",
@@ -1506,16 +1538,20 @@ kplhiv_art <- Map(function(prev, pse, art, pop) {
         cbind(pse_urban_region_samples),
       data.frame(indicator = "art_cov",
                  region = c("ESA", "WCA", "SSA")) %>%
-        cbind(art_cov_samples_region)
+        cbind(art_cov_samples_region),
+      data.frame(indicator = "pse",
+                 region = c("ESA", "WCA", "SSA")) %>%
+        cbind(pse_samples_region)
     )
 
-  region_qtls <- apply(region_res[as.character(1:1000)], 1, quantile, c(0.025, 0.5, 0.975))
+  region_qtls <- apply(region_res[as.character(1:1000)], 1, quantile, c(0.025, 0.975))
   
   region_res <- region_res %>%
     select(indicator, region) %>%
+    mutate(mean = rowMeans(region_res[as.character(1:1000)])) %>%
     cbind(data.frame(t(region_qtls)))
   
-  colnames(region_res) <- c("indicator", "region", "lower", "median", "upper")
+  colnames(region_res) <- c("indicator", "region", "mean", "lower", "upper")
   
   #### Country res
   
@@ -1542,7 +1578,7 @@ kplhiv_art <- Map(function(prev, pse, art, pop) {
   
   nat_pop <- urban_pop %>%
     group_by(iso3) %>%
-    summarise(nat_pop = sum(mean),
+    summarise(nat_pop = sum(population),
               nat_urban_pop = sum(urban_pop))
   
   pse_samples_nat <- pse_count_samples_nat / nat_pop$nat_pop
@@ -1557,25 +1593,27 @@ kplhiv_art <- Map(function(prev, pse, art, pop) {
   
   country_res <- country_res %>% bind_rows(nat_val)
   
-  country_qtls <- apply(country_res[as.character(1:1000)], 1, quantile, c(0.025, 0.5, 0.975))
+  country_qtls <- apply(country_res[as.character(1:1000)], 1, quantile, c(0.025, 0.975))
   
   country_res <- country_res %>%
     select(indicator, iso3) %>%
+    mutate(mean = rowMeans(country_res[as.character(1:1000)])) %>%
     cbind(data.frame(t(country_qtls)))
   
-  colnames(country_res) <- c("indicator", "iso3", "lower", "median", "upper")
+  colnames(country_res) <- c("indicator", "iso3", "mean", "lower", "upper")
   
   ### Area res
   
   area_res <- bind_rows(pse_total_count, plhiv, art, pse, prev, art_cov)
   
-  area_qtls <- apply(area_res[as.character(1:1000)], 1, quantile, c(0.025, 0.5, 0.975))
+  area_qtls <- apply(area_res[as.character(1:1000)], 1, quantile, c(0.025, 0.975))
   
   area_res <- area_res %>%
     select(iso3, area_id, indicator) %>%
+    mutate(mean = rowMeans(area_res[as.character(1:1000)])) %>%
     cbind(t(area_qtls))
   
-  colnames(area_res) <- c("iso3", "area_id", "indicator", "lower", "median", "upper")
+  colnames(area_res) <- c("iso3", "area_id", "indicator", "mean", "lower", "upper")
   
   # country_res <- bind_rows(pse_count, plhiv, art, pse, prev, art_cov)
   # 
@@ -1600,102 +1638,30 @@ kplhiv_art <- Map(function(prev, pse, art, pop) {
 
 saveRDS(kplhiv_art, "~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/kplhiv_art.rds")
 
-# pse_dat %>%
-#   filter(kp %in% c("MSM", "TG")) %>%
-#   select(iso3, area_id, kp, prop_estimate, study_idx) %>%
-#   group_by(iso3, area_id, kp, study_idx) %>%
-#   summarise(prop_estimate = median(prop_estimate)) %>%
-#   pivot_wider(names_from = "kp", values_from = "prop_estimate") %>%
-#   filter(!is.na(TG), !is.na(MSM)) %>%
-#   # filter(TG < 0.01) %>%
-#   ggplot(aes(x=TG, y=MSM)) + 
-#     geom_point() +
-#     scale_percent() +
-#     scale_x_continuous(labels = scales::label_percent()) +
-#     standard_theme() +
-#     geom_smooth(method = "lm", se = F) +
-#     ggpmisc::stat_poly_eq(use_label(c("eq", "R2")))
-#     
-
-# region_pop <- pop %>%
-#   left_join(region) %>%
-#   filter(sex == "both") %>%
-#   group_by(region) %>%
-#   summarise(population = sum(mean)) %>%
-#   bind_rows(
-#     pop %>%
-#       mutate(region = "SSA") %>%
-#       filter(sex == "both") %>%
-#       group_by(region) %>%
-#       summarise(population = sum(mean))
-#   )
-
-# unaids_num <- bind_rows(
-#   read.csv("R/Model/People living with HIV_People living with HIV - Adults (15-49)_Population All adults (15-49).csv") %>%
-#     mutate(indicator = "plhiv"),
-#   read.csv("R/Model/Treatment cascade_People living with HIV receiving ART ()_Population Adults (15+).csv") %>%
-#     mutate(indicator = "art")
-# ) %>%
-#   select(!contains(c("lower", "upper", "Footnote"))) %>%
-#   mutate(iso3 = countrycode::countrycode(Country, "country.name", "iso3c")) %>%
-#   filter(iso3 %in% ssa_iso3) %>%
-#   select(-Country) %>%
-#   pivot_longer(-c(iso3, indicator)) %>%
-#   mutate(year = str_remove(name, "X"),
-#          value = str_remove_all(value, " ")) %>%
-#   group_by(iso3, indicator) %>%
-#   fill(value, .direction = "down") %>%
-#   filter(year == "2021", !(iso3 == "ZAF" & indicator == "art")) %>%
-#   type_convert() %>%
-#   select(-name)
-# 
-# region_unaids_num <- unaids_num %>%
-#   left_join(region) %>%
-#   group_by(region, indicator) %>%
-#   summarise(value = sum(value)) %>%
-#   bind_rows(
-#     unaids_num %>%
-#       group_by(indicator) %>%
-#       summarise(value = sum(value)) %>%
-#       mutate(region = "SSA")
-#   )
-
-# bind_rows(
-#   kplhiv_art %>%
-#     lapply("[[", "region") %>%
-#     bind_rows(.id = "kp") %>%
-#     filter(indicator == "pse_total_count") %>%
-#     left_join(region_pop_1549 %>% rename(denominator = totpop)),
-#   kplhiv_art %>%
-#     lapply("[[", "region") %>%
-#     bind_rows(.id = "kp") %>%
-#     filter(indicator == "kplhiv") %>%
-#     left_join(region_unaids_num %>% ungroup() %>% filter(indicator == "plhiv") %>% select(-indicator) %>% rename(denominator = value))
-#   ) %>%
-#   mutate(across(lower:upper, ~.x/denominator),
-#          num = median * denominator) %>%
-#   filter(region == "SSA") %>%
-#   arrange(kp)
-
 ########################
 
-prev_s <- rbind(prev_mod$FSW$prev_samples[84:676,], prev_mod$MSM$prev_samples[84:676,], prev_mod$PWID$prev_samples[84:676,], prev_mod$TG$prev_samples[84:676,])
-pse_s <- rbind(pse_mod$FSW$pse_samples, pse_mod$MSM$pse_samples, pse_mod$PWID$pse_samples, pse_mod$TG$pse_samples)
-art_s <- rbind(art_list$FSW$art_samples[169:761,], art_list$MSM$art_samples[169:761,], art_list$PWID$art_samples[169:761,], art_list$TG$art_samples[169:761,])
+prev_s <- rbind(prev_mod$FSW$prev_samples[which(!is.na(prev_mod$FSW$prev$area_id)),],
+                prev_mod$MSM$prev_samples[which(!is.na(prev_mod$MSM$prev$area_id)),],
+                prev_mod$PWID$prev_samples[which(!is.na(prev_mod$PWID$prev$area_id)),],
+                prev_mod$TGW$prev_samples[which(!is.na(prev_mod$TGW$prev$area_id)),])
 
-pop_curr <- pop %>%
-  left_join(admin1_lvl) %>%
-  filter(area_level == admin1_level) %>%
-  left_join(areas %>% select(area_id, id.area) %>% st_drop_geometry()) %>%
-  arrange(id.area) %>%
-  mutate(area_id = factor(area_id),
-         kp = factor(kp, levels = c("FSW","MSM", "PWID", "TGW"))) %>%
-  arrange(kp, area_id)
+pse_s <- rbind(pse_mod$FSW$pse_samples, pse_mod$MSM$pse_samples, pse_mod$PWID$pse_samples, pse_mod$TGW$pse_samples)
 
-urban_prop_s <- matrix(rbeta(length(pse_s), 5, 3), nrow = nrow(pse_s))
+art_s <- rbind(art_list$FSW$art_samples[which(!is.na(art_list$FSW$art$area_id)),],
+               art_list$MSM$art_samples[which(!is.na(art_list$MSM$art$area_id)),],
+               art_list$PWID$art_samples[which(!is.na(art_list$PWID$art$area_id)),],
+               art_list$TGW$art_samples[which(!is.na(art_list$TGW$art$area_id)),])
+
+
+
+
+pop_curr <- bind_rows(pop_l[[1]], pop_l[[2]], pop_l[[3]], pop_l[[4]]) %>%
+  filter(area_id != "MOZ_1_10")
+
+urban_prop_s <- matrix(rep(rbeta(1000, 5, 3), nrow(pse_s)), nrow = nrow(pse_s), byrow = TRUE)
 rural_pse_s <- invlogit(pse_s) * urban_prop_s
 
-pse_count_samples <- (invlogit(pse_s) * pop_curr$mean * urban_proportion$urban_proportion) + (pop_curr$mean * rural_pse_s * (1-urban_proportion$urban_proportion))
+pse_count_samples <- (invlogit(pse_s) * pop_curr$population * urban_proportion$urban_proportion) + (pop_curr$population * rural_pse_s * (1-urban_proportion$urban_proportion))
 kplhiv_samples <- invlogit(prev_s) * pse_count_samples
 kpart_samples <- kplhiv_samples * invlogit(art_s)
 
@@ -1810,8 +1776,9 @@ bind_rows(
     filter(indicator == "kplhiv") %>%
     mutate(denominator = filter(ssa_15to49, region == "SSA")$hivpop) 
   ) %>%
-  mutate(across(lower:upper, ~100*(.x/denominator)))
+  # mutate(across(lower:upper, ~100*(.x/denominator)))
   # arrange(kp)
+  mutate(across(lower:upper, ~signif(.x, 2)))
 
 kplhiv_art %>%
   lapply("[[", "region") %>%
@@ -1917,13 +1884,18 @@ kplhiv_proportion_plot <- kplhiv_art %>%
   ggplot(aes(x=fct_rev(fct_relevel(iso3, plot_order)), y=median, fill=fct_rev(kp))) +
   geom_col(position = "stack", show.legend = F) +
   standard_theme() +
-  scale_y_continuous(labels = scales::label_percent()) +
-  scale_x_discrete(labels = ~countrycode::countrycode(sourcevar = .x, origin = "iso3c", destination = "country.name", custom_match = moz.utils::cc_plot())) +
+  scale_y_continuous(labels = scales::label_percent(), expand = expansion(mult = c(0, .05))) +
+  scale_x_discrete(labels = ~countrycode::countrycode(sourcevar = .x, origin = "iso3c", destination = "country.name", custom_match = moz.utils::cc_plot()), expand = expansion(mult = c(0.02, .02))) +
   scale_manual("fill", 4) +
   labs(x=element_blank(), y="Proportion of total people living with HIV", fill=element_blank(), tag = "A") +
   coord_flip() +
   theme(legend.position = "right",
-        plot.tag = element_text(size = rel(2.0), face = "bold")
+        axis.text.x = element_text(size = rel(1.2)),
+        axis.text.y = element_text(size = rel(1.2)),
+        plot.tag = element_text(size = rel(2.0), face = "bold"),
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.minor.x = element_blank()
         )
 
 kplhiv_plot <- kplhiv_art %>%
@@ -1935,15 +1907,18 @@ kplhiv_plot <- kplhiv_art %>%
   ggplot(aes(x=region, y=median, group=kp, fill=kp)) +
   geom_col(position = position_dodge(.9)) +
   geom_linerange(aes(ymin=lower, ymax = upper), position=position_dodge(.9)) +
-  scale_y_continuous(labels = scales::label_number(scale = 1E-3)) +
+  scale_y_continuous(labels = scales::label_number(scale = 1E-3), expand = expansion(mult = c(0, .05))) +
   # scale_y_log10(labels = scales::label_number()) +
   scale_fill_manual(values = rev(c(wesanderson::wes_palette("Darjeeling2")[2], wesanderson::wes_palette("Darjeeling1")[c(2,4,5)]))) +
   standard_theme() +
   labs(x=element_blank(), y="KPLHIV (thousands)", fill=element_blank(), tag = "B") +
-  theme(plot.tag = element_text(size = rel(2.0), face = "bold"))
+  theme(plot.tag = element_text(size = rel(2.0), face = "bold"),
+        axis.text.x = element_text(size = rel(1.2)),
+        axis.text.y = element_text(size = rel(1.2)),
+        panel.grid = element_blank())
 
-png("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Figs/Fig 7 kplhiv_plot.png", width = 600, height=800)
-ggpubr::ggarrange(kplhiv_proportion_plot, kplhiv_plot, nrow =2, heights = c(1.5,1), common.legend = T, legend = "bottom")
+png("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Figs/Fig 7 kplhiv_plot.png", width = 600, height=1000)
+ggpubr::ggarrange(kplhiv_proportion_plot, kplhiv_plot, nrow =2, heights = c(1.6,1), common.legend = T, legend = "bottom")
 dev.off()
 
 write_csv(prev_fixed, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_fixed.csv")

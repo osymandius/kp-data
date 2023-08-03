@@ -31,7 +31,16 @@ kplhiv_art %>%
   lapply("[[", "country") %>%
   bind_rows(.id = "kp") %>%
   filter(indicator == "pse_urban") %>%
-  group_by(kp) %>%
+  left_join(region) %>%
+  group_by(kp, region) %>%
+  filter(region != "SSA") %>%
+  reframe(calculate_quantile(median))
+
+kplhiv_art %>%
+  lapply("[[", "region") %>%
+  bind_rows(.id = "kp") %>%
+  filter(indicator == "pse_urban") %>%
+  group_by(kp, region) %>%
   reframe(calculate_quantile(median))
 
 mf <- crossing(region %>%
@@ -213,10 +222,10 @@ kplhiv_art %>%
   filter(indicator == "pse_urban") %>%
   left_join(region) %>%
   # bind_rows(mutate(., region = "SSA")) %>%
-  group_by(kp, region) %>%
+  group_by(kp) %>%
   reframe(calculate_quantile(median)) %>%
-  factor_region() %>%
-  arrange(kp, region) %>%
+  # factor_region() %>%
+  arrange(kp) %>%
   mutate(iqr = paste0(round(`0.25`, 2), "-", round(`0.75`, 2))) %>%
   select(-c(`0.25`, `0.75`))
 
@@ -265,7 +274,7 @@ pse_estimates <- pse_estimates %>%
               distinct() %>%
               mutate(has_data = 1)) %>%
   mutate(has_data = ifelse(is.na(has_data), 0, 1),
-         has_data = factor(has_data, labels = c("No data", "Data")))
+         has_data = factor(has_data, labels = c("No", "Yes")))
 
 iso3_sort <- pse_estimates %>%
   distinct(area_name, iso3) %>%
@@ -312,7 +321,7 @@ pal <- wesanderson::wes_palette("Zissou1", 100, type = "continuous")
 
 make_pse_map <- function(x) {
   
-  kp_name <- c("FSW" = "Female sex workers",  "MSM" = "Men who have sex with men", "PWID" = "People who inject drugs" , "TGW" = "Transwomen")
+  kp_name <- c("FSW" = "Female sex workers",  "MSM" = "Men who have sex with men", "PWID" = "People who inject drugs" , "TGW" = "Transgender women")
   kp_tag <- c("FSW" = "A",  "MSM" = element_blank(), "PWID" = element_blank() , "TGW" = element_blank())
   fig3a_tag_color <- c("FSW" = "black", "MSM" = NA, "PWID" = NA, "TGW" = NA)
   
@@ -333,7 +342,7 @@ make_pse_map <- function(x) {
       legend.key.width = unit(1.15, "lines"),
       legend.key.height = unit(0.7, "lines"),
       legend.text = element_text(size = rel(1.0), face = "plain"),
-      legend.title = element_text(size = rel(1.2), face = "plain"),
+      legend.title = element_text(size = rel(1.2), face = "bold"),
       legend.box.spacing = unit(0, "points"),
       plot.title = element_text(hjust = 0.5, face = "bold", size = rel(1.4)),
       plot.tag = element_text(size = rel(2.0), face = "bold", color = fig3a_tag_color[x]),
@@ -386,7 +395,7 @@ fig3b <- pse_estimates %>%
   coord_cartesian(ylim = c(0.0001, .1)) +
   labs(x = element_blank(),
        y = "Population proportion",
-       color = "Informed by:",
+       color = "Country has local surveillance data",
        shape = "Data reported\nas national",
        tag = "B") +
   theme_minimal(6) +
@@ -397,8 +406,9 @@ fig3b <- pse_estimates %>%
         legend.text = element_text(size = rel(1.1)), 
         strip.background = element_rect(fill = NA, colour = "white"), 
         panel.background = element_rect(fill = NA, color = "black")) +
-  theme(axis.text.x = element_text(size = rel(1.1), angle = 45, hjust=1),
-        axis.title.y = element_text(size = rel(1.25)),
+  theme(axis.text.x = element_text(size = rel(1.15), angle = 45, hjust=1),
+        axis.text.y = element_text(size = rel(1.15)),
+        axis.title.y = element_text(size = rel(1.25), face = "bold"),
         legend.text = element_text(size = rel(1.4)),
         legend.title = element_text(size = rel(1.4)),
         panel.background = element_rect(fill=NA, color="black"),
@@ -428,27 +438,17 @@ prev_final %>%
   group_by(kp) %>%
   count()
 
-prev_corr_fsw <- lm(logit(value) ~ logit(provincial_value), 
-   data = prev_final %>% mutate(value = ifelse(value == 1, 0.99, value),
-                                value = ifelse(value == 0, 0.01, value)) %>%
-     filter(kp == "FSW",
-            value < 1),
-   weights = denominator)
+corr_df <- distinct(prev_df, kp, region) %>%
+  arrange(kp)
 
-prev_corr_msm <- lm(logit(value) ~ logit(provincial_value), 
-   data = prev_final %>% mutate(value = ifelse(value == 1, 0.99, value),
-                                value = ifelse(value == 0, 0.01, value)) %>%
-     filter(kp == "MSM",
-            value < 1),
-   weights = denominator)
-
-prev_corr_pwid <- lm(logit(value) ~ logit(provincial_value), 
-   data = prev_final %>% mutate(value = ifelse(value == 1, 0.99, value),
-                                value = ifelse(value == 0, 0.01, value)) %>%
-     filter(kp == "PWID",
-            value < 1),
-   weights = denominator)
-
+prev_corr <- Map(function(kp_c, region_c) {
+  prev_corr <- glm(value ~ logit_gen_prev,
+                   family = "binomial",
+                   data = prev_df %>% filter(kp == kp_c, region == region_c) %>% mutate(denominator = round()),
+                   weights = denominator)
+  
+  summary(prev_corr)$r.squared
+}, corr_df$kp, corr_df$region)
 
 prev_estimates <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_estimates.csv", show_col_types = FALSE) %>%
   mutate(provincial_value = invlogit(logit_gen_prev),
@@ -501,9 +501,10 @@ p1 <- prev_estimates %>%
   scale_shape_manual(values = c(1, 16)) +
   scale_manual("color", 2) +
   scale_manual("fill", 2) +
-  labs(shape = "Informed by data", color = element_blank(), y = "KP HIV prevalence (logit scale)", x = "Total population HIV prevalence (logit scale)")+
+  labs(shape = "Country has local surveillance data", color = element_blank(), y = "KP HIV prevalence (logit scale)", x = "Total population HIV prevalence (logit scale)", tag = "A")+
   theme(panel.border = element_rect(fill=NA, color="black"),
         legend.position = "right",
+        aspect.ratio = 1,
         axis.text = element_text(size = 14),
         legend.title = element_text(size = 12),
         legend.text = element_text(size = 12),
@@ -534,13 +535,14 @@ p2 <- prev_estimates %>%
   scale_shape_manual(values = c(1, 16)) +
   scale_manual("color", 2) +
   scale_manual("fill", 2) +
-  labs(shape = "Informed by data", color = element_blank(), y = "KP HIV prevalence", x = "Total population HIV prevalence")+
+  labs(shape = "Country has local surveillance data", color = element_blank(), y = "KP HIV prevalence", x = "Total population HIV prevalence", tag = "B")+
   theme(panel.border = element_rect(fill=NA, color="black"),
         legend.position = "right",
+        aspect.ratio = 1,
         axis.text = element_text(size = 14),
         legend.title = element_text(size = 16),
         legend.text = element_text(size = 16),
-        strip.text = element_blank()) +
+        strip.text = element_text(color = "white")) +
   facet_wrap(~kp, nrow=1)
 
 p3 <- prev_estimates %>%
@@ -565,13 +567,14 @@ p3 <- prev_estimates %>%
   scale_manual("color", 2) +
   scale_manual("fill", 2) +
   geom_hline(aes(yintercept = 1), linetype = 2) +
-  labs(shape = "Informed by data", color = element_blank(), y="Prevalence ratio", x = "Total population HIV prevalence")+
+  labs(shape = "Country has local surveillance data", color = element_blank(), y="Prevalence ratio", x = "Total population HIV prevalence", tag = "C")+
   theme(panel.border = element_rect(fill=NA, color="black"),
         legend.position = "right",
+        aspect.ratio = 1,
         axis.text = element_text(size = 14),
         legend.title = element_text(size = 16),
         legend.text = element_text(size = 16),
-        strip.text = element_blank()) +
+        strip.text = element_text(color = "white")) +
   facet_wrap(~kp, nrow=1)
 
 prev_fig <- ggpubr::ggarrange(p1, p2, p3, ncol=1, common.legend = TRUE, legend = "bottom")
@@ -656,7 +659,7 @@ art_final <- art_final %>%
 
 
 convert_logis_labels <- function(x) {
-  paste0(plyr::round_any(plogis(x)*100, accuracy = 4, round), "%")
+  paste0(plyr::round_any(plogis(x)*100, accuracy = 1, round), "%")
 }
 
 p5 <- art_estimates %>%
@@ -676,16 +679,17 @@ p5 <- art_estimates %>%
     geom_point(data = art_country_estimates %>% name_kp(F), size=2.5, aes(shape = has_data)) +
     geom_abline(aes(intercept = 0, slope=1), linetype = 3) +
     moz.utils::standard_theme() +
-    scale_y_continuous(labels = convert_logis_labels) +
-    scale_x_continuous(labels = convert_logis_labels) +
+    scale_y_continuous(labels = convert_logis_labels, breaks = logit(c(0.1, 0.25, 0.5, 0.75, 0.9))) +
+    scale_x_continuous(labels = convert_logis_labels, breaks = logit(c(0.1, 0.25, 0.5, 0.75, 0.9))) +
     scale_shape_manual(values = c(1, 16)) +
     scale_manual("color", 2) +
-    labs(shape = "Informed by data", y = "KP ART coverage (logit scale)", x = "Total population ART coverage (logit scale)", color = element_blank())+
+    labs(shape = "Country has local surveillance data", y = "KP ART coverage (logit scale)", x = "Total population ART coverage (logit scale)", color = element_blank(), tag = "A")+
   theme(panel.border = element_rect(fill=NA, color="black"),
         panel.spacing = unit(2, "lines"),
         axis.text = element_text(size = 14),
-        legend.title = element_text(size = 16),
-        legend.text = element_text(size = 16),
+        aspect.ratio = 1,
+        legend.title = element_text(size = 14),
+        legend.text = element_text(size = 14),
         strip.text = element_text(face="bold")) +
   facet_wrap(~kp, nrow=1) +
   coord_cartesian(ylim = c(logit(0.05), logit(0.95)), xlim = c(logit(0.05), logit(0.95)))
@@ -711,13 +715,14 @@ p6 <- art_estimates %>%
     scale_y_continuous(labels = scales::label_percent()) +
     scale_shape_manual(values = c(1, 16)) +
     scale_manual("color", 2) +
-    labs(shape = "Informed by data", y = "KP ART coverage", x = "Total population ART coverage", color = element_blank())+
+    labs(shape = "Country has local surveillance data", y = "KP ART coverage", x = "Total population ART coverage", color = element_blank(), tag = "B")+
     theme(panel.border = element_rect(fill=NA, color="black"),
           panel.spacing = unit(2, "lines"),
+          aspect.ratio = 1,
           axis.text = element_text(size = 14),
-          legend.title = element_text(size = 16),
-          legend.text = element_text(size = 16),
-          strip.text = element_blank()) +
+          legend.title = element_text(size = 14),
+          legend.text = element_text(size = 14),
+          strip.text = element_text(color = "white")) +
     facet_wrap(~kp, nrow=1) +
     coord_cartesian(ylim = c(0.1,1), xlim = c(0.1,1)) 
 
@@ -914,3 +919,14 @@ kplhiv_art %>%
   mutate(iso3 = countrycode::countrycode(iso3, "iso3c", "country.name", custom_match = cc_plot())) %>%
   write_csv("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Supplementary figs/S9 art coverage.csv")
   
+
+kplhiv_art %>%
+  lapply("[[", "region") %>%
+  bind_rows(.id = "kp") %>%
+  filter(indicator == "pse_total_count") %>%
+  filter(region == "SSA")
+  left_join(region) %>%
+  mutate(median = ifelse(kp == "PWID", median, median/2)) %>%
+  group_by(kp, region) %>%
+  summarise(median = median(median)) %>%
+  arrange(region)

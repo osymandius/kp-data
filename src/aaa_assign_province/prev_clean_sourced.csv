@@ -1086,22 +1086,22 @@ ZMB,Zambia,prevalence,lab,NA,TGW,Kitwe,NA,NA,Y015_049,2021,NA,NA,NA,0.124,0.141,
 ZMB,Zambia,prevalence,lab,NA,TGW,Livingstone,NA,NA,Y015_049,2021,NA,NA,NA,0.069,0.1,0.133,14,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,258,1719
 ZMB,Zambia,prevalence,lab,NA,TGW,Lusaka,NA,NA,Y015_049,2021,NA,NA,NA,0.258,0.28300000000000003,0.308,41,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,258,1720
 ZMB,Zambia,prevalence,lab,NA,TGW,Solwezi,NA,NA,Y015_049,2021,NA,NA,NA,0.062,0.071,0.081,8,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,258,1721
-ZMB,Zambia,prevalence,lab,NA,FSW,Livingstone,NA,NA,NA,2017,NA,NA,NA,NA,0.275,NA,NA,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1722
-ZMB,Zambia,prevalence,lab,NA,FSW,Livingstone,NA,NA,NA,2017,NA,NA,NA,NA,0.471,NA,NA,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1723
-ZMB,Zambia,prevalence,lab,NA,FSW,Livingstone,NA,NA,NA,2017,NA,NA,NA,NA,0.621,NA,NA,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1724
-ZMB,Zambia,prevalence,lab,NA,FSW,Livingstone,NA,NA,NA,2017,NA,NA,NA,NA,0.823,NA,NA,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1725
-ZMB,Zambia,prevalence,lab,NA,FSW,Lusaka,NA,NA,NA,2017,NA,NA,NA,NA,0.245,NA,NA,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1726
-ZMB,Zambia,prevalence,lab,NA,FSW,Lusaka,NA,NA,NA,2017,NA,NA,NA,NA,0.494,NA,NA,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1727
-ZMB,Zambia,prevalence,lab,NA,FSW,Lusaka,NA,NA,NA,2017,NA,NA,NA,NA,0.559,NA,NA,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1728
-ZMB,Zambia,prevalence,lab,NA,FSW,Lusaka,NA,NA,NA,2017,NA,NA,NA,NA,0.748,NA,NA,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1729
-ZMB,Zambia,prevalence,lab,NA,FSW,Ndola,NA,NA,NA,2017,NA,NA,NA,NA,0.198,NA,NA,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1730
-ZMB,Zambia,prevalence,lab,NA,FSW,Ndola,NA,NA,NA,2017,NA,NA,NA,NA,0.589,NA,NA,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1731
-ZMB,Zambia,prevalence,lab,NA,FSW,Ndola,NA,NA,NA,2017,NA,NA,NA,NA,0.618,NA,NA,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1732
-ZMB,Zambia,prevalence,lab,NA,FSW,Ndola,NA,NA,NA,2017,NA,NA,NA,NA,0.673,NA,NA,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1733
-ZMB,Zambia,prevalence,lab,NA,FSW,Solwezi,NA,NA,NA,2017,NA,NA,NA,NA,0.289,NA,NA,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1741
-ZMB,Zambia,prevalence,lab,NA,FSW,Solwezi,NA,NA,NA,2017,NA,NA,NA,NA,0.608,NA,NA,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1742
-ZMB,Zambia,prevalence,lab,NA,FSW,Solwezi,NA,NA,NA,2017,NA,NA,NA,NA,0.77,NA,NA,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1743
-ZMB,Zambia,prevalence,lab,NA,FSW,Solwezi,NA,NA,NA,2017,NA,NA,NA,NA,0.698,NA,NA,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1744
+ZMB,Zambia,prevalence,lab,NA,FSW,Livingstone,NA,NA,Y020_024,2017,NA,NA,NA,NA,0.275,NA,131,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1722
+ZMB,Zambia,prevalence,lab,NA,FSW,Livingstone,NA,NA,Y025_029,2017,NA,NA,NA,NA,0.471,NA,150,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1723
+ZMB,Zambia,prevalence,lab,NA,FSW,Livingstone,NA,NA,Y030_034,2017,NA,NA,NA,NA,0.621,NA,115,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1724
+ZMB,Zambia,prevalence,lab,NA,FSW,Livingstone,NA,NA,Y035_049,2017,NA,NA,NA,NA,0.823,NA,102,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1725
+ZMB,Zambia,prevalence,lab,NA,FSW,Lusaka,NA,NA,Y020_024,2017,NA,NA,NA,NA,0.245,NA,173,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1726
+ZMB,Zambia,prevalence,lab,NA,FSW,Lusaka,NA,NA,Y025_029,2017,NA,NA,NA,NA,0.494,NA,118,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1727
+ZMB,Zambia,prevalence,lab,NA,FSW,Lusaka,NA,NA,Y030_034,2017,NA,NA,NA,NA,0.559,NA,72,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1728
+ZMB,Zambia,prevalence,lab,NA,FSW,Lusaka,NA,NA,Y035_049,2017,NA,NA,NA,NA,0.748,NA,104,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1729
+ZMB,Zambia,prevalence,lab,NA,FSW,Ndola,NA,NA,Y020_024,2017,NA,NA,NA,NA,0.198,NA,174,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1730
+ZMB,Zambia,prevalence,lab,NA,FSW,Ndola,NA,NA,Y025_029,2017,NA,NA,NA,NA,0.589,NA,103,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1731
+ZMB,Zambia,prevalence,lab,NA,FSW,Ndola,NA,NA,Y030_034,2017,NA,NA,NA,NA,0.618,NA,90,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1732
+ZMB,Zambia,prevalence,lab,NA,FSW,Ndola,NA,NA,Y035_049,2017,NA,NA,NA,NA,0.673,NA,124,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1733
+ZMB,Zambia,prevalence,lab,NA,FSW,Solwezi,NA,NA,Y020_024,2017,NA,NA,NA,NA,0.289,NA,220,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1741
+ZMB,Zambia,prevalence,lab,NA,FSW,Solwezi,NA,NA,Y025_029,2017,NA,NA,NA,NA,0.608,NA,135,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1742
+ZMB,Zambia,prevalence,lab,NA,FSW,Solwezi,NA,NA,Y030_034,2017,NA,NA,NA,NA,0.77,NA,86,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1743
+ZMB,Zambia,prevalence,lab,NA,FSW,Solwezi,NA,NA,Y035_049,2017,NA,NA,NA,NA,0.698,NA,54,2017 IBBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,259,1744
 ZMB,Zambia,prevalence,lab,NA,FSW,Chirundu,NA,NA,NA,2015,NA,NA,NA,NA,0.733,NA,116,Integrated Biological and Behavioural Surveillance Survey among Female Sex Workers in Zambia,https://www.nac.org.zm/sites/default/files/publications/IBBS%202015%20Final%20Report%204%20March%202016.pdf,KP Atlas_9e51e1c510a9709d73405616ede935c4,KP Atlas,b229d472d656d11a8cd02fa091720ebc,Yes,yes,NA,NA,NA,261,1749
 ZMB,Zambia,prevalence,lab,NA,FSW,Kapiri Mposhi,NA,NA,NA,2015,NA,NA,NA,NA,0.576,NA,311,Integrated Biological and Behavioural Surveillance Survey among Female Sex Workers in Zambia,https://www.nac.org.zm/sites/default/files/publications/IBBS%202015%20Final%20Report%204%20March%202016.pdf,KP Atlas_27cabd59abf2f66b0199a10efb7d99a8,KP Atlas,118c94f5c9a482e54ae4339767dd6aae,Yes,yes,NA,NA,NA,261,1750
 ZMB,Zambia,prevalence,lab,NA,FSW,Livingstone,NA,NA,NA,2015,NA,NA,NA,NA,0.46,NA,261,Integrated Biological and Behavioural Surveillance Survey among Female Sex Workers in Zambia,https://www.nac.org.zm/sites/default/files/publications/IBBS%202015%20Final%20Report%204%20March%202016.pdf,KP Atlas_81c8dc8fa593cf3921696431c8f8258a,KP Atlas,e7451cab803c820948f2dacf74f8b43c,Yes,yes,NA,NA,NA,261,1751

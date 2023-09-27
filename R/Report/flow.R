@@ -298,6 +298,7 @@ pse_final <- read.csv("~/Imperial College London/HIV Inference Group - WP - Docu
 pse_cleaned_data <- read_csv("src/aaa_assign_populations/pse_cleaned_sourced_data.csv")
 
 method_counts <- pse_total_dat %>%
+  mutate(kp = ifelse(kp == "TG", "TGW", kp)) %>%
   filter(year > 2009, source_found == "yes") %>%
   mutate(
     year = ifelse(year == 2022, 2021, year),
@@ -306,8 +307,8 @@ method_counts <- pse_total_dat %>%
          # year = ifelse(year == "2019-2021", "2019-2022", year)
   ) %>%
   distinct(year, kp, study_idx) %>%
-  count(year, kp) %>%
-  mutate(kp = ifelse(kp == "TG", "TGW", kp))
+  count(year, kp)
+  
 
 fig2 <- pse_total_dat %>%
   filter(year > 2009, source_found == "yes") %>%
@@ -340,12 +341,15 @@ fig2 <- pse_total_dat %>%
   moz.utils::standard_theme() +
   labs(x=element_blank(), y=element_blank(), fill=element_blank()) +
   coord_cartesian(clip = "off", ylim = c(0,1)) +
-  geom_text(data = method_counts %>% name_kp(F), aes(y=1.1, label = n)) +
-  theme(strip.text = element_text(face = "bold", size=13),
-        strip.text.x = element_text(margin = margin(b=20)),
-        axis.text.x = element_text(angle = 20, hjust = 1))
+  geom_text(data = method_counts %>% name_kp(F), aes(y=1.1, label = n), fontface = "bold", size = 4) +
+  geom_text(data = data.frame(kp = "Female sex workers"), aes(label = "Number of\nstudies", x=-Inf, y=1.1), hjust=0.8, fontface= "bold", inherit.aes = F) +
+  theme(strip.text = element_text(face = "bold", size=16),
+        strip.text.x = element_text(margin = margin(b=40)),
+        axis.text.x = element_text(angle = 20, hjust = 1, size = 15),
+        axis.text.y = element_text(size = 15),
+        panel.grid = element_blank())
 
-png("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Figs/Fig 2 PSE methods over time.png", width = 800, height = 400)
+png("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Figs/Fig 2 PSE methods over time.png", width = 1200, height = 500)
 fig2
 dev.off()
 

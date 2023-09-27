@@ -96,7 +96,7 @@ if(!iso3 %in% c("SSD", "ERI")) {
   filtered_indicators <- indicators %>%
     filter(area_level <= admin1_lvl,
            indicator %in% c("population", "plhiv", "art_current_residents"),
-           age_group_label %in% c("15+", "15-49", "15-24", "20-24", "25-29", "25-49", "15-64"),
+           age_group_label %in% c("15+", "15-49", "15-24", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49", "25-49", "15-64"),
            calendar_quarter == time_point) %>%
     select(area_level:age_group_label, indicator, mean) %>%
     pivot_wider(names_from = indicator, values_from = mean) %>%
@@ -110,13 +110,25 @@ if(!iso3 %in% c("SSD", "ERI")) {
                                                population = sum(population),
                                                art_current_residents = sum(art_current_residents)) %>%
                                      mutate(age_group_label = "15-29",
-                                            age_group = "Y015_029") 
-                                   
-  ) %>%
+                                            age_group = "Y015_029"),
+                                   filtered_indicators %>%
+                                     filter(age_group_label %in% c("35-39", "40-44", "45-49")) %>%
+                                     group_by(across(-c(age_group, age_group_label))) %>%
+                                     summarise(plhiv = sum(plhiv),
+                                               population = sum(population),
+                                               art_current_residents = sum(art_current_residents)) %>%
+                                     mutate(age_group_label = "35-49",
+                                            age_group = "Y035_049") ) %>%
     ungroup() %>%
     mutate(prevalence = plhiv/population,
            art_coverage = art_current_residents/plhiv) %>%
     select(-c(plhiv, art_current_residents))
+  
+  data_age_groups <- unique(dat$prev$age_group)[!is.na(unique(dat$prev$age_group))]
+  naomi_age_groups <- unique(filtered_indicators$age_group)
+  
+  if(length(data_age_groups[!data_age_groups %in% naomi_age_groups])>0)
+    stop("Age groups in data not in Naomi")
   
   filtered_indicators <- filtered_indicators %>%
     pivot_longer(cols = c(prevalence, population, art_coverage), names_to = "indicator", values_to = "mean")

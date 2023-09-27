@@ -55,7 +55,7 @@ names(id) <- ssa_iso3
 lapply(id %>% compact(), orderly_commit)
 
 ### SEARCH
-orderly::orderly_search(name = "aaa_scale_pop", query = paste0('latest(parameter:iso3 == "', "GHA", '")'), draft = FALSE)
+orderly::orderly_search(name = "aaa_scale_pop", query = paste0('latest(parameter:iso3 == "', "COD", '")'), draft = FALSE)
 
 
 id <- orderly_batch("aaa_inputs_orderly_pull", parameters = data.frame(iso3 = ssa_iso3))

@@ -29,6 +29,14 @@ if(iso3 != "SSD") {
                                 iso3 = NA_character_)
 }
 
+if(iso3 == "BFA") {
+  city_population <- city_population %>%
+    bind_rows(read_csv("bfa-humd-pop-scaled.csv", show_col_types = F) %>%
+                mutate(area_name = str_to_sentence(area_name),
+                       iso3 = iso3_c
+                ))
+}
+
 
 population <- population %>%
   bind_rows(city_population)
@@ -58,7 +66,7 @@ extrap_pop <- population %>%
     year = year + 5)
 
 population <- bind_rows(
-  population,
+  population %>% filter(year<2020),
   extrap_pop
 )
 
@@ -77,9 +85,29 @@ pse <- pse %>%
     kp == "MSM" ~ "male",
     kp == "PWID" ~ "both"
   )) %>%
-  # distinct(kp, area_name, year, pse, pse_lower, pse_upper, .keep_all=TRUE) %>%
   mutate(row_id = row_number())
-         # iso3 = countrycode(country.name, "country.name", "iso3c")) 
+
+pse <- pse %>%
+    mutate(area_name = case_when(
+      iso3 == "BFA" & area_name == "Sanmentenga" ~  "Sanmatenga",
+      
+      iso3 == "COD" & area_name == "Bas Congo" ~ "Kongo Central",
+      iso3 == "COD" & area_name == "Katanga" ~ "Tanganyika; Haut-Lomami; Lualaba; Haut-Katanga",
+      iso3 == "COD" & area_name %in% c("Oriental", "Orientale") ~ "Ituri; Haut-Uele; Tshopo; Bas-Uele",
+      
+      iso3 == "ETH" & area_name == "Adama" ~ "Adama Town",
+      
+      iso3 == "KEN" & area_name == "Dagoretti" ~ "Dagoretti South; Dagoretti North",
+      iso3 == "KEN" & area_name == "Embakasi" ~ "Embakasi South; Embakasi North; Embakasi West; Embakasi East; Embakasi Central",
+      iso3 == "KEN" & area_name == "Mavoko" ~ "Athiriver",
+      iso3 == "KEN" & area_name == "Nairobi" & study_idx == 124 ~ "Nairobi (County)",
+      iso3 == "KEN" & area_name == "Tharaka" & study_idx == 124 ~ "Tharaka-Nithi",
+      
+      iso3 == "NAM" & area_name == "Khomas region" ~ "Khomas",
+      
+      
+      TRUE ~ area_name
+    ))
 
 if(nrow(pse)) {
     

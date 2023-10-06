@@ -41,6 +41,9 @@ packages:
   - spud
   - countrycode
   - stringdist
+  - ggmap
+  - osmdata
+  - purrr
 
 resources:
   - merge_cities.geojson

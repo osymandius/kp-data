@@ -7,12 +7,14 @@ ssa_iso3 <- moz.utils::ssa_iso3()
 
 collapse <- function(...) {paste0(..., collapse = "\n")}
 
+setwd(rprojroot::find_rstudio_root_file())
+
 ### PSE
 
 pse_remove_label <- list()
 
 pse_total_dat_original <- read_csv("~/Documents/GitHub/kp-data-private/data/complete_dat.csv", show_col_types = F) %>%
-  filter(indicator == "pse") %>%
+  filter(indicator == "pse", iso3 %in% ssa_iso3()) %>%
   mutate(kp = ifelse(kp == "TG", "TGW", kp)) %>%
   filter(kp %in% c("FSW", "MSM", "PWID", "TGW")) %>%
   separate(dataset_id, sep = "_", into=c("dataset", NA), remove = F) %>%
@@ -84,16 +86,6 @@ pse_total_dat <- pse_total_dat_original %>%
   filter(is.na(duplicate_of),
          !is.na(iso3))
 
-#Remove non-specific area names
-nonspec_nrow_pse <- pse_total_dat %>%
-  filter(str_detect(area_name, regex("urban|rural|county|counties|districts|state|total", ignore_case = TRUE))) %>%
-  nrow()
-
-pse_remove_label$nonspec <- paste0("Unspecific area name (n = ", nonspec_nrow_pse, ")")
-
-pse_total_dat <- pse_total_dat %>%
-  filter(!str_detect(area_name, regex("urban|rural|county|counties|districts|state|total", ignore_case = TRUE)))
-
 #Remove extrapolated values
 modelled_nrow_pse <- pse_total_dat %>%
   filter(simple_method == "Modelled") %>%
@@ -113,6 +105,17 @@ pse_remove_label$non_emp <- paste0("Non-empirical methods (n = ", non_emp_nrow_p
 
 pse_total_dat <- pse_total_dat %>%
   filter(simple_method != "Non-empirical")
+
+#Remove non-specific area names
+nonspec_nrow_pse <- pse_total_dat %>%
+  filter(area_name %in% c("Rural area", "Urban area", "Eight States", "25 districts", "34 counties in Kenya")) %>%
+  nrow()
+
+pse_remove_label$nonspec <- paste0("Unspecific area name (n = ", nonspec_nrow_pse, ")")
+
+pse_total_dat <- pse_total_dat %>%
+  filter(!area_name %in% c("Rural area", "Urban area", "Eight States", "25 districts", "34 counties in Kenya"))
+
 
 # #Remove outliers
 # pse_remove_label$outlier <- NA
@@ -197,78 +200,12 @@ setwd(rprojroot::find_rstudio_root_file())
 pse_final <- lapply(paste0("archive/aaa_assign_populations/", pse_id, "/pse_prevalence.csv"),
        read_csv, show_col_types = FALSE) %>%
   bind_rows() %>%
-  filter(is.na(x),
-         !is.na(prop_estimate),
-         method != "Extrapolation from 2S-CRC"
-  ) %>%
   mutate(iso3 = countrycode(country.name, "country.name", "iso3c"))
-    # method = case_when(
-    #   method == "" ~ NA_character_,
-    #   method %in% c("Programmatic mapping", "programmatic mapping", "Hotspot mapping", "PLACE", "Enumeration/mapping", "Mapping", "Mapping and enumeration") ~ "PLACE/Mapping",
-    #   method %in% c("Unique object", "Unique object multiplier", "Unique Object Multiploer") ~ "Object multiplier",
-    #   method %in% c("Service Multiplier", "Service multiplier", "Multiplier") ~ "Service multiplier",
-    #   method %in% c("Unique event multiplier", "Unique event", "Event multiplier") ~ "Event multiplier",
-    #   method %in% c("Capture - recapture", "CRC", "2S-CEC") ~ "2S-CRC",
-    #   method %in% c("Wisdom of Crowds, unique object distribution, social event and successive-sampling methods",
-    #                 "Service multiplier, Unique Object , Literature SS-PSE(RDS-A), Unique event & Consensus approach-Modified Delphi",
-    #                 "Mapping, Enumeration and literature review",
-    #                 "Consensus and mapping",
-    #                 "Unique object, WODM, service multiplier, social multiplier, 2S-CRC",
-    #                 "Wisdom of Crowds, unique object multiplier, social events and SS-PSE",
-    #                 "WODC, unique object, service, social, 2S-CRC",
-    #                 "Wisdom of the masses and capture-recapture",
-    #                 "Wisdom of the masses and social multiplier",
-    #                 "Triangulation of the follow methods unique object multiplier, wisdom of the masses,  capture â€“ recapture  and multiplier",
-    #                 "Unique Object multiplier et wisdom of the masses, NSUM and capture-recapture",
-    #                 "Unique object multiplier, Census, Respondent driven sampling survey and service multiplier method",
-    #                 "Unique object multiplier, social event, wisdom of the masses and NSUM",
-    #                 "WODC, unique object, service, social",
-    #                 "Literature review (meta-analysis model for surveys) and Delphi method",
-    #                 "Literature review (meta-analysis) and Delphi method",
-    #                 "Literature review and individual interviews",
-    #                 "Delphi method and consensus",
-    #                 "Consensus of % adult population and population growth",
-    #                 "Consensus (service, literature, unique object, mapping, WOTC)",
-    #                 "Median of unique object, WOTC",
-    #                 "Median of unique object, WOTC, 2S-CRC",
-    #                 "Programme data",
-    #                 "RDS",
-    #                 "Snowball",
-    #                 "Triangulation",
-    #                 "Social event, wisdom of the crowds, capture-recapture, unique object multiplier and service multiplier",
-    #                 "Wisdom of the masses, unique object multiplier and social event"
-    #                 
-    #   ) ~ "Multiple methods - mixture",
-    #   method %in% c("Service multiplier, unique object multiplier,  literature review, RDSAnalyst  SS-PSE Method",
-    #                 "Unique object multiplier, service multiplier, event multiplier",
-    #                 "Bayesian synthesis - multiplier and SS-PSE",
-    #                 "Unique object and special event multiplier",
-    #                 "Unique object, social, service, 2S-CRC",
-    #                 "Capture-recapture, unique object multiplier and register multiplier",
-    #                 "Capture-recapture and NSUM",
-    #                 "Multiplier, capture-recapture and social event",
-    #                 "Unique object, event and service multipliers, SS-PSE, and a synthesis of the methods using the Anchored Multiplier",
-    #                 "Unique object, service multiplier and NSUM",
-    #                 "Unique object, social, service",
-    #                 "Consensus (SS-PSE, unique object, multiplier, 1% recommendation)",
-    #                 "Consensus (SS-PSE, unique object, multiplier)",
-    #                 "Social event, unique object multiplier and service multiplier",
-    #                 "Bayesian synthesis (SS-PSE, literature, something else)"
-    #                 
-    #                 
-    #   ) ~ "Multiple methods - empirical",
-    #   TRUE ~ method
-    # ),
-    # simple_method = case_when(
-    #   method %in% c("2S-CRC", "3S-CRC", "Multiple methods - empirical", "Object/event multiplier", "Service multiplier", "SS-PSE") ~ "empirical",
-    #   method %in% c("Multiple methods - mixture", "PLACE/Mapping") ~ "nonempirical",
-    #   TRUE ~ method
-    # ))
+  
+pse_remove_label$denom <- nrow(pse_final %>% filter(is.na(prop_estimate)))
+pse_remove_label$denom <- paste0("No area match (n = ", pse_remove_label$denom, ")")
 
-# bad_match <- lapply(paste0("archive/aaa_assign_populations/", pse_id[!is.na(pse_id)], "/bad_match_error.csv"),
-#        read_csv) %>%
-#   bind_rows() %>%
-#   distinct(iso3, given_name)
+pse_final <- filter(pse_final, !is.na(prop_estimate))
 
 pse_final_text <- pse_final %>%
   mutate(kp = ifelse(kp == "TG", "TGW", kp)) %>%
@@ -281,8 +218,6 @@ pse_final_text <- pse_final %>%
          name = "Final PSE data") %>%
   select(name, n, everything())
 
-pse_remove_label$denom <- nrow(pse_cleaned_data) - nrow(pse_final)
-pse_remove_label$denom <- paste0("No area match (n = ", pse_remove_label$denom, ")")
 
 pse_final_labels <- collapse(pse_final_text)
 
@@ -386,7 +321,7 @@ digraph a_nice_graph {
   m4_non_emp [label = '@@2-4']
   m5_unsourced [label = '@@2-5']
   clean [label = '@@3']
-  c1_denom [label = '@@2-7']
+  c1_denom [label = '@@2-6']
   final [label = '@@4']
     
   node [shape=none, width=0, height=0, label='']
@@ -435,6 +370,16 @@ pse_flow %>%
 # ) %>%
 #   lapply(type_convert) %>%
 #   bind_rows()
+
+library(tidyverse)
+library(DiagrammeR)
+library(countrycode)
+library(DiagrammeRsvg)
+
+ssa_iso3 <- moz.utils::ssa_iso3()
+
+collapse <- function(...) {paste0(..., collapse = "\n")}
+setwd(rprojroot::find_rstudio_root_file())
 
 prev_total_dat_original <- read_csv("~/Documents/GitHub/kp-data-private/data/complete_dat.csv") %>%
   filter(indicator == "prevalence")
@@ -527,16 +472,6 @@ prev_total_dat <- prev_total_dat_original %>%
          is.na(is_aggregate),
          !is.na(iso3))
 
-# Remove non-specific area names
-nonspec_nrow_prev <- prev_total_dat %>%
-  filter(str_detect(area_name, regex("urban|rural|county|counties|districts|state|total", ignore_case = TRUE))) %>%
-  nrow()
-
-prev_remove_label$nonspec <- paste0("Unspecific area name (n = ", nonspec_nrow_prev, ")")
-
-prev_total_dat <- prev_total_dat %>%
-  filter(!str_detect(area_name, regex("urban|rural|county|counties|districts|state|total", ignore_case = TRUE)))
-
 # Remove outliers
 # prev_remove_label$unconf <- NA
 
@@ -594,13 +529,12 @@ prev_cleaned_data <- bind_rows(prev_checked) %>%
   filter(kp %in% c("FSW", "MSM", "PWID", "TGW"))
 
 duplicate_nrow_prev <- nrow(prev_total_dat_original) -# Total data
-  (nonspec_nrow_prev + # non specific area name
-     unsourced_nrow_prev + # Unsourced
+  (unsourced_nrow_prev + # Unsourced
      nrow(prev_cleaned_data)) # Cleaned prev data (the remiander)
 
 prev_remove_label$duplicates <- paste0("Duplicated data (n = ", duplicate_nrow_prev, ")")
 
-write_csv(prev_cleaned_data, "src/aaa_assign_province/prev_clean_sourced.csv")
+write_csv(prev_cleaned_data %>% ungroup %>% mutate(row_id = row_number()), "src/aaa_assign_province/prev_clean_sourced.csv")
 
 prev_cleaned_text <- prev_cleaned_data %>%
   count(kp) %>%
@@ -608,7 +542,7 @@ prev_cleaned_text <- prev_cleaned_data %>%
   pivot_wider(names_from = kp, values_from = n) %>%
   mutate(across(everything(), ~paste0(cur_column(), " ", .x)),
          n = paste0("(n = ", nrow(prev_cleaned_data), ")"),
-         name = "Cleaned HIV prevalence data") %>%
+         name = "Final HIV prevalence data") %>%
   select(name, n, everything())
 
 prev_clean_labels <- collapse(prev_cleaned_text)
@@ -714,15 +648,6 @@ art_total_dat <- art_total_dat_original %>%
          is.na(is_aggregate),
          !is.na(iso3))
 
-# Remove non-specific area names
-nonspec_nrow_art <- art_total_dat %>%
-  filter(str_detect(area_name, regex("urban|rural|county|counties|districts|state|total", ignore_case = TRUE))) %>%
-  nrow()
-
-art_remove_label$nonspec <- paste0("Unspecific area name (n = ", nonspec_nrow_art, ")")
-
-art_total_dat <- art_total_dat %>%
-  filter(!str_detect(area_name, regex("urban|rural|county|counties|districts|state|total", ignore_case = TRUE)))
 
 # Remove outliers
 # art_remove_label$unconf <- NA
@@ -753,18 +678,25 @@ art_selfself <- art_checked %>%
 
 art_remove_label$selfself <- paste0("Self-report HIV status (n = ", nrow(art_selfself), ")")
 
+## Remove programme-recruited studies
+
+art_programme <- art_checked %>%
+  filter(study_idx %in% c(19, 28, 28, 34, 57, 62, 103, 118, 119, 119, 121, 138, 209, 212, 219, 253, 254, 256, 267))
+
+art_remove_label$programme <- paste0("Clinic-based recruitment (n = ", nrow(art_programme), ")")
+
 art_cleaned_data <- bind_rows(art_checked) %>%
-  filter(method != "self-self") %>%
-  filter(kp %in% c("FSW", "MSM", "PWID", "TGW"))
+  filter(method != "self-self",
+         !study_idx %in% c(19, 28, 28, 34, 57, 62, 103, 118, 119, 119, 121, 138, 209, 212, 219, 253, 254, 256, 267),
+         kp %in% c("FSW", "MSM", "PWID", "TGW"))
 
 duplicate_nrow_art <- nrow(art_total_dat_original) -# Total data
-  (nonspec_nrow_art + # non specific area name
-     unsourced_nrow_art + # Unsourced
+  (unsourced_nrow_art + # Unsourced
      nrow(art_cleaned_data)) # Cleaned prev data (the remiander)
 
 art_remove_label$duplicates <- paste0("Duplicated data (n = ", duplicate_nrow_art, ")")
 
-write_csv(art_cleaned_data, "src/aaa_assign_province/art_clean_sourced.csv")
+write_csv(art_cleaned_data %>% ungroup %>% mutate(row_id = row_number()), "src/aaa_assign_province/art_clean_sourced.csv")
 
 art_cleaned_text <- art_cleaned_data %>%
   count(kp) %>%
@@ -772,7 +704,7 @@ art_cleaned_text <- art_cleaned_data %>%
   pivot_wider(names_from = kp, values_from = n) %>%
   mutate(across(everything(), ~paste0(cur_column(), " ", .x)),
          n = paste0("(n = ", nrow(art_cleaned_data), ")"),
-         name = "Cleaned ART coverage data") %>%
+         name = "Final ART coverage data") %>%
   select(name, n, everything())
 
 art_clean_labels <- collapse(art_cleaned_text)
@@ -780,12 +712,12 @@ art_clean_labels <- collapse(art_cleaned_text)
 setwd(rprojroot::find_rstudio_root_file())
 
 prev_id <- lapply(ssa_iso3, function(x){
-  orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "', x, '" && parameter:version == 2022)'), draft = FALSE)
+  orderly::orderly_search(name = "aaa_assign_province", query = paste0('latest(parameter:iso3 == "', x, '" && parameter:version == 2022)'), draft = FALSE)
 })
 
 # prev_id <- id$id
 
-prev_final <- lapply(paste0("archive/aaa_extrapolate_naomi/", prev_id, "/prev.csv"),
+prev_final <- lapply(paste0("archive/aaa_assign_province/", prev_id, "/prev.csv"),
                      function(x) {read_csv(x, show_col_types = FALSE) %>% select(-any_of("...1"))}) %>%
   bind_rows()
 
@@ -809,11 +741,20 @@ saveRDS(prev_final_text, "R/Report/R objects for report/Prevalence/prev_count_te
 write_csv(prev_final, "~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/HIV prevalence/prev_final_sourced.csv")
 saveRDS(prev_inputs_text, "R/Report/R objects for report/Prevalence/prev_input_count_text.rds")
 
-# art_id <- id$id
 
-art_final <- lapply(paste0("archive/aaa_extrapolate_naomi/", prev_id[!is.na(prev_id)], "/art.csv"),
+
+art_final <- lapply(paste0("archive/aaa_assign_province/", prev_id[!is.na(prev_id)], "/art.csv"),
                      function(x) {read_csv(x, show_col_types = FALSE) %>% select(-any_of("...1"))}) %>%
   bind_rows()
+
+art_cleaned_data %>% 
+  count(study_idx) %>%
+  rename(clean = n) %>%
+  left_join(art_final %>%
+              count(study_idx) %>%
+              rename(final = n)
+  ) %>%
+  filter(clean != final)
 
 art_final_text <- art_final %>%
   mutate(kp = ifelse(kp == "TG", "TGW", kp)) %>%
@@ -826,8 +767,8 @@ art_final_text <- art_final %>%
          name = "Final ART coverage data") %>%
   select(name, n, everything())
 
-art_remove_label$denom <- nrow(art_cleaned_data) - nrow(art_final)
-art_remove_label$denom <- paste0("No area match (n = ", art_remove_label$denom, ")")
+# art_remove_label$denom <- nrow(art_cleaned_data) - nrow(art_final)
+# art_remove_label$denom <- paste0("No area match (n = ", art_remove_label$denom, ")")
 
 art_final_labels <- collapse(art_final_text)
 
@@ -867,19 +808,13 @@ digraph a_nice_graph {
   node [fontname = Helvetica, fontcolor = darkslategray,shape = rectangle, color = darkslategray]
   inp_total [label = '@@1-5']
   m1_dedup [label = '@@2-1']
-  m2_nonspec [label = '@@2-2']
   m3_unsourced [label = '@@2-3']
   clean [label = '@@3']
-  c1_denom [label = '@@2-4']
-  final [label = '@@4']
     
   node [shape=none, width=0, height=0, label='']
   p3 -> clean;
-  p6 -> final;
   {rank=same; p1 -> m1_dedup};
-  {rank=same; p2 -> m2_nonspec};
   {rank=same; p3 -> m3_unsourced};
-  {rank=same; p6 -> c1_denom};
   
   inp_surv -> inp_total;
 
@@ -887,7 +822,6 @@ digraph a_nice_graph {
     inp_total -> p1;
     p1 -> p2;
     p2 -> p3;
-    clean -> p6;
     
 }
 
@@ -927,17 +861,13 @@ digraph a_nice_graph {
   m3_unsourced [label = '@@2-3']
   m4_selfself [label = '@@2-4']
   clean [label = '@@3']
-  c1_denom [label = '@@2-6']
-  final [label = '@@4']
     
   node [shape=none, width=0, height=0, label='']
   p4 -> clean;
-  p6 -> final;
   {rank=same; p1 -> m1_dedup};
   {rank=same; p2 -> m2_nonspec};
   {rank=same; p3 -> m3_unsourced};
   {rank=same; p4 -> m4_selfself};
-  {rank=same; p6 -> c1_denom};
   
   inp_gf -> inp_total;
 
@@ -946,7 +876,6 @@ digraph a_nice_graph {
     p1 -> p2;
     p2 -> p3;
     p3 -> p4;
-    clean -> p6;
     
 }
 

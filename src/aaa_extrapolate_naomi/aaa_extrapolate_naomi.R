@@ -6,24 +6,20 @@ areas <- read_sf("depends/naomi_areas.geojson")
 admin1_lvl <- filter(read_csv("resources/iso_mapping_fit.csv", show_col_types = FALSE), iso3 == iso3_c)$admin1_level
 
 prev <- read_csv("depends/prev_assigned_province.csv", show_col_types = FALSE) %>%
-  mutate(indicator = "HIV prevalence",
-         iso3 = iso3) %>%
-  select(-province)
+  mutate(indicator = "HIV prevalence")
 
-if(nrow(prev))
-  prev <- prev %>%
-    left_join(areas %>% select(matched_province_area_id = area_id, province = area_name) %>% st_drop_geometry())
+# if(nrow(prev))
+#   prev <- prev %>%
+#     left_join(areas %>% select(matched_province_area_id = area_id, province = area_name) %>% st_drop_geometry())
 
 art <- read_csv("depends/art_assigned_province.csv", show_col_types = FALSE) %>%
-  mutate(indicator = "ART coverage",
-         iso3 = iso3) %>%
-  select(-province)
+  mutate(indicator = "ART coverage")
 
 if(nrow(art))
   art <- art %>%
     left_join(areas %>% select(matched_province_area_id = area_id, province = area_name) %>% st_drop_geometry())
 
-dat <- list("prev" = prev %>% select(-area_level), "art" = art %>% select(-area_level))
+dat <- list("prev" = prev, "art" = art)
 
 ###########
 
@@ -50,33 +46,38 @@ spectrum_ratio <- spectrum %>%
 
 if(!iso3 %in% c("SSD", "ERI")) {
   
-  sharepoint <- spud::sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
-  folder <- sharepoint$folder(site = Sys.getenv("SHAREPOINT_SITE"), path = "Shared Documents/Data/Spectrum files/2022 naomi preliminary")
+  # sharepoint <- spud::sharepoint$new(Sys.getenv("SHAREPOINT_URL"))
+  # folder <- sharepoint$folder(site = Sys.getenv("SHAREPOINT_SITE"), path = "Shared Documents/Data/Spectrum files/2022 naomi preliminary")
   
-  if(iso3 == "MOZ") {
-    folder <- sharepoint$folder(site = Sys.getenv("SHAREPOINT_SITE"), path = "Shared Documents/Data/Spectrum files/2023 naomi final")
-  }
+  indicators <- list.files("~/Imperial College London/HIV Inference Group - WP - Documents/Data/Spectrum files/2023 naomi final", pattern = "zip", full.names = T) %>%
+    grep(iso3, ., value = T)
   
-  path <- filter(folder$list(),
-         str_detect(name, fixed(iso3, ignore_case=TRUE)),
-         str_detect(name, "zip"))$name
   
-  # path <- grep(iso3, folder$list()$name, value=TRUE, ignore.case = TRUE)
   
-  if(length(path) > 1)
-    stop("More than one Naomi fit found")
-  
-  if(length(path) == 0)
-    stop("No Naomi fit found")
-  
-  if(iso3 == "MOZ") {
-    path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Data/Spectrum files/2023 naomi final", path)
-  } else {
-    path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Data/Spectrum files/2022 naomi preliminary", path)
-  }
-    
-  indicators <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = path)
-  # indicators <- read_output_package(indicators)
+  # if(iso3 == "MOZ") {
+  #   folder <- sharepoint$folder(site = Sys.getenv("SHAREPOINT_SITE"), path = "Shared Documents/Data/Spectrum files/2023 naomi final")
+  # }
+  # 
+  # path <- filter(folder$list(),
+  #        str_detect(name, fixed(iso3, ignore_case=TRUE)),
+  #        str_detect(name, "zip"))$name
+  # 
+  # # path <- grep(iso3, folder$list()$name, value=TRUE, ignore.case = TRUE)
+  # 
+  # if(length(path) > 1)
+  #   stop("More than one Naomi fit found")
+  # 
+  # if(length(path) == 0)
+  #   stop("No Naomi fit found")
+  # 
+  # if(iso3 == "MOZ") {
+  #   path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Data/Spectrum files/2023 naomi final", path)
+  # } else {
+  #   path <- file.path("sites", Sys.getenv("SHAREPOINT_SITE"), "Shared Documents/Data/Spectrum files/2022 naomi preliminary", path)
+  # }
+  #   
+  # indicators <- sharepoint_download(sharepoint_url = Sys.getenv("SHAREPOINT_URL"), sharepoint_path = path)
+  # # indicators <- read_output_package(indicators)
   
   tmpd <- tempfile()
   on.exit(unlink(tmpd))
@@ -118,7 +119,24 @@ if(!iso3 %in% c("SSD", "ERI")) {
                                                population = sum(population),
                                                art_current_residents = sum(art_current_residents)) %>%
                                      mutate(age_group_label = "35-49",
-                                            age_group = "Y035_049") ) %>%
+                                            age_group = "Y035_049"),
+                                   filtered_indicators %>%
+                                     filter(age_group_label %in% c("35-39", "40-44")) %>%
+                                     group_by(across(-c(age_group, age_group_label))) %>%
+                                     summarise(plhiv = sum(plhiv),
+                                               population = sum(population),
+                                               art_current_residents = sum(art_current_residents)) %>%
+                                     mutate(age_group_label = "35-44",
+                                            age_group = "Y035_044"),
+                                   filtered_indicators %>%
+                                     filter(age_group_label %in% c("30-34", "35-39", "40-44", "45-49")) %>%
+                                     group_by(across(-c(age_group, age_group_label))) %>%
+                                     summarise(plhiv = sum(plhiv),
+                                               population = sum(population),
+                                               art_current_residents = sum(art_current_residents)) %>%
+                                     mutate(age_group_label = "30-49",
+                                            age_group = "Y030_049")
+                                   ) %>%
     ungroup() %>%
     mutate(prevalence = plhiv/population,
            art_coverage = art_current_residents/plhiv) %>%

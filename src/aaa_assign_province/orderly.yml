@@ -21,6 +21,38 @@ artefacts:
       description: ART coverage error warnings for bad matches
       filenames:
         - art_bad_match_error.csv
+  - data:
+      description: 2022 admin-1 indicators for prediction
+      filenames:
+        - area_indicators.csv
+  - data:
+      description: HIV prevalence export for KP workbook
+      filenames:
+        - workbook_export_prev.csv
+  - data:
+      description: ART coverage export for KP workbook
+      filenames:
+        - workbook_export_art.csv
+  - data:
+      description: Naomi prevalence and ART extrapolated through time
+      filenames:
+        - extrapolated_naomi.csv
+  - data:
+      description: Matched admin1 prevalence for KP prevalence data
+      filenames:
+        - prev.csv
+  - data:
+      description: Matched admin1 ART coverage for KP ART data
+      filenames:
+        - art.csv
+  # - data:
+  #     description: HIV prevalence export for data sharing
+  #     filenames:
+  #       - data_sharing_prev.csv
+  # - data:
+  #     description: ART coverage export for data sharing
+  #     filenames:
+  #       - data_sharing_art.csv
 
 parameters:
   iso3:
@@ -55,3 +87,7 @@ depends:
     id: latest(parameter:iso3 == iso3 && parameter:version == version)
     use:
       depends/naomi_areas.geojson: outputs/naomi_areas.geojson
+  aaa_data_pjnz:
+    id: latest(parameter:iso3 == iso3 && parameter:version == version)
+    use:
+      depends/naomi_pjnz.zip: naomi_pjnz.zip

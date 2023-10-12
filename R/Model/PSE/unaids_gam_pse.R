@@ -48,27 +48,32 @@ gam %>%
   facet_wrap(~kp)
 
 # mod <- lmer(plogis(pse_prop) ~ year + (1 + year|iso3), data = gam)
-fsw_mod <- lmer(plogis(pse_prop) ~ year + (1+ year|iso3), data = gam %>% filter(kp == "FSW",
+fsw_mod <- lmer(pse_prop*100 ~ year + (1+ year|iso3), data = gam %>% filter(kp == "FSW",
                                                                             pse_prop < 0.02))
 
-msm_mod18 <- lmer(plogis(pse_prop) ~ year + (1|iso3), data = gam %>% filter(kp == "MSM",
+msm_mod18 <- lmer(pse_prop*100 ~ year + (1|iso3), data = gam %>% filter(kp == "MSM",
                                                                         outside_range == 0,
                                                                         year < 2021,
                                                                         pse_prop < 0.02))
 
-msm_mod21 <- lmer(plogis(pse_prop) ~ year + (1|iso3), data = gam %>% filter(kp == "MSM",
+msm_mod21 <- lmer(pse_prop*100 ~ year + (1|iso3), data = gam %>% filter(kp == "MSM",
                                                                             outside_range == 0,
                                                                             u1 == 0,
                                                                             pse_prop < 0.02))
 
-msm_mod_all <- lmer(plogis(pse_prop) ~ year + (1|iso3), data = gam %>% filter(kp == "MSM",
+msm_mod_all <- lmer(pse_prop*100 ~ year + (1|iso3), data = gam %>% filter(kp == "MSM",
                                                                               pse_prop < 0.02))
 
-pwid_mod <- lmer(plogis(pse_prop) ~ year + (1|iso3), data = gam %>% filter(kp == "PWID",
+pwid_mod <- lmer(pse_prop*100 ~ year + (1|iso3), data = gam %>% filter(kp == "PWID",
                                                                        pse_prop < 0.02))
 
-summary(pwid_mod)
+summary(fsw_mod)
 
+summary(msm_mod18)
+summary(msm_mod21)
+summary(msm_mod_all)
+
+summary(pwid_mod)
 
 pred <- lapply(c(fsw_mod, msm_mod18, msm_mod21, msm_mod_all, pwid_mod), function(x) {
   df <- data.frame(year = 2010:2022) %>%

@@ -30,11 +30,21 @@ if(iso3 != "SSD") {
 }
 
 if(iso3 == "BFA") {
+  
+  humd_pop <- read_csv("bfa-humd-pop-scaled.csv", show_col_types = F) %>%
+    mutate(area_name = str_to_sentence(area_name),
+           iso3 = iso3_c
+    )
+  
   city_population <- city_population %>%
-    bind_rows(read_csv("bfa-humd-pop-scaled.csv", show_col_types = F) %>%
-                mutate(area_name = str_to_sentence(area_name),
-                       iso3 = iso3_c
-                ))
+    bind_rows(humd_pop)
+  
+  bfa_humd_areas <- read_sf("bfa_humd_areas.geojson") %>%
+    st_make_valid() %>%
+    st_join(areas %>% filter(area_level == 1) %>% select(province_area_id = area_id, province = area_name), largest = T) %>%
+    mutate(area_name = str_replace_all(adm2_name1, "é|è", "e")) %>%
+    left_join(humd_pop %>% distinct(area_id, area_name)) %>%
+    select(area_id, area_name, province, province_area_id)
 }
 
 
@@ -90,6 +100,7 @@ pse <- pse %>%
 pse <- pse %>%
     mutate(area_name = case_when(
       iso3 == "BFA" & area_name == "Sanmentenga" ~  "Sanmatenga",
+      iso3 == "BFA" & area_name == "Toy" ~  "Tuy",
       
       iso3 == "COD" & area_name == "Bas Congo" ~ "Kongo Central",
       iso3 == "COD" & area_name == "Katanga" ~ "Tanganyika; Haut-Lomami; Lualaba; Haut-Katanga",
@@ -105,6 +116,8 @@ pse <- pse %>%
       
       iso3 == "NAM" & area_name == "Khomas region" ~ "Khomas",
       
+      iso3 == "SLE" & area_name == "Western rural" ~ "Western Area Rural",
+      iso3 == "SLE" & area_name == "Western Urban" ~ "Western Area Urban",
       
       TRUE ~ area_name
     ))
@@ -346,6 +359,32 @@ if(nrow(pse)) {
           left_join(row_populations)
       )
     
+    if(iso3 == "BFA")
+      pse <- pse %>% 
+        select(-c(province, province_area_id)) %>%
+        left_join(bfa_humd_areas %>% select(-area_name) %>% st_drop_geometry())
+    
+    pse <- pse %>%
+          mutate(province_area_id = case_when(
+            province_area_id == "CMR_1_3" ~ "CMR_1_5", # Douala merged into Littoral
+            province_area_id == "CMR_1_12" ~ "CMR_1_2", # Yaounde merged into Centre
+            province_area_id == "CMR_1_4" ~ "CMR_1_3", 
+            province_area_id == "CMR_1_5" ~ "CMR_1_4", 
+            province_area_id == "CMR_1_6" ~ "CMR_1_5", 
+            province_area_id == "CMR_1_7" ~ "CMR_1_6", 
+            province_area_id == "CMR_1_8" ~ "CMR_1_7", 
+            province_area_id == "CMR_1_9" ~ "CMR_1_8", 
+            province_area_id == "CMR_1_11" ~ "CMR_1_9",
+            
+            province_area_id == "ZMB_1_10" ~ "ZMB_1_10gh",
+            province_area_id == "ZMB_1_17" ~ "ZMB_1_17xt",
+            province_area_id == "ZMB_1_12" ~ "ZMB_1_12sg",
+            province_area_id == "ZMB_1_14" ~ "ZMB_1_14fz",
+            province_area_id == "ZMB_1_15" ~ "ZMB_1_15pi",
+            
+            TRUE ~ province_area_id
+          ))
+    
     pse <- pse %>%
       # bind_rows(pse_already_assigned) %>%
       mutate(
@@ -366,8 +405,8 @@ if(nrow(pse)) {
     
 } else {
   
-  pse <- data.frame(iso3 = iso3_c, x = "No KP PSE available")
-  bad_match_error <- data.frame(iso3 = iso3_c, x = "No KP PSE available")
+  pse <- data.frame()
+  bad_match_error <- data.frame()
   
 }
 

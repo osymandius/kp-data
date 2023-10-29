@@ -1,18 +1,44 @@
 iso3_c <- iso3
 
-areas <- read_sf("depends/naomi_areas.geojson")%>%
+areas <- read_sf("depends/naomi_areas.geojson") %>%
   mutate(iso3 = iso3_c)
+
+population <- read.csv("depends/interpolated_population.csv") 
+
+if(iso3 == "BEN") {
+  areas <- read_sf("ben_areas.geojson")%>%
+    mutate(iso3 = iso3_c)
+  
+  population <- read.csv("ben_pop.csv")
+}
+
+if(iso3 == "COG") {
+  areas <- read_sf("cog_areas.geojson") %>%
+    mutate(iso3 = iso3_c)
+  
+  population <- read.csv("cog_pop.csv")
+}
+
+if(iso3 == "GMB") {
+  areas <- read_sf("gmb_areas.geojson") %>%
+    mutate(iso3 = iso3_c)
+  
+  population <- read.csv("gmb_pop.csv")
+}
+
+if(iso3 == "MLI") {
+  areas <- read_sf("mli_areas.geojson") %>%
+    mutate(iso3 = iso3_c)
+  
+  population <- read.csv("mli_pop.csv")
+}
 
 area_lvl_mapping <- read_csv("resources/iso_mapping_fit.csv", show_col_types = FALSE)
 admin1_lvl <- area_lvl_mapping$admin1_level[area_lvl_mapping$iso3 == iso3_c]
 
-# merge_cities <- read_sf("depends/")
-
-population <- read.csv("depends/interpolated_population.csv") %>%
+population <- population %>%
   left_join(areas %>% dplyr::select(area_id, area_name) %>% st_drop_geometry()) %>%
   mutate(area_name = str_to_sentence(area_name))
-
-# naomi_names <- unique(population$area_name)
 
 if(iso3 != "SSD") {
   city_population <- read.csv("depends/interpolated_city_population.csv") %>%
@@ -92,8 +118,8 @@ pse <- pse %>%
   dplyr::select(iso3:count_upper, prop_lower, prop_estimate, prop_upper, area_level, study_idx, ref, data_checked, uid, -province) %>%
   mutate(sex = case_when(
     kp %in% c("FSW", "TG", "TGW") ~ "female",
-    kp == "MSM" ~ "male",
-    kp == "PWID" ~ "both"
+    kp %in% c("MSM", "PWID") ~ "male",
+    # kp == "PWID" ~ "both"
   )) %>%
   mutate(row_id = row_number())
 
@@ -101,6 +127,8 @@ pse <- pse %>%
     mutate(area_name = case_when(
       iso3 == "BFA" & area_name == "Sanmentenga" ~  "Sanmatenga",
       iso3 == "BFA" & area_name == "Toy" ~  "Tuy",
+      
+      iso3 == "BWA" & area_name == "Ngami" ~ "Ngamiland",
       
       iso3 == "COD" & area_name == "Bas Congo" ~ "Kongo Central",
       iso3 == "COD" & area_name == "Katanga" ~ "Tanganyika; Haut-Lomami; Lualaba; Haut-Katanga",
@@ -113,6 +141,16 @@ pse <- pse %>%
       iso3 == "KEN" & area_name == "Mavoko" ~ "Athiriver",
       iso3 == "KEN" & area_name == "Nairobi" & study_idx == 124 ~ "Nairobi (County)",
       iso3 == "KEN" & area_name == "Tharaka" & study_idx == 124 ~ "Tharaka-Nithi",
+      
+      iso3 == "MLI" & area_name == "GUEGNEKA (FANA)" & study_idx == 134 ~ "Guegneka",
+      iso3 == "MLI" & area_name == "KAYES" & study_idx == 134 ~ "Kayes Commune",
+      iso3 == "MLI" & area_name == "Kita" & study_idx == 134 ~ "Kita Commune",
+      iso3 == "MLI" & area_name == "NIORO" & study_idx == 134 ~ "Nioro Commune",
+      iso3 == "MLI" & area_name == "Kaladougou (Dioila)" & study_idx == 134 ~ "Kaladougou",
+      iso3 == "MLI" & area_name == "Benkadi (Kouremale)" & study_idx == 134 ~ "Benkadi-Kan",
+      iso3 == "MLI" & area_name == "BADJANGARA" & study_idx == 134 ~ "Bandiagara",
+      iso3 == "MLI" & area_name == "BADJANGA" & study_idx == 134 ~ "Bandiagara",
+      iso3 == "MLI" & area_name == "CINCINA" & study_idx == 134 ~ "Sincina",
       
       iso3 == "NAM" & area_name == "Khomas region" ~ "Khomas",
       
@@ -302,8 +340,8 @@ if(nrow(pse)) {
     row_populations <- best_matches %>%
       left_join(area_reshape) %>%
       mutate(sex = case_when(
-        kp %in% c("PWID") ~ "both",
-        kp %in% c("MSM", "TGM") ~ "male",
+        # kp %in% c("PWID") ~ "both",
+        kp %in% c("MSM", "TGM", "PWID") ~ "male",
         kp %in% c("FSW", "SW", "TG", "TGW") ~ "female"
       ),
       # age_group = case_when(
@@ -395,6 +433,10 @@ if(nrow(pse)) {
         age_group = NA,
         notes = NA,
         link = NA) %>%
+      mutate(simple_method = case_when(
+        simple_method == "PLACE/mapping" & method != "PLACE" ~ "mapping", 
+        method == "PLACE" ~ "PLACE",
+        TRUE ~ simple_method)) %>%
       select(-method) %>%
       rename(method = simple_method) %>%
       dplyr::select(all_of(c("country.name", "data_checked", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "area_match", "area_id", "province", "province_area_id", "year", "count_lower", "count_estimate", "count_upper", "population", "prop_lower", "prop_estimate", "prop_upper", "sample", "notes", "study_idx", "ref", "link")))

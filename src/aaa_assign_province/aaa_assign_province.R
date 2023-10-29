@@ -1,7 +1,8 @@
 iso3_c <- iso3
 
 areas <- read_sf("depends/naomi_areas.geojson") %>%
-  mutate(iso3 = iso3_c)
+  mutate(iso3 = iso3_c) %>%
+  st_make_valid()
 
 admin1_lvl <-
   filter(read_csv("resources/iso_mapping_fit.csv", show_col_types = FALSE),
@@ -75,7 +76,7 @@ if(iso3 == "ERI")
 
 # dat <- list("prev" = prev)
 # #
-x <- art
+x <- prev
 
 matched_province_dat <- lapply(dat, function(x) {
   indicator <- unique(x$indicator)
@@ -94,6 +95,8 @@ matched_province_dat <- lapply(dat, function(x) {
              iso3 == "ETH" & area_name == "Adama" ~ "Adama Town",
              
              iso3 == "GHA" & area_name == "Nothern" ~ "Northern",
+             
+             iso3 == "GNB" & area_name == "Guinea-Bissau" ~ "Guinea Bissau",
              
              iso3 == "KEN" & area_name == "Dagoretti" ~ "Dagoretti South; Dagoretti North",
              iso3 == "KEN" & area_name == "Embakasi" ~ "Embakasi South; Embakasi North; Embakasi West; Embakasi East; Embakasi Central",
@@ -291,6 +294,7 @@ matched_province_dat <- lapply(dat, function(x) {
           google_search == "kitebere Uganda" & study_idx == 234 ~ area_id == "UGA_1_04",
           google_search == "rwentuha Uganda" & study_idx == 234 ~ area_id == "UGA_1_02",
           google_search == "ehlanzeni South Africa" & study_idx == 242 ~ area_id == "ZAF_1_MP",
+          google_search == "ebibeyin Equatorial Guinea" & study_idx == 99 ~ area_id == "GNQ_2_02lh",
           TRUE ~ T)
         )
       
@@ -556,14 +560,17 @@ spectrum <- spectrum %>%
   filter(age %in% 15:49, year > 1999)
 
 spectrum_ratio <- spectrum %>%
-  bind_rows(
-    spectrum %>%
-      group_by(year) %>%
-      summarise(hivpop = sum(hivpop),
-                totpop = sum(totpop),
-                artpop = sum(artpop)) %>%
-      mutate(sex = "both")
-  ) %>%
+  filter(age %in% 15:49, year > 1999) %>%
+  select(iso3, year, age, sex, hivpop, totpop, artpop) %>%
+  sex_aggregation(c("hivpop", "totpop", "artpop")) %>%
+  # bind_rows(
+  #   spectrum %>%
+  #     group_by(year) %>%
+  #     summarise(hivpop = sum(hivpop),
+  #               totpop = sum(totpop),
+  #               artpop = sum(artpop)) %>%
+  #     mutate(sex = "both")
+  # ) %>%
   group_by(sex, year) %>%
   summarise(prevalence = sum(hivpop)/sum(totpop),
             art_coverage = sum(artpop)/sum(hivpop),
@@ -609,7 +616,7 @@ if(!iso3 %in% c("SSD", "ERI")) {
   filtered_indicators <- bind_rows(filtered_indicators, 
                                    filtered_indicators %>%
                                      filter(age_group_label %in% c("15-24", "25-29")) %>%
-                                     group_by(across(-c(age_group, age_group_label))) %>%
+                                     group_by(across(-c(age_group, age_group_label, plhiv, population, art_current_residents))) %>%
                                      summarise(plhiv = sum(plhiv),
                                                population = sum(population),
                                                art_current_residents = sum(art_current_residents)) %>%
@@ -617,7 +624,7 @@ if(!iso3 %in% c("SSD", "ERI")) {
                                             age_group = "Y015_029"),
                                    filtered_indicators %>%
                                      filter(age_group_label %in% c("35-39", "40-44", "45-49")) %>%
-                                     group_by(across(-c(age_group, age_group_label))) %>%
+                                     group_by(across(-c(age_group, age_group_label, plhiv, population, art_current_residents))) %>%
                                      summarise(plhiv = sum(plhiv),
                                                population = sum(population),
                                                art_current_residents = sum(art_current_residents)) %>%
@@ -625,7 +632,7 @@ if(!iso3 %in% c("SSD", "ERI")) {
                                             age_group = "Y035_049"),
                                    filtered_indicators %>%
                                      filter(age_group_label %in% c("35-39", "40-44")) %>%
-                                     group_by(across(-c(age_group, age_group_label))) %>%
+                                     group_by(across(-c(age_group, age_group_label, plhiv, population, art_current_residents))) %>%
                                      summarise(plhiv = sum(plhiv),
                                                population = sum(population),
                                                art_current_residents = sum(art_current_residents)) %>%
@@ -633,7 +640,7 @@ if(!iso3 %in% c("SSD", "ERI")) {
                                             age_group = "Y035_044"),
                                    filtered_indicators %>%
                                      filter(age_group_label %in% c("30-34", "35-39", "40-44", "45-49")) %>%
-                                     group_by(across(-c(age_group, age_group_label))) %>%
+                                     group_by(across(-c(age_group, age_group_label, plhiv, population, art_current_residents))) %>%
                                      summarise(plhiv = sum(plhiv),
                                                population = sum(population),
                                                art_current_residents = sum(art_current_residents)) %>%
@@ -716,7 +723,7 @@ if(!iso3 %in% c("SSD", "ERI")) {
     if(nrow(x)) {
       anonymised_dat <- x %>%
         select(!contains(c("Column", "..."))) %>%
-        left_join(kp_to_sex()) %>%
+        left_join(kp_to_sex() %>% mutate(sex = ifelse(kp == "PWID", "male", sex))) %>%
         # mutate(sex = case_when(
         #   kp %in% c("FSW", "SW", "TGW", "TG") ~ "female",
         #   kp %in% c("MSM", "TGM") ~ "male",
@@ -779,7 +786,8 @@ if(!iso3 %in% c("SSD", "ERI")) {
       indicator == "art_coverage" ~ "ART coverage",
       indicator == "population" ~ "Population",
       TRUE ~ indicator)) %>%
-    rename(provincial_value = value)
+    rename(provincial_value = value) %>%
+    select(-age_group)
   
   naomi_matched_dat <- lapply(dat, function(x) {
     
@@ -788,21 +796,25 @@ if(!iso3 %in% c("SSD", "ERI")) {
         select(!contains(c("Column", "..."))) %>%
         mutate(sex = case_when(
           kp %in% c("FSW", "SW", "TGW", "TG") ~ "female",
-          kp %in% c("MSM", "TGM") ~ "male",
-          kp == "PWID" ~ "both"
+          kp %in% c("MSM", "TGM", "PWID") ~ "male",
+          # kp == "PWID" ~ "both"
         ),
         has_age = ifelse(!is.na(age_group), 1, 0),
         age_group = case_when(
+          # is.na(age_group) | !kp %in% c("TG", "TGW", "MSM") ~ "Y015_049",
+          # is.na(age_group) | kp %in% c("TG", "TGW", "MSM") ~ "Y015_029",
           is.na(age_group) ~ "Y015_049",
           TRUE ~ as.character(age_group))
         ) %>%
-        left_join(df %>% select(indicator, sex, year, age_group, mean = provincial_value)) %>%
-        mutate(
-          matched_provincial_area_id = ifelse(length(unique(province)) > 1, iso3_c, matched_provincial_area_id),
-          province = ifelse(length(unique(province)) > 1, countrycode::countrycode(iso3_c, "iso3c", "country.name"), province),
-          rn = paste0("split_", row_number())) %>%
-        group_by(row_id, matched_provincial_area_id) %>%
+        left_join(df %>% select(indicator, sex, year, mean = provincial_value)) %>%
+        group_by(row_id) %>%
         mutate(mean = median(mean)) %>%
+        mutate(
+          model_matched_provincial_area_id = ifelse(length(unique(matched_provincial_area_id)) > 1, iso3_c, matched_provincial_area_id),
+          model_matched_provincial_area_id = ifelse(length(unique(matched_provincial_area_id)) > 1, countrycode::countrycode(iso3_c, "iso3c", "country.name"), matched_provincial_area_id),
+          rn = paste0("split_", row_number())) %>%
+        # group_by(row_id, matched_provincial_area_id) %>%
+        # mutate(mean = median(mean)) %>%
         pivot_wider(names_from = rn, values_from = matched_provincial_area_id) %>%
         unite("matched_provincial_area_id", starts_with("split"), sep = "; ") %>%
         mutate(matched_provincial_area_id = str_remove_all(matched_provincial_area_id, "; NA|NA; ")) %>%
@@ -857,8 +869,8 @@ if(nrow(dat$prev)) {
       population = NA,
       sex= case_when(
         kp %in%  c("FSW", "TG", "TGW") ~ "female",
-        kp == "MSM" ~ "male",
-        kp == "PWID" ~ "both"
+        kp %in% c("MSM", "PWID") ~ "male",
+        # kp == "PWID" ~ "both"
       ),
       age_group = NA,
       notes = NA,
@@ -888,8 +900,8 @@ if(nrow(dat$art)) {
       population = NA,
       sex= case_when(
         kp %in%  c("FSW", "TG", "TGW") ~ "female",
-        kp == "MSM" ~ "male",
-        kp == "PWID" ~ "both"
+        kp %in% c("MSM", "PWID") ~ "male",
+        # kp == "PWID" ~ "both"
       ),
       age_group = NA,
       notes = NA,

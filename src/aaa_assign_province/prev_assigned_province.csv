@@ -1,0 +1,12 @@
+indicator,iso3,value,year,kp,row_id,idx,study_idx,matched_area_id,matched_area_name,matched_provincial_area_id,source,matched_point
+prevalence,AGO,benguela,2017,FSW,34,1,3,AGO_1_2bo,benguela,AGO_1_2bo,Naomi,
+prevalence,AGO,benguela,2017,MSM,35,2,3,AGO_1_2bo,benguela,AGO_1_2bo,Naomi,
+prevalence,AGO,bie,2017,FSW,36,3,3,,"Bié Province, Angola",AGO_1_3hv,Google,"c(17.668887, -12.5727907)"
+prevalence,AGO,bie,2017,MSM,37,4,3,,"Bié Province, Angola",AGO_1_3hv,Google,"c(17.668887, -12.5727907)"
+prevalence,AGO,cabinda,2017,FSW,38,5,3,AGO_1_4pd,cabinda,AGO_1_4pd,Naomi,
+prevalence,AGO,cabinda,2017,MSM,39,6,3,AGO_1_4pd,cabinda,AGO_1_4pd,Naomi,
+prevalence,AGO,cunene,2017,FSW,40,7,3,AGO_1_8ql,cunene,AGO_1_8ql,Naomi,
+prevalence,AGO,cunene,2017,MSM,41,8,3,AGO_1_8ql,cunene,AGO_1_8ql,Naomi,
+prevalence,AGO,luanda,2017,FSW,42,9,3,AGO_1_11tw,luanda,AGO_1_11tw,Naomi,
+prevalence,AGO,luanda,2017,MSM,43,10,3,AGO_1_11tw,luanda,AGO_1_11tw,Naomi,
+prevalence,AGO,luanda,2011,MSM,44,11,4,AGO_1_11tw,luanda,AGO_1_11tw,Naomi,

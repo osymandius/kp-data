@@ -26,7 +26,7 @@ convert_logis_labels <- function(x) {
 }
 
 spec_id <- lapply(ssa_iso3, function(x){
-  orderly::orderly_search(name = "aaa_data_pjnz", query = paste0('latest(parameter:iso3 == "', x, '" && parameter:version == 2022)'), draft = FALSE)
+  orderly::orderly_search(name = "aaa_data_pjnz", query = paste0('latest(parameter:iso3 == "', x, '" && parameter:version == 2023)'), draft = FALSE)
 })
 
 spec_dat <- lapply(paste0("archive/aaa_data_pjnz/", spec_id, "/naomi_pjnz.zip"), extract_pjnz_naomi)
@@ -145,10 +145,10 @@ ssd_dat <- read_csv("R/Report/R objects for report/ssd.csv") %>%
   pivot_longer(c(population, prevalence, art_coverage), names_to = "indicator", values_to = "mean")
   # mutate(age_group = ifelse(sex == "male", "Y015_029", age_group))
 
-eri_dat <- extract_pjnz_naomi("~/Imperial College London/HIV Inference Group - WP - Documents/Data/Spectrum files/2022 final shared/EPP-Gen/Eritrea _Mar_18_2022 Shiny90.PJNZ")
+eri_dat <- extract_pjnz_naomi("~/Imperial College London/HIV Inference Group - WP - Documents/Data/Spectrum files/2023 final shared/SSA/Eritrea _April_2023_VLS KOS.PJNZ")
 
 eri_dat <- eri_dat %>%
-  filter(year == 2021) %>%
+  filter(year == 2022) %>%
   single_year_to_five_year() %>%
   select(iso3, sex, totpop, hivpop, artpop) %>%
   sex_aggregation(c("totpop", "hivpop", "artpop")) %>%
@@ -196,7 +196,7 @@ long_nd <- long_nd %>%
   bind_rows(ssd_dat %>%
               mutate(iso3 = "SSD",
                      calendar_quarter = "CY2021Q4"),
-            eri_dat %>% mutate(calendar_quarter = "CY2021Q4") %>%
+            eri_dat %>% mutate(year = 2023) %>%
               left_join(eri_areas %>% st_drop_geometry() %>% select(area_id, area_level))
             )
 
@@ -333,13 +333,13 @@ areas <- areas %>%
   select(iso3, area_id, geometry) %>%
   mutate(id.area = row_number())
 
-# nb <- areas %>%
-#   spdep::poly2nb() %>%
-#   `names<-`(areas$id.area)
-# 
-# nb <- lapply(nb, as.integer)
-# class(nb) <- "nb"
-# spdep::nb2INLA("admin1_level_adj.adj", nb)
+nb <- areas %>%
+  spdep::poly2nb() %>%
+  `names<-`(areas$id.area)
+
+nb <- lapply(nb, as.integer)
+class(nb) <- "nb"
+spdep::nb2INLA("2023_admin1_level_adj.adj", nb)
 
 genpop_pred <- data.frame(kp = c("FSW", "MSM", "PWID", "TGW"),
                           sex = c("female", "male", "both", "female"),

@@ -84,6 +84,7 @@ pse_total_dat <- pse_total_dat_original %>%
          data_checked = tolower(data_checked),
          source_found = tolower(source_found)) %>%
   filter(is.na(duplicate_of),
+         is.na(is_aggregate),
          !is.na(iso3))
 
 #Remove extrapolated values
@@ -202,19 +203,22 @@ pse_final <- lapply(paste0("archive/aaa_assign_populations/", pse_id, "/pse_prev
   bind_rows() %>%
   mutate(iso3 = countrycode(country.name, "country.name", "iso3c"))
   
+filter(pse_final, is.na(prop_estimate)) %>% View
+
 pse_remove_label$denom <- nrow(pse_final %>% filter(is.na(prop_estimate)))
 pse_remove_label$denom <- paste0("No area match (n = ", pse_remove_label$denom, ")")
 
-pse_final <- filter(pse_final, !is.na(prop_estimate))
+# pse_final <- filter(pse_final, !is.na(prop_estimate))
 
 pse_final_text <- pse_final %>%
+  filter(!is.na(prop_estimate)) %>%
   mutate(kp = ifelse(kp == "TG", "TGW", kp)) %>%
   filter(kp %in% c("FSW", "MSM", "PWID", "TGW")) %>%
   count(kp) %>%
   mutate(n = paste0("n = ", n)) %>%
   pivot_wider(names_from = kp, values_from = n) %>%
   mutate(across(everything(), ~paste0(cur_column(), " ", .x)),
-         n = paste0("(n = ", nrow(pse_final), ")"),
+         n = paste0("(n = ", nrow(pse_final %>% filter(!is.na(prop_estimate))), ")"),
          name = "Final PSE data") %>%
   select(name, n, everything())
 
@@ -227,10 +231,10 @@ saveRDS(pse_inputs_text, "R/Report/R objects for report/PSE/pse_input_count_text
 # 
 pal <- wesanderson::wes_palette("Zissou1", 10, "continuous")
 
-pse_total_dat <- read_csv("~/Documents/GitHub/kp-data-private/data/complete_dat.csv") %>%
+pse_total_dat <- read_csv("~/Documents/GitHub/kp-data-private/data/complete_dat.csv", show_col_types = F) %>%
   filter(indicator == "pse")
-pse_final <- read.csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_final_sourced.csv")
-pse_cleaned_data <- read_csv("src/aaa_assign_populations/pse_cleaned_sourced_data.csv")
+pse_final <- read_csv("~/Imperial College London/HIV Inference Group - WP - Documents/Analytical datasets/key-populations/PSE/pse_final_sourced.csv", show_col_types = F)
+pse_cleaned_data <- read_csv("src/aaa_assign_populations/pse_cleaned_sourced_data.csv", show_col_types = F)
 
 method_counts <- pse_total_dat %>%
   mutate(kp = ifelse(kp == "TG", "TGW", kp)) %>%
@@ -295,7 +299,7 @@ digraph a_nice_graph {
     subgraph cluster_0 {
     # style=filled;
     # color=lightgrey;
-  node [fontname = Helvetica, fontcolor = darkslategray,shape = rectangle, color = darkslategray]
+  node [fontname = Helvetica, fontcolor = darkslategray,shape = rectangle, color = darkslategray, fontsize = 16]
     inp_gam [label = '@@1-1']
     inp_atlas [label = '@@1-2'];
     inp_gf [label = '@@1-3'];
@@ -313,7 +317,7 @@ digraph a_nice_graph {
     label = 'Data sources';
     }
     
-  node [fontname = Helvetica, fontcolor = darkslategray,shape = rectangle, color = darkslategray]
+  node [fontname = Helvetica, fontcolor = darkslategray,shape = rectangle, color = darkslategray, fontsize = 16]
   inp_total [label = '@@1-6']
   m1_dedup [label = '@@2-1']
   m2_nonspec [label = '@@2-2']
@@ -359,7 +363,7 @@ library(rsvg)
 pse_flow %>%
   export_svg %>% 
   charToRaw %>% 
-  rsvg::rsvg_png("R/Report/R objects for report/PSE/pse_flowchart.png")
+  rsvg::rsvg_png("R/Report/R objects for report/PSE/pse_flowchart.png", )
 
 ### Prevalence
 
@@ -381,7 +385,7 @@ ssa_iso3 <- moz.utils::ssa_iso3()
 collapse <- function(...) {paste0(..., collapse = "\n")}
 setwd(rprojroot::find_rstudio_root_file())
 
-prev_total_dat_original <- read_csv("~/Documents/GitHub/kp-data-private/data/complete_dat.csv") %>%
+prev_total_dat_original <- read_csv("~/Documents/GitHub/kp-data-private/data/complete_dat.csv", show_col_types = F) %>%
   filter(indicator == "prevalence")
 
 prev_total_dat_original <-  prev_total_dat_original %>%

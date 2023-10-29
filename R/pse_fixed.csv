@@ -1,9 +1,5 @@
 kp,fe_method,fixed
-FSW,other methods,"-0.19 (-1.33, 0.94)"
-FSW,PLACE/Mapping,"-0.52 (-0.92, -0.13)"
-MSM,other methods,"0.15 (-1.06, 1.36)"
-MSM,PLACE/Mapping,"-1.16 (-1.58, -0.74)"
-PWID,other methods,"0.7 (-0.67, 2.07)"
-PWID,PLACE/Mapping,"-0.88 (-1.43, -0.33)"
-TGW,other methods,"0 (-62.02, 62.02)"
-TGW,PLACE/Mapping,"-0.88 (-2.06, 0.39)"
+FSW,PLACE/Mapping,"-0.53 (-0.93, -0.15)"
+MSM,PLACE/Mapping,"-1.35 (-1.78, -0.93)"
+PWID,PLACE/Mapping,"-1.13 (-1.69, -0.55)"
+TGW,PLACE/Mapping,"-1.21 (-2.5, 0.11)"

@@ -37,8 +37,21 @@ sources:
   
 resources:
   - pse_cleaned_sourced_data.csv
+  
   - bfa-humd-pop-scaled.csv
   - bfa_humd_areas.geojson
+  
+  - ben_areas.geojson
+  - ben_pop.csv
+  
+  - cog_areas.geojson
+  - cog_pop.csv
+  
+  - gmb_areas.geojson
+  - gmb_pop.csv
+  
+  - mli_areas.geojson
+  - mli_pop.csv
   
 global_resources:
   resources/iso_mapping_fit.csv: iso_mapping_fit.csv

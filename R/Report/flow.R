@@ -2,6 +2,7 @@ library(tidyverse)
 library(DiagrammeR)
 library(countrycode)
 library(DiagrammeRsvg)
+library(moz.utils)
 
 ssa_iso3 <- moz.utils::ssa_iso3()
 
@@ -240,7 +241,7 @@ method_counts <- pse_total_dat %>%
   mutate(kp = ifelse(kp == "TG", "TGW", kp)) %>%
   filter(year > 2009, source_found == "yes") %>%
   mutate(
-    year = ifelse(year == 2022, 2021, year),
+    # year = ifelse(year == 2022, 2021, year),
     year = plyr::round_any(year, 3, floor),
          year = paste0(year, "-", year+2),
          # year = ifelse(year == "2019-2021", "2019-2022", year)
@@ -252,7 +253,7 @@ method_counts <- pse_total_dat %>%
 fig2 <- pse_total_dat %>%
   filter(year > 2009, source_found == "yes") %>%
   mutate(
-    year = ifelse(year == 2022, 2021, year),
+    # year = ifelse(year == 2022, 2021, year),
     year = plyr::round_any(year, 3, floor),
          year = paste0(year, "-", year+2),
          simple_method = ifelse(str_detect(simple_method, "multiplier|Multiplier"), "Multiplier", simple_method),
@@ -260,7 +261,8 @@ fig2 <- pse_total_dat %>%
          kp = ifelse(kp == "TG", "TGW", kp)
          # year = ifelse(year == "2019-2021", "2019-2022", year)
   ) %>%
-  filter(!is.na(simple_method)) %>%
+  filter(!is.na(simple_method),
+         kp != "TGM") %>%
   distinct(kp, simple_method, year, study_idx) %>%
   group_by(kp, simple_method, year) %>%
   count() %>%
@@ -280,7 +282,7 @@ fig2 <- pse_total_dat %>%
   moz.utils::standard_theme() +
   labs(x=element_blank(), y=element_blank(), fill=element_blank()) +
   coord_cartesian(clip = "off", ylim = c(0,1)) +
-  geom_text(data = method_counts %>% name_kp(F), aes(y=1.1, label = n), fontface = "bold", size = 4) +
+  geom_text(data = method_counts %>% filter(kp != "TGM") %>% name_kp(F), aes(y=1.1, label = n), fontface = "bold", size = 4) +
   geom_text(data = data.frame(kp = "Female sex workers"), aes(label = "Number of\nstudies", x=-Inf, y=1.1), hjust=0.8, fontface= "bold", inherit.aes = F) +
   theme(strip.text = element_text(face = "bold", size=16),
         strip.text.x = element_text(margin = margin(b=40)),
@@ -685,13 +687,13 @@ art_remove_label$selfself <- paste0("Self-report HIV status (n = ", nrow(art_sel
 ## Remove programme-recruited studies
 
 art_programme <- art_checked %>%
-  filter(study_idx %in% c(19, 28, 28, 34, 57, 62, 103, 118, 119, 119, 121, 138, 209, 212, 219, 253, 254, 256, 267))
+  filter(study_idx %in% c(19, 28, 28, 34, 57, 62, 103, 118, 119, 119, 121, 138, 209, 212, 219, 240, 253, 254, 256, 267))
 
 art_remove_label$programme <- paste0("Clinic-based recruitment (n = ", nrow(art_programme), ")")
 
 art_cleaned_data <- bind_rows(art_checked) %>%
   filter(method != "self-self",
-         !study_idx %in% c(19, 28, 28, 34, 57, 62, 103, 118, 119, 119, 121, 138, 209, 212, 219, 253, 254, 256, 267),
+         !study_idx %in% c(19, 28, 28, 34, 57, 62, 103, 118, 119, 119, 121, 138, 209, 212, 219, 240, 253, 254, 256, 267),
          kp %in% c("FSW", "MSM", "PWID", "TGW"))
 
 duplicate_nrow_art <- nrow(art_total_dat_original) -# Total data

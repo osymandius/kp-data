@@ -152,10 +152,16 @@ pse <- pse %>%
       iso3 == "MLI" & area_name == "BADJANGA" & study_idx == 134 ~ "Bandiagara",
       iso3 == "MLI" & area_name == "CINCINA" & study_idx == 134 ~ "Sincina",
       
+      iso3 == "MOZ" & area_name == "Maputo City" ~ "Cidade de Maputo",
+      iso3 == "MOZ" & area_name == "Maputo Province" ~ "Maputo Provincia",
+      
+      
       iso3 == "NAM" & area_name == "Khomas region" ~ "Khomas",
       
       iso3 == "SLE" & area_name == "Western rural" ~ "Western Area Rural",
       iso3 == "SLE" & area_name == "Western Urban" ~ "Western Area Urban",
+      
+      iso3 == "ZAF" & area_name == "NM Molema DM" ~ "Ngaka Modiri Molema DM",
       
       TRUE ~ area_name
     ))

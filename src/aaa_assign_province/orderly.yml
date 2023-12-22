@@ -45,14 +45,14 @@ artefacts:
       description: Matched admin1 ART coverage for KP ART data
       filenames:
         - art.csv
-  # - data:
-  #     description: HIV prevalence export for data sharing
-  #     filenames:
-  #       - data_sharing_prev.csv
-  # - data:
-  #     description: ART coverage export for data sharing
-  #     filenames:
-  #       - data_sharing_art.csv
+  - data:
+      description: HIV prevalence export for data sharing
+      filenames:
+        - data_sharing_prev.csv
+  - data:
+      description: ART coverage export for data sharing
+      filenames:
+        - data_sharing_art.csv
 
 parameters:
   iso3:
@@ -76,6 +76,7 @@ packages:
   - ggmap
   - osmdata
   - purrr
+  - naomi
 
 resources:
   - merge_cities.geojson

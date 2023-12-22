@@ -58,7 +58,7 @@ lapply(id %>% compact(), orderly_commit)
 orderly::orderly_search(name = "aaa_scale_pop", query = paste0('latest(parameter:iso3 == "', "COD", '")'), draft = FALSE)
 
 
-id <- orderly_batch("aaa_inputs_orderly_pull", parameters = data.frame(iso3 = ssa_iso3))
+id <- orderly_batch("aaa_assign_province", parameters = data.frame(iso3 = ssa_iso3()))
 names(id) <- ssa_iso3
 lapply(id, orderly_commit)
 orderly_run("aaa_assign_populations", parameters = data.frame(iso3 = "ZAF"))

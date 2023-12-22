@@ -394,7 +394,7 @@ fig3b <- pse_estimates %>%
                          labels = c("Western Africa", "Central Africa",
                                     "Eastern Africa", "Southern Africa")),
              scales = "free", space = "free_x") +
-  scale_y_log10(breaks = scales::log_breaks(), labels = scales::label_percent(accuracy = 0.01)) +
+  # scale_y_log10(breaks = scales::log_breaks(), labels = scales::label_percent(accuracy = 0.01)) +
   coord_cartesian(ylim = c(0.0001, .1)) +
   labs(x = element_blank(),
        y = "Population proportion",
@@ -829,7 +829,7 @@ studies_used <- total_studies %>%
 write_csv(studies_used, "~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Supplementary figs/ST3 studies.csv")
 
 crossing(iso3 = ssa_iso3,
-         kp = c("FSW", "MSM", "PWID", "TG")) %>%
+         kp = c("FSW", "MSM", "PWID", "TGW")) %>%
   left_join(pse_final %>%
               ungroup() %>%
               group_by(iso3, kp) %>%
@@ -1091,45 +1091,62 @@ write_csv(s8_dat, "~/OneDrive - Imperial College London/Phd/KP data consolidatio
 
 ## Supplementary country table figs
 
-kplhiv_art$country %>%
-  lapply(data.frame) %>%
-  bind_rows() %>%
-  filter(indicator == "pse_urban_prop") %>%
-  bind_rows(
-    kplhiv_art$region %>%
-      lapply(data.frame) %>%
-      bind_rows() %>%
-      filter(indicator == "pse_urban_prop") %>%
-      mutate(iso3 = "ZZZ")
-  ) %>%
-  mutate(across(lower:upper, ~round(100*.x, 2)),
-         text = paste0(median, " (", lower, ", ", upper, ")")) %>%
-  select(kp, region, iso3, text) %>%
-  pivot_wider(names_from = kp, values_from = text) %>%
-  factor_region() %>%
-  arrange(region, iso3) %>%
-  mutate(iso3 = countrycode::countrycode(iso3, "iso3c", "country.name", custom_match = cc_plot())) %>%
-  write_csv("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Supplementary figs/ST7 urban PSE.csv")
+urban_prop <- read_csv("../inference-data/src/aaa_urban_proportion/wpp_urban_proportions.csv", show_col_types = F) %>%
+  mutate(iso3 = countrycode(country.name, "country.name", "iso3c"),
+         urban_prop = round(urban_prop))
 
 kplhiv_art$country %>%
   lapply(data.frame) %>%
   bind_rows() %>%
-  filter(indicator == "pse_prop") %>%
+  filter(indicator %in% c("pse_urban_prop", "pse_prop")) %>%
   bind_rows(
     kplhiv_art$region %>%
       lapply(data.frame) %>%
       bind_rows() %>%
-      filter(indicator == "pse_prop") %>%
+      filter(indicator %in% c("pse_urban_prop", "pse_prop"),
+             kp != "All") %>%
       mutate(iso3 = "ZZZ")
   ) %>%
-  mutate(across(lower:upper, ~round(100*.x, 2)),
-         text = paste0(median, " (", lower, ", ", upper, ")")) %>%
-  select(kp, region, iso3, text) %>%
-  pivot_wider(names_from = kp, values_from = text) %>%
+  mutate(across(lower:upper, ~100*.x),
+         text = sprintf("%0.2f (%0.2f, %0.2f)", median, lower, upper)) %>%
+  select(region:indicator, text) %>%
+  pivot_wider(names_from = indicator, values_from = text) %>%
+  left_join(urban_prop %>% select(iso3, urban_prop)) %>%
+  mutate(country = countrycode(iso3, "iso3c", "country.name", custom_match = cc_plot())) %>%
   factor_region() %>%
-  arrange(region, iso3) %>%
-  mutate(iso3 = countrycode::countrycode(iso3, "iso3c", "country.name", custom_match = cc_plot())) %>%
-  write_csv("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Supplementary figs/ST8 total PSE.csv")
+  arrange(kp, region, iso3) %>%
+  select(region, kp, country, urban_prop, pse_urban_prop, pse_prop) %>%
+  write_csv("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Supplementary figs/ST7 all PSE.csv")
+
+
+  # mutate(across(lower:upper, ~round(100*.x, 2)),
+  #        text = paste0(median, " (", lower, ", ", upper, ")")) %>%
+  # select(kp, region, iso3, text) %>%
+  # pivot_wider(names_from = kp, values_from = text) %>%
+  # factor_region() %>%
+  # arrange(region, iso3) %>%
+  # mutate(iso3 = countrycode::countrycode(iso3, "iso3c", "country.name", custom_match = cc_plot())) %>%
+  # write_csv("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Supplementary figs/ST7 urban PSE.csv")
+
+# kplhiv_art$country %>%
+#   lapply(data.frame) %>%
+#   bind_rows() %>%
+#   filter(indicator == "pse_prop") %>%
+#   bind_rows(
+#     kplhiv_art$region %>%
+#       lapply(data.frame) %>%
+#       bind_rows() %>%
+#       filter(indicator == "pse_prop") %>%
+#       mutate(iso3 = "ZZZ")
+#   ) %>%
+#   mutate(across(lower:upper, ~round(100*.x, 2)),
+#          text = paste0(median, " (", lower, ", ", upper, ")")) %>%
+#   select(kp, region, iso3, text) %>%
+#   pivot_wider(names_from = kp, values_from = text) %>%
+#   factor_region() %>%
+#   arrange(region, iso3) %>%
+#   mutate(iso3 = countrycode::countrycode(iso3, "iso3c", "country.name", custom_match = cc_plot())) %>%
+#   write_csv("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Supplementary figs/ST8 total PSE.csv")
 
 kplhiv_art$country %>%
   lapply(data.frame) %>%
@@ -1171,3 +1188,14 @@ kplhiv_art$country %>%
   mutate(iso3 = countrycode::countrycode(iso3, "iso3c", "country.name", custom_match = cc_plot())) %>%
   write_csv("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Supplementary figs/ST10 art coverage.csv")
 
+kplhiv_art$country %>%
+  lapply(data.frame) %>%
+  bind_rows() %>%
+  filter(indicator == "pse_prop") %>%
+  left_join(region) %>%
+  bind_rows(mutate(., region = "SSA")) %>%
+  group_by(kp, region) %>%
+  reframe(calculate_quantile(median)) %>%
+  factor_region() %>%
+  arrange(kp, region) %>%
+  filter(region == "SSA")

@@ -15,6 +15,7 @@ setwd(rprojroot::find_rstudio_root_file())
 pse_remove_label <- list()
 
 pse_total_dat_original <- read_csv("~/Documents/GitHub/kp-data-private/data/complete_dat.csv", show_col_types = F) %>%
+  select(!starts_with("...")) %>%
   filter(indicator == "pse", iso3 %in% ssa_iso3()) %>%
   mutate(kp = ifelse(kp == "TG", "TGW", kp)) %>%
   filter(kp %in% c("FSW", "MSM", "PWID", "TGW")) %>%
@@ -81,8 +82,7 @@ pse_inputs_labels <- apply(pse_inputs_text, 1, collapse)
 
 # Remove duplicates
 pse_total_dat <- pse_total_dat_original %>%
-  mutate(iso3 = countrycode::countrycode(country.name, "country.name", "iso3c"),
-         data_checked = tolower(data_checked),
+  mutate(data_checked = tolower(data_checked),
          source_found = tolower(source_found)) %>%
   filter(is.na(duplicate_of),
          is.na(is_aggregate),
@@ -133,9 +133,9 @@ pse_total_dat <- pse_total_dat %>%
 #   arrange(desc(n)) %>%
 #   View()
 
-pse_total_dat <- pse_total_dat %>%
-  ungroup() %>%
-  mutate(idx = row_number())
+# pse_total_dat <- pse_total_dat %>%
+#   ungroup() %>%
+#   mutate(idx = row_number())
 
 truly_checked <- pse_total_dat %>%
   filter(data_checked == "yes",
@@ -150,7 +150,6 @@ mapped_place <- pse_total_dat %>%
          data_checked == "remove",
          source_found %in% c("yes"),
          is.na(duplicate_of),
-         !country.name == area_name,
          year > 2009
          # is.na(ethic)
          ) %>%
@@ -195,7 +194,7 @@ pse_id <- lapply(ssa_iso3, function(x){
 
 # pse_id <- c(pse_id[!is.na(pse_id)], orderly::orderly_search(name = "aaa_assign_populations", query = paste0('latest(parameter:iso3 == "COD")'), draft = FALSE))
 
-# pse_id <- id$id[id$success != "FALSE"]
+pse_id <- id$id[id$success == "TRUE"]
 
 setwd(rprojroot::find_rstudio_root_file())
 
@@ -511,9 +510,9 @@ prev_total_dat <- prev_total_dat_original %>%
 #   mutate(country = countrycode(iso3, "iso3c", "country.name")) %>%
 #   write_csv("~/Downloads/missing_prev_iso.csv", na = "")
 # 
-prev_total_dat <- prev_total_dat %>%
-  ungroup() %>%
-  mutate(idx = row_number())
+# prev_total_dat <- prev_total_dat %>%
+#   ungroup() %>%
+#   mutate(idx = row_number())
 
 prev_checked <- prev_total_dat %>%
   filter(data_checked == "yes",
@@ -576,7 +575,7 @@ setwd(rprojroot::find_rstudio_root_file())
 #   lapply(type_convert) %>%
 #   bind_rows()
 
-art_total_dat_original <- read_csv("~/Documents/GitHub/kp-data-private/data/complete_dat.csv") %>%
+art_total_dat_original <- read_csv("~/Documents/GitHub/kp-data-private/data/complete_dat.csv", show_col_types = F) %>%
   filter(indicator == "art")
 
 art_total_dat_original <-  art_total_dat_original %>%
@@ -702,7 +701,7 @@ duplicate_nrow_art <- nrow(art_total_dat_original) -# Total data
 
 art_remove_label$duplicates <- paste0("Duplicated data (n = ", duplicate_nrow_art, ")")
 
-write_csv(art_cleaned_data %>% ungroup %>% mutate(row_id = row_number()), "src/aaa_assign_province/art_clean_sourced.csv")
+write_csv(art_cleaned_data, "src/aaa_assign_province/art_clean_sourced.csv")
 
 art_cleaned_text <- art_cleaned_data %>%
   count(kp) %>%
@@ -722,6 +721,8 @@ prev_id <- lapply(ssa_iso3, function(x){
 })
 
 # prev_id <- id$id
+
+paste
 
 prev_final <- lapply(paste0("archive/aaa_assign_province/", prev_id, "/prev.csv"),
                      function(x) {read_csv(x, show_col_types = FALSE) %>% select(-any_of("...1"))}) %>%

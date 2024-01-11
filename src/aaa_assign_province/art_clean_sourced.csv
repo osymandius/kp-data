@@ -1,197 +1,197 @@
-iso3,country.name,indicator,method,simple_method,kp,area_name,area_level,province,age_group,year,count_lower,count_estimate,count_upper,prop_lower,prop_estimate,prop_upper,denominator,ref,link,dataset_id,dataset,uid,data_checked,source_found,duplicate_of,is_aggregate,ethic,study_idx,row_id
-AGO,Angola,art,vls,NA,FSW,Angola,NA,NA,NA,2017,NA,NA,NA,NA,0.18,NA,147,Mapeamento Programatico E Prevalencia De VIH E Outras Its Entre Populacoes Chave De Angola: Estudo PLACE 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,3,1
-AGO,Angola,art,vls,NA,MSM,Angola,NA,NA,NA,2017,NA,NA,NA,NA,0.44,NA,19,Mapeamento Programatico E Prevalencia De VIH E Outras Its Entre Populacoes Chave De Angola: Estudo PLACE 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,3,2
-AGO,Angola,art,vls,NA,TGW,Angola,NA,NA,NA,2017,NA,NA,NA,NA,0.55,NA,8,Mapeamento Programatico E Prevalencia De VIH E Outras Its Entre Populacoes Chave De Angola: Estudo PLACE 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,3,3
-BFA,Burkina Faso,art,self-report,NA,MSM,Bobo Diouslasso,NA,NA,NA,2013,NA,NA,NA,NA,0.063,NA,16,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,27,4
-BFA,Burkina Faso,art,self-report,NA,FSW,Ouagadougou,NA,NA,NA,2013,NA,NA,NA,NA,0.226,NA,31,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,27,5
-BFA,Burkina Faso,art,self-report,NA,MSM,Ouagadougou,NA,NA,NA,2013,NA,NA,NA,NA,0.25,NA,16,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,27,6
-BFA,Burkina Faso,art,self-report,NA,FSW,Bobo Diouslasso,NA,NA,NA,2013,NA,NA,NA,NA,0.557,NA,115,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,27,7
-TGO,Togo,art,self-report,NA,MSM,Kara,NA,NA,NA,2013,NA,NA,NA,NA,0,NA,2,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,27,8
-TGO,Togo,art,self-report,NA,MSM,Lome,NA,NA,NA,2013,NA,NA,NA,NA,0.062,NA,65,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,27,9
-TGO,Togo,art,self-report,NA,FSW,Lome,NA,NA,NA,2013,NA,NA,NA,NA,0.147,NA,96,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,KP Atlas_b5afbcd155431e2bf04fc6c0c76c5ec3,KP Atlas,6eb0299cf58109641e9cfd8987674128,Yes,yes,NA,NA,NA,27,10
-TGO,Togo,art,self-report,NA,FSW,Kara,NA,NA,NA,2013,NA,NA,NA,NA,0.182,NA,33,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,27,11
-BWA,Botswana,art,self-report,NA,FSW,Francistown,NA,NA,NA,2017,NA,NA,NA,NA,0.348649,NA,131,2017 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,31,12
-BWA,Botswana,art,self-report,NA,FSW,Gaborone,NA,NA,NA,2017,NA,NA,NA,NA,0.128472,NA,264,2017 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,31,13
-BWA,Botswana,art,self-report,NA,FSW,Chobe,NA,NA,NA,2017,NA,NA,NA,NA,0.126741,NA,59,2017 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,31,14
-BWA,Botswana,art,self-report,NA,FSW,Maun,NA,NA,NA,2017,NA,NA,NA,NA,0.19788,NA,101,2017 BBS,NA,KP Atlas_7aaecf76f8a43dcf4102e0b6b525ab56,KP Atlas,9a000efb8b1e0eba92414ca6b1786492,Yes,yes,NA,NA,NA,31,15
-BWA,Botswana,art,self-report,NA,FSW,Palapye,NA,NA,NA,2017,NA,NA,NA,NA,0.079602,NA,181,2017 BBS,NA,KP Atlas_7f07c53ba4d549444bb0d9bddad68926,KP Atlas,ff1ff9975541f7f2079c71e1f390fd4c,Yes,yes,NA,NA,NA,31,16
-CIV,Cote d'Ivoire,art,VLS,NA,FSW,ABOISSO,NA,NA,NA,2020,NA,NA,NA,NA,0.6,NA,10,"Enquete Bio-Comportementale Et Cartographique En Direction Des Travailleuses De Sexe Dans Cinq Localites De La Cote D'ivoire : Katiola, Yamoussoukro, Soubre, Aboisso, Agboville.",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,46,17
-CIV,Cote d'Ivoire,art,VLS,NA,FSW,Agboville,NA,NA,NA,2020,NA,NA,NA,NA,0.33,NA,6,"Enquete Bio-Comportementale Et Cartographique En Direction Des Travailleuses De Sexe Dans Cinq Localites De La Cote D'ivoire : Katiola, Yamoussoukro, Soubre, Aboisso, Agboville.",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,46,18
-CMR,Cameroon,art,self-report,NA,MSM,Bertoua,NA,NA,NA,2016,NA,NA,NA,NA,0.087,NA,23,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,19
-CMR,Cameroon,art,self-report,NA,FSW,Kribi,NA,NA,NA,2016,NA,NA,NA,NA,0.1379,NA,87,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,20
-CMR,Cameroon,art,self-report,NA,FSW,Bertoua,NA,NA,NA,2016,NA,NA,NA,NA,0.257,NA,74,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,21
-CMR,Cameroon,art,self-report,NA,MSM,Yaounde,NA,NA,NA,2016,NA,NA,NA,NA,0.261,NA,138,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,22
-CMR,Cameroon,art,self-report,NA,MSM,Douala,NA,NA,NA,2016,NA,NA,NA,NA,0.352,NA,91,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,23
-CMR,Cameroon,art,self-report,NA,MSM,Kribi,NA,NA,NA,2016,NA,NA,NA,NA,0.417,NA,12,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,24
-CMR,Cameroon,art,self-report,NA,FSW,Yaounde,NA,NA,NA,2016,NA,NA,NA,NA,0.4552,NA,134,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,25
-CMR,Cameroon,art,self-report,NA,FSW,Douala,NA,NA,NA,2016,NA,NA,NA,NA,0.521,NA,140,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,26
-CMR,Cameroon,art,self-report,NA,FSW,Bamenda,NA,NA,NA,2016,NA,NA,NA,NA,0.651,NA,112,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,27
-CIV,Cote d'Ivoire,art,VLS,NA,FSW,Katiola,NA,NA,NA,2020,NA,NA,NA,NA,0.77,NA,26,"Enquete Bio-Comportementale Et Cartographique En Direction Des Travailleuses De Sexe Dans Cinq Localites De La Cote D'ivoire : Katiola, Yamoussoukro, Soubre, Aboisso, Agboville.",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,46,28
-CIV,Cote d'Ivoire,art,VLS,NA,FSW,Soubre,NA,NA,NA,2020,NA,NA,NA,NA,0.13,NA,8,"Enquete Bio-Comportementale Et Cartographique En Direction Des Travailleuses De Sexe Dans Cinq Localites De La Cote D'ivoire : Katiola, Yamoussoukro, Soubre, Aboisso, Agboville.",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,46,29
-CIV,Cote d'Ivoire,art,VLS,NA,FSW,YAKRO,NA,NA,NA,2020,NA,NA,NA,NA,0.33,NA,6,"Enquete Bio-Comportementale Et Cartographique En Direction Des Travailleuses De Sexe Dans Cinq Localites De La Cote D'ivoire : Katiola, Yamoussoukro, Soubre, Aboisso, Agboville.",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,46,30
-COD,Congo - Kinshasa,art,VLS,NA,FSW,Bas-Uele,NA,NA,NA,2019,NA,NA,NA,0.171,0.406,0.628,19,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,31
-COD,Congo - Kinshasa,art,VLS,NA,FSW,Haut-Katanga,NA,NA,NA,2019,NA,NA,NA,0.107,0.258,0.408,26,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,32
-COD,Congo - Kinshasa,art,VLS,NA,MSM,Haut-Katanga,NA,NA,NA,2019,NA,NA,NA,0.258,0.503,0.752,13,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,33
-COD,Congo - Kinshasa,art,VLS,NA,FSW,Haut-Uele,NA,NA,NA,2019,NA,NA,NA,0.139,0.26899999999999996,0.40399999999999997,38,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,34
-COD,Congo - Kinshasa,art,VLS,NA,FSW,Ituri,NA,NA,NA,2019,NA,NA,NA,0.45799999999999996,0.595,0.746,18,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,35
-COD,Congo - Kinshasa,art,VLS,NA,MSM,Ituri,NA,NA,NA,2019,NA,NA,NA,0.046,0.25,0.6990000000000001,4,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,36
-COD,Congo - Kinshasa,art,VLS,NA,PWID,Ituri,NA,NA,NA,2019,NA,NA,NA,0.43200000000000005,0.7140000000000001,0.968,8,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,37
-COD,Congo - Kinshasa,art,VLS,NA,FSW,Kasai-Oriental,NA,NA,NA,2019,NA,NA,NA,0.267,0.419,0.575,51,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,38
-COD,Congo - Kinshasa,art,VLS,NA,MSM,Kinshasa,NA,NA,NA,2019,NA,NA,NA,0.508,0.742,0.889,83,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,39
-COD,Congo - Kinshasa,art,VLS,NA,PWID,Kinshasa,NA,NA,NA,2019,NA,NA,NA,0.35,0.618,0.887,26,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,40
-COD,Congo - Kinshasa,art,VLS,NA,FSW,Kongo-Central,NA,NA,NA,2019,NA,NA,NA,0.358,0.5770000000000001,0.769,18,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,41
-COD,Congo - Kinshasa,art,VLS,NA,MSM,Kongo-Central,NA,NA,NA,2019,NA,NA,NA,0.596,0.9420000000000001,0.982,10,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,42
-COD,Congo - Kinshasa,art,VLS,NA,PWID,Kongo-Central,NA,NA,NA,2019,NA,NA,NA,NA,1,NA,2,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,43
-COD,Congo - Kinshasa,art,VLS,NA,FSW,Kwilu,NA,NA,NA,2019,NA,NA,NA,0.10800000000000001,0.261,0.402,15,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,44
-COD,Congo - Kinshasa,art,VLS,NA,FSW,Lomami,NA,NA,NA,2019,NA,NA,NA,0.429,0.551,0.66,37,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,45
-COD,Congo - Kinshasa,art,VLS,NA,FSW,Lualaba,NA,NA,NA,2019,NA,NA,NA,0.057,0.249,0.315,28,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,46
-COD,Congo - Kinshasa,art,VLS,NA,FSW,Maniema,NA,NA,NA,2019,NA,NA,NA,0.355,0.528,0.715,25,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,47
-COD,Congo - Kinshasa,art,VLS,NA,FSW,Nord-Kivu,NA,NA,NA,2019,NA,NA,NA,0.46399999999999997,0.598,0.731,54,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,48
-COD,Congo - Kinshasa,art,VLS,NA,FSW,Sud-Kivu,NA,NA,NA,2019,NA,NA,NA,0.32799999999999996,0.495,0.667,36,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,49
-COD,Congo - Kinshasa,art,VLS,NA,FSW,Tshopo,NA,NA,NA,2019,NA,NA,NA,0.302,0.445,0.599,40,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,50
-GMB,Gambia,art,VLS,NA,FSW,The Gambia,NA,NA,NA,2017,NA,NA,NA,NA,0.256410256,NA,39,BBS 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,94,51
-GMB,Gambia,art,VLS,NA,MSM,The Gambia,NA,NA,NA,2017,NA,NA,NA,NA,0.115384615,NA,52,BBS 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,94,52
-GNQ,Equitorial Guinea,art,self-report,NA,FSW,"Malabo, Bata, Ebibeyin, Mongomo",NA,NA,NA,2021,NA,NA,NA,NA,0.329,NA,79,"INFORME DE LA ENCUESTA NACIONAL SOBRE REALIDADES LGBTI, TRABAJADORES DE SEXO Y ENCARCELADOS EN LAS CIUDADES DE MALABO, BATA, EBIBEYÍN Y MONGO.",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,0,99,53
-GNQ,Equitorial Guinea,art,self-report,NA,MSM,"Malabo, Bata, Ebibeyin, Mongomo",NA,NA,NA,2021,NA,NA,NA,NA,0.361,NA,36,"INFORME DE LA ENCUESTA NACIONAL SOBRE REALIDADES LGBTI, TRABAJADORES DE SEXO Y ENCARCELADOS EN LAS CIUDADES DE MALABO, BATA, EBIBEYÍN Y MONGO.",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,0,99,54
-KEN,Kenya,art,VLS,NA,MSM,Nairobi,NA,NA,NA,2017,NA,NA,NA,NA,0.556291391,NA,151,Smith et al,https://bmjopen.bmj.com/content/11/12/e055783.abstract,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,108,55
-KEN,Kenya,art,VLS,NA,TGW,Nairobi,NA,NA,NA,2017,NA,NA,NA,NA,0.464285714,NA,28,Smith et al,https://bmjopen.bmj.com/content/11/12/e055783.abstract,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,108,56
-KEN,Kenya,art,lab,NA,MSM,Kisumu,NA,NA,NA,2016,NA,NA,NA,NA,0.7,NA,20,HPTN 075 (Sandfort et al),https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,113,57
-KEN,Kenya,art,lab,NA,TGW,Kisumu,NA,NA,NA,2016,NA,NA,NA,NA,0.625,NA,8,HPTN 075 (Sandfort et al),https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,113,58
-MWI,Malawi,art,lab,NA,MSM,Blantyre,NA,NA,NA,2016,NA,NA,NA,NA,0.333,NA,15,HPTN 075 (Sandfort et al),https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,113,59
-MWI,Malawi,art,lab,NA,TGW,Blantyre,NA,NA,NA,2016,NA,NA,NA,NA,0.417,NA,12,HPTN 075 (Sandfort et al),https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,113,60
-KEN,Kenya,art,VLS,NA,PWID,Coast,NA,NA,NA,2012,NA,NA,NA,NA,0.046,NA,216,Kurth | Degenhardt et al,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,114,61
-KEN,Kenya,art,VLS,NA,PWID,Nairobi,NA,NA,NA,2012,NA,NA,NA,NA,0.042,NA,71,Kurth | Degenhardt et al,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,114,62
-KEN,Kenya,art,VLS,NA,MSM,Kisumu,NA,NA,NA,2016,NA,NA,NA,NA,0.306,NA,63,Kunzweiler et al,https://www.tandfonline.com/doi/full/10.1080/09540121.2018.1510109,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,115,63
-KEN,Kenya,art,VLS,NA,MSM,Nairobi,NA,NA,NA,2017,NA,NA,NA,NA,0.785,NA,186,Fearon (TRANSFORM),https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7527758/#jia225603-sup-0001,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,116,64
-KEN,Kenya,art,self-report,NA,MSM,Kenya,NA,NA,NA,2019,NA,NA,NA,NA,0.323,NA,201,Bhattacharjee et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7319161/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,117,65
-KEN,Kenya,art,VLS,NA,MSM,"Malindi, Mtwapa",NA,NA,NA,2019,NA,NA,NA,NA,0.375,NA,56,Dijkstra,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8186249/#sup1,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,120,66
-MLI,Mali,art,self-report,NA,TGW,Mali,NA,NA,NA,2019,NA,NA,NA,NA,0.273,NA,33,ANALYSE DE LA SITUATION DES PERSONNES TRANSGENRES AU MALI EN RELATION AVEC L'INFECTION A VIH ET LE SIDA,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,130,67
-MLI,Mali,art,VLS,NA,MSM,Bamako,NA,NA,NA,2019,NA,NA,NA,NA,0.5529999999999999,NA,47,Cartographie et Estimation de la taille des Professionnelles de Sexe (PS) et des Hommes ayant des rapports Sexuels avec d’autres Hommes (HSH) couplees à l’etude bio-comportementale chez les HSH en matière de VIH au Mali,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,131,68
-MLI,Mali,art,VLS,NA,MSM,Kayes,NA,NA,NA,2019,NA,NA,NA,NA,0.41600000000000004,NA,24,Cartographie et Estimation de la taille des Professionnelles de Sexe (PS) et des Hommes ayant des rapports Sexuels avec d’autres Hommes (HSH) couplees à l’etude bio-comportementale chez les HSH en matière de VIH au Mali,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,131,69
-MLI,Mali,art,VLS,NA,MSM,Koulikoro,NA,NA,NA,2019,NA,NA,NA,NA,0.174,NA,23,Cartographie et Estimation de la taille des Professionnelles de Sexe (PS) et des Hommes ayant des rapports Sexuels avec d’autres Hommes (HSH) couplees à l’etude bio-comportementale chez les HSH en matière de VIH au Mali,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,131,70
-MLI,Mali,art,VLS,NA,MSM,Mopti,NA,NA,NA,2019,NA,NA,NA,NA,0.846,NA,13,Cartographie et Estimation de la taille des Professionnelles de Sexe (PS) et des Hommes ayant des rapports Sexuels avec d’autres Hommes (HSH) couplees à l’etude bio-comportementale chez les HSH en matière de VIH au Mali,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,131,71
-MLI,Mali,art,VLS,NA,MSM,Segou,NA,NA,NA,2019,NA,NA,NA,NA,0.455,NA,11,Cartographie et Estimation de la taille des Professionnelles de Sexe (PS) et des Hommes ayant des rapports Sexuels avec d’autres Hommes (HSH) couplees à l’etude bio-comportementale chez les HSH en matière de VIH au Mali,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,131,72
-MLI,Mali,art,VLS,NA,MSM,Sikasso,NA,NA,NA,2019,NA,NA,NA,NA,0.545,NA,11,Cartographie et Estimation de la taille des Professionnelles de Sexe (PS) et des Hommes ayant des rapports Sexuels avec d’autres Hommes (HSH) couplees à l’etude bio-comportementale chez les HSH en matière de VIH au Mali,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,131,73
-MLI,Mali,art,VLS,NA,TGW,Bamako,NA,NA,NA,2015,NA,NA,NA,0,0.072,0.158,37,Hakim et al,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,132,74
-MOZ,Mozambique,art,self-report,NA,FSW,Nampula,NA,NA,NA,2012,NA,NA,NA,NA,0.273,NA,11,BBS 2012,NA,KP Atlas_896eeac60202d5fd827d08332479fb1a,KP Atlas,cf8b56fcd7fc70b433bd26599dace8bb,Yes,yes,NA,NA,NA,140,75
-MOZ,Mozambique,art,self-report,NA,FSW,Cidade de Maputo,NA,NA,NA,2012,NA,NA,NA,NA,0.49,NA,49,BBS 2012,NA,KP Atlas_a800745773acfca1d861b289c35bdcd2,KP Atlas,3808cc2aa2e2244bb025b63aa8e25baa,Yes,yes,NA,NA,NA,140,76
-MOZ,Mozambique,art,self-report,NA,FSW,Beira,NA,NA,NA,2012,NA,NA,NA,NA,0.548,NA,31,BBS 2012,NA,KP Atlas_3a45503881b090e7d2ee7c24bf937330,KP Atlas,df1bf1f80789d4662654a0da91eca9e0,Yes,yes,NA,NA,NA,140,77
-MOZ,Mozambique,art,self-report,NA,PWID,Cidade de Maputo,NA,NA,NA,2016,NA,NA,NA,0.345,0.479,0.6,123,BBS 2014,NA,KP Atlas_e06e5aea386e6fae91d427ac8cdc17b0,KP Atlas,aee4998f796c65b1d6eaddd5edec46b5,Yes,yes,NA,NA,NA,141,78
-MOZ,Mozambique,art,VLS,NA,FSW,Mozambique,NA,NA,NA,2017,NA,NA,NA,NA,0.52,NA,228,PLACE 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,142,79
-MOZ,Mozambique,art,VLS,NA,MSM,Mozambique,NA,NA,NA,2017,NA,NA,NA,NA,0.18,NA,55,PLACE 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,142,80
-MOZ,Mozambique,art,VLS,NA,TGW,Mozambique,NA,NA,NA,2017,NA,NA,NA,NA,0.3,NA,14,PLACE 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,142,81
-MWI,Malawi,art,self-report,NA,MSM,Lilongwe,NA,NA,NA,2014,NA,NA,NA,NA,0.039,NA,49,HIV Prevalence and Sociobehavioral Characteristics Among Men Who Have Sex with Men Across Seven Sites in Malawi,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,149,82
-MWI,Malawi,art,self-report,NA,MSM,Mangochi,NA,NA,NA,2014,NA,NA,NA,NA,0,NA,71,HIV Prevalence and Sociobehavioral Characteristics Among Men Who Have Sex with Men Across Seven Sites in Malawi,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,149,83
-MWI,Malawi,art,self-report,NA,MSM,Mulanje,NA,NA,NA,2014,NA,NA,NA,NA,0,NA,86,HIV Prevalence and Sociobehavioral Characteristics Among Men Who Have Sex with Men Across Seven Sites in Malawi,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,149,84
-MWI,Malawi,art,self-report,NA,MSM,Nkhata Bay,NA,NA,NA,2014,NA,NA,NA,NA,0,NA,76,HIV Prevalence and Sociobehavioral Characteristics Among Men Who Have Sex with Men Across Seven Sites in Malawi,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,149,85
-MWI,Malawi,art,self-report,NA,FSW,Zomba,NA,NA,NA,2017,NA,NA,NA,NA,0.397,NA,68,2017 PLACE,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,150,86
-MWI,Malawi,art,self-report,NA,MSM,Zomba,NA,NA,NA,2017,NA,NA,NA,NA,0.067,NA,15,2017 PLACE,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,150,87
-NAM,Namibia,art,self-report,NA,FSW,Windhoek,NA,NA,NA,2014,NA,NA,NA,NA,0.252,NA,103,IBBS 2015,NA,GF_87c0abcbe984655663365f224b2746f7,GF,b921d91440065db671e9a4c400bcd57b,Yes,yes,NA,NA,NA,155,88
-NAM,Namibia,art,self-report,NA,FSW,Oshikango,NA,NA,NA,2014,NA,NA,NA,NA,0.338,NA,77,IBBS 2015,NA,GF_9007bdfcbad2ce5201d6b13850e16128,GF,712394d4d852aae55fc5084318fcab65,Yes,yes,NA,NA,NA,155,89
-NAM,Namibia,art,self-report,NA,FSW,Katima Mulilo,NA,NA,NA,2014,NA,NA,NA,NA,0.362,NA,177,IBBS 2015,NA,GF_2af94728873ff0a3e2a49398fbf5c9f1,GF,5f403f019bea02ad94c04c7427f49491,Yes,yes,NA,NA,NA,155,90
-NAM,Namibia,art,self-report,NA,FSW,Walvis Bay/Swakopmund,NA,NA,NA,2014,NA,NA,NA,NA,0.369,NA,130,IBBS 2015,NA,GF_549a2c4467b79430847df4d30efc5b32,GF,e5d7f1e19293f7db287dc05888450fc6,Yes,yes,NA,NA,NA,155,91
-NAM,Namibia,art,self-report,NA,MSM,Windhoek,NA,NA,NA,2013,NA,NA,NA,NA,0.102,NA,59,BBS 2014,NA,GF_7f62011976aaad3330c15d1b595bed9f,GF,7d500f477c6ccb42b8d4c6bbd63a1742,Yes,yes,NA,NA,NA,156,92
-NAM,Namibia,art,self-report,NA,MSM,Oshakati,NA,NA,NA,2013,NA,NA,NA,NA,0.118,NA,17,BBS 2014,NA,GF_3310a9bfcf815efdbcd07fc66b0ff650,GF,1dcc26d540e6c328e8cd716a705fddcf,Yes,yes,NA,NA,NA,156,93
-NAM,Namibia,art,self-report,NA,MSM,Walvis Bay/Swakopmund,NA,NA,NA,2013,NA,NA,NA,NA,0.151,NA,53,BBS 2014,NA,GF_dee25776150a89db4009f500cf8a8b09,GF,671509512caf52a013ff5b39b750d311,Yes,yes,NA,NA,NA,156,94
-NAM,Namibia,art,self-report,NA,MSM,Keetmanshoop,NA,NA,NA,2013,NA,NA,NA,NA,0.227,NA,44,BBS 2014,NA,GF_a93b37c75601f34b9cc723d26542c663,GF,eaa784b12994a1f1ab5e581284e8a0c2,Yes,yes,NA,NA,NA,156,95
-NGA,Nigeria,art,VLS,NA,FSW,Nigeria,NA,NA,NA,2020,NA,NA,NA,NA,0.224,NA,771,BBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,164,96
-NGA,Nigeria,art,VLS,NA,MSM,Nigeria,NA,NA,NA,2020,NA,NA,NA,NA,0.204,NA,1097,BBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,164,97
-NGA,Nigeria,art,VLS,NA,PWID,Nigeria,NA,NA,NA,2020,NA,NA,NA,NA,0.55272,NA,481,BBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,164,98
-NGA,Nigeria,art,VLS,NA,TGW,Nigeria,NA,NA,NA,2020,NA,NA,NA,NA,0.1099,NA,1205,BBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,164,99
-RWA,Rwanda,art,VLS,NA,MSM,Kigali,NA,NA,NA,2018,NA,NA,NA,NA,0.59,NA,74,"HIV infection and engagement in HIV care cascade among men who have sex with men and transgender women in Kigali, Rwanda: a cross-sectional study",https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7527755/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,168,100
-SEN,Senegal,art,self-report,NA,FSW,Senegal,NA,NA,NA,2019,NA,NA,NA,NA,0.4375,NA,91,ENQUE_TE NATIONALE DE SURVEILLANCE COMBINEE DES IST ET DU VIH/SIDA (ENSC 2019),NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,181,101
-SEN,Senegal,art,self-report,NA,FSW,Senegal,NA,NA,NA,2013,NA,NA,NA,NA,0.25,NA,40,Potential Impact of Integrated Stigma Mitigation Interventions in Improving HIV/AIDS Service Delivery and Uptake for Key Populations in Senegal,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5147043/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,183,102
-SEN,Senegal,art,self-report,NA,MSM,Senegal,NA,NA,NA,2013,NA,NA,NA,NA,0.1,NA,219,Potential Impact of Integrated Stigma Mitigation Interventions in Improving HIV/AIDS Service Delivery and Uptake for Key Populations in Senegal,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5147043/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,183,103
-SSD,South Sudan,art,self-report,NA,FSW,Juba,NA,NA,NA,2016,NA,NA,NA,NA,0.457413249,NA,317,Eagle Survey (Juba),NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,188,104
-SSD,South Sudan,art,VLS,NA,FSW,Wau,NA,NA,NA,2019,NA,NA,NA,NA,0.365384615,NA,52,"BIO-BEHAVIOUR SURVEY AMONG FEMALE SEX WORKERS IN WAU, SOUTH SUDAN EAGLE 11 SURVEY, 2019",NA,KP Atlas_ec4e80370b8da49e131929923f9b8bfb,KP Atlas,e5d59d3241e8386325ee91cfe3b67b02,Yes,yes,NA,NA,NA,190,105
-SSD,South Sudan,art,VLS,NA,FSW,Yambio,NA,NA,NA,2019,NA,NA,NA,NA,0.585106383,NA,94,"BIO-BEHAVIOUR SURVEY AMONG FEMALE SEX WORKERS IN YAMBIO, SOUTH SUDAN EAGLE 11 SURVEY, 2019",NA,KP Atlas_bf2ae5739b9ffddaa430ebfef762f7a2,KP Atlas,b14831399940d8ce8235084c19b82776,Yes,yes,NA,NA,NA,191,106
-SSD,South Sudan,art,self-report,NA,FSW,Nimule,NA,NA,NA,2017,NA,NA,NA,NA,0.448979592,NA,98,A Bio-Behavioral HIV Survey of Female Sex Workers in Nimule South Sudan,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,192,107
-SWZ,Eswatini,art,self-report,NA,FSW,eSwatini,NA,NA,NA,2020,NA,NA,NA,NA,0.836982968,NA,411,IBBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,195,108
-SWZ,Eswatini,art,self-report,NA,MSM,eSwatini,NA,NA,NA,2020,NA,NA,NA,NA,0.548672566,NA,113,IBBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,195,109
-SWZ,Eswatini,art,self-report,NA,TGW,eSwatini,NA,NA,NA,2020,NA,NA,NA,NA,0.714285714,NA,7,IBBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,195,110
-TZA,Tanzania,art,VLS,NA,FSW,Zanzibar,NA,NA,NA,2019,NA,NA,NA,NA,0.670212766,NA,94,"Integrated behavioural and biological surveillance survey among key populations in zanzibar, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,213,111
-TZA,Tanzania,art,VLS,NA,MSM,Zanzibar,NA,NA,NA,2019,NA,NA,NA,NA,0.407407407,NA,27,"Integrated behavioural and biological surveillance survey among key populations in zanzibar, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,213,112
-TZA,Tanzania,art,VLS,NA,PWID,Zanzibar,NA,NA,NA,2019,NA,NA,NA,NA,0.333333333,NA,18,"Integrated behavioural and biological surveillance survey among key populations in zanzibar, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,213,113
-UGA,Uganda,art,VLS,NA,MSM,Kampala,NA,NA,NA,2013,NA,NA,NA,NA,0.215,NA,79,Hladik 2017,https://link.springer.com/article/10.1007/s10461-016-1535-2,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,228,114
-UGA,Uganda,art,VLS,NA,FSW,Kampala,NA,NA,NA,2012,NA,NA,NA,NA,0.368115942,NA,345,Crane Survey Data (Doshi et al.),NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,229,115
-UGA,Uganda,art,VLS,NA,FSW,Kampala,NA,NA,NA,2021,NA,NA,NA,NA,0.84,NA,494,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,233,116
-UGA,Uganda,art,Self-report,NA,FSW,"Masaka, Mpigi, Kalungu, Lwengo, Rakai, Kyotera, Lyantonde",NA,NA,NA,2020,NA,NA,NA,NA,0.840909,NA,220,Kiyingi et al.,https://link.springer.com/article/10.1007/s10461-022-03837-9,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,236,117
-ZAF,South Africa,art,lab,NA,TGW,Buffalo City,NA,NA,NA,2019,NA,NA,NA,NA,0.19,NA,NA,Cloete et al 2021,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,248,118
-ZAF,South Africa,art,lab,NA,TGW,Cape Town,NA,NA,NA,2016,NA,NA,NA,NA,0.385,NA,13,HPTN 075 (Sandfort et al),https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,113,119
-ZAF,South Africa,art,VLS,NA,PWID,Cape Town,NA,NA,NA,2017,NA,NA,NA,NA,0.361,NA,203,TipVal 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,239,120
-ZAF,South Africa,art,lab,NA,TGW,Cape Town,NA,NA,NA,2019,NA,NA,NA,NA,0.26,NA,NA,Cloete et al 2021,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,248,121
-ZMB,Zambia,art,self-report,NA,FSW,Ndola,NA,NA,NA,2017,NA,NA,NA,NA,0.197676,NA,230,2017 IBBS,NA,GF_b23f53ccfc9e497419abf81696c47fe1,GF,d3def6bd02fa65ac65e43ad8e1664227,Yes,yes,NA,NA,NA,259,122
-ZMB,Zambia,art,self-report,NA,FSW,Solwezi,NA,NA,NA,2017,NA,NA,NA,NA,0.28015,NA,248,2017 IBBS,NA,GF_362cb0e852b347186d7cf1e5d4720e4d,GF,7ceeacd293d7fed7f12e98796ec295c2,Yes,yes,NA,NA,NA,259,123
-ZMB,Zambia,art,self-report,NA,FSW,Lusaka,NA,NA,NA,2017,NA,NA,NA,NA,0.38475,NA,228,2017 IBBS,NA,GF_7ee2cdf8f31eccaff7c603c705186a90,GF,ada55a0ea82ff5f5e428d1faa86b1d22,Yes,yes,NA,NA,NA,259,124
-ZMB,Zambia,art,self-report,NA,FSW,Livingstone,NA,NA,NA,2017,NA,NA,NA,NA,0.413649,NA,264,2017 IBBS,NA,GF_2d22254b791e38e60e20c631d87ed4dc,GF,acf22aa7cce038889b74a9c88a12761d,Yes,yes,NA,NA,NA,259,125
-ZWE,Zimbabwe,art,VLS,NA,MSM,Bulawayo,NA,NA,NA,2019,NA,NA,NA,NA,0.616,NA,178,IBBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,262,126
-ZWE,Zimbabwe,art,VLS,NA,TGW,Bulawayo,NA,NA,NA,2019,NA,NA,NA,NA,0.571,NA,14,IBBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,262,127
-ZWE,Zimbabwe,art,VLS,NA,MSM,Harare,NA,NA,NA,2019,NA,NA,NA,NA,0.69,NA,74,IBBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,262,128
-ZWE,Zimbabwe,art,VLS,NA,TGW,Harare,NA,NA,NA,2019,NA,NA,NA,NA,0.551,NA,80,IBBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,262,129
-ZWE,Zimbabwe,art,VLS,NA,FSW,Bindura,NA,NA,NA,2013,NA,NA,NA,NA,0.37829999999999997,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,130
-ZWE,Zimbabwe,art,VLS,NA,FSW,Chinhoyi,NA,NA,NA,2013,NA,NA,NA,NA,0.3385,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,131
-ZWE,Zimbabwe,art,VLS,NA,FSW,Chipinge,NA,NA,NA,2013,NA,NA,NA,NA,0.35229999999999995,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,132
-ZWE,Zimbabwe,art,VLS,NA,FSW,Chivhu,NA,NA,NA,2013,NA,NA,NA,NA,0.2554,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,133
-ZWE,Zimbabwe,art,VLS,NA,FSW,Gutu,NA,NA,NA,2013,NA,NA,NA,NA,0.34020000000000006,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,134
-ZWE,Zimbabwe,art,VLS,NA,FSW,Gwanda,NA,NA,NA,2013,NA,NA,NA,NA,0.2531,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,135
-ZWE,Zimbabwe,art,VLS,NA,FSW,Hwange,NA,NA,NA,2013,NA,NA,NA,NA,0.35,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,136
-ZWE,Zimbabwe,art,VLS,NA,FSW,Juru,NA,NA,NA,2013,NA,NA,NA,NA,0.3488,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,137
-ZWE,Zimbabwe,art,VLS,NA,FSW,Kadoma,NA,NA,NA,2013,NA,NA,NA,NA,0.3568,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,138
-ZWE,Zimbabwe,art,VLS,NA,FSW,Kariba,NA,NA,NA,2013,NA,NA,NA,NA,0.40759999999999996,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,139
-ZWE,Zimbabwe,art,VLS,NA,FSW,Magunje,NA,NA,NA,2013,NA,NA,NA,NA,0.2515,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,140
-ZWE,Zimbabwe,art,VLS,NA,FSW,Marondera,NA,NA,NA,2013,NA,NA,NA,NA,0.2651,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,141
-ZWE,Zimbabwe,art,VLS,NA,FSW,Ngundu,NA,NA,NA,2013,NA,NA,NA,NA,0.2501,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,142
-ZWE,Zimbabwe,art,VLS,NA,FSW,Zvishavane,NA,NA,NA,2013,NA,NA,NA,NA,0.3176,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,143
-ERI,Eritrea,art,self-report,NA,FSW,Central Highlands,NA,NA,NA,2019,NA,NA,NA,NA,1,NA,30,"2019 BBS (HIV, HBsAg, HCV Ab and Syphilis Prevalence and HIV 
+iso3,country.name,indicator,method,simple_method,kp,area_name,area_level,age_group,year,count_lower,count_estimate,count_upper,prop_lower,prop_estimate,prop_upper,denominator,ref,link,dataset_id,dataset,uid,data_checked,source_found,duplicate_of,is_aggregate,ethic,study_idx,observation_idx
+KEN,Kenya,art,lab,NA,MSM,Kisumu,NA,NA,2016,NA,NA,NA,NA,0.7,NA,20,HPTN 075 (Sandfort et al),https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,113,160
+KEN,Kenya,art,lab,NA,TGW,Kisumu,NA,NA,2016,NA,NA,NA,NA,0.625,NA,8,HPTN 075 (Sandfort et al),https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,113,161
+MWI,Malawi,art,lab,NA,MSM,Blantyre,NA,NA,2016,NA,NA,NA,NA,0.333,NA,15,HPTN 075 (Sandfort et al),https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,113,162
+MWI,Malawi,art,lab,NA,TGW,Blantyre,NA,NA,2016,NA,NA,NA,NA,0.417,NA,12,HPTN 075 (Sandfort et al),https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,113,163
+ZAF,South Africa,art,lab,NA,TGW,Buffalo City,NA,NA,2019,NA,NA,NA,NA,0.19,NA,NA,Cloete et al 2021,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,248,256
+ZAF,South Africa,art,lab,NA,TGW,Cape Town,NA,NA,2016,NA,NA,NA,NA,0.385,NA,13,HPTN 075 (Sandfort et al),https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,113,262
+ZAF,South Africa,art,lab,NA,TGW,Cape Town,NA,NA,2019,NA,NA,NA,NA,0.26,NA,NA,Cloete et al 2021,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,248,266
+BFA,Burkina Faso,art,self-report,NA,MSM,Bobo Diouslasso,NA,NA,2013,NA,NA,NA,NA,0.063,NA,16,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,27,5
+BFA,Burkina Faso,art,self-report,NA,FSW,Ouagadougou,NA,NA,2013,NA,NA,NA,NA,0.226,NA,31,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,27,7
+BFA,Burkina Faso,art,self-report,NA,MSM,Ouagadougou,NA,NA,2013,NA,NA,NA,NA,0.25,NA,16,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,27,8
+BFA,Burkina Faso,art,self-report,NA,FSW,Bobo Diouslasso,NA,NA,2013,NA,NA,NA,NA,0.557,NA,115,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,27,9
+TGO,Togo,art,self-report,NA,MSM,Kara,NA,NA,2013,NA,NA,NA,NA,0,NA,2,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,27,10
+TGO,Togo,art,self-report,NA,MSM,Lome,NA,NA,2013,NA,NA,NA,NA,0.062,NA,65,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,27,12
+TGO,Togo,art,self-report,NA,FSW,Lome,NA,NA,2013,NA,NA,NA,NA,0.147,NA,96,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,KP Atlas_b5afbcd155431e2bf04fc6c0c76c5ec3,KP Atlas,6eb0299cf58109641e9cfd8987674128,Yes,yes,NA,NA,NA,27,13
+TGO,Togo,art,self-report,NA,FSW,Kara,NA,NA,2013,NA,NA,NA,NA,0.182,NA,33,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,27,14
+BWA,Botswana,art,self-report,NA,FSW,Francistown,NA,NA,2017,NA,NA,NA,NA,0.348649,NA,131,2017 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,31,15
+BWA,Botswana,art,self-report,NA,FSW,Gaborone,NA,NA,2017,NA,NA,NA,NA,0.128472,NA,264,2017 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,31,16
+BWA,Botswana,art,self-report,NA,FSW,Chobe,NA,NA,2017,NA,NA,NA,NA,0.126741,NA,59,2017 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,31,17
+BWA,Botswana,art,self-report,NA,FSW,Maun,NA,NA,2017,NA,NA,NA,NA,0.19788,NA,101,2017 BBS,NA,KP Atlas_7aaecf76f8a43dcf4102e0b6b525ab56,KP Atlas,9a000efb8b1e0eba92414ca6b1786492,Yes,yes,NA,NA,NA,31,25
+BWA,Botswana,art,self-report,NA,FSW,Palapye,NA,NA,2017,NA,NA,NA,NA,0.079602,NA,181,2017 BBS,NA,KP Atlas_7f07c53ba4d549444bb0d9bddad68926,KP Atlas,ff1ff9975541f7f2079c71e1f390fd4c,Yes,yes,NA,NA,NA,31,26
+CMR,Cameroon,art,self-report,NA,MSM,Bertoua,NA,NA,2016,NA,NA,NA,NA,0.087,NA,23,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,30
+CMR,Cameroon,art,self-report,NA,FSW,Kribi,NA,NA,2016,NA,NA,NA,NA,0.1379,NA,87,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,31
+CMR,Cameroon,art,self-report,NA,FSW,Bertoua,NA,NA,2016,NA,NA,NA,NA,0.257,NA,74,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,32
+CMR,Cameroon,art,self-report,NA,MSM,Yaounde,NA,NA,2016,NA,NA,NA,NA,0.261,NA,138,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,34
+CMR,Cameroon,art,self-report,NA,MSM,Douala,NA,NA,2016,NA,NA,NA,NA,0.352,NA,91,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,35
+CMR,Cameroon,art,self-report,NA,MSM,Kribi,NA,NA,2016,NA,NA,NA,NA,0.417,NA,12,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,37
+CMR,Cameroon,art,self-report,NA,FSW,Yaounde,NA,NA,2016,NA,NA,NA,NA,0.4552,NA,134,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,38
+CMR,Cameroon,art,self-report,NA,FSW,Douala,NA,NA,2016,NA,NA,NA,NA,0.521,NA,140,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,39
+CMR,Cameroon,art,self-report,NA,FSW,Bamenda,NA,NA,2016,NA,NA,NA,NA,0.651,NA,112,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,40
+GNQ,Equitorial Guinea,art,self-report,NA,FSW,"Malabo, Bata, Ebibeyin, Mongomo",NA,NA,2021,NA,NA,NA,NA,0.329,NA,79,"INFORME DE LA ENCUESTA NACIONAL SOBRE REALIDADES LGBTI, TRABAJADORES DE SEXO Y ENCARCELADOS EN LAS CIUDADES DE MALABO, BATA, EBIBEYÍN Y MONGO.",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,0,99,112
+GNQ,Equitorial Guinea,art,self-report,NA,MSM,"Malabo, Bata, Ebibeyin, Mongomo",NA,NA,2021,NA,NA,NA,NA,0.361,NA,36,"INFORME DE LA ENCUESTA NACIONAL SOBRE REALIDADES LGBTI, TRABAJADORES DE SEXO Y ENCARCELADOS EN LAS CIUDADES DE MALABO, BATA, EBIBEYÍN Y MONGO.",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,0,99,113
+KEN,Kenya,art,self-report,NA,MSM,Kenya,NA,NA,2019,NA,NA,NA,NA,0.323,NA,201,Bhattacharjee et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7319161/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,117,172
+MLI,Mali,art,self-report,NA,TGW,Mali,NA,NA,2019,NA,NA,NA,NA,0.273,NA,33,ANALYSE DE LA SITUATION DES PERSONNES TRANSGENRES AU MALI EN RELATION AVEC L'INFECTION A VIH ET LE SIDA,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,130,177
+MOZ,Mozambique,art,self-report,NA,FSW,Nampula,NA,NA,2012,NA,NA,NA,NA,0.273,NA,11,BBS 2012,NA,KP Atlas_896eeac60202d5fd827d08332479fb1a,KP Atlas,cf8b56fcd7fc70b433bd26599dace8bb,Yes,yes,NA,NA,NA,140,186
+MOZ,Mozambique,art,self-report,NA,FSW,Cidade de Maputo,NA,NA,2012,NA,NA,NA,NA,0.49,NA,49,BBS 2012,NA,KP Atlas_a800745773acfca1d861b289c35bdcd2,KP Atlas,3808cc2aa2e2244bb025b63aa8e25baa,Yes,yes,NA,NA,NA,140,187
+MOZ,Mozambique,art,self-report,NA,FSW,Beira,NA,NA,2012,NA,NA,NA,NA,0.548,NA,31,BBS 2012,NA,KP Atlas_3a45503881b090e7d2ee7c24bf937330,KP Atlas,df1bf1f80789d4662654a0da91eca9e0,Yes,yes,NA,NA,NA,140,188
+MOZ,Mozambique,art,self-report,NA,PWID,Cidade de Maputo,NA,NA,2016,NA,NA,NA,0.345,0.479,0.6,123,BBS 2014,NA,KP Atlas_e06e5aea386e6fae91d427ac8cdc17b0,KP Atlas,aee4998f796c65b1d6eaddd5edec46b5,Yes,yes,NA,NA,NA,141,189
+MWI,Malawi,art,self-report,NA,MSM,Lilongwe,NA,NA,2014,NA,NA,NA,NA,0.039,NA,49,HIV Prevalence and Sociobehavioral Characteristics Among Men Who Have Sex with Men Across Seven Sites in Malawi,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,149,193
+MWI,Malawi,art,self-report,NA,MSM,Mangochi,NA,NA,2014,NA,NA,NA,NA,0,NA,71,HIV Prevalence and Sociobehavioral Characteristics Among Men Who Have Sex with Men Across Seven Sites in Malawi,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,149,194
+MWI,Malawi,art,self-report,NA,MSM,Mulanje,NA,NA,2014,NA,NA,NA,NA,0,NA,86,HIV Prevalence and Sociobehavioral Characteristics Among Men Who Have Sex with Men Across Seven Sites in Malawi,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,149,195
+MWI,Malawi,art,self-report,NA,MSM,Nkhata Bay,NA,NA,2014,NA,NA,NA,NA,0,NA,76,HIV Prevalence and Sociobehavioral Characteristics Among Men Who Have Sex with Men Across Seven Sites in Malawi,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,149,196
+MWI,Malawi,art,self-report,NA,FSW,Zomba,NA,NA,2017,NA,NA,NA,NA,0.397,NA,68,2017 PLACE,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,150,197
+MWI,Malawi,art,self-report,NA,MSM,Zomba,NA,NA,2017,NA,NA,NA,NA,0.067,NA,15,2017 PLACE,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,150,198
+NAM,Namibia,art,self-report,NA,FSW,Windhoek,NA,NA,2014,NA,NA,NA,NA,0.252,NA,103,IBBS 2015,NA,GF_87c0abcbe984655663365f224b2746f7,GF,b921d91440065db671e9a4c400bcd57b,Yes,yes,NA,NA,NA,155,206
+NAM,Namibia,art,self-report,NA,FSW,Oshikango,NA,NA,2014,NA,NA,NA,NA,0.338,NA,77,IBBS 2015,NA,GF_9007bdfcbad2ce5201d6b13850e16128,GF,712394d4d852aae55fc5084318fcab65,Yes,yes,NA,NA,NA,155,207
+NAM,Namibia,art,self-report,NA,FSW,Katima Mulilo,NA,NA,2014,NA,NA,NA,NA,0.362,NA,177,IBBS 2015,NA,GF_2af94728873ff0a3e2a49398fbf5c9f1,GF,5f403f019bea02ad94c04c7427f49491,Yes,yes,NA,NA,NA,155,208
+NAM,Namibia,art,self-report,NA,FSW,Walvis Bay/Swakopmund,NA,NA,2014,NA,NA,NA,NA,0.369,NA,130,IBBS 2015,NA,GF_549a2c4467b79430847df4d30efc5b32,GF,e5d7f1e19293f7db287dc05888450fc6,Yes,yes,NA,NA,NA,155,209
+NAM,Namibia,art,self-report,NA,MSM,Windhoek,NA,NA,2013,NA,NA,NA,NA,0.102,NA,59,BBS 2014,NA,GF_7f62011976aaad3330c15d1b595bed9f,GF,7d500f477c6ccb42b8d4c6bbd63a1742,Yes,yes,NA,NA,NA,156,210
+NAM,Namibia,art,self-report,NA,MSM,Oshakati,NA,NA,2013,NA,NA,NA,NA,0.118,NA,17,BBS 2014,NA,GF_3310a9bfcf815efdbcd07fc66b0ff650,GF,1dcc26d540e6c328e8cd716a705fddcf,Yes,yes,NA,NA,NA,156,211
+NAM,Namibia,art,self-report,NA,MSM,Walvis Bay/Swakopmund,NA,NA,2013,NA,NA,NA,NA,0.151,NA,53,BBS 2014,NA,GF_dee25776150a89db4009f500cf8a8b09,GF,671509512caf52a013ff5b39b750d311,Yes,yes,NA,NA,NA,156,212
+NAM,Namibia,art,self-report,NA,MSM,Keetmanshoop,NA,NA,2013,NA,NA,NA,NA,0.227,NA,44,BBS 2014,NA,GF_a93b37c75601f34b9cc723d26542c663,GF,eaa784b12994a1f1ab5e581284e8a0c2,Yes,yes,NA,NA,NA,156,213
+SEN,Senegal,art,self-report,NA,FSW,Senegal,NA,NA,2019,NA,NA,NA,NA,0.4375,NA,91,ENQUE_TE NATIONALE DE SURVEILLANCE COMBINEE DES IST ET DU VIH/SIDA (ENSC 2019),NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,181,219
+SEN,Senegal,art,self-report,NA,FSW,Senegal,NA,NA,2013,NA,NA,NA,NA,0.25,NA,40,Potential Impact of Integrated Stigma Mitigation Interventions in Improving HIV/AIDS Service Delivery and Uptake for Key Populations in Senegal,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5147043/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,183,221
+SEN,Senegal,art,self-report,NA,MSM,Senegal,NA,NA,2013,NA,NA,NA,NA,0.1,NA,219,Potential Impact of Integrated Stigma Mitigation Interventions in Improving HIV/AIDS Service Delivery and Uptake for Key Populations in Senegal,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5147043/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,183,224
+SSD,South Sudan,art,self-report,NA,FSW,Juba,NA,NA,2016,NA,NA,NA,NA,0.457413249,NA,317,Eagle Survey (Juba),NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,188,226
+SSD,South Sudan,art,self-report,NA,FSW,Nimule,NA,NA,2017,NA,NA,NA,NA,0.448979592,NA,98,A Bio-Behavioral HIV Survey of Female Sex Workers in Nimule South Sudan,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,192,229
+SWZ,Eswatini,art,self-report,NA,FSW,eSwatini,NA,NA,2020,NA,NA,NA,NA,0.836982968,NA,411,IBBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,195,230
+SWZ,Eswatini,art,self-report,NA,MSM,eSwatini,NA,NA,2020,NA,NA,NA,NA,0.548672566,NA,113,IBBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,195,231
+SWZ,Eswatini,art,self-report,NA,TGW,eSwatini,NA,NA,2020,NA,NA,NA,NA,0.714285714,NA,7,IBBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,195,232
+UGA,Uganda,art,Self-report,NA,FSW,"Masaka, Mpigi, Kalungu, Lwengo, Rakai, Kyotera, Lyantonde",NA,NA,2020,NA,NA,NA,NA,0.840909,NA,220,Kiyingi et al.,https://link.springer.com/article/10.1007/s10461-022-03837-9,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,236,246
+ZMB,Zambia,art,self-report,NA,FSW,Ndola,NA,NA,2017,NA,NA,NA,NA,0.197676,NA,230,2017 IBBS,NA,GF_b23f53ccfc9e497419abf81696c47fe1,GF,d3def6bd02fa65ac65e43ad8e1664227,Yes,yes,NA,NA,NA,259,319
+ZMB,Zambia,art,self-report,NA,FSW,Solwezi,NA,NA,2017,NA,NA,NA,NA,0.28015,NA,248,2017 IBBS,NA,GF_362cb0e852b347186d7cf1e5d4720e4d,GF,7ceeacd293d7fed7f12e98796ec295c2,Yes,yes,NA,NA,NA,259,320
+ZMB,Zambia,art,self-report,NA,FSW,Lusaka,NA,NA,2017,NA,NA,NA,NA,0.38475,NA,228,2017 IBBS,NA,GF_7ee2cdf8f31eccaff7c603c705186a90,GF,ada55a0ea82ff5f5e428d1faa86b1d22,Yes,yes,NA,NA,NA,259,331
+ZMB,Zambia,art,self-report,NA,FSW,Livingstone,NA,NA,2017,NA,NA,NA,NA,0.413649,NA,264,2017 IBBS,NA,GF_2d22254b791e38e60e20c631d87ed4dc,GF,acf22aa7cce038889b74a9c88a12761d,Yes,yes,NA,NA,NA,259,332
+ERI,Eritrea,art,self-report,NA,FSW,Central Highlands,NA,NA,2019,NA,NA,NA,NA,1,NA,30,"2019 BBS (HIV, HBsAg, HCV Ab and Syphilis Prevalence and HIV 
 Risk Behaviors Survey among Commercial Sex Workers 
-in Eritrea-2019)",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,310,144
-ERI,Eritrea,art,self-report,NA,FSW,Lowlands,NA,NA,NA,2019,NA,NA,NA,NA,0.864,NA,81,"2019 BBS (HIV, HBsAg, HCV Ab and Syphilis Prevalence and HIV 
+in Eritrea-2019)",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,310,364
+ERI,Eritrea,art,self-report,NA,FSW,Lowlands,NA,NA,2019,NA,NA,NA,NA,0.864,NA,81,"2019 BBS (HIV, HBsAg, HCV Ab and Syphilis Prevalence and HIV 
 Risk Behaviors Survey among Commercial Sex Workers 
-in Eritrea-2019)",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,310,145
-BEN,Benin,art,self-report,NA,FSW,"Alibori, Atacora, Atlantique, Borgou, Collines, Couffo, Donga, Littoral, Mono, Oueme, Plateau, Zou",NA,NA,NA,2021,NA,NA,NA,NA,0.282,NA,85,2021 ESDG,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,321,146
-GIN,Guinea,art,self-report,NA,PWID,Conakry,NA,NA,NA,2022,NA,NA,NA,NA,0.5,NA,2,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,147
-GIN,Guinea,art,VLS,NA,FSW,Boke,NA,NA,NA,2022,NA,NA,NA,NA,0.38,NA,21,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,148
-GIN,Guinea,art,VLS,NA,FSW,Conakry,NA,NA,NA,2022,NA,NA,NA,NA,0.24,NA,25,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,149
-GIN,Guinea,art,VLS,NA,FSW,Faranah,NA,NA,NA,2022,NA,NA,NA,NA,0.5,NA,4,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,150
-GIN,Guinea,art,VLS,NA,FSW,Kankan,NA,NA,NA,2022,NA,NA,NA,NA,0.1667,NA,1,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,151
-GIN,Guinea,art,VLS,NA,FSW,Kindia,NA,NA,NA,2022,NA,NA,NA,NA,0.429,NA,3,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,152
-GIN,Guinea,art,VLS,NA,FSW,Labe,NA,NA,NA,2022,NA,NA,NA,NA,0.5,NA,7,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,153
-GIN,Guinea,art,VLS,NA,FSW,Mamou,NA,NA,NA,2022,NA,NA,NA,NA,0.75,NA,3,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,154
-GIN,Guinea,art,VLS,NA,FSW,N'Zerekore,NA,NA,NA,2022,NA,NA,NA,NA,0.23,NA,3,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,155
-GIN,Guinea,art,VLS,NA,MSM,Boke,NA,NA,NA,2022,NA,NA,NA,NA,0.230769231,NA,13,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,156
-GIN,Guinea,art,VLS,NA,MSM,Conakry,NA,NA,NA,2022,NA,NA,NA,NA,0.247524752,NA,101,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,157
-GIN,Guinea,art,VLS,NA,MSM,Faranah,NA,NA,NA,2022,NA,NA,NA,NA,0.5,NA,4,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,158
-GIN,Guinea,art,VLS,NA,MSM,Kankan,NA,NA,NA,2022,NA,NA,NA,NA,0.5,NA,14,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,159
-GIN,Guinea,art,VLS,NA,MSM,Kindia,NA,NA,NA,2022,NA,NA,NA,NA,0.307692308,NA,13,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,160
-GIN,Guinea,art,VLS,NA,MSM,Labe,NA,NA,NA,2022,NA,NA,NA,NA,0,NA,4,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,161
-GIN,Guinea,art,VLS,NA,MSM,Mam,NA,NA,NA,2022,NA,NA,NA,NA,0,NA,1,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,162
-ZAF,South Africa,art,self-report,NA,MSM,Ehlanzeni,NA,NA,NA,2013,NA,NA,NA,NA,0.096,NA,62,Lane et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4234301/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,242,163
-ZAF,South Africa,art,self-report,NA,MSM,Gert Sibande DM,NA,NA,NA,2013,NA,NA,NA,NA,0.136,NA,110,Lane et al 2014,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4234301/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,242,164
-GIN,Guinea,art,VLS,NA,MSM,Nz,NA,NA,NA,2022,NA,NA,NA,NA,0.111111111,NA,9,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,165
-RWA,Rwanda,art,self-report,NA,FSW,Rwanda,NA,NA,NA,2015,NA,NA,NA,NA,0.52,NA,413,Biological &Behavioral Surveillance among Female Sexual Workers in Rwanda in 2015,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9461641/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,325,166
-COG,Congo - Brazzaville,art,self-report,NA,MSM,"Brazzaville, Pointe-Noire",NA,NA,NA,2018,NA,NA,NA,NA,0.014,NA,74,"ENQUETE COMPORTEMENTALE COUPLEE A LA SEROLOGIE VIH CHEZ LES HOMMES AYANT DES RAPPORTS SEXUELS AVEC LES HOMMES, LES PROFESSIONNELLES DE SEXE, LES CONSOMMATEURS DE DROGUES INJECTABLES ET LES DETENUS EN REPUBLIQUE DU CONGO",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,327,167
-COG,Congo - Brazzaville,art,self-report,NA,FSW,"Brazzaville, Pointe-Noire, Dolisie, Ouesso, Pokola",NA,NA,NA,2018,NA,NA,NA,NA,0.0545,NA,55,NA,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,327,168
-ZWE,Zimbabwe,art,VLS,NA,FSW,Bindura,NA,NA,NA,2016,NA,NA,NA,NA,0.6091,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,169
-ZWE,Zimbabwe,art,VLS,NA,FSW,Bulawayo,NA,NA,NA,2016,NA,NA,NA,NA,0.5871,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,170
-ZWE,Zimbabwe,art,VLS,NA,FSW,Chinhoyi,NA,NA,NA,2016,NA,NA,NA,NA,0.642,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,171
-ZWE,Zimbabwe,art,VLS,NA,FSW,Chipinge,NA,NA,NA,2016,NA,NA,NA,NA,0.5471,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,172
-ZWE,Zimbabwe,art,VLS,NA,FSW,Chivhu,NA,NA,NA,2016,NA,NA,NA,NA,0.4575,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,173
-ZWE,Zimbabwe,art,VLS,NA,FSW,Gutu,NA,NA,NA,2016,NA,NA,NA,NA,0.6169,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,174
-ZWE,Zimbabwe,art,VLS,NA,FSW,Gwanda,NA,NA,NA,2016,NA,NA,NA,NA,0.6003000000000001,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,175
-ZWE,Zimbabwe,art,VLS,NA,FSW,Harare,NA,NA,NA,2016,NA,NA,NA,NA,0.49310000000000004,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,176
-ZWE,Zimbabwe,art,VLS,NA,FSW,Hwange,NA,NA,NA,2016,NA,NA,NA,NA,0.5299,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,177
-ZWE,Zimbabwe,art,VLS,NA,FSW,Juru,NA,NA,NA,2016,NA,NA,NA,NA,0.5539000000000001,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,178
-ZWE,Zimbabwe,art,VLS,NA,FSW,Kadoma,NA,NA,NA,2016,NA,NA,NA,NA,0.7609,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,179
-ZWE,Zimbabwe,art,VLS,NA,FSW,Kariba,NA,NA,NA,2016,NA,NA,NA,NA,0.5559000000000001,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,180
-ZWE,Zimbabwe,art,VLS,NA,FSW,Magunje,NA,NA,NA,2016,NA,NA,NA,NA,0.7109000000000001,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,181
-ZWE,Zimbabwe,art,VLS,NA,FSW,Maronder,NA,NA,NA,2016,NA,NA,NA,NA,0.5225,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,182
-ZWE,Zimbabwe,art,VLS,NA,FSW,Ngundu,NA,NA,NA,2016,NA,NA,NA,NA,0.5211,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,183
-ZWE,Zimbabwe,art,VLS,NA,FSW,Shamva,NA,NA,NA,2016,NA,NA,NA,NA,0.4078,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,184
-ZWE,Zimbabwe,art,VLS,NA,FSW,Zvishavane,NA,NA,NA,2016,NA,NA,NA,NA,0.5513,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,185
-ZWE,Zimbabwe,art,self-report,NA,FSW,Hwange,NA,NA,NA,2011,NA,NA,NA,NA,0.56,NA,71,Cowan 2013,NA,GF_be78b374df47db8398e62f0db32138ad,GF,8ed841cb0d07bc25ae8ff989a8d00446,Yes,yes,NA,NA,NA,265,186
-ZWE,Zimbabwe,art,self-report,NA,FSW,Mutare,NA,NA,NA,2011,NA,NA,NA,NA,0.789,NA,108,Cowan 2013,NA,GF_5798cb9929022168d185c437af580441,GF,bc20e5860bde730e46e419d4c68ebd03,Yes,yes,NA,NA,NA,265,187
-ZWE,Zimbabwe,art,self-report,NA,FSW,Victoria Falls,NA,NA,NA,2011,NA,NA,NA,NA,0.513,NA,83,Cowan 2013,NA,GF_c1200cd7c8c2c5ad0df3fa575a7d3586,GF,d92180dbb9bbee783aaa16a83ca8be61,Yes,yes,NA,NA,NA,265,188
-HTI,Haiti,art,self-report,NA,MSM,Haiti,NA,NA,NA,2016,NA,NA,NA,NA,0.2174,NA,NA,2017 PLACE,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,NA,189
-HTI,Haiti,art,self-report,NA,FSW,Haiti,NA,NA,NA,2016,NA,NA,NA,NA,0.2386,NA,NA,2017 PLACE,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,NA,190
-HTI,Haiti,art,self-report,NA,TGW,Haiti,NA,NA,NA,2016,NA,NA,NA,NA,0.2453,NA,NA,2017 PLACE,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,NA,191
-NER,Niger,art,self-report,NA,FSW,"Agadez, Maradi, Niamey, Tahoua, Zinder",NA,NA,NA,2017,NA,NA,NA,NA,0.174,NA,144,2017 ESDG,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,374,192
+in Eritrea-2019)",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,310,365
+BEN,Benin,art,self-report,NA,FSW,"Alibori, Atacora, Atlantique, Borgou, Collines, Couffo, Donga, Littoral, Mono, Oueme, Plateau, Zou",NA,NA,2021,NA,NA,NA,NA,0.282,NA,85,2021 ESDG,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,321,366
+GIN,Guinea,art,self-report,NA,PWID,Conakry,NA,NA,2022,NA,NA,NA,NA,0.5,NA,2,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,367
+ZAF,South Africa,art,self-report,NA,MSM,Ehlanzeni,NA,NA,2013,NA,NA,NA,NA,0.096,NA,62,Lane et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4234301/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,242,387
+ZAF,South Africa,art,self-report,NA,MSM,Gert Sibande DM,NA,NA,2013,NA,NA,NA,NA,0.136,NA,110,Lane et al 2014,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4234301/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,242,388
+RWA,Rwanda,art,self-report,NA,FSW,Rwanda,NA,NA,2015,NA,NA,NA,NA,0.52,NA,413,Biological &Behavioral Surveillance among Female Sexual Workers in Rwanda in 2015,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9461641/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,325,454
+COG,Congo - Brazzaville,art,self-report,NA,MSM,"Brazzaville, Pointe-Noire",NA,NA,2018,NA,NA,NA,NA,0.014,NA,74,"ENQUETE COMPORTEMENTALE COUPLEE A LA SEROLOGIE VIH CHEZ LES HOMMES AYANT DES RAPPORTS SEXUELS AVEC LES HOMMES, LES PROFESSIONNELLES DE SEXE, LES CONSOMMATEURS DE DROGUES INJECTABLES ET LES DETENUS EN REPUBLIQUE DU CONGO",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,327,455
+COG,Congo - Brazzaville,art,self-report,NA,FSW,"Brazzaville, Pointe-Noire, Dolisie, Ouesso, Pokola",NA,NA,2018,NA,NA,NA,NA,0.0545,NA,55,NA,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,327,456
+ZWE,Zimbabwe,art,self-report,NA,FSW,Hwange,NA,NA,2011,NA,NA,NA,NA,0.56,NA,71,Cowan 2013,NA,GF_be78b374df47db8398e62f0db32138ad,GF,8ed841cb0d07bc25ae8ff989a8d00446,Yes,yes,NA,NA,NA,265,528
+ZWE,Zimbabwe,art,self-report,NA,FSW,Mutare,NA,NA,2011,NA,NA,NA,NA,0.789,NA,108,Cowan 2013,NA,GF_5798cb9929022168d185c437af580441,GF,bc20e5860bde730e46e419d4c68ebd03,Yes,yes,NA,NA,NA,265,529
+ZWE,Zimbabwe,art,self-report,NA,FSW,Victoria Falls,NA,NA,2011,NA,NA,NA,NA,0.513,NA,83,Cowan 2013,NA,GF_c1200cd7c8c2c5ad0df3fa575a7d3586,GF,d92180dbb9bbee783aaa16a83ca8be61,Yes,yes,NA,NA,NA,265,530
+HTI,Haiti,art,self-report,NA,MSM,Haiti,NA,NA,2016,NA,NA,NA,NA,0.2174,NA,NA,2017 PLACE,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,NA,543
+HTI,Haiti,art,self-report,NA,FSW,Haiti,NA,NA,2016,NA,NA,NA,NA,0.2386,NA,NA,2017 PLACE,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,NA,544
+HTI,Haiti,art,self-report,NA,TGW,Haiti,NA,NA,2016,NA,NA,NA,NA,0.2453,NA,NA,2017 PLACE,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,NA,545
+NER,Niger,art,self-report,NA,FSW,"Agadez, Maradi, Niamey, Tahoua, Zinder",NA,NA,2017,NA,NA,NA,NA,0.174,NA,144,2017 ESDG,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,374,8123
+AGO,Angola,art,vls,NA,FSW,Angola,NA,NA,2017,NA,NA,NA,NA,0.18,NA,147,Mapeamento Programatico E Prevalencia De VIH E Outras Its Entre Populacoes Chave De Angola: Estudo PLACE 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,3,1
+AGO,Angola,art,vls,NA,MSM,Angola,NA,NA,2017,NA,NA,NA,NA,0.44,NA,19,Mapeamento Programatico E Prevalencia De VIH E Outras Its Entre Populacoes Chave De Angola: Estudo PLACE 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,3,2
+AGO,Angola,art,vls,NA,TGW,Angola,NA,NA,2017,NA,NA,NA,NA,0.55,NA,8,Mapeamento Programatico E Prevalencia De VIH E Outras Its Entre Populacoes Chave De Angola: Estudo PLACE 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,3,3
+CIV,Cote d'Ivoire,art,VLS,NA,FSW,ABOISSO,NA,NA,2020,NA,NA,NA,NA,0.6,NA,10,"Enquete Bio-Comportementale Et Cartographique En Direction Des Travailleuses De Sexe Dans Cinq Localites De La Cote D'ivoire : Katiola, Yamoussoukro, Soubre, Aboisso, Agboville.",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,46,28
+CIV,Cote d'Ivoire,art,VLS,NA,FSW,Agboville,NA,NA,2020,NA,NA,NA,NA,0.33,NA,6,"Enquete Bio-Comportementale Et Cartographique En Direction Des Travailleuses De Sexe Dans Cinq Localites De La Cote D'ivoire : Katiola, Yamoussoukro, Soubre, Aboisso, Agboville.",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,46,29
+CIV,Cote d'Ivoire,art,VLS,NA,FSW,Katiola,NA,NA,2020,NA,NA,NA,NA,0.77,NA,26,"Enquete Bio-Comportementale Et Cartographique En Direction Des Travailleuses De Sexe Dans Cinq Localites De La Cote D'ivoire : Katiola, Yamoussoukro, Soubre, Aboisso, Agboville.",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,46,52
+CIV,Cote d'Ivoire,art,VLS,NA,FSW,Soubre,NA,NA,2020,NA,NA,NA,NA,0.13,NA,8,"Enquete Bio-Comportementale Et Cartographique En Direction Des Travailleuses De Sexe Dans Cinq Localites De La Cote D'ivoire : Katiola, Yamoussoukro, Soubre, Aboisso, Agboville.",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,46,53
+CIV,Cote d'Ivoire,art,VLS,NA,FSW,YAKRO,NA,NA,2020,NA,NA,NA,NA,0.33,NA,6,"Enquete Bio-Comportementale Et Cartographique En Direction Des Travailleuses De Sexe Dans Cinq Localites De La Cote D'ivoire : Katiola, Yamoussoukro, Soubre, Aboisso, Agboville.",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,46,54
+COD,Congo - Kinshasa,art,VLS,NA,FSW,Bas-Uele,NA,NA,2019,NA,NA,NA,0.171,0.406,0.628,19,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,88
+COD,Congo - Kinshasa,art,VLS,NA,FSW,Haut-Katanga,NA,NA,2019,NA,NA,NA,0.107,0.258,0.408,26,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,89
+COD,Congo - Kinshasa,art,VLS,NA,MSM,Haut-Katanga,NA,NA,2019,NA,NA,NA,0.258,0.503,0.752,13,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,90
+COD,Congo - Kinshasa,art,VLS,NA,FSW,Haut-Uele,NA,NA,2019,NA,NA,NA,0.139,0.26899999999999996,0.40399999999999997,38,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,91
+COD,Congo - Kinshasa,art,VLS,NA,FSW,Ituri,NA,NA,2019,NA,NA,NA,0.45799999999999996,0.595,0.746,18,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,92
+COD,Congo - Kinshasa,art,VLS,NA,MSM,Ituri,NA,NA,2019,NA,NA,NA,0.046,0.25,0.6990000000000001,4,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,93
+COD,Congo - Kinshasa,art,VLS,NA,PWID,Ituri,NA,NA,2019,NA,NA,NA,0.43200000000000005,0.7140000000000001,0.968,8,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,94
+COD,Congo - Kinshasa,art,VLS,NA,FSW,Kasai-Oriental,NA,NA,2019,NA,NA,NA,0.267,0.419,0.575,51,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,95
+COD,Congo - Kinshasa,art,VLS,NA,MSM,Kinshasa,NA,NA,2019,NA,NA,NA,0.508,0.742,0.889,83,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,96
+COD,Congo - Kinshasa,art,VLS,NA,PWID,Kinshasa,NA,NA,2019,NA,NA,NA,0.35,0.618,0.887,26,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,97
+COD,Congo - Kinshasa,art,VLS,NA,FSW,Kongo-Central,NA,NA,2019,NA,NA,NA,0.358,0.5770000000000001,0.769,18,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,98
+COD,Congo - Kinshasa,art,VLS,NA,MSM,Kongo-Central,NA,NA,2019,NA,NA,NA,0.596,0.9420000000000001,0.982,10,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,99
+COD,Congo - Kinshasa,art,VLS,NA,PWID,Kongo-Central,NA,NA,2019,NA,NA,NA,NA,1,NA,2,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,100
+COD,Congo - Kinshasa,art,VLS,NA,FSW,Kwilu,NA,NA,2019,NA,NA,NA,0.10800000000000001,0.261,0.402,15,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,101
+COD,Congo - Kinshasa,art,VLS,NA,FSW,Lomami,NA,NA,2019,NA,NA,NA,0.429,0.551,0.66,37,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,102
+COD,Congo - Kinshasa,art,VLS,NA,FSW,Lualaba,NA,NA,2019,NA,NA,NA,0.057,0.249,0.315,28,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,103
+COD,Congo - Kinshasa,art,VLS,NA,FSW,Maniema,NA,NA,2019,NA,NA,NA,0.355,0.528,0.715,25,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,104
+COD,Congo - Kinshasa,art,VLS,NA,FSW,Nord-Kivu,NA,NA,2019,NA,NA,NA,0.46399999999999997,0.598,0.731,54,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,105
+COD,Congo - Kinshasa,art,VLS,NA,FSW,Sud-Kivu,NA,NA,2019,NA,NA,NA,0.32799999999999996,0.495,0.667,36,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,106
+COD,Congo - Kinshasa,art,VLS,NA,FSW,Tshopo,NA,NA,2019,NA,NA,NA,0.302,0.445,0.599,40,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,107
+GMB,Gambia,art,VLS,NA,FSW,The Gambia,NA,NA,2017,NA,NA,NA,NA,0.256410256,NA,39,BBS 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,94,108
+GMB,Gambia,art,VLS,NA,MSM,The Gambia,NA,NA,2017,NA,NA,NA,NA,0.115384615,NA,52,BBS 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,94,109
+KEN,Kenya,art,VLS,NA,MSM,Nairobi,NA,NA,2017,NA,NA,NA,NA,0.556291391,NA,151,Smith et al,https://bmjopen.bmj.com/content/11/12/e055783.abstract,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,108,114
+KEN,Kenya,art,VLS,NA,TGW,Nairobi,NA,NA,2017,NA,NA,NA,NA,0.464285714,NA,28,Smith et al,https://bmjopen.bmj.com/content/11/12/e055783.abstract,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,108,115
+KEN,Kenya,art,VLS,NA,PWID,Coast,NA,NA,2012,NA,NA,NA,NA,0.046,NA,216,Kurth | Degenhardt et al,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,114,168
+KEN,Kenya,art,VLS,NA,PWID,Nairobi,NA,NA,2012,NA,NA,NA,NA,0.042,NA,71,Kurth | Degenhardt et al,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,114,169
+KEN,Kenya,art,VLS,NA,MSM,Kisumu,NA,NA,2016,NA,NA,NA,NA,0.306,NA,63,Kunzweiler et al,https://www.tandfonline.com/doi/full/10.1080/09540121.2018.1510109,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,115,170
+KEN,Kenya,art,VLS,NA,MSM,Nairobi,NA,NA,2017,NA,NA,NA,NA,0.785,NA,186,Fearon (TRANSFORM),https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7527758/#jia225603-sup-0001,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,116,171
+KEN,Kenya,art,VLS,NA,MSM,"Malindi, Mtwapa",NA,NA,2019,NA,NA,NA,NA,0.375,NA,56,Dijkstra,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8186249/#sup1,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,120,176
+MLI,Mali,art,VLS,NA,MSM,Bamako,NA,NA,2019,NA,NA,NA,NA,0.5529999999999999,NA,47,Cartographie et Estimation de la taille des Professionnelles de Sexe (PS) et des Hommes ayant des rapports Sexuels avec d’autres Hommes (HSH) couplees à l’etude bio-comportementale chez les HSH en matière de VIH au Mali,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,131,178
+MLI,Mali,art,VLS,NA,MSM,Kayes,NA,NA,2019,NA,NA,NA,NA,0.41600000000000004,NA,24,Cartographie et Estimation de la taille des Professionnelles de Sexe (PS) et des Hommes ayant des rapports Sexuels avec d’autres Hommes (HSH) couplees à l’etude bio-comportementale chez les HSH en matière de VIH au Mali,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,131,179
+MLI,Mali,art,VLS,NA,MSM,Koulikoro,NA,NA,2019,NA,NA,NA,NA,0.174,NA,23,Cartographie et Estimation de la taille des Professionnelles de Sexe (PS) et des Hommes ayant des rapports Sexuels avec d’autres Hommes (HSH) couplees à l’etude bio-comportementale chez les HSH en matière de VIH au Mali,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,131,180
+MLI,Mali,art,VLS,NA,MSM,Mopti,NA,NA,2019,NA,NA,NA,NA,0.846,NA,13,Cartographie et Estimation de la taille des Professionnelles de Sexe (PS) et des Hommes ayant des rapports Sexuels avec d’autres Hommes (HSH) couplees à l’etude bio-comportementale chez les HSH en matière de VIH au Mali,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,131,181
+MLI,Mali,art,VLS,NA,MSM,Segou,NA,NA,2019,NA,NA,NA,NA,0.455,NA,11,Cartographie et Estimation de la taille des Professionnelles de Sexe (PS) et des Hommes ayant des rapports Sexuels avec d’autres Hommes (HSH) couplees à l’etude bio-comportementale chez les HSH en matière de VIH au Mali,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,131,182
+MLI,Mali,art,VLS,NA,MSM,Sikasso,NA,NA,2019,NA,NA,NA,NA,0.545,NA,11,Cartographie et Estimation de la taille des Professionnelles de Sexe (PS) et des Hommes ayant des rapports Sexuels avec d’autres Hommes (HSH) couplees à l’etude bio-comportementale chez les HSH en matière de VIH au Mali,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,131,183
+MLI,Mali,art,VLS,NA,TGW,Bamako,NA,NA,2015,NA,NA,NA,0,0.072,0.158,37,Hakim et al,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,132,184
+MOZ,Mozambique,art,VLS,NA,FSW,Mozambique,NA,NA,2017,NA,NA,NA,NA,0.52,NA,228,PLACE 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,142,190
+MOZ,Mozambique,art,VLS,NA,MSM,Mozambique,NA,NA,2017,NA,NA,NA,NA,0.18,NA,55,PLACE 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,142,191
+MOZ,Mozambique,art,VLS,NA,TGW,Mozambique,NA,NA,2017,NA,NA,NA,NA,0.3,NA,14,PLACE 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,142,192
+NGA,Nigeria,art,VLS,NA,FSW,Nigeria,NA,NA,2020,NA,NA,NA,NA,0.224,NA,771,BBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,164,214
+NGA,Nigeria,art,VLS,NA,MSM,Nigeria,NA,NA,2020,NA,NA,NA,NA,0.204,NA,1097,BBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,164,215
+NGA,Nigeria,art,VLS,NA,PWID,Nigeria,NA,NA,2020,NA,NA,NA,NA,0.55272,NA,481,BBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,164,216
+NGA,Nigeria,art,VLS,NA,TGW,Nigeria,NA,NA,2020,NA,NA,NA,NA,0.1099,NA,1205,BBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,164,217
+RWA,Rwanda,art,VLS,NA,MSM,Kigali,NA,NA,2018,NA,NA,NA,NA,0.59,NA,74,"HIV infection and engagement in HIV care cascade among men who have sex with men and transgender women in Kigali, Rwanda: a cross-sectional study",https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7527755/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,168,218
+SSD,South Sudan,art,VLS,NA,FSW,Wau,NA,NA,2019,NA,NA,NA,NA,0.365384615,NA,52,"BIO-BEHAVIOUR SURVEY AMONG FEMALE SEX WORKERS IN WAU, SOUTH SUDAN EAGLE 11 SURVEY, 2019",NA,KP Atlas_ec4e80370b8da49e131929923f9b8bfb,KP Atlas,e5d59d3241e8386325ee91cfe3b67b02,Yes,yes,NA,NA,NA,190,227
+SSD,South Sudan,art,VLS,NA,FSW,Yambio,NA,NA,2019,NA,NA,NA,NA,0.585106383,NA,94,"BIO-BEHAVIOUR SURVEY AMONG FEMALE SEX WORKERS IN YAMBIO, SOUTH SUDAN EAGLE 11 SURVEY, 2019",NA,KP Atlas_bf2ae5739b9ffddaa430ebfef762f7a2,KP Atlas,b14831399940d8ce8235084c19b82776,Yes,yes,NA,NA,NA,191,228
+TZA,Tanzania,art,VLS,NA,FSW,Zanzibar,NA,NA,2019,NA,NA,NA,NA,0.670212766,NA,94,"Integrated behavioural and biological surveillance survey among key populations in zanzibar, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,213,239
+TZA,Tanzania,art,VLS,NA,MSM,Zanzibar,NA,NA,2019,NA,NA,NA,NA,0.407407407,NA,27,"Integrated behavioural and biological surveillance survey among key populations in zanzibar, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,213,241
+TZA,Tanzania,art,VLS,NA,PWID,Zanzibar,NA,NA,2019,NA,NA,NA,NA,0.333333333,NA,18,"Integrated behavioural and biological surveillance survey among key populations in zanzibar, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,213,242
+UGA,Uganda,art,VLS,NA,MSM,Kampala,NA,NA,2013,NA,NA,NA,NA,0.215,NA,79,Hladik 2017,https://link.springer.com/article/10.1007/s10461-016-1535-2,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,228,243
+UGA,Uganda,art,VLS,NA,FSW,Kampala,NA,NA,2012,NA,NA,NA,NA,0.368115942,NA,345,Crane Survey Data (Doshi et al.),NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,229,244
+UGA,Uganda,art,VLS,NA,FSW,Kampala,NA,NA,2021,NA,NA,NA,NA,0.84,NA,494,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,233,245
+ZAF,South Africa,art,VLS,NA,PWID,Cape Town,NA,NA,2017,NA,NA,NA,NA,0.361,NA,203,TipVal 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,239,263
+ZWE,Zimbabwe,art,VLS,NA,MSM,Bulawayo,NA,NA,2019,NA,NA,NA,NA,0.616,NA,178,IBBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,262,339
+ZWE,Zimbabwe,art,VLS,NA,TGW,Bulawayo,NA,NA,2019,NA,NA,NA,NA,0.571,NA,14,IBBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,262,346
+ZWE,Zimbabwe,art,VLS,NA,MSM,Harare,NA,NA,2019,NA,NA,NA,NA,0.69,NA,74,IBBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,262,347
+ZWE,Zimbabwe,art,VLS,NA,TGW,Harare,NA,NA,2019,NA,NA,NA,NA,0.551,NA,80,IBBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,262,348
+ZWE,Zimbabwe,art,VLS,NA,FSW,Bindura,NA,NA,2013,NA,NA,NA,NA,0.37829999999999997,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,349
+ZWE,Zimbabwe,art,VLS,NA,FSW,Chinhoyi,NA,NA,2013,NA,NA,NA,NA,0.3385,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,350
+ZWE,Zimbabwe,art,VLS,NA,FSW,Chipinge,NA,NA,2013,NA,NA,NA,NA,0.35229999999999995,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,351
+ZWE,Zimbabwe,art,VLS,NA,FSW,Chivhu,NA,NA,2013,NA,NA,NA,NA,0.2554,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,352
+ZWE,Zimbabwe,art,VLS,NA,FSW,Gutu,NA,NA,2013,NA,NA,NA,NA,0.34020000000000006,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,353
+ZWE,Zimbabwe,art,VLS,NA,FSW,Gwanda,NA,NA,2013,NA,NA,NA,NA,0.2531,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,354
+ZWE,Zimbabwe,art,VLS,NA,FSW,Hwange,NA,NA,2013,NA,NA,NA,NA,0.35,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,355
+ZWE,Zimbabwe,art,VLS,NA,FSW,Juru,NA,NA,2013,NA,NA,NA,NA,0.3488,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,356
+ZWE,Zimbabwe,art,VLS,NA,FSW,Kadoma,NA,NA,2013,NA,NA,NA,NA,0.3568,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,357
+ZWE,Zimbabwe,art,VLS,NA,FSW,Kariba,NA,NA,2013,NA,NA,NA,NA,0.40759999999999996,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,358
+ZWE,Zimbabwe,art,VLS,NA,FSW,Magunje,NA,NA,2013,NA,NA,NA,NA,0.2515,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,359
+ZWE,Zimbabwe,art,VLS,NA,FSW,Marondera,NA,NA,2013,NA,NA,NA,NA,0.2651,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,360
+ZWE,Zimbabwe,art,VLS,NA,FSW,Ngundu,NA,NA,2013,NA,NA,NA,NA,0.2501,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,361
+ZWE,Zimbabwe,art,VLS,NA,FSW,Zvishavane,NA,NA,2013,NA,NA,NA,NA,0.3176,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,362
+GIN,Guinea,art,VLS,NA,FSW,Boke,NA,NA,2022,NA,NA,NA,NA,0.38,NA,21,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,368
+GIN,Guinea,art,VLS,NA,FSW,Conakry,NA,NA,2022,NA,NA,NA,NA,0.24,NA,25,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,369
+GIN,Guinea,art,VLS,NA,FSW,Faranah,NA,NA,2022,NA,NA,NA,NA,0.5,NA,4,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,370
+GIN,Guinea,art,VLS,NA,FSW,Kankan,NA,NA,2022,NA,NA,NA,NA,0.1667,NA,1,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,371
+GIN,Guinea,art,VLS,NA,FSW,Kindia,NA,NA,2022,NA,NA,NA,NA,0.429,NA,3,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,372
+GIN,Guinea,art,VLS,NA,FSW,Labe,NA,NA,2022,NA,NA,NA,NA,0.5,NA,7,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,373
+GIN,Guinea,art,VLS,NA,FSW,Mamou,NA,NA,2022,NA,NA,NA,NA,0.75,NA,3,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,374
+GIN,Guinea,art,VLS,NA,FSW,N'Zerekore,NA,NA,2022,NA,NA,NA,NA,0.23,NA,3,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,375
+GIN,Guinea,art,VLS,NA,MSM,Boke,NA,NA,2022,NA,NA,NA,NA,0.230769231,NA,13,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,376
+GIN,Guinea,art,VLS,NA,MSM,Conakry,NA,NA,2022,NA,NA,NA,NA,0.247524752,NA,101,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,377
+GIN,Guinea,art,VLS,NA,MSM,Faranah,NA,NA,2022,NA,NA,NA,NA,0.5,NA,4,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,378
+GIN,Guinea,art,VLS,NA,MSM,Kankan,NA,NA,2022,NA,NA,NA,NA,0.5,NA,14,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,379
+GIN,Guinea,art,VLS,NA,MSM,Kindia,NA,NA,2022,NA,NA,NA,NA,0.307692308,NA,13,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,380
+GIN,Guinea,art,VLS,NA,MSM,Labe,NA,NA,2022,NA,NA,NA,NA,0,NA,4,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,381
+GIN,Guinea,art,VLS,NA,MSM,Mam,NA,NA,2022,NA,NA,NA,NA,0,NA,1,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,382
+GIN,Guinea,art,VLS,NA,MSM,Nz,NA,NA,2022,NA,NA,NA,NA,0.111111111,NA,9,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,453
+ZWE,Zimbabwe,art,VLS,NA,FSW,Bindura,NA,NA,2016,NA,NA,NA,NA,0.6091,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,497
+ZWE,Zimbabwe,art,VLS,NA,FSW,Bulawayo,NA,NA,2016,NA,NA,NA,NA,0.5871,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,498
+ZWE,Zimbabwe,art,VLS,NA,FSW,Chinhoyi,NA,NA,2016,NA,NA,NA,NA,0.642,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,499
+ZWE,Zimbabwe,art,VLS,NA,FSW,Chipinge,NA,NA,2016,NA,NA,NA,NA,0.5471,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,500
+ZWE,Zimbabwe,art,VLS,NA,FSW,Chivhu,NA,NA,2016,NA,NA,NA,NA,0.4575,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,501
+ZWE,Zimbabwe,art,VLS,NA,FSW,Gutu,NA,NA,2016,NA,NA,NA,NA,0.6169,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,502
+ZWE,Zimbabwe,art,VLS,NA,FSW,Gwanda,NA,NA,2016,NA,NA,NA,NA,0.6003000000000001,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,503
+ZWE,Zimbabwe,art,VLS,NA,FSW,Harare,NA,NA,2016,NA,NA,NA,NA,0.49310000000000004,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,504
+ZWE,Zimbabwe,art,VLS,NA,FSW,Hwange,NA,NA,2016,NA,NA,NA,NA,0.5299,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,505
+ZWE,Zimbabwe,art,VLS,NA,FSW,Juru,NA,NA,2016,NA,NA,NA,NA,0.5539000000000001,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,506
+ZWE,Zimbabwe,art,VLS,NA,FSW,Kadoma,NA,NA,2016,NA,NA,NA,NA,0.7609,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,507
+ZWE,Zimbabwe,art,VLS,NA,FSW,Kariba,NA,NA,2016,NA,NA,NA,NA,0.5559000000000001,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,508
+ZWE,Zimbabwe,art,VLS,NA,FSW,Magunje,NA,NA,2016,NA,NA,NA,NA,0.7109000000000001,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,509
+ZWE,Zimbabwe,art,VLS,NA,FSW,Maronder,NA,NA,2016,NA,NA,NA,NA,0.5225,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,510
+ZWE,Zimbabwe,art,VLS,NA,FSW,Ngundu,NA,NA,2016,NA,NA,NA,NA,0.5211,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,511
+ZWE,Zimbabwe,art,VLS,NA,FSW,Shamva,NA,NA,2016,NA,NA,NA,NA,0.4078,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,512
+ZWE,Zimbabwe,art,VLS,NA,FSW,Zvishavane,NA,NA,2016,NA,NA,NA,NA,0.5513,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,513

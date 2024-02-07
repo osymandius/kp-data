@@ -21,7 +21,7 @@ id <- map(area_tasks, ~possibly_pull(.x, id = paste0('latest(parameter:version =
 lapply(ssa_iso3, function(x) orderly_pull_dependencies("aaa_assign_populations", remote = "inference-web", parameters = paste0('latest(parameter:iso3 == "', x, '" && parameter:version == 2022)')))
 orderly_pull_dependencies("aaa_assign_populations", remote = "inference-web", parameters = paste0('latest(parameter:iso3 == "MWI" && parameter:version == 2022)'))
 
-id <- orderly::orderly_batch("aaa_assign_populations", data.frame(iso3 = ssa_iso3, version = 2022))
+id <- orderly::orderly_batch("aaa_assign_province", data.frame(iso3 = ssa_iso3(), version = 2022))
 # names(id) <- ssa_iso3
 lapply(id$id[id$success == TRUE], orderly_commit)
 
@@ -36,7 +36,7 @@ id <- map(c("ZAF", "TZA", "RWA", "GHA", "ETH", "COD", "CIV", "BDI", "UGA", "BEN"
 lapply(id2 %>% compact(), orderly_commit)
 
 
-orderly_dev_start_oli("aaa_extrapolate_naomi", data.frame(iso3 = "MOZ"))
+orderly_dev_start_oli("aaa_assign_province", data.frame(iso3 = "UGA"))
 # setwd("src/aaa_assign_province")
 
 ### Extrapolate Naomi
@@ -235,7 +235,7 @@ lapply("MOZ", function(x){
   orderly::orderly_search(name = "aaa_extrapolate_naomi", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
 })
 
-lapply("MOZ", function(x){
+id <- lapply(ssa_iso3(), function(x){
   orderly::orderly_search(name = "aaa_assign_province", query = paste0('latest(parameter:iso3 == "', x, '")'), draft = FALSE)
 })
 

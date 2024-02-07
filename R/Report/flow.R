@@ -194,7 +194,12 @@ pse_id <- lapply(ssa_iso3, function(x){
 
 # pse_id <- c(pse_id[!is.na(pse_id)], orderly::orderly_search(name = "aaa_assign_populations", query = paste0('latest(parameter:iso3 == "COD")'), draft = FALSE))
 
-pse_id <- id$id[id$success == "TRUE"]
+bm <- lapply(paste0("archive/aaa_assign_populations/", pse_id, "/bad_match_error.csv"), read_csv, show_col_types = F) %>%
+  bind_rows() %>%
+  filter(is.na(x)) %>%
+  distinct(iso3, given_area)
+
+# pse_id <- id$id[id$success == "TRUE"]
 
 setwd(rprojroot::find_rstudio_root_file())
 
@@ -243,7 +248,7 @@ method_counts <- pse_total_dat %>%
     # year = ifelse(year == 2022, 2021, year),
     year = plyr::round_any(year, 3, floor),
          year = paste0(year, "-", year+2),
-         # year = ifelse(year == "2019-2021", "2019-2022", year)
+         year = ifelse(year == "2022-2024", "2022-2023", year)
   ) %>%
   distinct(year, kp, study_idx) %>%
   count(year, kp)
@@ -257,8 +262,8 @@ fig2 <- pse_total_dat %>%
          year = paste0(year, "-", year+2),
          simple_method = ifelse(str_detect(simple_method, "multiplier|Multiplier"), "Multiplier", simple_method),
          simple_method = ifelse(str_detect(simple_method, "Modelled"), "Modelled/extrapolated", simple_method),
-         kp = ifelse(kp == "TG", "TGW", kp)
-         # year = ifelse(year == "2019-2021", "2019-2022", year)
+         kp = ifelse(kp == "TG", "TGW", kp),
+    year = ifelse(year == "2022-2024", "2022-2023", year)
   ) %>%
   filter(!is.na(simple_method),
          kp != "TGM") %>%
@@ -387,7 +392,8 @@ collapse <- function(...) {paste0(..., collapse = "\n")}
 setwd(rprojroot::find_rstudio_root_file())
 
 prev_total_dat_original <- read_csv("~/Documents/GitHub/kp-data-private/data/complete_dat.csv", show_col_types = F) %>%
-  filter(indicator == "prevalence")
+  filter(indicator == "prevalence") %>%
+  select(iso3:observation_idx)
 
 prev_total_dat_original <-  prev_total_dat_original %>%
   mutate(prop_estimate = ifelse(prop_estimate > 1, prop_estimate/100, prop_estimate),
@@ -472,7 +478,7 @@ prev_inputs_labels <- apply(prev_inputs_text, 1, collapse)
 ## Clean prevalence data
 
 prev_total_dat <- prev_total_dat_original %>%
-  mutate(iso3 = countrycode::countrycode(country.name, "country.name", "iso3c")) %>%
+  select(!starts_with("...")) %>%
   filter(is.na(duplicate_of),
          is.na(is_aggregate),
          !is.na(iso3))
@@ -524,22 +530,22 @@ prev_checked <- prev_total_dat %>%
 unsourced_nrow_prev <- nrow(prev_total_dat) - nrow(prev_checked)
 prev_remove_label$unsourced <- paste0("Unsourced (n = ", unsourced_nrow_prev , ")")
 
+self_report_nrow_prev <- nrow(prev_checked %>% filter(str_detect(method, "elf")))
+prev_remove_label$self_report <- paste0("Self-report HIV status (n = ", self_report_nrow_prev  , ")")
+
 prev_cleaned_data <- bind_rows(prev_checked) %>%
-  mutate(method = case_when(
-           method %in% c("Lab") ~ "lab",
-           str_detect(method, "elf") ~ "selfreport",
-           is.na(method) ~ "selfreport",
-           TRUE ~ method
-         )) %>%
-  filter(kp %in% c("FSW", "MSM", "PWID", "TGW"))
+  mutate(method = tolower(method)) %>%
+  filter(method %in% c("lab", "Lab"),
+         kp %in% c("FSW", "MSM", "PWID", "TGW"))
 
 duplicate_nrow_prev <- nrow(prev_total_dat_original) -# Total data
   (unsourced_nrow_prev + # Unsourced
+     self_report_nrow_prev + 
      nrow(prev_cleaned_data)) # Cleaned prev data (the remiander)
 
 prev_remove_label$duplicates <- paste0("Duplicated data (n = ", duplicate_nrow_prev, ")")
 
-write_csv(prev_cleaned_data %>% ungroup %>% mutate(row_id = row_number()), "src/aaa_assign_province/prev_clean_sourced.csv")
+write_csv(prev_cleaned_data %>% ungroup, "src/aaa_assign_province/prev_clean_sourced.csv")
 
 prev_cleaned_text <- prev_cleaned_data %>%
   count(kp) %>%
@@ -576,7 +582,8 @@ setwd(rprojroot::find_rstudio_root_file())
 #   bind_rows()
 
 art_total_dat_original <- read_csv("~/Documents/GitHub/kp-data-private/data/complete_dat.csv", show_col_types = F) %>%
-  filter(indicator == "art")
+  filter(indicator == "art") %>%
+  select(iso3:observation_idx)
 
 art_total_dat_original <-  art_total_dat_original %>%
   mutate(prop_estimate = ifelse(prop_estimate > 1, prop_estimate/100, prop_estimate),
@@ -648,7 +655,7 @@ art_inputs_labels <- apply(art_inputs_text, 1, collapse)
 ## Clean artalence data
 
 art_total_dat <- art_total_dat_original %>%
-  mutate(iso3 = countrycode::countrycode(country.name, "country.name", "iso3c")) %>%
+  select(!starts_with("...")) %>%
   filter(is.na(duplicate_of),
          is.na(is_aggregate),
          !is.na(iso3))
@@ -686,13 +693,13 @@ art_remove_label$selfself <- paste0("Self-report HIV status (n = ", nrow(art_sel
 ## Remove programme-recruited studies
 
 art_programme <- art_checked %>%
-  filter(study_idx %in% c(19, 28, 28, 34, 57, 62, 103, 118, 119, 119, 121, 138, 209, 212, 219, 240, 253, 254, 256, 267))
+  filter(study_idx %in% c(19, 28, 28, 34, 57, 62, 103, 118, 119, 121, 138, 209, 212, 219, 240, 253, 254, 256, 267))
 
 art_remove_label$programme <- paste0("Clinic-based recruitment (n = ", nrow(art_programme), ")")
 
 art_cleaned_data <- bind_rows(art_checked) %>%
   filter(method != "self-self",
-         !study_idx %in% c(19, 28, 28, 34, 57, 62, 103, 118, 119, 119, 121, 138, 209, 212, 219, 240, 253, 254, 256, 267),
+         !study_idx %in% c(19, 28, 28, 34, 57, 62, 103, 118, 119, 121, 138, 209, 212, 219, 240, 253, 254, 256, 267),
          kp %in% c("FSW", "MSM", "PWID", "TGW"))
 
 duplicate_nrow_art <- nrow(art_total_dat_original) -# Total data
@@ -722,10 +729,10 @@ prev_id <- lapply(ssa_iso3, function(x){
 
 # prev_id <- id$id
 
-paste
+# paste
 
 prev_final <- lapply(paste0("archive/aaa_assign_province/", prev_id, "/prev.csv"),
-                     function(x) {read_csv(x, show_col_types = FALSE) %>% select(-any_of("...1"))}) %>%
+                     function(x) {read_csv(x, show_col_types = FALSE) %>% select(-any_of(c("...1", "ethic")))}) %>%
   bind_rows()
 
 prev_final_text <- prev_final %>%
@@ -751,7 +758,7 @@ saveRDS(prev_inputs_text, "R/Report/R objects for report/Prevalence/prev_input_c
 
 
 art_final <- lapply(paste0("archive/aaa_assign_province/", prev_id[!is.na(prev_id)], "/art.csv"),
-                     function(x) {read_csv(x, show_col_types = FALSE) %>% select(-any_of("...1"))}) %>%
+                     function(x) {read_csv(x, show_col_types = FALSE) %>% select(-any_of(c("...1", "ethic")))}) %>%
   bind_rows()
 
 art_cleaned_data %>% 
@@ -815,12 +822,14 @@ digraph a_nice_graph {
   node [fontname = Helvetica, fontcolor = darkslategray,shape = rectangle, color = darkslategray]
   inp_total [label = '@@1-5']
   m1_dedup [label = '@@2-1']
+  m2_self_report [label = '@@2-2']
   m3_unsourced [label = '@@2-3']
   clean [label = '@@3']
     
   node [shape=none, width=0, height=0, label='']
   p3 -> clean;
   {rank=same; p1 -> m1_dedup};
+  {rank=same; p2 -> m2_self_report};
   {rank=same; p3 -> m3_unsourced};
   
   inp_surv -> inp_total;

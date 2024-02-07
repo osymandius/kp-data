@@ -1,4 +1,7 @@
-iso3,method,simple_method,kp,area_name,area_level,age_group,year,count_lower,count_estimate,count_upper,prop_lower,prop_estimate,prop_upper,denominator,ref,link,dataset_id,dataset,uid,data_checked,source_found,duplicate_of,is_aggregate,study_idx,observation_idx,8905
+iso3,method,simple_method,kp,area_name,area_level,age_group,year,count_lower,count_estimate,count_upper,prop_lower,prop_estimate,prop_upper,denominator,ref,link,dataset_id,dataset,uid,data_checked,source_found,duplicate_of,is_aggregate,study_idx,observation_idx,8922
+UGA,SS-PSE,SS-PSE,FSW,Kampala,NA,NA,2021,3900,4400,5000,NA,NA,NA,NA,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,233,7145,NA
+UGA,3S-CRC,3S-CRC,TGW,Kampala,NA,NA,2023,1537,2568,3638,NA,NA,NA,NA,CRANE III,NA,NA,Surveillance review,NA,Yes,private,NA,NA,233,7949,NA
+TCD,SS-PSE,SS-PSE,MSM,N'Djamena,NA,NA,2021,1868,3951,6785,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7549,NA
 AGO,Multiplier,Multiplier,FSW,Benguela,NA,NA,2015,2768,3277,3786,NA,NA,NA,NA,"Prevalencia Do VIH, Factores Biologicos E Comportamentais Da Infeccao Entre As Profissionais Do Sexo (MTS) Em Angola",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,2,3461,NA
 AGO,Multiplier,Multiplier,FSW,Benguela,NA,NA,2015,5310,5695,6080,NA,NA,NA,NA,"Prevalencia Do VIH, Factores Biologicos E Comportamentais Da Infeccao Entre As Profissionais Do Sexo (MTS) Em Angola",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,2,3462,NA
 AGO,Multiplier,Multiplier,FSW,Kilamba Kiaxi,NA,NA,2015,748,994,1240,NA,NA,NA,NA,"Prevalencia Do VIH, Factores Biologicos E Comportamentais Da Infeccao Entre As Profissionais Do Sexo (MTS) Em Angola",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,2,3463,NA
@@ -913,25 +916,6 @@ MLI,Multiple methods - mixture,Multiple methods - mixture,PWID,Koulikoro,NA,NA,2
 MLI,Multiple methods - mixture,Multiple methods - mixture,PWID,Mopti,NA,NA,2017,375,582,1302,NA,NA,NA,NA,Estimation Scientifique De La Taille Et Cartographie Des Utilisateurs De Drogues Par Injection En Relation Avec L'infection Par Le VIH Au Mali,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,135,5825,NA
 MLI,Multiple methods - mixture,Multiple methods - mixture,PWID,Segou,NA,NA,2017,346,537,1202,NA,NA,NA,NA,Estimation Scientifique De La Taille Et Cartographie Des Utilisateurs De Drogues Par Injection En Relation Avec L'infection Par Le VIH Au Mali,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,135,5826,NA
 MLI,Multiple methods - mixture,Multiple methods - mixture,PWID,Sikasso,NA,NA,2017,794,1232,2755,NA,NA,NA,NA,Estimation Scientifique De La Taille Et Cartographie Des Utilisateurs De Drogues Par Injection En Relation Avec L'infection Par Le VIH Au Mali,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,135,5827,NA
-MOZ,Event multiplier,Event multiplier,MSM,Beira,NA,NA,2011,NA,2397,NA,NA,NA,NA,NA,BBS 2011,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,139,5835,NA
-MOZ,Event multiplier,Event multiplier,MSM,"Cidade de Maputo, Matola",NA,NA,2011,NA,6947,NA,NA,NA,NA,NA,BBS 2011,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,139,5838,NA
-MOZ,Event multiplier,Event multiplier,MSM,Nampula/Nacala,NA,NA,2011,NA,1075,NA,NA,NA,NA,NA,BBS 2011,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,139,5839,NA
-MOZ,Object multiplier,Object multiplier,MSM,Beira,NA,NA,2011,NA,7181,NA,NA,NA,NA,NA,BBS 2011,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,139,5842,NA
-MOZ,Object multiplier,Object multiplier,MSM,"Cidade de Maputo, Matola",NA,NA,2011,NA,28500,NA,NA,NA,NA,NA,BBS 2011,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,139,5843,NA
-MOZ,Object multiplier,Object multiplier,MSM,Nampula/Nacala,NA,NA,2011,NA,12064,NA,NA,NA,NA,NA,BBS 2011,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,139,5844,NA
-MOZ,Service multiplier,Service multiplier,MSM,Beira,NA,NA,2011,NA,1231,NA,NA,NA,NA,NA,BBS 2011,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,139,5845,NA
-MOZ,Service multiplier,Service multiplier,MSM,"Cidade de Maputo, Matola",NA,NA,2011,NA,6400,NA,NA,NA,NA,NA,BBS 2011,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,139,5846,NA
-MOZ,Service multiplier,Service multiplier,MSM,Nampula/Nacala,NA,NA,2011,NA,1474,NA,NA,NA,NA,NA,BBS 2011,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,139,5849,NA
-MOZ,Event multiplier,Event multiplier,FSW,Beira,NA,NA,2012,NA,2955,NA,NA,NA,NA,NA,BBS 2012,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,140,5850,NA
-MOZ,Event multiplier,Event multiplier,FSW,"Cidade de Maputo, Matola",NA,NA,2012,NA,2859,NA,NA,NA,NA,NA,BBS 2012,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,140,5877,NA
-MOZ,Event multiplier,Event multiplier,FSW,Nampula,NA,NA,2012,NA,2429,NA,NA,NA,NA,NA,BBS 2012,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,140,5878,NA
-MOZ,Object multiplier,Object multiplier,FSW,Beira,NA,NA,2012,NA,10152,NA,NA,NA,NA,NA,BBS 2012,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,140,5915,NA
-MOZ,Object multiplier,Object multiplier,FSW,"Cidade de Maputo, Matola",NA,NA,2012,NA,8568,NA,NA,NA,NA,NA,BBS 2012,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,140,5927,NA
-MOZ,Object multiplier,Object multiplier,FSW,Nampula,NA,NA,2012,NA,6929,NA,NA,NA,NA,NA,BBS 2012,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,140,5928,NA
-MOZ,Object multiplier,Object multiplier,PWID,"Cidade de Maputo, Matola",NA,NA,2014,1281,2061,2842,NA,NA,NA,NA,BBS 2014,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,141,5954,NA
-MOZ,Object multiplier,Object multiplier,PWID,Nampula,NA,NA,2014,1402,3921,6443,NA,NA,NA,NA,BBS 2014,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,141,5955,NA
-MOZ,SS-PSE,SS-PSE,PWID,"Cidade de Maputo, Matola",NA,NA,2014,2430,2869,3190,NA,NA,NA,NA,BBS 2014,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,141,5956,NA
-MOZ,SS-PSE,SS-PSE,PWID,Nampula,NA,NA,2014,309,463,764,NA,NA,NA,NA,BBS 2014,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,141,5959,NA
 MOZ,PLACE/mapping,PLACE/mapping,FSW,"Beira, Dondo",NA,NA,2017,NA,2700,NA,NA,NA,NA,NA,PLACE 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,142,6197,NA
 MOZ,PLACE/mapping,PLACE/mapping,MSM,"Beira, Dondo",NA,NA,2017,NA,3200,NA,NA,NA,NA,NA,PLACE 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,142,6198,NA
 MOZ,PLACE/mapping,PLACE/mapping,TGW,"Beira, Dondo",NA,NA,2017,NA,220,NA,NA,NA,NA,NA,PLACE 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,142,6199,NA
@@ -957,16 +941,16 @@ MOZ,Object multiplier,Object multiplier,FSW,"Cidade de Maputo, Matola",NA,NA,202
 MOZ,Object multiplier,Object multiplier,FSW,Nampula,NA,NA,2021,NA,7915,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,143,6140,NA
 MOZ,Object multiplier,Object multiplier,FSW,Quelimane,NA,NA,2021,NA,8452,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,143,6143,NA
 MOZ,Object multiplier,Object multiplier,FSW,Tete,NA,NA,2021,NA,6015,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,143,6145,NA
-MOZ,Service multiplier,Service multiplier,FSW,Beira,NA,NA,2021,NA,6957,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,143,6146,NA
-MOZ,Service multiplier,Service multiplier,FSW,"Cidade de Maputo, Matola",NA,NA,2021,NA,4766,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,143,6148,NA
-MOZ,Service multiplier,Service multiplier,FSW,Nampula,NA,NA,2021,NA,2663,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,143,6149,NA
-MOZ,Service multiplier,Service multiplier,FSW,Quelimane,NA,NA,2021,NA,2949,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,143,6150,NA
-MOZ,Service multiplier,Service multiplier,FSW,Tete,NA,NA,2021,NA,588,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,143,6151,NA
-MOZ,SS-PSE,SS-PSE,FSW,Beira,NA,NA,2021,NA,2001,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,143,6152,NA
-MOZ,SS-PSE,SS-PSE,FSW,"Cidade de Maputo, Matola",NA,NA,2021,NA,3792,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,143,6153,NA
-MOZ,SS-PSE,SS-PSE,FSW,Nampula,NA,NA,2021,NA,1025,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,143,6154,NA
-MOZ,SS-PSE,SS-PSE,FSW,Quelimane,NA,NA,2021,NA,2546,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,143,6155,NA
-MOZ,SS-PSE,SS-PSE,FSW,Tete,NA,NA,2021,NA,1189,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,143,6158,NA
+MOZ,Service multiplier,Service multiplier,FSW,Beira,NA,NA,2021,5735,6957,8874,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,143,6146,NA
+MOZ,Service multiplier,Service multiplier,FSW,"Cidade de Maputo, Matola",NA,NA,2021,4419,4766,5167,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,143,6148,NA
+MOZ,Service multiplier,Service multiplier,FSW,Nampula,NA,NA,2021,2382,2663,3037,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,143,6149,NA
+MOZ,Service multiplier,Service multiplier,FSW,Quelimane,NA,NA,2021,2420,2949,3663,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,143,6150,NA
+MOZ,Service multiplier,Service multiplier,FSW,Tete,NA,NA,2021,545,588,643,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,143,6151,NA
+MOZ,SS-PSE,SS-PSE,FSW,Beira,NA,NA,2021,1162,2001,3560,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,143,6152,NA
+MOZ,SS-PSE,SS-PSE,FSW,"Cidade de Maputo, Matola",NA,NA,2021,598,3792,4902,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,143,6153,NA
+MOZ,SS-PSE,SS-PSE,FSW,Nampula,NA,NA,2021,784,1025,1358,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,143,6154,NA
+MOZ,SS-PSE,SS-PSE,FSW,Quelimane,NA,NA,2021,1385,2546,4346,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,143,6155,NA
+MOZ,SS-PSE,SS-PSE,FSW,Tete,NA,NA,2021,835,1189,1699,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,143,6158,NA
 MWI,2S-CRC,2S-CRC,FSW,Blantyre,NA,NA,2014,1062,1130,1197,NA,NA,NA,NA,BBS 2013,NA,GF_c8905c89aa1aa40c56736761ad6db5ab,GF,728112b21cadeefcf5ec0bad39bd7f49,Yes,yes,NA,NA,146,6159,NA
 MWI,2S-CRC,2S-CRC,FSW,Dedza,NA,NA,2014,67,89,112,NA,NA,NA,NA,BBS 2013,NA,GF_894bc5a37695c37eb499b7296fdd617a,GF,63349dcdddaa293ec25b4badb2f29ffe,Yes,yes,NA,NA,146,6160,NA
 MWI,2S-CRC,2S-CRC,FSW,Dowa,NA,NA,2014,377,592,806,NA,NA,NA,NA,BBS 2013,NA,GF_028616ddb79db15bf70285fabacd947f,GF,520accb58ed278f809c67b618151d758,Yes,yes,NA,NA,146,6161,NA
@@ -1481,8 +1465,6 @@ UGA,2S-CRC,2S-CRC,MSM,Wakiso,NA,NA,2017,280,367,455,NA,NA,NA,NA,"Crane Survey Re
 UGA,3S-CRC,3S-CRC,FSW,Kampala,NA,NA,2017,10818,15419,20021,NA,NA,NA,NA,"Crane Survey Report: Population Size Estimation among Female Sex Workers, People Who Inject Drugs, Men Who Have Sex with Men in 12 Locations, Uganda",NA,CDC_7d8ddaac90a0eca5d0c72e464a20799b,CDC,e63eac008e6c5eb94fcd4aff9e9fb2ed,Yes,yes,NA,NA,232,7142,NA
 UGA,3S-CRC,3S-CRC,MSM,Kampala,NA,NA,2017,7371,10807,14244,NA,NA,NA,NA,"Crane Survey Report: Population Size Estimation among Female Sex Workers, People Who Inject Drugs, Men Who Have Sex with Men in 12 Locations, Uganda",NA,CDC_634eaa203d34db4899b19d9fa3fa937a,CDC,fef97b6e50df6aa71a17b4e3317efd38,Yes,yes,NA,NA,232,7143,NA
 UGA,3S-CRC,3S-CRC,PWID,Kampala,NA,NA,2017,2952,3837,4722,NA,NA,NA,NA,"Crane Survey Report: Population Size Estimation among Female Sex Workers, People Who Inject Drugs, Men Who Have Sex with Men in 12 Locations, Uganda",NA,CDC_f660084565568a8adbf5152a24deb76a,CDC,2ae4140ee3738823e70b93f633ea0d78,Yes,yes,NA,NA,232,7144,NA
-UGA,3S-CRC,3S-CRC,FSW,Mbarara,NA,NA,2022,770,2600,11870,NA,0.02,NA,NA,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,233,8241,NA
-UGA,SS-PSE,SS-PSE,FSW,Kampala,NA,NA,2021,3900,4400,5000,NA,NA,NA,NA,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,233,7145,NA
 ZAF,Object multiplier,Object multiplier,PWID,Tshwane MM,NA,NA,2017,NA,1972,NA,NA,NA,NA,NA,TipVal 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,239,7311,NA
 ZAF,Service multiplier,Service multiplier,PWID,Cape Town MM,NA,NA,2017,NA,1688,NA,NA,NA,NA,NA,TipVal 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,239,413,NA
 ZAF,Service multiplier,Service multiplier,PWID,Tshwane MM,NA,NA,2017,NA,7827,NA,NA,NA,NA,NA,TipVal 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,239,7312,NA
@@ -1651,16 +1633,16 @@ BFA,Multiple methods - mixture,Multiple methods - mixture,PWID,Sahel,NA,NA,2022,
 BFA,Multiple methods - mixture,Multiple methods - mixture,MSM,Sud Ouest,NA,NA,2022,NA,938,NA,NA,NA,NA,NA,NA,NA,NA,Surveillance review,NA,Yes,private,NA,NA,314,7816,NA
 BFA,Multiple methods - mixture,Multiple methods - mixture,FSW,Sud Ouest,NA,NA,2022,NA,1613,NA,NA,NA,NA,NA,NA,NA,NA,Surveillance review,NA,Yes,private,NA,NA,314,7829,NA
 BFA,Multiple methods - mixture,Multiple methods - mixture,PWID,Sud Ouest,NA,NA,2022,NA,1091,NA,NA,NA,NA,NA,NA,NA,NA,Surveillance review,NA,Yes,private,NA,NA,314,7842,NA
-MOZ,Service multiplier,Service multiplier,MSM,Beira,NA,NA,2021,NA,1948,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,7387,NA
-MOZ,Object multiplier,Object multiplier,MSM,Beira,NA,NA,2021,NA,3706,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,7377,NA
-MOZ,Service multiplier,Service multiplier,MSM,"Cidade de Maputo, Matola",NA,NA,2021,NA,7019,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,7388,NA
-MOZ,Object multiplier,Object multiplier,MSM,"Cidade de Maputo, Matola",NA,NA,2021,NA,6000,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,7380,NA
-MOZ,Service multiplier,Service multiplier,MSM,Nampula,NA,NA,2021,NA,7080,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,7389,NA
-MOZ,Object multiplier,Object multiplier,MSM,Nampula,NA,NA,2021,NA,2904,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,7381,NA
-MOZ,Service multiplier,Service multiplier,MSM,Quelimane,NA,NA,2021,NA,4710,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,7390,NA
-MOZ,Object multiplier,Object multiplier,MSM,Quelimane,NA,NA,2021,NA,3449,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,7382,NA
-MOZ,Service multiplier,Service multiplier,MSM,Tete,NA,NA,2021,NA,1287,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,7391,NA
-MOZ,Object multiplier,Object multiplier,MSM,Tete,NA,NA,2021,NA,2995,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,7383,NA
+MOZ,2S-CRC,2S-CRC,MSM,Quelimane,NA,NA,2021,NA,4055,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,8905,NA
+MOZ,Object multiplier,Object multiplier,MSM,Beira,NA,NA,2021,2979,3706,4879,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,7377,NA
+MOZ,Object multiplier,Object multiplier,MSM,"Cidade de Maputo, Matola",NA,NA,2021,4150,6000,10579,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,7380,NA
+MOZ,Object multiplier,Object multiplier,MSM,Nampula,NA,NA,2021,2400,2904,3697,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,7381,NA
+MOZ,Object multiplier,Object multiplier,MSM,Quelimane,NA,NA,2021,4100,4873,6016,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,7382,NA
+MOZ,Object multiplier,Object multiplier,MSM,Tete,NA,NA,2021,2750,3137,3670,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,7383,NA
+MOZ,Service multiplier,Service multiplier,MSM,Beira,NA,NA,2021,1274,1390,1530,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,7387,NA
+MOZ,Service multiplier,Service multiplier,MSM,"Cidade de Maputo, Matola",NA,NA,2021,3673,4043,4500,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,7388,NA
+MOZ,Service multiplier,Service multiplier,MSM,Nampula,NA,NA,2021,3038,3323,3664,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,7389,NA
+MOZ,Service multiplier,Service multiplier,MSM,Quelimane,NA,NA,2021,1183,1113,1261,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,7390,NA
 BEN,SS-PSE,SS-PSE,MSM,Abomey,NA,NA,2022,311,765,790,NA,NA,NA,NA,2022 ESDG,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,322,7401,NA
 BEN,SS-PSE,SS-PSE,PWID,Abomey,NA,NA,2022,48,82,167,NA,NA,NA,NA,2022 ESDG,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,322,7408,NA
 BEN,SS-PSE,SS-PSE,MSM,Abomey-Calavi,NA,NA,2022,556,1125,1985,NA,NA,NA,NA,2022 ESDG,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,322,7396,NA
@@ -1797,21 +1779,21 @@ BEN,PLACE/mapping,PLACE/mapping,FSW,Mono,1,NA,2014,NA,318,NA,NA,NA,NA,NA,"MAPPIN
 BEN,PLACE/mapping,PLACE/mapping,FSW,Oueme,1,NA,2014,NA,1054,NA,NA,NA,NA,NA,"MAPPING DES SITES DE PROSTITUTION ""POINTS CHAUDS"" ET DENOMBREMENT DES TRAVAILLEUSES DE SEXE, DES SERVICES DE SANTE, ONG ET ASSOCIATIONS INTERVENANT DANS LE DOMAINE DE LA LUTTE CONTRE LES IST ET LE VIH/SIDA",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,343,7655,NA
 BEN,PLACE/mapping,PLACE/mapping,FSW,Plateau,1,NA,2014,NA,650,NA,NA,NA,NA,NA,"MAPPING DES SITES DE PROSTITUTION ""POINTS CHAUDS"" ET DENOMBREMENT DES TRAVAILLEUSES DE SEXE, DES SERVICES DE SANTE, ONG ET ASSOCIATIONS INTERVENANT DANS LE DOMAINE DE LA LUTTE CONTRE LES IST ET LE VIH/SIDA",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,343,7656,NA
 BEN,PLACE/mapping,PLACE/mapping,FSW,Zou,1,NA,2014,NA,1745,NA,NA,NA,NA,NA,"MAPPING DES SITES DE PROSTITUTION ""POINTS CHAUDS"" ET DENOMBREMENT DES TRAVAILLEUSES DE SEXE, DES SERVICES DE SANTE, ONG ET ASSOCIATIONS INTERVENANT DANS LE DOMAINE DE LA LUTTE CONTRE LES IST ET LE VIH/SIDA",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,343,7657,NA
-TCD,Object multiplier,Object multiplier,FSW,Abeche,NA,NA,2021,NA,484,NA,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7539,NA
-TCD,Object multiplier,Object multiplier,FSW,Ati,NA,NA,2021,NA,276,NA,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7534,NA
-TCD,Object multiplier,Object multiplier,FSW,Bongor,NA,NA,2021,NA,456,NA,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7535,NA
-TCD,Object multiplier,Object multiplier,FSW,Koumra,NA,NA,2021,NA,623,NA,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7540,NA
-TCD,Object multiplier,Object multiplier,FSW,Moundou,NA,NA,2021,NA,506,NA,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7538,NA
-TCD,Object multiplier,Object multiplier,FSW,N'Djamena,NA,NA,2021,NA,532,NA,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7541,NA
-TCD,Object multiplier,Object multiplier,FSW,Oum-hadjer,NA,NA,2021,NA,244,NA,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7537,NA
-TCD,Object multiplier,Object multiplier,FSW,Sarh,NA,NA,2021,NA,666,NA,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7536,NA
-TCD,SS-PSE,SS-PSE,FSW,Abeche,NA,NA,2021,585,975,1527,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7547,NA
-TCD,SS-PSE,SS-PSE,FSW,Ati,NA,NA,2021,193,282,409,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7542,NA
-TCD,SS-PSE,SS-PSE,FSW,Bongor,NA,NA,2021,462,694,1025,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7543,NA
-TCD,SS-PSE,SS-PSE,FSW,Koumra,NA,NA,2021,378,480,624,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7548,NA
-TCD,SS-PSE,SS-PSE,FSW,Moundou,NA,NA,2021,516,905,1302,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7545,NA
-TCD,SS-PSE,SS-PSE,FSW,Oum Hadjer,NA,NA,2021,223,287,372,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7544,NA
-TCD,SS-PSE,SS-PSE,FSW,Sarh,NA,NA,2021,464,661,915,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7546,NA
+TCD,Object multiplier,Object multiplier,MSM,Abeche,NA,NA,2021,NA,484,NA,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7539,NA
+TCD,Object multiplier,Object multiplier,MSM,Ati,NA,NA,2021,NA,276,NA,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7534,NA
+TCD,Object multiplier,Object multiplier,MSM,Bongor,NA,NA,2021,NA,456,NA,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7535,NA
+TCD,Object multiplier,Object multiplier,MSM,Koumra,NA,NA,2021,NA,623,NA,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7540,NA
+TCD,Object multiplier,Object multiplier,MSM,Moundou,NA,NA,2021,NA,506,NA,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7538,NA
+TCD,Object multiplier,Object multiplier,MSM,N'Djamena,NA,NA,2021,NA,532,NA,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7541,NA
+TCD,Object multiplier,Object multiplier,MSM,Oum-hadjer,NA,NA,2021,NA,244,NA,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7537,NA
+TCD,Object multiplier,Object multiplier,MSM,Sarh,NA,NA,2021,NA,666,NA,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7536,NA
+TCD,SS-PSE,SS-PSE,MSM,Abeche,NA,NA,2021,585,975,1527,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7547,NA
+TCD,SS-PSE,SS-PSE,MSM,Ati,NA,NA,2021,193,282,409,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7542,NA
+TCD,SS-PSE,SS-PSE,MSM,Bongor,NA,NA,2021,462,694,1025,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7543,NA
+TCD,SS-PSE,SS-PSE,MSM,Koumra,NA,NA,2021,378,480,624,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7548,NA
+TCD,SS-PSE,SS-PSE,MSM,Moundou,NA,NA,2021,516,905,1302,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7545,NA
+TCD,SS-PSE,SS-PSE,MSM,Oum Hadjer,NA,NA,2021,223,287,372,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7544,NA
+TCD,SS-PSE,SS-PSE,MSM,Sarh,NA,NA,2021,464,661,915,NA,NA,NA,NA,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,346,7546,NA
 TCD,PLACE/mapping,PLACE/mapping,FSW,Abeche,NA,NA,2017,NA,943,NA,NA,NA,NA,NA,2017 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,347,7660,NA
 TCD,PLACE/mapping,PLACE/mapping,MSM,Abeche,NA,NA,2017,NA,202,NA,NA,NA,NA,NA,2017 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,347,7671,NA
 TCD,PLACE/mapping,PLACE/mapping,PWID,Abeche,NA,NA,2017,NA,0,NA,NA,NA,NA,NA,2017 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,347,7696,NA
@@ -1867,7 +1849,7 @@ ZAF,Unique object multiplier,Unique object multiplier,MSM,Capricorn DM (Polokwan
 ZAF,Unique object multiplier,Unique object multiplier,MSM,Johannesburg,NA,NA,2016,NA,7257,NA,NA,NA,NA,NA,SAHMHS Report,NA,NA,Surveillance review,NA,Yes,private,NA,NA,351,7872,NA
 ZAF,Unique object multiplier,Unique object multiplier,MSM,Mangaung,NA,NA,2016,NA,1357,NA,NA,NA,NA,NA,SAHMHS Report,NA,NA,Surveillance review,NA,Yes,private,NA,NA,351,7874,NA
 ZAF,Unique object multiplier,Unique object multiplier,MSM,NM Molema DM,NA,NA,2016,NA,1541,NA,NA,NA,NA,NA,SAHMHS Report,NA,NA,Surveillance review,NA,Yes,private,NA,NA,351,7876,NA
-UGA,3S-CRC,3S-CRC,TGW,Kampala,NA,NA,2023,1537,2568,3638,NA,NA,NA,NA,CRANE III,NA,NA,Surveillance review,NA,Yes,private,NA,NA,353,7949,NA
+UGA,3S-CRC,3S-CRC,FSW,Mbarara,NA,NA,2022,770,2600,11870,NA,0.02,NA,NA,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,233,8241,NA
 ETH,Service Multiplier,Service Multiplier,PWID,Hawassa,NA,NA,2017,624,696,786,NA,NA,NA,NA,Deyessa et al,https://assets.researchsquare.com/files/rs-720937/v1/3b154853-0c48-4b13-9812-f8c7f5f445be.pdf?c=1631887680,NA,Surveillance review,NA,Yes,yes,NA,NA,357,7951,NA
 TGO,Multiple methods - mixture,Multiple methods - mixture,FSW,Aneho,NA,NA,2015,116,160,230,NA,NA,NA,NA,ESTIMATION DE LA TAILLE ET CARTOGRAPHIE DES SITES DES HOMMES AYANT DES RAPPORTS SEXUELS AVEC D’AUTRES HOMMES (HSH) ET DES PROFESSIONNELLES DE SEXE (PS) AU TOGO,NA,GAM_90878afd71d19236961158b4d422b1ae,GAM,56a75a5d3ab3d42cc47a6050f829c5aa,Yes,yes,NA,NA,358,4232,NA
 TGO,Multiple methods - mixture,Multiple methods - mixture,MSM,Aneho,NA,NA,2015,16,70,127,NA,NA,NA,NA,"CARTOGRAPHIE DES SITES, ESTIMATION DE LA TAILLE DES USAGERS DE DROGUES INJECTABLES (UDI) ET EVALUATION DE LEURS BESOINS EN MATIERE DE SERVICES DEPREVENTION, DE SOINS TRAITEMENT EN MATIERE DE VIH ET DE SANTE DE LA REPRODUCTION AU TOGO / Reported by the cou",NA,GAM_bd1b95597a34b776fd72526636f7a902,GAM,bc32eb6aa55eea62f6136cf8d7f7de3d,Yes,yes,NA,NA,358,4242,NA
@@ -1950,7 +1932,7 @@ MOZ,Object multiplier,Object multiplier,MSM,Nampula,NA,NA,2011,3096,5067,13782,N
 MOZ,Object multiplier,Object multiplier,PWID,Nampula,NA,NA,2014,222,1382,1389,NA,NA,NA,NA,Sathane et al,https://pubmed.ncbi.nlm.nih.gov/32815901/,NA,Surveillance review,NA,Yes,yes,NA,NA,369,8085,NA
 MOZ,Service Multiplier,Service Multiplier,MSM,Beira,NA,NA,2011,532,844,2045,NA,NA,NA,NA,Sathane et al,https://pubmed.ncbi.nlm.nih.gov/32815901/,NA,Surveillance review,NA,Yes,yes,NA,NA,369,8070,NA
 MOZ,Service Multiplier,Service Multiplier,MSM,Maputo,NA,NA,2011,2400,4954,4954,NA,NA,NA,NA,Sathane et al,https://pubmed.ncbi.nlm.nih.gov/32815901/,NA,Surveillance review,NA,Yes,yes,NA,NA,369,8064,NA
-MOZ,Service Multiplier,Service Multiplier,MSM,Nampula,NA,NA,2011,508,870,2645,NA,NA,NA,NA,Sathane et al,https://pubmed.ncbi.nlm.nih.gov/32815901/,NA,Surveillance review,NA,Yes,yes,NA,NA,369,8073,NA
+MOZ,SS-PSE,SS-PSE,MSM,Nampula,NA,NA,2011,508,870,2645,NA,NA,NA,NA,Sathane et al,https://pubmed.ncbi.nlm.nih.gov/32815901/,NA,Surveillance review,NA,Yes,yes,NA,NA,369,8073,NA
 MOZ,Service Multiplier,Service Multiplier,MSM,Nampula,NA,NA,2011,547,879,2193,NA,NA,NA,NA,Sathane et al,https://pubmed.ncbi.nlm.nih.gov/32815901/,NA,Surveillance review,NA,Yes,yes,NA,NA,369,8067,NA
 MOZ,SS-PSE,SS-PSE,FSW,Beira,NA,NA,2012,731,1184,2338,NA,NA,NA,NA,Sathane et al,https://pubmed.ncbi.nlm.nih.gov/32815901/,NA,Surveillance review,NA,Yes,yes,NA,NA,369,8079,NA
 MOZ,SS-PSE,SS-PSE,MSM,Beira,NA,NA,2011,1042,1487,2371,NA,NA,NA,NA,Sathane et al,https://pubmed.ncbi.nlm.nih.gov/32815901/,NA,Surveillance review,NA,Yes,yes,NA,NA,369,8072,NA
@@ -1962,15 +1944,15 @@ MOZ,SS-PSE,SS-PSE,PWID,Nampula,NA,NA,2014,987,1982,3160,NA,NA,NA,NA,Sathane et a
 MOZ,3S-CRC,3S-CRC,FSW,Gaza,2,NA,2022,5820,9870,17250,0.0151,0.0256,0.048,385144,Gaza 2022 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,370,8087,NA
 MOZ,3S-CRC,3S-CRC,MSM,Gaza,2,NA,2022,250,470,850,7.9385e-4,0.001492438,0.00269909,314921,Gaza 2022 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,370,8088,NA
 MOZ,3S-CRC,3S-CRC,PWID,Gaza,2,NA,2022,190,210,380,6.03326e-4,6.66834e-4,0.001206652,314921,Gaza 2022 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,370,8089,NA
-MOZ,3S-CRC,3S-CRC,TGW,Gaza,2,NA,2022,20,20,40,5.19286e-5,5.19286e-5,1.03857e-4,385144,Gaza 2022 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,370,8090,NA
-MOZ,3S-CRC,3S-CRC,FSW,Cidade de Maputo,2,NA,2022,2040,3920,5950,0.006326641,0.012157074,0.018452702,322446,Maputo City 2022 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,371,8091,NA
-MOZ,3S-CRC,3S-CRC,MSM,Cidade de Maputo,2,NA,2022,2060,3055,5830,0.006676,0.009900573,0.018893728,308568,Maputo City 2022 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,371,8092,NA
-MOZ,3S-CRC,3S-CRC,PWID,Cidade de Maputo,2,NA,2022,790,990,1290,0.002560214,0.003208369,0.004180602,308568,Maputo City 2022 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,371,8093,NA
-MOZ,3S-CRC,3S-CRC,TGW,Cidade de Maputo,2,NA,2022,120,180,270,3.72155e-4,5.58233e-4,8.3735e-4,322446,Maputo City 2022 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,371,8094,NA
-MOZ,3S-CRC,3S-CRC,FSW,Maputo Provincia,2,NA,2022,4730,12800,21770,0.007028368,0.019019684,0.032348322,672987,Maputo Province 2022 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,372,8096,NA
-MOZ,3S-CRC,3S-CRC,MSM,Maputo Province,2,NA,2022,3050,7300,12410,0.004994571,0.01195422,0.020322174,610663,Maputo Province 2022 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,372,8097,NA
-MOZ,3S-CRC,3S-CRC,PWID,Maputo Province,2,NA,2022,1150,3980,7170,0.001883199,0.006517506,0.011741337,610663,Maputo Province 2022 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,372,8098,NA
-MOZ,3S-CRC,3S-CRC,TGW,Maputo Province,2,NA,2022,420,590,820,6.24083e-4,8.76689e-4,0.001218448,672987,Maputo Province 2022 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,372,8099,NA
+MOZ,3S-CRC,3S-CRC,TGW,Gaza,2,NA,2022,20,20,40,5.19e-5,5.19e-5,1.03857e-4,385144,Gaza 2022 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,370,8090,NA
+MOZ,3S-CRC,3S-CRC,FSW,Cidade de Maputo,2,NA,2022,2040,3920,5950,0.006326641,0.012157074,0.018452702,322446,Maputo City 2022 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,370,8091,NA
+MOZ,3S-CRC,3S-CRC,MSM,Cidade de Maputo,2,NA,2022,2060,3055,5830,0.006676,0.009900573,0.018893728,308568,Maputo City 2022 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,370,8092,NA
+MOZ,3S-CRC,3S-CRC,PWID,Cidade de Maputo,2,NA,2022,790,990,1290,0.002560214,0.003208369,0.004180602,308568,Maputo City 2022 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,370,8093,NA
+MOZ,3S-CRC,3S-CRC,TGW,Cidade de Maputo,2,NA,2022,120,180,270,3.72155e-4,5.58233e-4,8.3735e-4,322446,Maputo City 2022 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,370,8094,NA
+MOZ,3S-CRC,3S-CRC,FSW,Maputo Provincia,2,NA,2022,4730,12800,21770,0.007028368,0.019019684,0.032348322,672987,Maputo Province 2022 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,370,8096,NA
+MOZ,3S-CRC,3S-CRC,MSM,Maputo Province,2,NA,2022,3050,7300,12410,0.004994571,0.01195422,0.020322174,610663,Maputo Province 2022 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,370,8097,NA
+MOZ,3S-CRC,3S-CRC,PWID,Maputo Province,2,NA,2022,1150,3980,7170,0.001883199,0.006517506,0.011741337,610663,Maputo Province 2022 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,370,8098,NA
+MOZ,3S-CRC,3S-CRC,TGW,Maputo Province,2,NA,2022,420,590,820,6.24083e-4,8.76689e-4,0.001218448,672987,Maputo Province 2022 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,370,8099,NA
 NER,unique object multiplier,Object multiplier,FSW,Agadez,NA,NA,2017,NA,1920,NA,NA,NA,NA,NA,2017 ESDG,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,374,2094,NA
 NER,unique object multiplier,Object multiplier,FSW,Maradi,NA,NA,2017,NA,2375,NA,NA,NA,NA,NA,2017 ESDG,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,374,2102,NA
 NER,unique object multiplier,Object multiplier,MSM,Maradi,NA,NA,2017,NA,1736,NA,NA,NA,NA,NA,2017 ESDG,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,374,2103,NA
@@ -2074,32 +2056,17 @@ SEN,service multiplier,Service Multiplier,FSW,Dakar,NA,NA,2012,NA,1591,NA,NA,NA,
 SEN,service multiplier,Service Multiplier,MSM,Dakar,NA,NA,2012,NA,1345,NA,NA,NA,NA,NA,2012 SEN PSE,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,380,8235,NA
 SEN,unique object multiplier,Object multiplier,FSW,Dakar,NA,NA,2012,NA,3582,NA,NA,NA,NA,NA,2012 SEN PSE,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,380,8231,NA
 SEN,unique object multiplier,Object multiplier,MSM,Dakar,NA,NA,2012,NA,1147,NA,NA,NA,NA,NA,2012 SEN PSE,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,380,8234,NA
-MWI,PLACE/mapping,PLACE/mapping,FSW,Blantyre,NA,NA,2021,NA,3649,NA,NA,NA,NA,NA,2021 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,1000,7705,NA
-MWI,PLACE/mapping,PLACE/mapping,MSM,Blantyre,NA,NA,2021,NA,40,NA,NA,NA,NA,NA,2021 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,1000,7706,NA
-MWI,PLACE/mapping,PLACE/mapping,TGW,Blantyre,NA,NA,2021,NA,240,NA,NA,NA,NA,NA,2021 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,1000,7707,NA
-MWI,PLACE/mapping,PLACE/mapping,FSW,Lilongwe,NA,NA,2021,NA,4038,NA,NA,NA,NA,NA,2021 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,1000,7708,NA
-MWI,PLACE/mapping,PLACE/mapping,MSM,Lilongwe,NA,NA,2021,NA,172,NA,NA,NA,NA,NA,2021 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,1000,7709,NA
-MWI,PLACE/mapping,PLACE/mapping,TGW,Lilongwe,NA,NA,2021,NA,411,NA,NA,NA,NA,NA,2021 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,1000,7710,NA
-MWI,PLACE/mapping,PLACE/mapping,FSW,Machinga,NA,NA,2021,NA,494,NA,NA,NA,NA,NA,2021 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,1000,7711,NA
-MWI,PLACE/mapping,PLACE/mapping,MSM,Machinga,NA,NA,2021,NA,0,NA,NA,NA,NA,NA,2021 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,1000,7712,NA
-MWI,PLACE/mapping,PLACE/mapping,FSW,Mangochi,NA,NA,2021,NA,649,NA,NA,NA,NA,NA,2021 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,1000,7713,NA
-MWI,PLACE/mapping,PLACE/mapping,MSM,Mangochi,NA,NA,2021,NA,41,NA,NA,NA,NA,NA,2021 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,1000,7714,NA
-MWI,PLACE/mapping,PLACE/mapping,TGW,Mangochi,NA,NA,2021,NA,58,NA,NA,NA,NA,NA,2021 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,1000,7715,NA
-MWI,PLACE/mapping,PLACE/mapping,TGW,Muzuzu,NA,NA,2021,NA,231,NA,NA,NA,NA,NA,2021 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,1000,7716,NA
-MWI,PLACE/mapping,PLACE/mapping,FSW,Mzimba,NA,NA,2021,NA,1646,NA,NA,NA,NA,NA,2021 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,1000,7717,NA
-MWI,PLACE/mapping,PLACE/mapping,MSM,Mzimba,NA,NA,2021,NA,28,NA,NA,NA,NA,NA,2021 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,1000,7718,NA
-MWI,PLACE/mapping,PLACE/mapping,FSW,Phalombe,NA,NA,2021,NA,331,NA,NA,NA,NA,NA,2021 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,1000,7719,NA
-MWI,PLACE/mapping,PLACE/mapping,MSM,Phalombe,NA,NA,2021,NA,72,NA,NA,NA,NA,NA,2021 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,1000,7720,NA
-MWI,PLACE/mapping,PLACE/mapping,TGW,Phalombe,NA,NA,2021,NA,35,NA,NA,NA,NA,NA,2021 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,1000,7721,NA
-MWI,PLACE/mapping,PLACE/mapping,TGW,Zomba,NA,NA,2021,NA,156,NA,NA,NA,NA,NA,2021 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,1000,3493,NA
-MWI,PLACE/mapping,PLACE/mapping,FSW,Zomba,NA,NA,2021,NA,1159,NA,NA,NA,NA,NA,2021 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,1000,7722,NA
-MWI,PLACE/mapping,PLACE/mapping,MSM,Zomba,NA,NA,2021,NA,7,NA,NA,NA,NA,NA,2021 Mapping,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,1000,7723,NA
-MOZ,SS-PSE,SS-PSE,MSM,Beira,NA,NA,2021,NA,3685,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,8900,NA
-MOZ,SS-PSE,SS-PSE,MSM,"Cidade de Maputo, Matola",NA,NA,2021,NA,1006,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,8901,NA
-MOZ,SS-PSE,SS-PSE,MSM,Nampula,NA,NA,2021,NA,925,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,8902,NA
-MOZ,SS-PSE,SS-PSE,MSM,Quelimane,NA,NA,2021,NA,2408,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,8903,NA
-MOZ,SS-PSE,SS-PSE,MSM,Tete,NA,NA,2021,NA,891,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,8904,NA
-MOZ,2S-CRC,2S-CRC,MSM,Quelimane,NA,NA,2021,NA,4055,NA,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,8905,NA
+MOZ,Service multiplier,Service multiplier,MSM,Tete,NA,NA,2021,963,1046,1145,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,7391,NA
+MOZ,SS-PSE,SS-PSE,MSM,Beira,NA,NA,2021,1924,3685,5156,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,8900,NA
+MOZ,SS-PSE,SS-PSE,MSM,"Cidade de Maputo, Matola",NA,NA,2021,774,1006,1324,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,8901,NA
+MOZ,SS-PSE,SS-PSE,MSM,Nampula,NA,NA,2021,692,925,1265,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,8902,NA
+MOZ,SS-PSE,SS-PSE,MSM,Quelimane,NA,NA,2021,1407,2408,3956,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,8903,NA
+MOZ,SS-PSE,SS-PSE,MSM,Tete,NA,NA,2021,685,891,1249,NA,NA,NA,NA,Round II BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,320,8904,NA
+UGA,3S-CRC,3S-CRC,FSW,Fort Portal,NA,NA,2022,NA,NA,NA,NA,NA,NA,NA,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,233,8910,NA
+UGA,3S-CRC,3S-CRC,FSW,Jinja,NA,NA,2022,1100,2200,4100,0.009,0.018,0.033545455,NA,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,233,8913,NA
+UGA,3S-CRC,3S-CRC,FSW,Masaka,NA,NA,2022,850,1200,1700,0.016291667,0.023,0.032583333,NA,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,233,8916,NA
+UGA,3S-CRC,3S-CRC,FSW,Tororo,NA,NA,2022,1400,3200,4600,0.00875,0.02,0.02875,NA,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,233,8919,NA
+UGA,3S-CRC,3S-CRC,MSM,Kampala,NA,NA,2022,4700,9900,17500,0.009020202,0.019,0.033585859,NA,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,233,8922,NA
 CMR,PLACE/mapping,PLACE/mapping,FSW,Bafoussam,NA,NA,2016,1994,2458,2923,NA,NA,NA,NA,Mapping and size estimation of female sex workers in Cameroon: To inform HIV Program Design and Implementation,NA,CDC_a4bec72a1e831cf240b953209ecfc331,CDC,486844319517a09aa6073864a2d499f5,Yes,yes,NA,NA,54,3992,NA
 CMR,PLACE/mapping,PLACE/mapping,FSW,Bamenda,NA,NA,2016,1605,1975,2345,NA,NA,NA,NA,Mapping and size estimation of female sex workers in Cameroon: To inform HIV Program Design and Implementation,NA,CDC_48c5fab4a953a322460fe03daa9a93cc,CDC,e3d81b93ea3906c4c78725d9a79fa57f,Yes,yes,NA,NA,54,3993,NA
 CMR,PLACE/mapping,PLACE/mapping,FSW,Bertoua,NA,NA,2016,891,1044,1198,NA,NA,NA,NA,Mapping and size estimation of female sex workers in Cameroon: To inform HIV Program Design and Implementation,NA,CDC_658743cae7b17e3f05335800cb7f7246,CDC,2cab718a37c9de5cfdc32fe9bff44a15,Yes,yes,NA,NA,54,3995,NA

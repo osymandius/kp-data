@@ -39,6 +39,32 @@ kplhiv_art$country %>%
   arrange(kp, region) %>%
   filter(region == "SSA")
 
+chi <- kplhiv_art$country %>%
+  lapply(data.frame) %>%
+  bind_rows() %>%
+  filter(indicator == "pse_urban_prop") %>%
+  left_join(region) %>%
+   select(kp, region, median, lower, upper) %>%
+  mutate(across(c(median:upper), logit)) %>%
+  mutate(se = (upper - median)/1.96)
+
+weights::wtd.t.test(chi$median[chi$region == "ESA" & chi$kp == "FSW"],
+                    chi$median[chi$region == "WCA" & chi$kp == "FSW"],
+                    weight = 1/chi$se[chi$region == "ESA" & chi$kp == "FSW"]^2,
+                    weighty = 1/chi$se[chi$region == "WCA" & chi$kp == "FSW"]^2,
+                    samedata = F)
+
+weights::wtd.t.test(chi$median[chi$region == "ESA" & chi$kp == "TGW"],
+                    chi$median[chi$region == "WCA" & chi$kp == "TGW"],
+                    weight = 1/chi$se[chi$region == "ESA" & chi$kp == "TGW"]^2,
+                    weighty = 1/chi$se[chi$region == "WCA" & chi$kp == "TGW"]^2,
+                    samedata = F)
+
+t.test()
+t.test(chi$median[chi$region == "ESA" & chi$kp == "MSM"], chi$median[chi$region == "WCA" & chi$kp == "MSM"])
+t.test(chi$median[chi$region == "ESA" & chi$kp == "PWID"], chi$median[chi$region == "WCA" & chi$kp == "PWID"])
+t.test(chi$median[chi$region == "ESA" & chi$kp == "TGW"], chi$median[chi$region == "WCA" & chi$kp == "TGW"])
+
 kplhiv_art$country$MSM %>%
   filter(indicator == "pse_urban_prop") %>% filter(median > 0.01)
 
@@ -1191,11 +1217,19 @@ kplhiv_art$country %>%
 kplhiv_art$country %>%
   lapply(data.frame) %>%
   bind_rows() %>%
-  filter(indicator == "pse_prop") %>%
-  left_join(region) %>%
-  bind_rows(mutate(., region = "SSA")) %>%
-  group_by(kp, region) %>%
-  reframe(calculate_quantile(median)) %>%
-  factor_region() %>%
-  arrange(kp, region) %>%
-  filter(region == "SSA")
+  filter(indicator == "plhiv_prop") %>%
+  mutate(across(median:upper, ~100*.x),
+         text = sprintf("%0.1f (%0.1f, %0.1f)", median, lower, upper),
+         country = countrycode::countrycode(iso3, "iso3c", "country.name", custom_match = cc_plot())) %>%
+  select(region, country, kp, text) %>%
+  pivot_wider(names_from = kp, values_from = text) %>%
+  arrange(region, country) %>%
+  write_csv("~/OneDrive - Imperial College London/Phd/KP data consolidation/Consolidation paper/Supplementary figs/ST15 country kplhiv proportions.csv")
+
+crossing(country = 1:5,
+         disease = paste0("disease", 1:5)
+         ) %>%
+  mutate(count = runif(25, 0, 250)) %>%
+  ggplot(aes(x=country, y=count)) +
+    geom_col() +
+    facet_wrap(~disease)

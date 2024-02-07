@@ -33,6 +33,20 @@ if(iso3 == "MLI") {
   population <- read.csv("mli_pop.csv")
 }
 
+if(iso3 == "NGA") {
+  areas <- read_sf("nga_areas.geojson")%>%
+    mutate(iso3 = iso3_c)
+  
+  population <- read.csv("nga_pop.csv")
+}
+
+if(iso3 == "ZAF") {
+  areas <- read_sf("zaf_areas.geojson")%>%
+    mutate(iso3 = iso3_c)
+  
+  population <- read.csv("zaf_pop.csv")
+}
+
 area_lvl_mapping <- read_csv("resources/iso_mapping_fit.csv", show_col_types = FALSE)
 admin1_lvl <- area_lvl_mapping$admin1_level[area_lvl_mapping$iso3 == iso3_c]
 
@@ -126,12 +140,16 @@ pse <- pse %>%
     mutate(area_name = case_when(
       iso3 == "BFA" & area_name == "Sanmentenga" ~  "Sanmatenga",
       iso3 == "BFA" & area_name == "Toy" ~  "Tuy",
+      iso3 == "BFA" & str_detect(area_name, "Centre ") & study_idx == 314 ~  str_replace(area_name, "Centre ", "Centre-"),
+      iso3 == "BFA" & area_name == "Sud Ouest" ~  "Sud-Ouest",
       
       iso3 == "BWA" & area_name == "Ngami" ~ "Ngamiland",
       
       iso3 == "COD" & area_name == "Bas Congo" ~ "Kongo Central",
       iso3 == "COD" & area_name == "Katanga" ~ "Tanganyika; Haut-Lomami; Lualaba; Haut-Katanga",
       iso3 == "COD" & area_name %in% c("Oriental", "Orientale") ~ "Ituri; Haut-Uele; Tshopo; Bas-Uele",
+      
+      iso3 == "GNB" & str_detect(area_name, "Sector Autonomo de Bissau") ~ str_replace(area_name, "Sector Autonomo de Bissau", "SAB"),
       
       iso3 == "ETH" & area_name == "Adama" ~ "Adama Town",
       
@@ -154,13 +172,20 @@ pse <- pse %>%
       iso3 == "MOZ" & area_name == "Maputo City" ~ "Cidade de Maputo",
       iso3 == "MOZ" & area_name == "Maputo Province" ~ "Maputo Provincia",
       
-      
       iso3 == "NAM" & area_name == "Khomas region" ~ "Khomas",
+      
+      iso3 == "NGA" & area_name == "Calabar Municipality" ~ "Calabar Municipal",
       
       iso3 == "SLE" & area_name == "Western rural" ~ "Western Area Rural",
       iso3 == "SLE" & area_name == "Western Urban" ~ "Western Area Urban",
       
+      iso3 == "TGO" & area_name == "Grand Lome" ~ "Lome",
+      
       iso3 == "ZAF" & area_name == "NM Molema DM" ~ "Ngaka Modiri Molema DM",
+      iso3 == "ZAF" & area_name == "Nelson Mandela Bay Metro" ~ "N Mandela Bay MM",
+      iso3 == "ZAF" & area_name == "Mangaung" ~ "Mangaung MM",
+      iso3 == "ZAF" & area_name == "Manguang DM" ~ "Mangaung MM",
+      iso3 == "ZAF" & area_name == "Capricorn DM (Polokwane)" ~ "Capricorn DM",
       
       TRUE ~ area_name
     ))
@@ -404,8 +429,11 @@ if(nrow(pse)) {
     
     if(iso3 == "BFA")
       pse <- pse %>% 
+        filter(study_idx == 29) %>%
         select(-c(province, province_area_id)) %>%
-        left_join(bfa_humd_areas %>% select(-area_name) %>% st_drop_geometry())
+        left_join(bfa_humd_areas %>% select(-area_name) %>% st_drop_geometry()) %>%
+        bind_rows(pse %>%
+                    filter(study_idx != 29))
     
     pse <- pse %>%
           mutate(province_area_id = case_when(

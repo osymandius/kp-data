@@ -2,34 +2,33 @@ iso3,indicator,method,simple_method,kp,area_name,area_level,age_group,year,count
 AGO,art,vls,vls,FSW,Angola,NA,NA,2017,NA,NA,NA,NA,0.18,NA,147,Mapeamento Programatico E Prevalencia De VIH E Outras Its Entre Populacoes Chave De Angola: Estudo PLACE 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,3,1
 AGO,art,vls,vls,MSM,Angola,NA,NA,2017,NA,NA,NA,NA,0.44,NA,19,Mapeamento Programatico E Prevalencia De VIH E Outras Its Entre Populacoes Chave De Angola: Estudo PLACE 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,3,2
 AGO,art,vls,vls,TGW,Angola,NA,NA,2017,NA,NA,NA,NA,0.55,NA,8,Mapeamento Programatico E Prevalencia De VIH E Outras Its Entre Populacoes Chave De Angola: Estudo PLACE 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,3,3
-AGO,art,self-report,self-report,MSM,Luanda,NA,NA,2011,NA,NA,NA,NA,0.154,NA,26,4. AGO 2011 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,4,8031
 BFA,art,self-report,self-report,MSM,Bobo Diouslasso,NA,NA,2013,NA,NA,NA,NA,0.063,NA,16,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,27,5
-BFA,art,self-report,self-report,FSW,Bobo Diouslasso,NA,NA,2013,NA,NA,NA,NA,0.557,NA,115,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,27,9
-TGO,art,self-report,self-report,MSM,Kara,NA,NA,2013,NA,NA,NA,NA,0,NA,2,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,27,10
-TGO,art,self-report,self-report,FSW,Kara,NA,NA,2013,NA,NA,NA,NA,0.182,NA,33,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,27,14
-TGO,art,self-report,self-report,MSM,Lome,NA,NA,2013,NA,NA,NA,NA,0.062,NA,65,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,27,12
-TGO,art,self-report,self-report,FSW,Lome,NA,NA,2013,NA,NA,NA,NA,0.147,NA,96,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,KP Atlas_b5afbcd155431e2bf04fc6c0c76c5ec3,KP Atlas,6eb0299cf58109641e9cfd8987674128,Yes,yes,NA,NA,NA,27,13
 BFA,art,self-report,self-report,FSW,Ouagadougou,NA,NA,2013,NA,NA,NA,NA,0.226,NA,31,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,27,7
 BFA,art,self-report,self-report,MSM,Ouagadougou,NA,NA,2013,NA,NA,NA,NA,0.25,NA,16,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,27,8
-BWA,art,self-report,self-report,FSW,Chobe,NA,NA,2017,NA,NA,NA,NA,0.126741,NA,59,2017 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,31,17
+BFA,art,self-report,self-report,FSW,Bobo Diouslasso,NA,NA,2013,NA,NA,NA,NA,0.557,NA,115,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,27,9
+TGO,art,self-report,self-report,MSM,Kara,NA,NA,2013,NA,NA,NA,NA,0,NA,2,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,27,10
+TGO,art,self-report,self-report,MSM,Lome,NA,NA,2013,NA,NA,NA,NA,0.062,NA,65,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,27,12
+TGO,art,self-report,self-report,FSW,Lome,NA,NA,2013,NA,NA,NA,NA,0.147,NA,96,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,KP Atlas_b5afbcd155431e2bf04fc6c0c76c5ec3,KP Atlas,6eb0299cf58109641e9cfd8987674128,Yes,yes,NA,NA,NA,27,13
+TGO,art,self-report,self-report,FSW,Kara,NA,NA,2013,NA,NA,NA,NA,0.182,NA,33,Holland et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5230836/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,27,14
 BWA,art,self-report,self-report,FSW,Francistown,NA,NA,2017,NA,NA,NA,NA,0.348649,NA,131,2017 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,31,15
 BWA,art,self-report,self-report,FSW,Gaborone,NA,NA,2017,NA,NA,NA,NA,0.128472,NA,264,2017 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,31,16
+BWA,art,self-report,self-report,FSW,Chobe,NA,NA,2017,NA,NA,NA,NA,0.126741,NA,59,2017 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,31,17
 BWA,art,self-report,self-report,FSW,Maun,NA,NA,2017,NA,NA,NA,NA,0.19788,NA,101,2017 BBS,NA,KP Atlas_7aaecf76f8a43dcf4102e0b6b525ab56,KP Atlas,9a000efb8b1e0eba92414ca6b1786492,Yes,yes,NA,NA,NA,31,25
 BWA,art,self-report,self-report,FSW,Palapye,NA,NA,2017,NA,NA,NA,NA,0.079602,NA,181,2017 BBS,NA,KP Atlas_7f07c53ba4d549444bb0d9bddad68926,KP Atlas,ff1ff9975541f7f2079c71e1f390fd4c,Yes,yes,NA,NA,NA,31,26
 CIV,art,VLS,VLS,FSW,ABOISSO,NA,NA,2020,NA,NA,NA,NA,0.6,NA,10,"Enquete Bio-Comportementale Et Cartographique En Direction Des Travailleuses De Sexe Dans Cinq Localites De La Cote D'ivoire : Katiola, Yamoussoukro, Soubre, Aboisso, Agboville.",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,46,28
 CIV,art,VLS,VLS,FSW,Agboville,NA,NA,2020,NA,NA,NA,NA,0.33,NA,6,"Enquete Bio-Comportementale Et Cartographique En Direction Des Travailleuses De Sexe Dans Cinq Localites De La Cote D'ivoire : Katiola, Yamoussoukro, Soubre, Aboisso, Agboville.",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,46,29
+CMR,art,self-report,self-report,MSM,Bertoua,NA,NA,2016,NA,NA,NA,NA,0.087,NA,23,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,30
+CMR,art,self-report,self-report,FSW,Kribi,NA,NA,2016,NA,NA,NA,NA,0.1379,NA,87,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,31
+CMR,art,self-report,self-report,FSW,Bertoua,NA,NA,2016,NA,NA,NA,NA,0.257,NA,74,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,32
+CMR,art,self-report,self-report,MSM,Yaounde,NA,NA,2016,NA,NA,NA,NA,0.261,NA,138,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,34
+CMR,art,self-report,self-report,MSM,Douala,NA,NA,2016,NA,NA,NA,NA,0.352,NA,91,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,35
+CMR,art,self-report,self-report,MSM,Kribi,NA,NA,2016,NA,NA,NA,NA,0.417,NA,12,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,37
+CMR,art,self-report,self-report,FSW,Yaounde,NA,NA,2016,NA,NA,NA,NA,0.4552,NA,134,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,38
+CMR,art,self-report,self-report,FSW,Douala,NA,NA,2016,NA,NA,NA,NA,0.521,NA,140,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,39
+CMR,art,self-report,self-report,FSW,Bamenda,NA,NA,2016,NA,NA,NA,NA,0.651,NA,112,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,40
 CIV,art,VLS,VLS,FSW,Katiola,NA,NA,2020,NA,NA,NA,NA,0.77,NA,26,"Enquete Bio-Comportementale Et Cartographique En Direction Des Travailleuses De Sexe Dans Cinq Localites De La Cote D'ivoire : Katiola, Yamoussoukro, Soubre, Aboisso, Agboville.",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,46,52
 CIV,art,VLS,VLS,FSW,Soubre,NA,NA,2020,NA,NA,NA,NA,0.13,NA,8,"Enquete Bio-Comportementale Et Cartographique En Direction Des Travailleuses De Sexe Dans Cinq Localites De La Cote D'ivoire : Katiola, Yamoussoukro, Soubre, Aboisso, Agboville.",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,46,53
 CIV,art,VLS,VLS,FSW,YAKRO,NA,NA,2020,NA,NA,NA,NA,0.33,NA,6,"Enquete Bio-Comportementale Et Cartographique En Direction Des Travailleuses De Sexe Dans Cinq Localites De La Cote D'ivoire : Katiola, Yamoussoukro, Soubre, Aboisso, Agboville.",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,46,54
-CMR,art,self-report,self-report,FSW,Bamenda,NA,NA,2016,NA,NA,NA,NA,0.651,NA,112,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,40
-CMR,art,self-report,self-report,MSM,Bertoua,NA,NA,2016,NA,NA,NA,NA,0.087,NA,23,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,30
-CMR,art,self-report,self-report,FSW,Bertoua,NA,NA,2016,NA,NA,NA,NA,0.257,NA,74,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,32
-CMR,art,self-report,self-report,MSM,Douala,NA,NA,2016,NA,NA,NA,NA,0.352,NA,91,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,35
-CMR,art,self-report,self-report,FSW,Douala,NA,NA,2016,NA,NA,NA,NA,0.521,NA,140,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,39
-CMR,art,self-report,self-report,FSW,Kribi,NA,NA,2016,NA,NA,NA,NA,0.1379,NA,87,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,31
-CMR,art,self-report,self-report,MSM,Kribi,NA,NA,2016,NA,NA,NA,NA,0.417,NA,12,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,37
-CMR,art,self-report,self-report,MSM,Yaounde,NA,NA,2016,NA,NA,NA,NA,0.261,NA,138,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,34
-CMR,art,self-report,self-report,FSW,Yaounde,NA,NA,2016,NA,NA,NA,NA,0.4552,NA,134,2016 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,53,38
 COD,art,VLS,VLS,FSW,Bas-Uele,NA,NA,2019,NA,NA,NA,0.171,0.406,0.628,19,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,88
 COD,art,VLS,VLS,FSW,Haut-Katanga,NA,NA,2019,NA,NA,NA,0.107,0.258,0.408,26,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,89
 COD,art,VLS,VLS,MSM,Haut-Katanga,NA,NA,2019,NA,NA,NA,0.258,0.503,0.752,13,"Enquete De Surveillance Bio-Comportementale Aupres Des Populations Cles A Risque De L'infection Par Le VIH Dans 14 Provinces, 2018-2019",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,58,90
@@ -56,14 +55,10 @@ GNQ,art,self-report,self-report,FSW,"Malabo, Bata, Ebibeyin, Mongomo",NA,NA,2021
 GNQ,art,self-report,self-report,MSM,"Malabo, Bata, Ebibeyin, Mongomo",NA,NA,2021,NA,NA,NA,NA,0.361,NA,36,"INFORME DE LA ENCUESTA NACIONAL SOBRE REALIDADES LGBTI, TRABAJADORES DE SEXO Y ENCARCELADOS EN LAS CIUDADES DE MALABO, BATA, EBIBEYÍN Y MONGO.",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,0,99,113
 KEN,art,VLS,VLS,MSM,Nairobi,NA,NA,2017,NA,NA,NA,0.44,0.54,0.63,156,Smith et al,https://bmjopen.bmj.com/content/11/12/e055783.abstract,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,116,114
 KEN,art,VLS,VLS,TGW,Nairobi,NA,NA,2017,NA,NA,NA,0.24,0.43,0.64,30,Smith et al,https://bmjopen.bmj.com/content/11/12/e055783.abstract,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,116,115
-MWI,art,lab,lab,MSM,Blantyre,NA,NA,2016,NA,NA,NA,NA,0.333,NA,15,HPTN 075 (Sandfort et al),https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,113,162
-MWI,art,lab,lab,TGW,Blantyre,NA,NA,2016,NA,NA,NA,NA,0.417,NA,12,HPTN 075 (Sandfort et al),https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,113,163
-ZAF,art,lab,lab,TGW,Cape Town,NA,NA,2016,NA,NA,NA,NA,0.385,NA,13,HPTN 075 (Sandfort et al),https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,113,262
 KEN,art,lab,lab,MSM,Kisumu,NA,NA,2016,NA,NA,NA,NA,0.7,NA,20,HPTN 075 (Sandfort et al),https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,113,160
 KEN,art,lab,lab,TGW,Kisumu,NA,NA,2016,NA,NA,NA,NA,0.625,NA,8,HPTN 075 (Sandfort et al),https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,113,161
-ZAF,art,lab,lab,MSM,Cape Town,NA,NA,2016,NA,NA,NA,NA,0.194,NA,31,HPTN 075 (Sandfort et al),https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,113,2959
-ZAF,art,lab,lab,MSM,Soweto,NA,NA,2016,NA,NA,NA,NA,0.271,NA,59,HPTN 075 (Sandfort et al),https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,113,2975
-ZAF,art,lab,lab,TGW,Soweto,NA,NA,2016,NA,NA,NA,NA,0.28,NA,25,HPTN 075 (Sandfort et al),https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,113,7295
+MWI,art,lab,lab,MSM,Blantyre,NA,NA,2016,NA,NA,NA,NA,0.333,NA,15,HPTN 075 (Sandfort et al),https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,113,162
+MWI,art,lab,lab,TGW,Blantyre,NA,NA,2016,NA,NA,NA,NA,0.417,NA,12,HPTN 075 (Sandfort et al),https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,113,163
 KEN,art,VLS,VLS,PWID,Coast,NA,NA,2012,NA,NA,NA,NA,0.046,NA,216,Kurth | Degenhardt et al,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,114,168
 KEN,art,VLS,VLS,PWID,Nairobi,NA,NA,2012,NA,NA,NA,NA,0.042,NA,71,Kurth | Degenhardt et al,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,114,169
 KEN,art,VLS,VLS,MSM,Kisumu,NA,NA,2016,NA,NA,NA,NA,0.306,NA,63,Kunzweiler et al,https://www.tandfonline.com/doi/full/10.1080/09540121.2018.1510109,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,115,170
@@ -77,9 +72,9 @@ MLI,art,VLS,VLS,MSM,Mopti,NA,NA,2019,NA,NA,NA,NA,0.846,NA,13,Cartographie et Est
 MLI,art,VLS,VLS,MSM,Segou,NA,NA,2019,NA,NA,NA,NA,0.455,NA,11,Cartographie et Estimation de la taille des Professionnelles de Sexe (PS) et des Hommes ayant des rapports Sexuels avec d’autres Hommes (HSH) couplees à l’etude bio-comportementale chez les HSH en matière de VIH au Mali,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,131,182
 MLI,art,VLS,VLS,MSM,Sikasso,NA,NA,2019,NA,NA,NA,NA,0.545,NA,11,Cartographie et Estimation de la taille des Professionnelles de Sexe (PS) et des Hommes ayant des rapports Sexuels avec d’autres Hommes (HSH) couplees à l’etude bio-comportementale chez les HSH en matière de VIH au Mali,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,131,183
 MLI,art,VLS,VLS,TGW,Bamako,NA,NA,2015,NA,NA,NA,0,0.072,0.158,37,Hakim et al,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,132,184
-MOZ,art,self-report,self-report,FSW,Beira,NA,NA,2012,NA,NA,NA,NA,0.548,NA,31,BBS 2012,NA,KP Atlas_3a45503881b090e7d2ee7c24bf937330,KP Atlas,df1bf1f80789d4662654a0da91eca9e0,Yes,yes,NA,NA,NA,140,188
-MOZ,art,self-report,self-report,FSW,Cidade de Maputo,NA,NA,2012,NA,NA,NA,NA,0.49,NA,49,BBS 2012,NA,KP Atlas_a800745773acfca1d861b289c35bdcd2,KP Atlas,3808cc2aa2e2244bb025b63aa8e25baa,Yes,yes,NA,NA,NA,140,187
 MOZ,art,self-report,self-report,FSW,Nampula,NA,NA,2012,NA,NA,NA,NA,0.273,NA,11,BBS 2012,NA,KP Atlas_896eeac60202d5fd827d08332479fb1a,KP Atlas,cf8b56fcd7fc70b433bd26599dace8bb,Yes,yes,NA,NA,NA,140,186
+MOZ,art,self-report,self-report,FSW,Cidade de Maputo,NA,NA,2012,NA,NA,NA,NA,0.49,NA,49,BBS 2012,NA,KP Atlas_a800745773acfca1d861b289c35bdcd2,KP Atlas,3808cc2aa2e2244bb025b63aa8e25baa,Yes,yes,NA,NA,NA,140,187
+MOZ,art,self-report,self-report,FSW,Beira,NA,NA,2012,NA,NA,NA,NA,0.548,NA,31,BBS 2012,NA,KP Atlas_3a45503881b090e7d2ee7c24bf937330,KP Atlas,df1bf1f80789d4662654a0da91eca9e0,Yes,yes,NA,NA,NA,140,188
 MOZ,art,self-report,self-report,PWID,Cidade de Maputo,NA,NA,2016,NA,NA,NA,0.345,0.479,0.6,123,BBS 2014,NA,KP Atlas_e06e5aea386e6fae91d427ac8cdc17b0,KP Atlas,aee4998f796c65b1d6eaddd5edec46b5,Yes,yes,NA,NA,NA,141,189
 MOZ,art,VLS,VLS,FSW,Mozambique,NA,NA,2017,NA,NA,NA,NA,0.52,NA,228,PLACE 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,142,190
 MOZ,art,VLS,VLS,MSM,Mozambique,NA,NA,2017,NA,NA,NA,NA,0.18,NA,55,PLACE 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,142,191
@@ -90,14 +85,14 @@ MWI,art,self-report,self-report,MSM,Mulanje,NA,NA,2014,NA,NA,NA,NA,0,NA,86,HIV P
 MWI,art,self-report,self-report,MSM,Nkhata Bay,NA,NA,2014,NA,NA,NA,NA,0,NA,76,HIV Prevalence and Sociobehavioral Characteristics Among Men Who Have Sex with Men Across Seven Sites in Malawi,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,149,196
 MWI,art,self-report,self-report,FSW,Zomba,NA,NA,2017,NA,NA,NA,NA,0.397,NA,68,2017 PLACE,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,150,197
 MWI,art,self-report,self-report,MSM,Zomba,NA,NA,2017,NA,NA,NA,NA,0.067,NA,15,2017 PLACE,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,150,198
-NAM,art,self-report,self-report,FSW,Katima Mulilo,NA,NA,2014,NA,NA,NA,NA,0.362,NA,177,IBBS 2015,NA,GF_2af94728873ff0a3e2a49398fbf5c9f1,GF,5f403f019bea02ad94c04c7427f49491,Yes,yes,NA,NA,NA,155,208
-NAM,art,self-report,self-report,FSW,Oshikango,NA,NA,2014,NA,NA,NA,NA,0.338,NA,77,IBBS 2015,NA,GF_9007bdfcbad2ce5201d6b13850e16128,GF,712394d4d852aae55fc5084318fcab65,Yes,yes,NA,NA,NA,155,207
-NAM,art,self-report,self-report,FSW,Walvis Bay/Swakopmund,NA,NA,2014,NA,NA,NA,NA,0.369,NA,130,IBBS 2015,NA,GF_549a2c4467b79430847df4d30efc5b32,GF,e5d7f1e19293f7db287dc05888450fc6,Yes,yes,NA,NA,NA,155,209
 NAM,art,self-report,self-report,FSW,Windhoek,NA,NA,2014,NA,NA,NA,NA,0.252,NA,103,IBBS 2015,NA,GF_87c0abcbe984655663365f224b2746f7,GF,b921d91440065db671e9a4c400bcd57b,Yes,yes,NA,NA,NA,155,206
-NAM,art,self-report,self-report,MSM,Keetmanshoop,NA,NA,2013,NA,NA,NA,NA,0.227,NA,44,BBS 2014,NA,GF_a93b37c75601f34b9cc723d26542c663,GF,eaa784b12994a1f1ab5e581284e8a0c2,Yes,yes,NA,NA,NA,156,213
+NAM,art,self-report,self-report,FSW,Oshikango,NA,NA,2014,NA,NA,NA,NA,0.338,NA,77,IBBS 2015,NA,GF_9007bdfcbad2ce5201d6b13850e16128,GF,712394d4d852aae55fc5084318fcab65,Yes,yes,NA,NA,NA,155,207
+NAM,art,self-report,self-report,FSW,Katima Mulilo,NA,NA,2014,NA,NA,NA,NA,0.362,NA,177,IBBS 2015,NA,GF_2af94728873ff0a3e2a49398fbf5c9f1,GF,5f403f019bea02ad94c04c7427f49491,Yes,yes,NA,NA,NA,155,208
+NAM,art,self-report,self-report,FSW,Walvis Bay/Swakopmund,NA,NA,2014,NA,NA,NA,NA,0.369,NA,130,IBBS 2015,NA,GF_549a2c4467b79430847df4d30efc5b32,GF,e5d7f1e19293f7db287dc05888450fc6,Yes,yes,NA,NA,NA,155,209
+NAM,art,self-report,self-report,MSM,Windhoek,NA,NA,2013,NA,NA,NA,NA,0.102,NA,59,BBS 2014,NA,GF_7f62011976aaad3330c15d1b595bed9f,GF,7d500f477c6ccb42b8d4c6bbd63a1742,Yes,yes,NA,NA,NA,156,210
 NAM,art,self-report,self-report,MSM,Oshakati,NA,NA,2013,NA,NA,NA,NA,0.118,NA,17,BBS 2014,NA,GF_3310a9bfcf815efdbcd07fc66b0ff650,GF,1dcc26d540e6c328e8cd716a705fddcf,Yes,yes,NA,NA,NA,156,211
 NAM,art,self-report,self-report,MSM,Walvis Bay/Swakopmund,NA,NA,2013,NA,NA,NA,NA,0.151,NA,53,BBS 2014,NA,GF_dee25776150a89db4009f500cf8a8b09,GF,671509512caf52a013ff5b39b750d311,Yes,yes,NA,NA,NA,156,212
-NAM,art,self-report,self-report,MSM,Windhoek,NA,NA,2013,NA,NA,NA,NA,0.102,NA,59,BBS 2014,NA,GF_7f62011976aaad3330c15d1b595bed9f,GF,7d500f477c6ccb42b8d4c6bbd63a1742,Yes,yes,NA,NA,NA,156,210
+NAM,art,self-report,self-report,MSM,Keetmanshoop,NA,NA,2013,NA,NA,NA,NA,0.227,NA,44,BBS 2014,NA,GF_a93b37c75601f34b9cc723d26542c663,GF,eaa784b12994a1f1ab5e581284e8a0c2,Yes,yes,NA,NA,NA,156,213
 NGA,art,VLS,VLS,FSW,Nigeria,NA,NA,2020,NA,NA,NA,NA,0.224,NA,771,BBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,164,214
 NGA,art,VLS,VLS,MSM,Nigeria,NA,NA,2020,NA,NA,NA,NA,0.204,NA,1097,BBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,164,215
 NGA,art,VLS,VLS,PWID,Nigeria,NA,NA,2020,NA,NA,NA,NA,0.55272,NA,481,BBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,164,216
@@ -120,134 +115,153 @@ UGA,art,VLS,VLS,MSM,Kampala,NA,NA,2013,NA,NA,NA,NA,0.215,NA,79,Hladik 2017,https
 UGA,art,VLS,VLS,FSW,Kampala,NA,NA,2012,NA,NA,NA,NA,0.368115942,NA,345,Crane Survey Data (Doshi et al.),NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,229,244
 UGA,art,VLS,VLS,FSW,Kampala,NA,NA,2021,NA,NA,NA,NA,0.84,NA,494,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,233,245
 UGA,art,Self-report,Self-report,FSW,"Masaka, Mpigi, Kalungu, Lwengo, Rakai, Kyotera, Lyantonde",NA,NA,2020,NA,NA,NA,NA,0.840909,NA,220,Kiyingi et al.,https://link.springer.com/article/10.1007/s10461-022-03837-9,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,236,246
-ZAF,art,vls,vls,MSM,Johannesburg,NA,NA,2017,NA,NA,NA,NA,0.601,NA,118,TRANSFORM,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7299351/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,116,3021
-ZAF,art,VLS,VLS,PWID,Cape Town,NA,NA,2017,NA,NA,NA,NA,0.361,NA,203,TipVal 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,239,263
-ZAF,art,vls,vls,PWID,Tshwane MM,NA,NA,2017,NA,NA,NA,NA,0.155,NA,303,TipVal 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,239,7305
-ZAF,art,self-report,self-report,MSM,Ehlanzeni,NA,NA,2013,NA,NA,NA,NA,0.096,NA,62,Lane et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4234301/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,242,387
-ZAF,art,self-report,self-report,MSM,Gert Sibande DM,NA,NA,2013,NA,NA,NA,NA,0.136,NA,110,Lane et al 2014,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4234301/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,242,388
-ZAF,art,lab,lab,MSM,Cape Town,NA,NA,2019,NA,NA,NA,NA,0.41602,NA,274,SAMHMS II (MSM),NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,244,7909
-ZAF,art,lab,lab,MSM,Johannesburg,NA,NA,2019,NA,NA,NA,NA,0.550275,NA,316,SAMHMS II (MSM),NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,244,7910
-ZAF,art,lab,lab,MSM,Mahikeng LM,NA,NA,2019,NA,NA,NA,NA,0.457912,NA,159,SAMHMS II (MSM),NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,244,7911
 ZAF,art,lab,lab,TGW,Buffalo City,NA,NA,2019,NA,NA,NA,NA,0.189244,NA,141,Cloete et al 2021,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,248,256
+ZAF,art,lab,lab,TGW,Cape Town,NA,NA,2016,NA,NA,NA,NA,0.385,NA,13,HPTN 075 (Sandfort et al),https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,113,262
+ZAF,art,VLS,VLS,PWID,Cape Town,NA,NA,2017,NA,NA,NA,NA,0.361,NA,203,TipVal 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,239,263
 ZAF,art,lab,lab,TGW,Cape Town,NA,NA,2019,NA,NA,NA,NA,0.255565,NA,118,Cloete et al 2021,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,248,266
-ZAF,art,lab,lab,TGW,Johannesburg,NA,NA,2019,NA,NA,NA,NA,0.444982,NA,205,Cloete et al 2021,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,248,3018
-ZAF,art,lab,lab,FSW,Cape Town,NA,NA,2018,NA,NA,NA,NA,0.303876,NA,290,SAHMS II (FSW),NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,249,4226
-ZAF,art,lab,lab,FSW,Durban,NA,NA,2018,NA,NA,NA,NA,0.543482,NA,415,SAHMS II (FSW),NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,249,4341
-ZAF,art,lab,lab,FSW,Johannesburg,NA,NA,2018,NA,NA,NA,NA,0.607439,NA,331,SAHMS II (FSW),NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,249,4361
-ZMB,art,vls,vls,MSM,Kitwe,NA,NA,2021,NA,NA,NA,NA,0.909,NA,34,2021 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,258,3216
-ZMB,art,vls,vls,MSM,Livingstone,NA,NA,2021,NA,NA,NA,NA,0.817,NA,35,2021 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,258,3218
-ZMB,art,vls,vls,MSM,Lusaka,NA,NA,2021,NA,NA,NA,NA,0.548,NA,68,2021 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,258,3219
-ZMB,art,vls,vls,MSM,Solwezi,NA,NA,2021,NA,NA,NA,NA,0.498,NA,9,2021 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,258,3220
-ZMB,art,self-report,self-report,FSW,Livingstone,NA,NA,2017,NA,NA,NA,NA,0.413649,NA,264,2017 IBBS,NA,GF_2d22254b791e38e60e20c631d87ed4dc,GF,acf22aa7cce038889b74a9c88a12761d,Yes,yes,NA,NA,NA,259,332
-ZMB,art,self-report,self-report,FSW,Lusaka,NA,NA,2017,NA,NA,NA,NA,0.38475,NA,228,2017 IBBS,NA,GF_7ee2cdf8f31eccaff7c603c705186a90,GF,ada55a0ea82ff5f5e428d1faa86b1d22,Yes,yes,NA,NA,NA,259,331
 ZMB,art,self-report,self-report,FSW,Ndola,NA,NA,2017,NA,NA,NA,NA,0.197676,NA,230,2017 IBBS,NA,GF_b23f53ccfc9e497419abf81696c47fe1,GF,d3def6bd02fa65ac65e43ad8e1664227,Yes,yes,NA,NA,NA,259,319
 ZMB,art,self-report,self-report,FSW,Solwezi,NA,NA,2017,NA,NA,NA,NA,0.28015,NA,248,2017 IBBS,NA,GF_362cb0e852b347186d7cf1e5d4720e4d,GF,7ceeacd293d7fed7f12e98796ec295c2,Yes,yes,NA,NA,NA,259,320
+ZMB,art,self-report,self-report,FSW,Lusaka,NA,NA,2017,NA,NA,NA,NA,0.38475,NA,228,2017 IBBS,NA,GF_7ee2cdf8f31eccaff7c603c705186a90,GF,ada55a0ea82ff5f5e428d1faa86b1d22,Yes,yes,NA,NA,NA,259,331
+ZMB,art,self-report,self-report,FSW,Livingstone,NA,NA,2017,NA,NA,NA,NA,0.413649,NA,264,2017 IBBS,NA,GF_2d22254b791e38e60e20c631d87ed4dc,GF,acf22aa7cce038889b74a9c88a12761d,Yes,yes,NA,NA,NA,259,332
 ZWE,art,VLS,VLS,MSM,Bulawayo,NA,NA,2019,NA,NA,NA,NA,0.616,NA,178,IBBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,262,339
 ZWE,art,VLS,VLS,TGW,Bulawayo,NA,NA,2019,NA,NA,NA,NA,0.571,NA,14,IBBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,262,346
 ZWE,art,VLS,VLS,MSM,Harare,NA,NA,2019,NA,NA,NA,NA,0.69,NA,74,IBBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,262,347
 ZWE,art,VLS,VLS,TGW,Harare,NA,NA,2019,NA,NA,NA,NA,0.551,NA,80,IBBS 2020,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,262,348
-ZWE,art,self-report,self-report,FSW,Hwange,NA,NA,2011,NA,NA,NA,NA,0.56,NA,71,Cowan 2013,NA,GF_be78b374df47db8398e62f0db32138ad,GF,8ed841cb0d07bc25ae8ff989a8d00446,Yes,yes,NA,NA,NA,265,528
-ZWE,art,self-report,self-report,FSW,Mutare,NA,NA,2011,NA,NA,NA,NA,0.789,NA,108,Cowan 2013,NA,GF_5798cb9929022168d185c437af580441,GF,bc20e5860bde730e46e419d4c68ebd03,Yes,yes,NA,NA,NA,265,529
-ZWE,art,self-report,self-report,FSW,Victoria Falls,NA,NA,2011,NA,NA,NA,NA,0.513,NA,83,Cowan 2013,NA,GF_c1200cd7c8c2c5ad0df3fa575a7d3586,GF,d92180dbb9bbee783aaa16a83ca8be61,Yes,yes,NA,NA,NA,265,530
 ZWE,art,VLS,VLS,FSW,Bindura,NA,NA,2013,NA,NA,NA,NA,0.37829999999999997,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,349
-ZWE,art,VLS,VLS,FSW,Bindura,NA,NA,2016,NA,NA,NA,NA,0.6091,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,497
-ZWE,art,VLS,VLS,FSW,Bulawayo,NA,NA,2016,NA,NA,NA,NA,0.5871,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,498
 ZWE,art,VLS,VLS,FSW,Chinhoyi,NA,NA,2013,NA,NA,NA,NA,0.3385,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,350
-ZWE,art,VLS,VLS,FSW,Chinhoyi,NA,NA,2016,NA,NA,NA,NA,0.642,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,499
 ZWE,art,VLS,VLS,FSW,Chipinge,NA,NA,2013,NA,NA,NA,NA,0.35229999999999995,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,351
-ZWE,art,VLS,VLS,FSW,Chipinge,NA,NA,2016,NA,NA,NA,NA,0.5471,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,500
 ZWE,art,VLS,VLS,FSW,Chivhu,NA,NA,2013,NA,NA,NA,NA,0.2554,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,352
-ZWE,art,VLS,VLS,FSW,Chivhu,NA,NA,2016,NA,NA,NA,NA,0.4575,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,501
 ZWE,art,VLS,VLS,FSW,Gutu,NA,NA,2013,NA,NA,NA,NA,0.34020000000000006,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,353
-ZWE,art,VLS,VLS,FSW,Gutu,NA,NA,2016,NA,NA,NA,NA,0.6169,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,502
 ZWE,art,VLS,VLS,FSW,Gwanda,NA,NA,2013,NA,NA,NA,NA,0.2531,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,354
-ZWE,art,VLS,VLS,FSW,Gwanda,NA,NA,2016,NA,NA,NA,NA,0.6003000000000001,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,503
-ZWE,art,VLS,VLS,FSW,Harare,NA,NA,2016,NA,NA,NA,NA,0.49310000000000004,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,504
 ZWE,art,VLS,VLS,FSW,Hwange,NA,NA,2013,NA,NA,NA,NA,0.35,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,355
-ZWE,art,VLS,VLS,FSW,Hwange,NA,NA,2016,NA,NA,NA,NA,0.5299,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,505
 ZWE,art,VLS,VLS,FSW,Juru,NA,NA,2013,NA,NA,NA,NA,0.3488,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,356
-ZWE,art,VLS,VLS,FSW,Juru,NA,NA,2016,NA,NA,NA,NA,0.5539000000000001,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,506
 ZWE,art,VLS,VLS,FSW,Kadoma,NA,NA,2013,NA,NA,NA,NA,0.3568,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,357
-ZWE,art,VLS,VLS,FSW,Kadoma,NA,NA,2016,NA,NA,NA,NA,0.7609,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,507
 ZWE,art,VLS,VLS,FSW,Kariba,NA,NA,2013,NA,NA,NA,NA,0.40759999999999996,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,358
-ZWE,art,VLS,VLS,FSW,Kariba,NA,NA,2016,NA,NA,NA,NA,0.5559000000000001,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,508
 ZWE,art,VLS,VLS,FSW,Magunje,NA,NA,2013,NA,NA,NA,NA,0.2515,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,359
-ZWE,art,VLS,VLS,FSW,Magunje,NA,NA,2016,NA,NA,NA,NA,0.7109000000000001,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,509
-ZWE,art,VLS,VLS,FSW,Maronder,NA,NA,2016,NA,NA,NA,NA,0.5225,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,510
 ZWE,art,VLS,VLS,FSW,Marondera,NA,NA,2013,NA,NA,NA,NA,0.2651,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,360
 ZWE,art,VLS,VLS,FSW,Ngundu,NA,NA,2013,NA,NA,NA,NA,0.2501,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,361
-ZWE,art,VLS,VLS,FSW,Ngundu,NA,NA,2016,NA,NA,NA,NA,0.5211,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,511
-ZWE,art,VLS,VLS,FSW,Shamva,NA,NA,2016,NA,NA,NA,NA,0.4078,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,512
 ZWE,art,VLS,VLS,FSW,Zvishavane,NA,NA,2013,NA,NA,NA,NA,0.3176,NA,114,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,362
-ZWE,art,VLS,VLS,FSW,Zvishavane,NA,NA,2016,NA,NA,NA,NA,0.5513,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,513
 ERI,art,self-report,self-report,FSW,Central Highlands,NA,NA,2019,NA,NA,NA,NA,1,NA,30,"2019 BBS (HIV, HBsAg, HCV Ab and Syphilis Prevalence and HIV 
 Risk Behaviors Survey among Commercial Sex Workers 
 in Eritrea-2019)",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,310,364
 ERI,art,self-report,self-report,FSW,Lowlands,NA,NA,2019,NA,NA,NA,NA,0.864,NA,81,"2019 BBS (HIV, HBsAg, HCV Ab and Syphilis Prevalence and HIV 
 Risk Behaviors Survey among Commercial Sex Workers 
 in Eritrea-2019)",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,310,365
-BFA,art,vls,vls,FSW,Burkina Faso,NA,NA,2022,NA,NA,NA,NA,0.25,NA,87,NA,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,314,7791
-BFA,art,vls,vls,MSM,"Ouagadougou, Bobo Dioulasso",NA,NA,2022,NA,NA,NA,NA,0.11,NA,142,NA,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,314,7789
 BEN,art,self-report,self-report,FSW,"Alibori, Atacora, Atlantique, Borgou, Collines, Couffo, Donga, Littoral, Mono, Oueme, Plateau, Zou",NA,NA,2021,NA,NA,NA,NA,0.282,NA,85,2021 ESDG,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,321,366
 GIN,art,self-report,self-report,PWID,Conakry,NA,NA,2022,NA,NA,NA,NA,0.5,NA,2,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,367
 GIN,art,VLS,VLS,FSW,Boke,NA,NA,2022,NA,NA,NA,NA,0.38,NA,21,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,368
-GIN,art,VLS,VLS,MSM,Boke,NA,NA,2022,NA,NA,NA,NA,0.230769231,NA,13,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,376
 GIN,art,VLS,VLS,FSW,Conakry,NA,NA,2022,NA,NA,NA,NA,0.24,NA,25,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,369
-GIN,art,VLS,VLS,MSM,Conakry,NA,NA,2022,NA,NA,NA,NA,0.247524752,NA,101,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,377
 GIN,art,VLS,VLS,FSW,Faranah,NA,NA,2022,NA,NA,NA,NA,0.5,NA,4,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,370
-GIN,art,VLS,VLS,MSM,Faranah,NA,NA,2022,NA,NA,NA,NA,0.5,NA,4,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,378
 GIN,art,VLS,VLS,FSW,Kankan,NA,NA,2022,NA,NA,NA,NA,0.1667,NA,1,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,371
-GIN,art,VLS,VLS,MSM,Kankan,NA,NA,2022,NA,NA,NA,NA,0.5,NA,14,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,379
 GIN,art,VLS,VLS,FSW,Kindia,NA,NA,2022,NA,NA,NA,NA,0.429,NA,3,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,372
-GIN,art,VLS,VLS,MSM,Kindia,NA,NA,2022,NA,NA,NA,NA,0.307692308,NA,13,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,380
 GIN,art,VLS,VLS,FSW,Labe,NA,NA,2022,NA,NA,NA,NA,0.5,NA,7,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,373
-GIN,art,VLS,VLS,MSM,Labe,NA,NA,2022,NA,NA,NA,NA,0,NA,4,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,381
 GIN,art,VLS,VLS,FSW,Mamou,NA,NA,2022,NA,NA,NA,NA,0.75,NA,3,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,374
-GIN,art,VLS,VLS,MSM,Mamou,NA,NA,2022,NA,NA,NA,NA,0,NA,1,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,382
 GIN,art,VLS,VLS,FSW,Nzerekore,NA,NA,2022,NA,NA,NA,NA,0.23,NA,3,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,375
+GIN,art,VLS,VLS,MSM,Boke,NA,NA,2022,NA,NA,NA,NA,0.230769231,NA,13,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,376
+GIN,art,VLS,VLS,MSM,Conakry,NA,NA,2022,NA,NA,NA,NA,0.247524752,NA,101,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,377
+GIN,art,VLS,VLS,MSM,Faranah,NA,NA,2022,NA,NA,NA,NA,0.5,NA,4,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,378
+GIN,art,VLS,VLS,MSM,Kankan,NA,NA,2022,NA,NA,NA,NA,0.5,NA,14,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,379
+GIN,art,VLS,VLS,MSM,Kindia,NA,NA,2022,NA,NA,NA,NA,0.307692308,NA,13,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,380
+GIN,art,VLS,VLS,MSM,Labe,NA,NA,2022,NA,NA,NA,NA,0,NA,4,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,381
+GIN,art,VLS,VLS,MSM,Mamou,NA,NA,2022,NA,NA,NA,NA,0,NA,1,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,382
+ZAF,art,self-report,self-report,MSM,Ehlanzeni,NA,NA,2013,NA,NA,NA,NA,0.096,NA,62,Lane et al,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4234301/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,242,387
+ZAF,art,self-report,self-report,MSM,Gert Sibande DM,NA,NA,2013,NA,NA,NA,NA,0.136,NA,110,Lane et al 2014,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4234301/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,242,388
 GIN,art,VLS,VLS,MSM,Nzerekore,NA,NA,2022,NA,NA,NA,NA,0.111111111,NA,9,2022 ESCOMB,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,324,453
 RWA,art,self-report,self-report,FSW,Rwanda,NA,NA,2015,NA,NA,NA,NA,0.52,NA,413,Biological &Behavioral Surveillance among Female Sexual Workers in Rwanda in 2015,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9461641/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,325,454
 COG,art,self-report,self-report,MSM,"Brazzaville, Pointe-Noire",NA,NA,2018,NA,NA,NA,NA,0.014,NA,74,"ENQUETE COMPORTEMENTALE COUPLEE A LA SEROLOGIE VIH CHEZ LES HOMMES AYANT DES RAPPORTS SEXUELS AVEC LES HOMMES, LES PROFESSIONNELLES DE SEXE, LES CONSOMMATEURS DE DROGUES INJECTABLES ET LES DETENUS EN REPUBLIQUE DU CONGO",NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,327,455
 COG,art,self-report,self-report,FSW,"Brazzaville, Pointe-Noire, Dolisie, Ouesso, Pokola",NA,NA,2018,NA,NA,NA,NA,0.0545,NA,55,NA,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,327,456
-ZMB,art,vls,vls,PWID,Livingstone,NA,NA,2021,NA,NA,NA,NA,0.741,NA,32,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,338,7918
-ZMB,art,vls,vls,PWID,Lusaka,NA,NA,2021,NA,NA,NA,NA,0.397,NA,26,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,338,7919
-ZMB,art,vls,vls,PWID,Ndola,NA,NA,2021,NA,NA,NA,NA,0.551,NA,52,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,338,7920
-ZMB,art,vls,vls,FSW,Chipata,NA,NA,2023,NA,NA,NA,NA,0.9309999999999999,NA,171,2023 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,339,7927
-ZMB,art,vls,vls,FSW,Kitwe,NA,NA,2023,NA,NA,NA,NA,0.852,NA,149,2023 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,339,7928
-ZMB,art,vls,vls,FSW,Lusaka,NA,NA,2023,NA,NA,NA,NA,0.857,NA,123,2023 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,339,7929
-ZMB,art,vls,vls,FSW,Mazabuka,NA,NA,2023,NA,NA,NA,NA,0.893,NA,106,2023 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,339,7930
-ZMB,art,vls,vls,FSW,Mongu,NA,NA,2023,NA,NA,NA,NA,0.93,NA,175,2023 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,339,7931
-ZMB,art,vls,vls,FSW,Solwezi,NA,NA,2023,NA,NA,NA,NA,0.8220000000000001,NA,149,2023 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,339,7932
-ZWE,art,VLS,VLS,FSW,Zimbabwe,NA,NA,2021,NA,NA,NA,NA,0.888,NA,1041,Cowan et al,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,344,7533
-ZAF,art,lab,lab,MSM,Cape Town MM,NA,NA,2016,NA,NA,NA,NA,0.4,NA,NA,Lane et al,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,351,7868
-ZAF,art,lab,lab,MSM,Capricorn DM,NA,NA,2016,NA,NA,NA,NA,0.223,NA,NA,Lane et al,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,351,7869
-ZAF,art,lab,lab,MSM,eThekwini,NA,NA,2016,NA,NA,NA,NA,0.602,NA,203,SAHMHS Report (eThekewini and Pretoria Addendum),NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,351,7893
-ZAF,art,lab,lab,MSM,Johannesburg MM,NA,NA,2016,NA,NA,NA,NA,0.43,NA,NA,Lane et al,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,351,7867
-ZAF,art,lab,lab,MSM,Manguang DM,NA,NA,2016,NA,NA,NA,NA,0.354,NA,NA,Lane et al,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,351,7871
-ZAF,art,lab,lab,MSM,NM Molema DM,NA,NA,2016,NA,NA,NA,NA,0.294,NA,NA,Lane et al,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,351,7870
-ZAF,art,lab,lab,MSM,Pretoria,NA,NA,2016,NA,NA,NA,NA,0.539,NA,191,SAHMHS Report (eThekewini and Pretoria Addendum),NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,351,7892
-TZA,art,vls,vls,PWID,Unguja,NA,NA,2023,NA,NA,NA,NA,0.704010838,NA,42,2022/2023 BBS summary sheet,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,354,7897
-TZA,art,vls,vls,MSM,Unguja,NA,NA,2023,NA,NA,NA,NA,0.621124448,NA,55,2022/2023 BBS summary sheet,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,354,7898
-TZA,art,vls,vls,FSW,Unguja,NA,NA,2023,NA,NA,NA,NA,0.792813029,NA,126,2022/2023 BBS summary sheet,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,354,7899
-TGO,art,self-report,self-report,MSM,Dapaong,NA,NA,2022,NA,NA,NA,NA,0,NA,6,2022 ESDG,https://cnlstogo.org/cnls/download/togo-rapport-ssg-populations-cles-2022/?wpdmdl=2284&refresh=657b20c05738e1702568128,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,362,8024
-TGO,art,self-report,self-report,FSW,Dapaong,NA,NA,2022,NA,NA,NA,NA,0.736842105,NA,22,2022 ESDG,https://cnlstogo.org/cnls/download/togo-rapport-ssg-populations-cles-2022/?wpdmdl=2284&refresh=657b20c05738e1702568128,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,362,8030
-TGO,art,self-report,self-report,MSM,Grand Lome,NA,NA,2022,NA,NA,NA,NA,0.62,NA,95,2022 ESDG,https://cnlstogo.org/cnls/download/togo-rapport-ssg-populations-cles-2022/?wpdmdl=2284&refresh=657b20c05738e1702568128,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,362,8019
-TGO,art,self-report,self-report,FSW,Grand Lome,NA,NA,2022,NA,NA,NA,NA,0.522802409,NA,44,2022 ESDG,https://cnlstogo.org/cnls/download/togo-rapport-ssg-populations-cles-2022/?wpdmdl=2284&refresh=657b20c05738e1702568128,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,362,8025
-TGO,art,self-report,self-report,MSM,Kara,NA,NA,2022,NA,NA,NA,NA,1,NA,15,2022 ESDG,https://cnlstogo.org/cnls/download/togo-rapport-ssg-populations-cles-2022/?wpdmdl=2284&refresh=657b20c05738e1702568128,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,362,8023
-TGO,art,self-report,self-report,FSW,Kara,NA,NA,2022,NA,NA,NA,NA,0.743243243,NA,39,2022 ESDG,https://cnlstogo.org/cnls/download/togo-rapport-ssg-populations-cles-2022/?wpdmdl=2284&refresh=657b20c05738e1702568128,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,362,8029
-TGO,art,self-report,self-report,MSM,Kpalime,NA,NA,2022,NA,NA,NA,NA,0.64,NA,6,2022 ESDG,https://cnlstogo.org/cnls/download/togo-rapport-ssg-populations-cles-2022/?wpdmdl=2284&refresh=657b20c05738e1702568128,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,362,8021
-TGO,art,self-report,self-report,FSW,Kpalime,NA,NA,2022,NA,NA,NA,NA,0.548630409,NA,15,2022 ESDG,https://cnlstogo.org/cnls/download/togo-rapport-ssg-populations-cles-2022/?wpdmdl=2284&refresh=657b20c05738e1702568128,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,362,8027
-TGO,art,self-report,self-report,MSM,Sokode,NA,NA,2022,NA,NA,NA,NA,0.87,NA,11,2022 ESDG,https://cnlstogo.org/cnls/download/togo-rapport-ssg-populations-cles-2022/?wpdmdl=2284&refresh=657b20c05738e1702568128,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,362,8022
-TGO,art,self-report,self-report,FSW,Sokode,NA,NA,2022,NA,NA,NA,NA,0.727465536,NA,23,2022 ESDG,https://cnlstogo.org/cnls/download/togo-rapport-ssg-populations-cles-2022/?wpdmdl=2284&refresh=657b20c05738e1702568128,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,362,8028
-TGO,art,self-report,self-report,MSM,Tsevie,NA,NA,2022,NA,NA,NA,NA,0.39,NA,21,2022 ESDG,https://cnlstogo.org/cnls/download/togo-rapport-ssg-populations-cles-2022/?wpdmdl=2284&refresh=657b20c05738e1702568128,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,362,8020
-TGO,art,self-report,self-report,FSW,Tsevie,NA,NA,2022,NA,NA,NA,NA,0.393939394,NA,60,2022 ESDG,https://cnlstogo.org/cnls/download/togo-rapport-ssg-populations-cles-2022/?wpdmdl=2284&refresh=657b20c05738e1702568128,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,362,8026
-NER,art,self-report,self-report,FSW,"Agadez, Maradi, Niamey, Tahoua, Zinder",NA,NA,2017,NA,NA,NA,NA,0.174,NA,144,2017 ESDG,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,374,8123
+ZWE,art,VLS,VLS,FSW,Bindura,NA,NA,2016,NA,NA,NA,NA,0.6091,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,497
+ZWE,art,VLS,VLS,FSW,Bulawayo,NA,NA,2016,NA,NA,NA,NA,0.5871,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,498
+ZWE,art,VLS,VLS,FSW,Chinhoyi,NA,NA,2016,NA,NA,NA,NA,0.642,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,499
+ZWE,art,VLS,VLS,FSW,Chipinge,NA,NA,2016,NA,NA,NA,NA,0.5471,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,500
+ZWE,art,VLS,VLS,FSW,Chivhu,NA,NA,2016,NA,NA,NA,NA,0.4575,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,501
+ZWE,art,VLS,VLS,FSW,Gutu,NA,NA,2016,NA,NA,NA,NA,0.6169,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,502
+ZWE,art,VLS,VLS,FSW,Gwanda,NA,NA,2016,NA,NA,NA,NA,0.6003000000000001,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,503
+ZWE,art,VLS,VLS,FSW,Harare,NA,NA,2016,NA,NA,NA,NA,0.49310000000000004,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,504
+ZWE,art,VLS,VLS,FSW,Hwange,NA,NA,2016,NA,NA,NA,NA,0.5299,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,505
+ZWE,art,VLS,VLS,FSW,Juru,NA,NA,2016,NA,NA,NA,NA,0.5539000000000001,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,506
+ZWE,art,VLS,VLS,FSW,Kadoma,NA,NA,2016,NA,NA,NA,NA,0.7609,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,507
+ZWE,art,VLS,VLS,FSW,Kariba,NA,NA,2016,NA,NA,NA,NA,0.5559000000000001,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,508
+ZWE,art,VLS,VLS,FSW,Magunje,NA,NA,2016,NA,NA,NA,NA,0.7109000000000001,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,509
+ZWE,art,VLS,VLS,FSW,Maronder,NA,NA,2016,NA,NA,NA,NA,0.5225,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,510
+ZWE,art,VLS,VLS,FSW,Ngundu,NA,NA,2016,NA,NA,NA,NA,0.5211,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,511
+ZWE,art,VLS,VLS,FSW,Shamva,NA,NA,2016,NA,NA,NA,NA,0.4078,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,512
+ZWE,art,VLS,VLS,FSW,Zvishavane,NA,NA,2016,NA,NA,NA,NA,0.5513,NA,181,Cowan 2018,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,265,513
+ZWE,art,self-report,self-report,FSW,Hwange,NA,NA,2011,NA,NA,NA,NA,0.56,NA,71,Cowan 2013,NA,GF_be78b374df47db8398e62f0db32138ad,GF,8ed841cb0d07bc25ae8ff989a8d00446,Yes,yes,NA,NA,NA,265,528
+ZWE,art,self-report,self-report,FSW,Mutare,NA,NA,2011,NA,NA,NA,NA,0.789,NA,108,Cowan 2013,NA,GF_5798cb9929022168d185c437af580441,GF,bc20e5860bde730e46e419d4c68ebd03,Yes,yes,NA,NA,NA,265,529
+ZWE,art,self-report,self-report,FSW,Victoria Falls,NA,NA,2011,NA,NA,NA,NA,0.513,NA,83,Cowan 2013,NA,GF_c1200cd7c8c2c5ad0df3fa575a7d3586,GF,d92180dbb9bbee783aaa16a83ca8be61,Yes,yes,NA,NA,NA,265,530
 HTI,art,self-report,NA,MSM,Haiti,NA,NA,2016,NA,NA,NA,NA,0.2174,NA,NA,2017 PLACE,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,NA,543
 HTI,art,self-report,NA,FSW,Haiti,NA,NA,2016,NA,NA,NA,NA,0.2386,NA,NA,2017 PLACE,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,NA,544
 HTI,art,self-report,NA,TGW,Haiti,NA,NA,2016,NA,NA,NA,NA,0.2453,NA,NA,2017 PLACE,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,NA,545
-UGA,art,vls,vls,FSW,Mbarara,NA,NA,2022,NA,NA,NA,NA,0.87,NA,328,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,233,8240
-UGA,art,vls,vls,FSW,Fort Portal,NA,NA,2022,NA,NA,NA,NA,0.8,NA,204,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,233,8908
-UGA,art,vls,vls,FSW,Jinja,NA,NA,2022,NA,NA,NA,NA,0.76,NA,194,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,233,8911
-UGA,art,vls,vls,FSW,Masaka,NA,NA,2022,NA,NA,NA,NA,0.79,NA,200,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,233,8914
-UGA,art,vls,vls,FSW,Tororo,NA,NA,2022,NA,NA,NA,NA,0.5,NA,216,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,233,8917
-UGA,art,vls,vls,MSM,Kampala,NA,NA,2022,NA,NA,NA,NA,0.82,NA,100,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,233,8920
+ZAF,art,lab,lab,MSM,Cape Town,NA,NA,2016,NA,NA,NA,NA,0.194,NA,31,HPTN 075 (Sandfort et al),https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,113,2959
+ZAF,art,lab,lab,MSM,Soweto,NA,NA,2016,NA,NA,NA,NA,0.271,NA,59,HPTN 075 (Sandfort et al),https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,113,2975
+ZAF,art,lab,lab,TGW,Johannesburg,NA,NA,2019,NA,NA,NA,NA,0.444982,NA,205,Cloete et al 2021,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,248,3018
+ZAF,art,vls,vls,MSM,Johannesburg,NA,NA,2017,NA,NA,NA,NA,0.601,NA,118,TRANSFORM,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7299351/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,116,3021
+ZMB,art,vls,vls,MSM,Kitwe,NA,NA,2021,NA,NA,NA,NA,0.909,NA,34,2021 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,258,3216
+ZMB,art,vls,vls,MSM,Livingstone,NA,NA,2021,NA,NA,NA,NA,0.817,NA,35,2021 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,258,3218
+ZMB,art,vls,vls,MSM,Lusaka,NA,NA,2021,NA,NA,NA,NA,0.548,NA,68,2021 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,258,3219
+ZMB,art,vls,vls,MSM,Solwezi,NA,NA,2021,NA,NA,NA,NA,0.498,NA,9,2021 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,258,3220
+ZAF,art,lab,lab,FSW,Cape Town,NA,NA,2018,NA,NA,NA,NA,0.303876,NA,290,SAHMS II (FSW),NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,249,4226
+ZAF,art,lab,lab,FSW,Durban,NA,NA,2018,NA,NA,NA,NA,0.543482,NA,415,SAHMS II (FSW),NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,249,4341
+ZAF,art,lab,lab,FSW,Johannesburg,NA,NA,2018,NA,NA,NA,NA,0.607439,NA,331,SAHMS II (FSW),NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,249,4361
+ZAF,art,lab,lab,TGW,Soweto,NA,NA,2016,NA,NA,NA,NA,0.28,NA,25,HPTN 075 (Sandfort et al),https://www.ncbi.nlm.nih.gov/labs/pmc/articles/PMC6544251/,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,113,7293
+ZAF,art,vls,vls,PWID,Tshwane MM,NA,NA,2017,NA,NA,NA,NA,0.155,NA,303,TipVal 2017,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,239,7302
+ZWE,art,VLS,VLS,FSW,Zimbabwe,NA,NA,2021,NA,NA,NA,NA,0.888,NA,1041,Cowan et al,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,344,7528
+BFA,art,vls,vls,MSM,"Ouagadougou, Bobo Dioulasso",NA,NA,2022,NA,NA,NA,NA,0.11,NA,142,NA,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,314,7784
+BFA,art,vls,vls,FSW,Burkina Faso,NA,NA,2022,NA,NA,NA,NA,0.25,NA,87,NA,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,314,7786
+ZAF,art,lab,lab,MSM,Johannesburg MM,NA,NA,2016,NA,NA,NA,NA,0.43,NA,NA,Lane et al,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,351,7862
+ZAF,art,lab,lab,MSM,Cape Town MM,NA,NA,2016,NA,NA,NA,NA,0.4,NA,NA,Lane et al,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,351,7863
+ZAF,art,lab,lab,MSM,Capricorn DM,NA,NA,2016,NA,NA,NA,NA,0.223,NA,NA,Lane et al,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,351,7864
+ZAF,art,lab,lab,MSM,NM Molema DM,NA,NA,2016,NA,NA,NA,NA,0.294,NA,NA,Lane et al,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,351,7865
+ZAF,art,lab,lab,MSM,Manguang DM,NA,NA,2016,NA,NA,NA,NA,0.354,NA,NA,Lane et al,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,351,7866
+ZAF,art,lab,lab,MSM,Pretoria,NA,NA,2016,NA,NA,NA,NA,0.539,NA,191,SAHMHS Report (eThekewini and Pretoria Addendum),NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,351,7887
+ZAF,art,lab,lab,MSM,eThekwini,NA,NA,2016,NA,NA,NA,NA,0.602,NA,203,SAHMHS Report (eThekewini and Pretoria Addendum),NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,351,7888
+TZA,art,vls,vls,PWID,Unguja,NA,NA,2023,NA,NA,NA,NA,0.704010838,NA,42,2022/2023 BBS summary sheet,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,354,7892
+TZA,art,vls,vls,MSM,Unguja,NA,NA,2023,NA,NA,NA,NA,0.621124448,NA,55,2022/2023 BBS summary sheet,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,354,7893
+TZA,art,vls,vls,FSW,Unguja,NA,NA,2023,NA,NA,NA,NA,0.792813029,NA,126,2022/2023 BBS summary sheet,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,354,7894
+ZAF,art,lab,lab,MSM,Cape Town,NA,NA,2019,NA,NA,NA,NA,0.41602,NA,274,SAMHMS II (MSM),NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,244,7904
+ZAF,art,lab,lab,MSM,Johannesburg,NA,NA,2019,NA,NA,NA,NA,0.550275,NA,316,SAMHMS II (MSM),NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,244,7905
+ZAF,art,lab,lab,MSM,Mahikeng LM,NA,NA,2019,NA,NA,NA,NA,0.457912,NA,159,SAMHMS II (MSM),NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,244,7906
+ZMB,art,vls,vls,PWID,Livingstone,NA,NA,2021,NA,NA,NA,NA,0.741,NA,32,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,338,7913
+ZMB,art,vls,vls,PWID,Lusaka,NA,NA,2021,NA,NA,NA,NA,0.397,NA,26,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,338,7914
+ZMB,art,vls,vls,PWID,Ndola,NA,NA,2021,NA,NA,NA,NA,0.551,NA,52,2021 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,338,7915
+ZMB,art,vls,vls,FSW,Chipata,NA,NA,2023,NA,NA,NA,NA,0.9309999999999999,NA,171,2023 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,339,7922
+ZMB,art,vls,vls,FSW,Kitwe,NA,NA,2023,NA,NA,NA,NA,0.852,NA,149,2023 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,339,7923
+ZMB,art,vls,vls,FSW,Lusaka,NA,NA,2023,NA,NA,NA,NA,0.857,NA,123,2023 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,339,7924
+ZMB,art,vls,vls,FSW,Mazabuka,NA,NA,2023,NA,NA,NA,NA,0.893,NA,106,2023 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,339,7925
+ZMB,art,vls,vls,FSW,Mongu,NA,NA,2023,NA,NA,NA,NA,0.93,NA,175,2023 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,339,7926
+ZMB,art,vls,vls,FSW,Solwezi,NA,NA,2023,NA,NA,NA,NA,0.8220000000000001,NA,149,2023 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,339,7927
+TGO,art,self-report,self-report,MSM,Grand Lome,NA,NA,2022,NA,NA,NA,NA,0.62,NA,95,2022 ESDG,https://cnlstogo.org/cnls/download/togo-rapport-ssg-populations-cles-2022/?wpdmdl=2284&refresh=657b20c05738e1702568128,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,362,8014
+TGO,art,self-report,self-report,MSM,Tsevie,NA,NA,2022,NA,NA,NA,NA,0.39,NA,21,2022 ESDG,https://cnlstogo.org/cnls/download/togo-rapport-ssg-populations-cles-2022/?wpdmdl=2284&refresh=657b20c05738e1702568128,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,362,8015
+TGO,art,self-report,self-report,MSM,Kpalime,NA,NA,2022,NA,NA,NA,NA,0.64,NA,6,2022 ESDG,https://cnlstogo.org/cnls/download/togo-rapport-ssg-populations-cles-2022/?wpdmdl=2284&refresh=657b20c05738e1702568128,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,362,8016
+TGO,art,self-report,self-report,MSM,Sokode,NA,NA,2022,NA,NA,NA,NA,0.87,NA,11,2022 ESDG,https://cnlstogo.org/cnls/download/togo-rapport-ssg-populations-cles-2022/?wpdmdl=2284&refresh=657b20c05738e1702568128,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,362,8017
+TGO,art,self-report,self-report,MSM,Kara,NA,NA,2022,NA,NA,NA,NA,1,NA,15,2022 ESDG,https://cnlstogo.org/cnls/download/togo-rapport-ssg-populations-cles-2022/?wpdmdl=2284&refresh=657b20c05738e1702568128,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,362,8018
+TGO,art,self-report,self-report,MSM,Dapaong,NA,NA,2022,NA,NA,NA,NA,0,NA,6,2022 ESDG,https://cnlstogo.org/cnls/download/togo-rapport-ssg-populations-cles-2022/?wpdmdl=2284&refresh=657b20c05738e1702568128,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,362,8019
+TGO,art,self-report,self-report,FSW,Grand Lome,NA,NA,2022,NA,NA,NA,NA,0.522802409,NA,44,2022 ESDG,https://cnlstogo.org/cnls/download/togo-rapport-ssg-populations-cles-2022/?wpdmdl=2284&refresh=657b20c05738e1702568128,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,362,8020
+TGO,art,self-report,self-report,FSW,Tsevie,NA,NA,2022,NA,NA,NA,NA,0.393939394,NA,60,2022 ESDG,https://cnlstogo.org/cnls/download/togo-rapport-ssg-populations-cles-2022/?wpdmdl=2284&refresh=657b20c05738e1702568128,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,362,8021
+TGO,art,self-report,self-report,FSW,Kpalime,NA,NA,2022,NA,NA,NA,NA,0.548630409,NA,15,2022 ESDG,https://cnlstogo.org/cnls/download/togo-rapport-ssg-populations-cles-2022/?wpdmdl=2284&refresh=657b20c05738e1702568128,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,362,8022
+TGO,art,self-report,self-report,FSW,Sokode,NA,NA,2022,NA,NA,NA,NA,0.727465536,NA,23,2022 ESDG,https://cnlstogo.org/cnls/download/togo-rapport-ssg-populations-cles-2022/?wpdmdl=2284&refresh=657b20c05738e1702568128,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,362,8023
+TGO,art,self-report,self-report,FSW,Kara,NA,NA,2022,NA,NA,NA,NA,0.743243243,NA,39,2022 ESDG,https://cnlstogo.org/cnls/download/togo-rapport-ssg-populations-cles-2022/?wpdmdl=2284&refresh=657b20c05738e1702568128,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,362,8024
+TGO,art,self-report,self-report,FSW,Dapaong,NA,NA,2022,NA,NA,NA,NA,0.736842105,NA,22,2022 ESDG,https://cnlstogo.org/cnls/download/togo-rapport-ssg-populations-cles-2022/?wpdmdl=2284&refresh=657b20c05738e1702568128,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,362,8025
+AGO,art,self-report,self-report,MSM,Luanda,NA,NA,2011,NA,NA,NA,NA,0.154,NA,26,4. AGO 2011 BBS,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,4,8026
+NER,art,self-report,self-report,FSW,"Agadez, Maradi, Niamey, Tahoua, Zinder",NA,NA,2017,NA,NA,NA,NA,0.174,NA,144,2017 ESDG,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,374,8114
+UGA,art,vls,vls,FSW,Mbarara,NA,NA,2022,NA,NA,NA,NA,0.87,NA,328,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,233,8235
+UGA,art,vls,vls,FSW,Fort Portal,NA,NA,2022,NA,NA,NA,NA,0.8,NA,204,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,233,8365
+UGA,art,vls,vls,FSW,Jinja,NA,NA,2022,NA,NA,NA,NA,0.76,NA,194,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,233,8368
+UGA,art,vls,vls,FSW,Masaka,NA,NA,2022,NA,NA,NA,NA,0.79,NA,200,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,233,8371
+UGA,art,vls,vls,FSW,Tororo,NA,NA,2022,NA,NA,NA,NA,0.5,NA,216,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,233,8374
+UGA,art,vls,vls,MSM,Kampala,NA,NA,2022,NA,NA,NA,NA,0.82,NA,100,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,233,8377
+UGA,art,vls,vls,FSW,Mbale,NA,NA,2022,NA,NA,NA,NA,0.66,NA,197,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,233,8381
+UGA,art,vls,vls,FSW,Arua,NA,NA,2022,NA,NA,NA,NA,0.63,NA,195,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,233,8384
+UGA,art,vls,vls,FSW,Gulu,NA,NA,2022,NA,NA,NA,NA,0.76,NA,197,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,233,8387
+UGA,art,vls,vls,FSW,Busia,NA,NA,2022,NA,NA,NA,NA,0.77,NA,220,CRANE III,NA,NA,Surveillance review,NA,Yes,yes,NA,NA,NA,233,8390
+GHA,art,VLS,VLS,MSM,Greater Accra,NA,NA,2023,NA,NA,NA,0.49200000000000005,0.573,0.649,259,2023 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,383,8414
+GHA,art,VLS,VLS,MSM,Ashanti,NA,NA,2023,NA,NA,NA,0.474,0.5660000000000001,0.654,159,2023 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,383,8415
+GHA,art,VLS,VLS,MSM,Volta,NA,NA,2023,NA,NA,NA,0.327,0.46,0.6,96,2023 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,383,8416
+GHA,art,VLS,VLS,MSM,Western,NA,NA,2023,NA,NA,NA,0.248,0.371,0.513,108,2023 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,383,8417
+GHA,art,VLS,VLS,MSM,Eastern,NA,NA,2023,NA,NA,NA,0.28300000000000003,0.397,0.524,139,2023 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,383,8418
+GHA,art,VLS,VLS,MSM,Central,NA,NA,2023,NA,NA,NA,0.488,0.636,0.763,65,2023 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,383,8419
+GHA,art,VLS,VLS,MSM,Brong Ahafo,NA,NA,2023,NA,NA,NA,0.316,0.466,0.623,81,2023 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,383,8420
+GHA,art,VLS,VLS,MSM,Northern,NA,NA,2023,NA,NA,NA,0.261,0.47200000000000003,0.693,26,2023 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,383,8421
+GHA,art,VLS,VLS,MSM,Upper West,NA,NA,2023,NA,NA,NA,0.015,0.083,0.344,3,2023 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,383,8422
+GHA,art,VLS,VLS,TGW,Ghana,NA,NA,2023,NA,NA,NA,0.384,0.48100000000000004,0.58,181,2023 BBS,NA,NA,Surveillance review,NA,Yes,private,NA,NA,NA,383,8423

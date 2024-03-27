@@ -133,7 +133,8 @@ pse <- pse %>%
     kp %in% c("FSW", "TG", "TGW") ~ "female",
     kp %in% c("MSM", "PWID") ~ "male",
     # kp == "PWID" ~ "both"
-  ))
+  ),
+  area_level = ifelse(area_name == countrycode::countrycode(iso3_c, "iso3c", "country.name"), 0, area_level))
   # mutate(observation_idx = row_number())
 
 pse <- pse %>%
@@ -313,7 +314,7 @@ if(nrow(pse)) {
           filter(dist>=3, !idx %in% best_matches_cities$idx)
       ) %>%
       ungroup() %>%
-      distinct(iso3, kp, year, given_area, area_name, area_id, dist)
+      distinct(observation_idx, iso3, kp, year, given_area, area_name, area_id, dist)
     
     if (nrow(bad_match)) {
       bad_match_error <- bad_match %>%
@@ -367,8 +368,13 @@ if(nrow(pse)) {
         )
     }
     
+    area_reshape <- area_reshape %>%
+      bind_rows(data.frame(province = countrycode::countrycode(iso3_c, "iso3c", "country.name"),
+                           province_area_id = iso3_c,
+                           area_id = iso3_c) %>%
+                  mutate(province = ifelse(iso3_c == "COD", "Democratic Republic of The Congo", province)))
+    
     row_populations <- best_matches %>%
-      left_join(area_reshape) %>%
       mutate(sex = case_when(
         # kp %in% c("PWID") ~ "both",
         kp %in% c("MSM", "TGM", "PWID") ~ "male",
@@ -381,29 +387,30 @@ if(nrow(pse)) {
       age_group = "Y015_049"
       ) %>%
       type_convert() %>%
+      filter(!observation_idx %in% bad_match$observation_idx) %>%
       left_join(population %>% ungroup() %>% dplyr::select(area_id, year, sex, age_group, population) %>% type_convert()) %>%
-      group_by(observation_idx) %>%
-      mutate(province = ifelse(length(unique(province)) > 1, NA_character_, province),
-             province_area_id = ifelse(length(unique(province)) > 1, NA_character_, province_area_id)) %>%
-      group_by(observation_idx, area_id, province, province_area_id) %>%
-      summarise(population = sum(population))
+      left_join(area_reshape) %>% # If matched areas are in more than one province - wipe the name
+      group_by(observation_idx, given_area, year, kp, sex, age_group) %>%
+      summarise(population = sum(population),
+                matched_area_name = toString(area_name),
+                matched_area_id = toString(area_id),
+                matched_province_area_id = toString(province_area_id),
+                )
+      
+      
     
     
     if(nrow(row_populations) > 0) {
       
       row_populations <- row_populations %>%
-        group_by(observation_idx) %>%
-        mutate(population = sum(population)) %>%
-        group_by(observation_idx) %>%
-        mutate(rn = paste0("split_", row_number())) %>%
-        pivot_wider(names_from = rn, values_from = area_id) %>%
-        unite("area_id", starts_with("split"), sep = "; ") %>%
-        mutate(area_id = str_remove_all(area_id, "; NA|NA; ")) %>%
-        mutate(area_match = case_when(
-          !str_detect(area_id, iso3) & str_detect(area_id, "GRUMP") ~ "GRUMP",
-          str_detect(area_id, iso3) & !str_detect(area_id, "GRUMP") ~ "Naomi",
-          str_detect(area_id, iso3) & str_detect(area_id, "GRUMP") ~ "Both"
-        ))
+        left_join(area_reshape %>% select(province, province_area_id) %>% distinct(), by=c("matched_province_area_id" = "province_area_id")) %>% # If matched areas are in more than one province - wipe the name
+        mutate(province_area_id = ifelse(is.na(province), iso3_c, matched_province_area_id), ## If matched areas are in more than one province - set the area to national level (this is the variable used in the spatial model)
+               area_match = case_when(
+                                !str_detect(matched_area_id, iso3) & str_detect(matched_area_id, "GRUMP") ~ "GRUMP",
+                                str_detect(matched_area_id, iso3) & !str_detect(matched_area_id, "GRUMP") ~ "Naomi",
+                                str_detect(matched_area_id, iso3) & str_detect(matched_area_id, "GRUMP") ~ "Noami + GRUMP"
+                              )
+               )
       
       
       if(all.equal(row_populations$observation_idx, unique(row_populations$observation_idx)) != TRUE) {
@@ -416,22 +423,25 @@ if(nrow(pse)) {
     
     pse <- pse %>%
       filter(is.na(prop_estimate)) %>%
-      select(-c(prop_lower:prop_upper)) %>%
+      select(-c(prop_lower:prop_upper, age_group)) %>%
       left_join(row_populations) %>%
       mutate(prop_estimate = count_estimate/population,
-             prop_lower = NA,
-             prop_upper = NA) %>%
+             prop_lower = count_lower/population,
+             prop_upper = count_upper/population) %>%
       bind_rows(
         pse %>%
           filter(!is.na(prop_estimate)) %>%
-          left_join(row_populations)
+          select(-age_group) %>%
+          left_join(row_populations) %>%
+          mutate(population = NA,
+                 area_match = "PSE proportion extracted from study report")
       )
     
     if(iso3 == "BFA")
       pse <- pse %>% 
         filter(study_idx == 29) %>%
         select(-c(province, province_area_id)) %>%
-        left_join(bfa_humd_areas %>% select(-area_name) %>% st_drop_geometry()) %>%
+        left_join(bfa_humd_areas %>% select(-area_name) %>% st_drop_geometry(), by = c("matched_area_id" = "area_id")) %>%
         bind_rows(pse %>%
                     filter(study_idx != 29))
     
@@ -472,7 +482,7 @@ if(nrow(pse)) {
         TRUE ~ simple_method)) %>%
       select(-method) %>%
       rename(method = simple_method) %>%
-      dplyr::select(all_of(c("country.name", "data_checked", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "area_match", "area_id", "province", "province_area_id", "year", "count_lower", "count_estimate", "count_upper", "population", "prop_lower", "prop_estimate", "prop_upper", "sample", "notes", "study_idx", "observation_idx", "ref", "link")))
+      dplyr::select(all_of(c("country.name", "data_checked", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "matched_area_name", "matched_area_id", "area_match", "province", "province_area_id", "year", "count_lower", "count_estimate", "count_upper", "population", "prop_lower", "prop_estimate", "prop_upper", "sample", "notes", "study_idx", "observation_idx", "ref", "link")))
       # arrange(country.name, kp, year)
     
     

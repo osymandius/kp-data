@@ -95,6 +95,7 @@ matched_province_dat <- lapply(dat, function(x) {
              iso3 == "ETH" & area_name == "Adama" ~ "Adama Town",
              
              iso3 == "GHA" & area_name == "Nothern" ~ "Northern",
+             iso3 == "GHA" & area_name == "Brong Ahafo" ~ " Bono; Bono East; Ahafo",
              
              iso3 == "GNB" & area_name == "Guinea-Bissau" ~ "Guinea Bissau",
              
@@ -471,21 +472,30 @@ matched_province_dat <- lapply(dat, function(x) {
       st_drop_geometry() %>%
       bind_rows(first_cut %>% mutate(source = "Google"),
                 bounding_box %>% mutate(source = "OSM")) %>%
-      arrange(idx)
+      arrange(idx) %>%
+      mutate(matched_area_id = ifelse(is.na(matched_area_id), matched_point, matched_area_id)) %>%
+      select(-matched_point)
     
     no_match <- x %>%
       filter(!idx %in% total_match$idx) %>%
       select(study_idx, observation_idx, idx, value)
     
-    ## In cases where 1 line has multiple areas, and only some of them are matched, set the provincial area ID for that row ID to NA.
-    x <- x %>%
-      left_join(total_match %>% 
+    # ## In cases where 1 line has multiple areas, and only some of them are matched, set the provincial area ID for that row ID to NA.
+    ## This also sets any failed matches to country level as well
+    total_match <- x %>%
+      left_join(total_match %>%
                   select(observation_idx, idx, starts_with("match"), source)) %>%
       group_by(observation_idx) %>%
-      mutate(matched_provincial_area_id = ifelse(any(is.na(matched_provincial_area_id)), NA, matched_provincial_area_id))
-    
-    total_match <- x %>% 
-      filter(!is.na(matched_provincial_area_id)) %>%
+      group_split() %>%
+      lapply(function(x) {
+        ar <- unique(x$matched_provincial_area_id)
+        if(NA %in% ar) {
+          x$matched_provincial_area_id <- iso3_c
+          x
+        } else
+          x
+      }) %>%
+      bind_rows() %>%
       select(any_of(colnames(total_match)))
     
     
@@ -522,9 +532,8 @@ write_csv(matched_province_dat$art$assigned_province, "art_assigned_province.csv
 if(nrow(dat$prev)) {
   if(nrow(matched_province_dat$prev$assigned_province))
     dat$prev <- dat$prev %>% 
-      left_join(matched_province_dat$prev$assigned_province %>% select(study_idx, observation_idx, matched_provincial_area_id)) %>%
-      mutate(matched_provincial_area_id = ifelse(is.na(matched_provincial_area_id), iso3_c, matched_provincial_area_id),
-             indicator = "HIV prevalence")
+      left_join(matched_province_dat$prev$assigned_province %>% select(study_idx, observation_idx, matched_area_name, matched_area_id, matched_provincial_area_id, area_match = source)) %>%
+      mutate(indicator = "HIV prevalence")
   else
     dat$prev <- dat$prev %>% 
       mutate(matched_provincial_area_id = iso3_c,
@@ -537,9 +546,8 @@ if(nrow(dat$prev)) {
 if(nrow(dat$art)) {
   if(nrow(matched_province_dat$art$assigned_province))
     dat$art <- dat$art %>% 
-      left_join(matched_province_dat$art$assigned_province %>% select(study_idx, observation_idx, matched_provincial_area_id)) %>%
-      mutate(matched_provincial_area_id = ifelse(is.na(matched_provincial_area_id), iso3_c, matched_provincial_area_id),
-             indicator = "ART coverage")
+      left_join(matched_province_dat$art$assigned_province %>% select(study_idx, observation_idx, matched_area_name, matched_area_id, matched_provincial_area_id, area_match = source)) %>%
+      mutate(indicator = "ART coverage")
   else
     dat$art <- dat$art %>% 
       mutate(matched_provincial_area_id = iso3_c,
@@ -646,6 +654,7 @@ if(!iso3 %in% c("SSD", "ERI")) {
            art_coverage = art_current_residents/plhiv) %>%
     select(-c(plhiv, art_current_residents))
   
+  ## Manually aligning 2022 and 2023 Naomi area changes
   dat <- lapply(dat, function(x) {
     if(nrow(x))
       x <- x %>%
@@ -718,44 +727,34 @@ if(!iso3 %in% c("SSD", "ERI")) {
       anonymised_dat <- x %>%
         select(!contains(c("Column", "..."))) %>%
         left_join(kp_to_sex() %>% mutate(sex = ifelse(kp == "PWID", "male", sex))) %>%
-        # mutate(sex = case_when(
-        #   kp %in% c("FSW", "SW", "TGW", "TG") ~ "female",
-        #   kp %in% c("MSM", "TGM") ~ "male",
-        #   kp == "PWID" ~ "both"
-        # ),
         mutate(
           has_age = ifelse(!is.na(age_group), 1, 0),
           age_group = case_when(
-            # (is.na(age_group) | !age_group %in% unique(filtered_indicators$age_group)) & !kp %in% c("TG", "TGW", "MSM") ~ "Y015_049",
-            # (is.na(age_group) | !age_group %in% unique(filtered_indicators$age_group)) & kp %in% c("TG", "TGW", "MSM") ~ "Y015_029",
             is.na(age_group) | !age_group %in% unique(filtered_indicators$age_group) ~ "Y015_049",
             TRUE ~ as.character(age_group)
           )) %>%
         left_join(df %>% select(indicator, matched_provincial_area_id = area_id, sex, year, age_group, mean)) %>%
         group_by(observation_idx) %>%
-        mutate(mean = median(mean)) %>%
-        mutate(
-          model_matched_provincial_area_id = ifelse(length(unique(matched_provincial_area_id)) > 1, iso3_c, matched_provincial_area_id),
-          model_matched_provincial_area_id = ifelse(length(unique(matched_provincial_area_id)) > 1, countrycode::countrycode(iso3_c, "iso3c", "country.name"), matched_provincial_area_id),
-          rn = paste0("split_", row_number())) %>%
-        # group_by(observation_idx, matched_provincial_area_id) %>%
-        # mutate(mean = median(mean)) %>%
-        pivot_wider(names_from = rn, values_from = matched_provincial_area_id) %>%
-        unite("all_matched_provincial_area_id", starts_with("split"), sep = "; ") %>%
-        mutate(all_matched_provincial_area_id = str_remove_all(all_matched_provincial_area_id, "; NA|NA; ")) %>%
+        mutate(mean = median(mean),
+               matched_province_area_id = toString(matched_provincial_area_id),
+               province_area_id = ifelse(length(unique(matched_provincial_area_id)) > 1, iso3_c, matched_provincial_area_id),
+               matched_area_name = str_replace_all(matched_area_name, ",", "|"),
+               matched_area_name = toString(matched_area_name),
+               matched_area_name = str_replace_all(matched_area_name, ",", ";"),
+               matched_area_name = str_replace_all(matched_area_name, "\\|", ","),
+               matched_area_id = toString(matched_area_id),
+               area_match = case_when(
+                 str_detect(matched_area_id, iso3) & !str_detect(matched_area_id, "\\.") ~ "Naomi",
+                 !str_detect(matched_area_id, iso3) & str_detect(matched_area_id, "\\.") ~ "Google",
+                 str_detect(matched_area_id, iso3) & str_detect(matched_area_id, "\\.") ~ "Naomi + Google"
+               )
+               ) %>%
+        select(-c(matched_provincial_area_id)) %>%
+        distinct() %>%
         rename(provincial_value = mean) %>%
         mutate(ratio = value/provincial_value) %>%
         ungroup() %>%
-        # select(-province) %>%
-        left_join(areas %>% select(area_id, province = area_name) %>% st_drop_geometry(), by = c("model_matched_provincial_area_id" = "area_id"))
-      # pivot_wider(names_from = rn, values_from = c(area_id, matched_area_name)) %>%
-      #   unite("area_id", starts_with("area_id_split"), sep = "; ") %>%
-      #   unite("matched_area_name", starts_with("matched_area_name_split"), sep = "; ") %>%
-      #   mutate(area_id = str_remove_all(area_id, "; NA|NA; "),
-      #          matched_area_name = str_remove_all(matched_area_name, "; NA|NA; ")) %>%
-      #   rename(provincial_value = mean) %>%
-      #   mutate(ratio = value/provincial_value) %>%
-      #   ungroup()
+        left_join(areas %>% select(area_id, province = area_name) %>% st_drop_geometry(), by = c("province_area_id" = "area_id"))
     } else {
       data.frame()
     }
@@ -802,22 +801,30 @@ if(!iso3 %in% c("SSD", "ERI")) {
         ) %>%
         left_join(df %>% select(indicator, sex, year, mean = provincial_value)) %>%
         group_by(observation_idx) %>%
-        mutate(mean = median(mean)) %>%
-        mutate(
-          model_matched_provincial_area_id = ifelse(length(unique(matched_provincial_area_id)) > 1, iso3_c, matched_provincial_area_id),
-          model_matched_provincial_area_id = ifelse(length(unique(matched_provincial_area_id)) > 1, countrycode::countrycode(iso3_c, "iso3c", "country.name"), matched_provincial_area_id),
-          rn = paste0("split_", row_number())) %>%
-        # group_by(observation_idx, matched_provincial_area_id) %>%
-        # mutate(mean = median(mean)) %>%
-        pivot_wider(names_from = rn, values_from = matched_provincial_area_id) %>%
-        unite("matched_provincial_area_id", starts_with("split"), sep = "; ") %>%
-        mutate(matched_provincial_area_id = str_remove_all(matched_provincial_area_id, "; NA|NA; ")) %>%
+        group_by(observation_idx) %>%
+        mutate(mean = median(mean),
+               matched_province_area_id = toString(matched_provincial_area_id),
+               province_area_id = ifelse(length(unique(matched_provincial_area_id)) > 1, iso3_c, matched_provincial_area_id),
+               matched_area_name = str_replace_all(matched_area_name, ",", "|"),
+               matched_area_name = toString(matched_area_name),
+               matched_area_name = str_replace_all(matched_area_name, ",", ";"),
+               matched_area_name = str_replace_all(matched_area_name, "\\|", ","),
+               matched_area_id = toString(matched_area_id),
+               area_match = case_when(
+                 str_detect(matched_area_id, iso3) & !str_detect(matched_area_id, "\\.") ~ "Naomi",
+                 !str_detect(matched_area_id, iso3) & str_detect(matched_area_id, "\\.") ~ "Google",
+                 str_detect(matched_area_id, iso3) & str_detect(matched_area_id, "\\.") ~ "Naomi + Google"
+               )
+        ) %>%
+        select(-c(matched_provincial_area_id)) %>%
+        distinct() %>%
         rename(provincial_value = mean) %>%
         mutate(ratio = value/provincial_value) %>%
         ungroup() %>%
         # select(-province) %>%
-        left_join(areas %>% select(area_id, province = area_name) %>% st_drop_geometry(), by = c("matched_provincial_area_id" = "area_id")) %>%
-        mutate(all_matched_provincial_area_id = iso3_c)
+        left_join(areas %>% select(area_id, province = area_name) %>% st_drop_geometry(), by = c("province_area_id" = "area_id")) %>%
+        mutate(matched_provincial_area_id = iso3_c,
+               province_area_id = iso3_c)
     } else {
       data.frame()
     }
@@ -851,10 +858,12 @@ write_csv(area_indicators, "area_indicators.csv", na = "")
 
 if(nrow(dat$prev)) {
   workbook_export_prev <- dat$prev %>%
+    group_by(observation_idx) %>%
+    mutate(province_area_id = ifelse(length(unique(matched_provincial_area_id)) > 1, iso3_c, matched_provincial_area_id)) %>%
     select(-any_of("province")) %>%
-    left_join(areas %>% select(area_id, province = area_name) %>% st_drop_geometry(), by = c("matched_provincial_area_id" = "area_id")) %>%
+    left_join(areas %>% select(area_id, province = area_name) %>% st_drop_geometry(), by = c("province_area_id" = "area_id")) %>%
     mutate(country = countrycode::countrycode(iso3, "iso3c", "country.name")) %>%
-    distinct(iso3, data_checked, country, method, kp, area_name, province, year, prop_lower, value, prop_upper, denominator, ref, link) %>%
+    distinct(study_idx, observation_idx, iso3, data_checked, country, method, kp, area_name, province, year, prop_lower, value, prop_upper, denominator, ref, link) %>%
     mutate(indicator = "HIV prevalence") %>%
     rename(prop_estimate = value) %>%
     mutate(
@@ -875,16 +884,17 @@ if(nrow(dat$prev)) {
       prop_estimate = round(prop_estimate, 3),
       prop_upper = round(prop_upper, 3)
     ) %>%
-    select(all_of(c("country", "data_checked", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "province", "year", "count_lower", "count_estimate", "count_upper", "population", "prop_lower", "prop_estimate", "prop_upper", "denominator", "notes", "ref", "link")))
+    select(all_of(c("study_idx", "observation_idx", "country", "data_checked", "surveillance_type", "indicator", "method", "kp", "sex", "age_group", "area_name", "province", "year", "count_lower", "count_estimate", "count_upper", "population", "prop_lower", "prop_estimate", "prop_upper", "denominator", "notes", "ref", "link")))
 } else {
   workbook_export_prev <- data.frame()
 }
 
 if(nrow(dat$art)) {
   workbook_export_art <- dat$art %>%
+    group_by(observation_idx) %>%
+    mutate(province_area_id = ifelse(length(unique(matched_provincial_area_id)) > 1, iso3_c, matched_provincial_area_id)) %>%
     select(-any_of("province")) %>%
-    left_join(areas %>% select(area_id, province = area_name) %>% st_drop_geometry(), by = c("matched_provincial_area_id" = "area_id")) %>%
-    ungroup() %>%
+    left_join(areas %>% select(area_id, province = area_name) %>% st_drop_geometry(), by = c("province_area_id" = "area_id")) %>%
     mutate(country = countrycode::countrycode(iso3, "iso3c", "country.name")) %>%
     distinct(iso3, data_checked, country, method, kp, area_name, province, year, prop_lower, value, prop_upper, denominator, ref, link) %>%
     mutate(indicator = "ART coverage") %>%
@@ -926,16 +936,18 @@ if(nrow(naomi_matched_dat$prev)) {
            age_group = ifelse(has_age == 1, age_group, NA),
            country = countrycode::countrycode(iso3, "iso3c", "country.name")) %>%
     select(study_idx,
+           observation_idx,
            country,
            kp,
            year,
            indicator,
            method,
            area_name,
-           # matched_area_name,
-           # area_id,
+           matched_area_name,
+           matched_area_id,
+           area_match,
            matched_province = province,
-           all_matched_provincial_area_id,
+           matched_province_area_id,
            age_group,
            age_group_analysis,
            proportion_estimate = value,
@@ -955,16 +967,18 @@ if(nrow(naomi_matched_dat$art)) {
            age_group = ifelse(has_age == 1, age_group, NA),
            country = countrycode::countrycode(iso3, "iso3c", "country.name")) %>%
     select(study_idx,
+           observation_idx,
            country,
            kp,
            year,
            indicator,
            method,
            area_name,
-           # matched_area_name,
-           # area_id,
+           matched_area_name,
+           matched_area_id,
+           area_match,
            matched_province = province,
-           all_matched_provincial_area_id,
+           matched_province_area_id,
            age_group,
            age_group_analysis,
            proportion_estimate = value,

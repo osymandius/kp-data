@@ -255,13 +255,17 @@ method_counts <- pse_total_dat %>%
   
 
 fig2 <- pse_total_dat %>%
-  filter(year > 2009, source_found == "yes") %>%
+  filter(year > 2009, source_found == "yes", is.na(duplicate_of), source_found == "yes", !is.na(simple_method)) %>%
   mutate(
     # year = ifelse(year == 2022, 2021, year),
     year = plyr::round_any(year, 3, floor),
          year = paste0(year, "-", year+2),
-         simple_method = ifelse(str_detect(simple_method, "multiplier|Multiplier"), "Multiplier", simple_method),
-         simple_method = ifelse(str_detect(simple_method, "Modelled"), "Modelled/extrapolated", simple_method),
+    simple_method = case_when(
+      str_detect(simple_method, "multiplier|Multiplier") ~ "Multiplier",
+      str_detect(simple_method, "Modelled") ~ "Modelled/extrapolated",
+      simple_method == "PNS" ~ "SS-PSE",
+      TRUE ~ simple_method
+    ),
          kp = ifelse(kp == "TG", "TGW", kp),
     year = ifelse(year == "2022-2024", "2022-2023", year)
   ) %>%

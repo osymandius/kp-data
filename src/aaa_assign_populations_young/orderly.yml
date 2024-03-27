@@ -1,0 +1,81 @@
+script: aaa_assign_populations_young.R
+
+artefacts:
+  # - data:
+  #     description: Extrapolated population denominators over time
+  #     filenames:
+  #       - extrapolated_populations.csv
+  - data:
+      description: Population size estimates with population prevalence
+      filenames:
+        - pse_prevalence.csv
+  - data:
+      description: Error warnings for bad matches
+      filenames:
+        - bad_match_error.csv
+
+parameters:
+  iso3:
+    default: ~
+  version:
+    default: 2022
+
+packages:
+  - naomi
+  - readr
+  - dplyr
+  - tidyr
+  - stringr
+  - sf
+  - spud
+  - countrycode
+  - moz.utils
+  - stringdist
+
+sources:
+  - kp_population_functions.R
+  
+resources:
+  - pse_cleaned_sourced_data.csv
+  
+  - bfa-humd-pop-scaled.csv
+  - bfa_humd_areas.geojson
+  
+  - ben_areas.geojson
+  - ben_pop.csv
+  
+  - cog_areas.geojson
+  - cog_pop.csv
+  
+  - gmb_areas.geojson
+  - gmb_pop.csv
+  
+  - mli_areas.geojson
+  - mli_pop.csv
+  
+  - nga_areas.geojson
+  - nga_pop.csv
+  
+  - zaf_areas.geojson
+  - zaf_pop.csv
+  
+global_resources:
+  resources/iso_mapping_fit.csv: iso_mapping_fit.csv
+
+depends:
+  aaa_pull_naomi_estimates:
+    id: latest(parameter:iso3 == iso3 && parameter:version == version)
+    use:
+      depends/naomi_areas.geojson: outputs/naomi_areas.geojson
+
+  aaa_scale_pop:
+    id: latest(parameter:iso3 == iso3 && parameter:version == version && parameter:source == "WPP2022")
+    use:
+      depends/interpolated_population.csv: interpolated_population.csv
+  
+  aaa_download_constrained_worldpop:
+    id: latest(parameter:iso3 == iso3 && parameter:version == version)
+    use:
+      depends/interpolated_city_population.csv: interpolated_city_population.csv
+      depends/city_province_map.csv: city_province_map.csv
+      

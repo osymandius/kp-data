@@ -1,0 +1,403 @@
+iso3,study_idx,observation_idx,kp,method,area_name,count_estimate,c1,c2,c3,c3_prop
+AGO,4,3481,MSM,Object multiplier,Luanda,6236,792,351,,
+BDI,7,648,FSW,Service multiplier,Bujumbura,8799,359,498,,0.0408
+BDI,7,654,FSW,SS-PSE,Bujumbura,1563,,,,
+BDI,7,649,FSW,Service multiplier,Gitega,1017,118,248,,0.116
+BDI,7,3524,FSW,SS-PSE,Gitega,1588,,,,
+BDI,7,655,FSW,SS-PSE,Kirundo,632,,,,
+BDI,7,3522,FSW,SS-PSE,Makamba,452,,,,
+BDI,7,3523,FSW,SS-PSE,Mukungu,463,,,,
+BDI,7,3527,FSW,SS-PSE,Muyinga,642,,,,
+BDI,7,3525,FSW,SS-PSE,Ngozi,819,,,,
+BDI,7,651,FSW,Service multiplier,Ngozi; Kirundo; Muyinga,1416,,,,
+BDI,7,652,FSW,Service multiplier,Ngozi; Kirundo; Muyinga,7361,,,,
+BDI,7,3526,FSW,SS-PSE,Rumonge,668,,,,
+BDI,7,650,FSW,Service multiplier,Rumonge; Makamba,421,,,,
+BDI,7,653,FSW,Service multiplier,Rumonge; Makamba,6000,,,,
+BDI,7,3532,MSM,Service multiplier,Bujumbura,6452,490,245,,0.076
+BDI,7,3555,MSM,SS-PSE,Bujumbura,879,,,,
+BDI,7,3559,MSM,SS-PSE,Gitega,962,,,,
+BDI,7,3556,MSM,SS-PSE,Kirundo,458,,,,
+BDI,7,3557,MSM,SS-PSE,Makamba,126,,,,
+BDI,7,3558,MSM,SS-PSE,Mukungu,440,,,,
+BDI,7,3562,MSM,SS-PSE,Muyinga,412,,,,
+BDI,7,3560,MSM,SS-PSE,Ngozi,342,,,,
+BDI,7,3561,MSM,SS-PSE,Rumonge,541,,,,
+BDI,7,3567,PWID,Service multiplier,Bujumbura,4215,94,178,,0.023
+BDI,7,3568,PWID,Service multiplier,Bujumbura,7556,68,178,,0.009
+BDI,7,3569,PWID,Service multiplier,Bujumbura,5667,68,178,,0.012
+BEN,22,3597,TGW,Object multiplier,Abomey-Calavi,98,45,48,22,
+BEN,22,3598,TGW,Object multiplier,Bohicon,333,30,22,2,
+BEN,22,3599,TGW,Object multiplier,Cotonou,686,133,103,20,
+BEN,22,3600,TGW,Object multiplier,Ouidah,54,43,30,24,
+BEN,22,3601,TGW,Object multiplier,Parakou,393,48,30,24,
+BEN,22,3605,TGW,Object multiplier,Porto-Novo,83,54,46,30,
+BWA,30,3722,MSM,Service multiplier,Boteti,225,225,10,,1
+BWA,30,3723,MSM,Service multiplier,Chobe,18,10,9,,0.556
+BWA,30,3724,MSM,Service multiplier,Greater Francistown,403,289,127,,0.717
+BWA,30,3725,MSM,Service multiplier,Greater Gaborone,455,362,83,,0.795
+BWA,30,3727,MSM,Service multiplier,Ngamiland,269,192,7,,0.714
+BWA,30,3728,MSM,Service multiplier,Palapye,449,234,23,,0.522
+BWA,30,3729,MSM,Service multiplier,Selebi Phikwe,146,107,34,,0.735
+BWA,30,3730,MSM,Service multiplier,Serowe,463,267,26,,0.577
+BWA,30,3732,MSM,Service multiplier,Tutume,178,178,13,,1
+BWA,32,3767,MSM,Event multiplier,Francistown,360,31,151,13,
+BWA,32,3768,MSM,Event multiplier,Gaborone,292,36,273,71,
+CAF,33,3769,FSW,2S-CRC,Bangui,2387,1132,823,370,
+CAF,33,3788,FSW,Object multiplier,Bangui,2338,,,,
+CAF,33,3775,FSW,2S-CRC,Berberati,545,253,125,46,
+CAF,33,3789,FSW,Object multiplier,Berberati,505,,,,
+CAF,33,3776,FSW,2S-CRC,Boali,288,114,61,0,
+CAF,33,3790,FSW,Object multiplier,Boali,245,,,,
+CAF,33,3777,FSW,2S-CRC,Bouar,214,157,75,55,
+CAF,33,3791,FSW,Object multiplier,Bouar,978,,,,
+CAF,33,3778,FSW,2S-CRC,Carnot,184,33,152,1,
+CAF,33,3792,FSW,Object multiplier,Carnot,283,,,,
+CAF,33,3779,MSM,Event multiplier,Bangui,1039,,,,
+CAF,33,3780,MSM,Event multiplier,Berberati,43,,,,
+CAF,33,3781,MSM,Event multiplier,Boali,44,,,,
+CAF,33,3782,MSM,Event multiplier,Bouar,150,,,,
+CAF,33,3783,MSM,Event multiplier,Carnot,24,,,,
+CIV,46,3819,FSW,2S-CRC,Aboisso,313,,,,
+CIV,46,3824,FSW,Event multiplier,Aboisso,682,,,,
+CIV,46,3830,FSW,Object multiplier,Aboisso,962,,,,
+CIV,46,3820,FSW,2S-CRC,Agboville,422,,,,
+CIV,46,3825,FSW,Event multiplier,Agboville,371,,,,
+CIV,46,3832,FSW,Object multiplier,Agboville,500,,,,
+CIV,46,3821,FSW,2S-CRC,Katiola,731,,,,
+CIV,46,3840,FSW,Service multiplier,Katiola,915,,,,
+CIV,46,3822,FSW,2S-CRC,Soubre,1346,,,,
+CIV,46,3826,FSW,Event multiplier,Soubre,625,,,,
+CIV,46,3835,FSW,Object multiplier,Soubre,820,,,,
+CIV,46,3823,FSW,2S-CRC,Yamoussoukro,649,,,,
+CIV,46,3827,FSW,Event multiplier,Yamoussoukro,815,,,,
+CIV,46,3836,FSW,Object multiplier,Yamoussoukro,962,,,,
+CIV,48,3843,MSM,Object multiplier,Abengourou,1112,249,183,41,
+CIV,48,3845,MSM,Object multiplier,Bouafle,216,180,216,180,
+CIV,48,3847,MSM,Object multiplier,Daloa,552,284,390,201,
+CIV,48,3848,MSM,Object multiplier,Divo,460,200,202,88,
+CIV,48,3851,MSM,Object multiplier,Korhogo,310,212,310,212,
+COD,59,4148,FSW,2S-CRC,Ituri; Haut-Uele; Tshopo; Bas-Uele,145512,,,,
+COD,59,4134,FSW,2S-CRC,Kinshasa,102714,,,,
+COD,59,4128,FSW,2S-CRC,Kongo Central,34238,,,,
+COD,59,4137,FSW,2S-CRC,Nord Kivu,59917,,,,
+COD,59,4149,FSW,2S-CRC,Sud Kivu,51357,,,,
+COD,59,4131,FSW,2S-CRC,Tanganyika; Haut-Lomami; Lualaba; Haut-Katanga,86059,,,,
+COD,59,4144,MSM,2S-CRC,Ituri; Haut-Uele; Tshopo; Bas-Uele,52825,,,,
+COD,59,4135,MSM,2S-CRC,Kinshasa,89141,,,,
+COD,59,4129,MSM,2S-CRC,Kongo Central,19809,,,,
+COD,59,4139,MSM,2S-CRC,Nord Kivu,19809,,,,
+COD,59,4150,MSM,2S-CRC,Sud Kivu,13205,,,,
+COD,59,4132,MSM,2S-CRC,Tanganyika; Haut-Lomami; Lualaba; Haut-Katanga,42927,,,,
+COD,59,4145,PWID,2S-CRC,Ituri; Haut-Uele; Tshopo; Bas-Uele,1712,,,,
+COD,59,4136,PWID,2S-CRC,Kinshasa,1834,,,,
+COD,59,4130,PWID,2S-CRC,Kongo Central,734,,,,
+COD,59,4140,PWID,2S-CRC,Nord Kivu,611,,,,
+COD,59,4151,PWID,2S-CRC,Sud Kivu,856,,,,
+COD,59,4133,PWID,2S-CRC,Tanganyika; Haut-Lomami; Lualaba; Haut-Katanga,1689,,,,
+COD,63,4182,FSW,Multiple methods - mixture,Kinshasa,3941,,,,
+COD,63,4181,MSM,Multiple methods - mixture,Kinshasa,4403,,,,
+COD,63,4183,PWID,Multiple methods - mixture,Kinshasa,3381,,,,
+COD,64,4185,FSW,Multiple methods - empirical,Kinshasa,16884,,,,
+COD,64,4184,MSM,Multiple methods - empirical,Kinshasa,9458,,,,
+COD,64,4187,PWID,Multiple methods - empirical,Kinshasa,5202,,,,
+GHA,73,4447,FSW,Service multiplier,Ashanti,9566,8007,496,,0.837
+GHA,73,4448,FSW,Service multiplier,"Bono, Bono East, Ahafo",8066,6445,472,,0.799
+GHA,73,4449,FSW,Service multiplier,Central,2351,1822,436,,0.775
+GHA,73,4450,FSW,Service multiplier,Eastern,9071,6740,428,,0.743
+GHA,73,4451,FSW,Service multiplier,Greater Accra,10851,6413,922,,0.591
+GHA,73,4452,FSW,Service multiplier,Northern,1609,991,336,,0.616
+GHA,73,4453,FSW,Service multiplier,Upper East,392,319,443,,0.813
+GHA,73,4454,FSW,Service multiplier,Upper West,201,165,182,,0.819
+GHA,73,4457,FSW,Service multiplier,Volta,2702,1964,472,,0.727
+GHA,73,4458,FSW,Service multiplier,Western,20243,9413,564,,0.465
+GHA,75,4466,FSW,2S-CRC,Ashanti,1315,,,,
+GHA,75,4467,FSW,2S-CRC,"Bono, Bono East, Ahafo",442,,,,
+GHA,75,4468,FSW,2S-CRC,Central,496,,,,
+GHA,75,4469,FSW,2S-CRC,Eastern,547,,,,
+GHA,75,4470,FSW,2S-CRC,Greater Accra,3027,,,,
+GHA,75,4473,FSW,2S-CRC,Northern,180,,,,
+GHA,75,4476,FSW,2S-CRC,Upper East,168,,,,
+GHA,75,4485,FSW,2S-CRC,Upper West,192,,,,
+GHA,75,4486,FSW,2S-CRC,Volta,428,,,,
+GHA,75,4487,FSW,2S-CRC,Western,436,,,,
+GHA,80,4620,FSW,2S-CRC,Ashanti,1123,602,448,240,
+GHA,80,4621,FSW,2S-CRC,"Bono, Bono East, Ahafo",377,364,122,118,
+GHA,80,4622,FSW,2S-CRC,Central,461,261,182,103,
+GHA,80,4623,FSW,2S-CRC,Eastern,511,313,222,136,
+GHA,80,4624,FSW,2S-CRC,Greater Accra,2397,739,582,179,
+GHA,80,4626,FSW,2S-CRC,Northern,180,111,97,60,
+GHA,80,4627,FSW,2S-CRC,Upper East,168,161,145,140,
+GHA,80,4628,FSW,2S-CRC,Upper West,180,89,95,47,
+GHA,80,4629,FSW,2S-CRC,Volta,373,302,223,181,
+GHA,80,4632,FSW,2S-CRC,Western,347,216,130,81,
+GIN,85,5888,MSM,Object multiplier,Conakry,1423,200,415,60,
+GIN,87,4703,MSM,2S-CRC,Boke,30,23,9,7,
+GIN,87,4705,MSM,2S-CRC,Faranah,11,11,1,1,
+GIN,87,4706,MSM,2S-CRC,Fria,14,14,2,2,
+GIN,87,4721,MSM,2S-CRC,Kankan,29,19,3,2,
+GIN,87,4722,MSM,2S-CRC,Kindia,13,13,2,2,
+GIN,87,4723,MSM,2S-CRC,Labe,38,32,6,5,
+GIN,87,4724,MSM,2S-CRC,Mamou,12,18,2,3,
+GIN,87,4725,MSM,2S-CRC,Nzerekore,66,66,2,2,
+GIN,87,4764,MSM,2S-CRC,Siguiri,47,20,7,3,
+GIN,89,4955,MSM,2S-CRC,Dixinn,92,57,50,31,
+GIN,89,4956,MSM,2S-CRC,Kaloum,72,35,49,24,
+GIN,89,4960,MSM,2S-CRC,Matam,69,48,26,18,
+GIN,89,4701,MSM,2S-CRC,Matoto,66,45,25,17,
+GIN,89,5022,MSM,2S-CRC,Ratoma,314,140,112,56,
+GNB,98,5090,FSW,Multiple methods - mixture,"Bissora, Bafata, Gabu, Sector Autonomo de Bissau",7894,,,,
+GNB,98,5089,MSM,Multiple methods - empirical,"Bissora, Bafata, Gabu, Sector Autonomo de Bissau",3608,,,,
+KEN,123,5592,FSW,Service multiplier,Nairobi,54467,1634,465,,0.03
+KEN,123,5593,FSW,Service multiplier,Nairobi,16550,331,465,,0.02
+KEN,123,5594,FSW,Service multiplier,Nairobi,649000,4543,465,,0.007
+KEN,123,5595,MSM,Service multiplier,Nairobi,10417,250,563,,0.024
+KEN,123,5596,MSM,Service multiplier,Nairobi,3261,150,563,,0.046
+KEN,123,5597,MSM,Service multiplier,Nairobi,22222,400,563,,0.018
+KEN,123,5598,MSM,Service multiplier,Nairobi,11667,140,563,,0.012
+KEN,123,5599,PWID,Service multiplier,Nairobi,22727,250,352,,0.011
+KEN,123,5600,PWID,Service multiplier,Nairobi,13251,53,352,,0.004
+KEN,123,5601,PWID,Service multiplier,Nairobi,5031,893,352,,0.1775
+KEN,123,5602,PWID,Service multiplier,Nairobi,5652,1526,352,,0.27
+LSO,125,5398,FSW,Multiple methods - mixture,Butha-Buthe,3910,,,,
+LSO,125,5414,FSW,Multiple methods - mixture,Leribe,2215,,,,
+LSO,125,5421,FSW,Multiple methods - mixture,Mafeteng,2996,,,,
+LSO,125,5442,FSW,Multiple methods - mixture,Maseru,6198,,,,
+LSO,125,5716,MSM,Multiple methods - mixture,Butha-Buthe,1085,,,,
+LSO,125,5717,MSM,Multiple methods - mixture,Leribe,1197,,,,
+LSO,125,5720,MSM,Multiple methods - mixture,Mafeteng,951,,,,
+LSO,125,7218,MSM,Multiple methods - mixture,Maseru,2848,,,,
+LSO,127,5443,FSW,Object multiplier,Maseru,1387,372,410,110,
+LSO,127,5444,FSW,Service multiplier,Maseru,438,63,410,59,
+LSO,127,7219,MSM,Object multiplier,Maseru,1842,366,317,63,
+LSO,127,7352,MSM,Service multiplier,Maseru,481,68,318,45,
+MOZ,139,5835,MSM,Event multiplier,Beira,2397,163,583,,0.068
+MOZ,139,5842,MSM,Object multiplier,Beira,7181,517,583,,0.072
+MOZ,139,5845,MSM,Service multiplier,Beira,1231,32,583,,0.026
+MOZ,139,5838,MSM,Event multiplier,"Cidade de Maputo, Matola",6947,264,496,,0.038
+MOZ,139,5843,MSM,Object multiplier,"Cidade de Maputo, Matola",28500,684,496,,0.024
+MOZ,139,5846,MSM,Service multiplier,"Cidade de Maputo, Matola",6400,96,496,,0.015
+MOZ,139,5839,MSM,Event multiplier,Nampula/Nacala,1075,57,353,,0.053
+MOZ,139,5844,MSM,Object multiplier,Nampula/Nacala,12064,567,353,,0.047
+MOZ,139,5849,MSM,Service multiplier,Nampula/Nacala,1474,56,353,,0.038
+MOZ,140,5850,FSW,Event multiplier,Beira,2955,65,411,,0.022
+MOZ,140,5915,FSW,Object multiplier,Beira,10152,335,411,,0.033
+MOZ,140,5877,FSW,Event multiplier,"Cidade de Maputo, Matola",2859,91,400,,0.032
+MOZ,140,5927,FSW,Object multiplier,"Cidade de Maputo, Matola",8568,814,400,,0.095
+MOZ,140,5878,FSW,Event multiplier,Nampula,2429,17,429,,0.007
+MOZ,140,5928,FSW,Object multiplier,Nampula,6929,589,429,,0.085
+MOZ,143,6118,FSW,Event multiplier,Beira,9255,,,,
+MOZ,143,6137,FSW,Object multiplier,Beira,19660,,,,
+MOZ,143,6146,FSW,Service multiplier,Beira,6957,,,,
+MOZ,143,6152,FSW,SS-PSE,Beira,2001,,,,
+MOZ,143,6120,FSW,Event multiplier,"Cidade de Maputo, Matola",1666,,,,
+MOZ,143,6138,FSW,Object multiplier,"Cidade de Maputo, Matola",3279,,,,
+MOZ,143,6148,FSW,Service multiplier,"Cidade de Maputo, Matola",4766,,,,
+MOZ,143,6153,FSW,SS-PSE,"Cidade de Maputo, Matola",3792,,,,
+MOZ,143,6121,FSW,Event multiplier,Nampula,3752,,,,
+MOZ,143,6140,FSW,Object multiplier,Nampula,7915,,,,
+MOZ,143,6149,FSW,Service multiplier,Nampula,2663,,,,
+MOZ,143,6154,FSW,SS-PSE,Nampula,1025,,,,
+MOZ,143,6122,FSW,Event multiplier,Quelimane,1676,,,,
+MOZ,143,6143,FSW,Object multiplier,Quelimane,8452,,,,
+MOZ,143,6150,FSW,Service multiplier,Quelimane,2949,,,,
+MOZ,143,6155,FSW,SS-PSE,Quelimane,2546,,,,
+MOZ,143,6124,FSW,Event multiplier,Tete,2265,,,,
+MOZ,143,6145,FSW,Object multiplier,Tete,6015,,,,
+MOZ,143,6151,FSW,Service multiplier,Tete,588,,,,
+MOZ,143,6158,FSW,SS-PSE,Tete,1189,,,,
+MWI,151,6239,FSW,Object multiplier,Blantyre City,1800,1235,375,354,
+MWI,151,6241,FSW,Object multiplier,Karonga,1200,813,226,155,
+MWI,151,6244,FSW,Object multiplier,Lilongwe City,2400,1490,170,104,
+MWI,151,6245,FSW,Object multiplier,Mangochi,1900,833,306,134,
+MWI,151,6249,FSW,Object multiplier,Mchinji,800,600,386,301,
+MWI,151,6250,FSW,Object multiplier,Mwanza,600,525,439,375,
+MWI,151,6251,FSW,Object multiplier,Nkhata Bay,700,486,305,202,
+MWI,151,6253,FSW,Object multiplier,Zomba,1200,979,257,199,
+MWI,151,6240,MSM,Object multiplier,Blantyre City,1600,1620,440,307,
+MWI,151,6242,MSM,Object multiplier,Karonga,300,200,85,64,
+MWI,151,6243,MSM,Object multiplier,Lilongwe,5500,1620,582,171,
+MWI,151,6248,MSM,Object multiplier,Mangochi,1300,600,298,139,
+MWI,151,6252,MSM,Object multiplier,Nkhata Bay,600,400,184,119,
+MWI,151,6254,MSM,Object multiplier,Zomba,2300,800,376,186,
+MWI,152,6269,TGW,Object multiplier,Blantyre City,256,150,71,,0.586
+MWI,152,6270,TGW,Object multiplier,Chikwawa,188,50,30,,0.266
+MWI,152,6271,TGW,Object multiplier,Lilongwe City,198,150,81,,0.761
+MWI,152,6272,TGW,Object multiplier,Mzuzu City,177,150,69,,0.848
+MWI,152,6273,TGW,Object multiplier,Nkhatabay,131,50,30,,0.384
+NGA,161,6345,MSM,2S-CRC,Cross River,3509,,,,
+NGA,161,6350,MSM,2S-CRC,Rivers,1245,,,,
+SWZ,194,6651,FSW,Multiple methods - empirical,Lavumisa,186,,,,
+SWZ,194,6653,FSW,Multiple methods - empirical,Nhlangano,498,,,,
+SWZ,194,6656,FSW,Multiple methods - empirical,Piggs Peak,796,,,,
+SWZ,194,6658,MSM,Multiple methods - empirical,Nhlangano,363,,,,
+SWZ,194,6659,MSM,Multiple methods - empirical,Piggs Peak,341,,,,
+SWZ,195,7731,FSW,Service Multiplier,Eswatini,7056,,,,
+SWZ,195,7735,MSM,Service Multiplier,Eswatini,6574,,,,
+SWZ,195,7733,MSM,SS-PSE,Eswatini,4000,,,,
+SWZ,195,7734,MSM,Unique object multiplier,Eswatini,3190,,,,
+TZA,215,6692,FSW,Object multiplier,Dar es Salaam,9500,513,958,,0.054
+TZA,216,6693,PWID,Object multiplier,Dar es Salaam,7100,284,611,,0.04
+TZA,218,6706,PWID,Service multiplier,Dar es Salaam,7855,2650,620,210,
+TZA,220,6707,MSM,2S-CRC,Dar Es Salaam,6409,753,749,88,
+TZA,220,6708,MSM,Service multiplier,Dar Es Salaam,13513,500,753,,0.037
+TZA,223,6709,MSM,Object multiplier,Dar es Salaam,18000,378,763,,0.021
+TZA,226,6719,FSW,Object multiplier,Dar es Salaam,7500,1100,537,,
+ZAF,239,412,PWID,Object multiplier,Cape Town MM,1347,680,348,202,
+ZAF,239,413,PWID,Service multiplier,Cape Town MM,1688,843,348,199,
+ZAF,239,414,PWID,SS-PSE,Cape Town MM,909,,,,
+ZAF,239,7311,PWID,Object multiplier,Tshwane MM,1972,808,544,232,
+ZAF,239,7312,PWID,Service multiplier,Tshwane MM,7827,3954,544,279,
+ZAF,239,7313,PWID,SS-PSE,Tshwane MM,2027,,,,
+ZAF,243,417,FSW,Object multiplier,Cape Town MM,23750,950,650,58,
+ZAF,243,422,FSW,Event multiplier,eThekwini MM,747,56,766,,
+ZAF,243,433,FSW,Object multiplier,eThekwini MM,11200,952,766,64,
+ZMB,259,3034,FSW,Object multiplier,Lusaka,3333,474,497,,0.242
+ZMB,260,3177,FSW,2S-CRC,Chililabombwe,881,583,503,333,
+ZMB,260,3186,FSW,2S-CRC,Chipata,1584,945,1509,900,
+ZMB,260,3196,FSW,2S-CRC,Chirundu,468,339,439,318,
+ZMB,260,3207,FSW,2S-CRC,Kapiri Mposhi,629,337,519,278,
+ZMB,260,3208,FSW,2S-CRC,Katete,370,169,206,94,
+ZMB,260,3209,FSW,2S-CRC,Kazungula,285,202,244,173,
+ZMB,260,3210,FSW,2S-CRC,Livingstone,2227,"1,314",1368,807,
+ZMB,260,3213,FSW,2S-CRC,Nakonde,1303,400,619,190,
+ZMB,260,3214,FSW,2S-CRC,Sesheke,586,359,382,234,
+ZMB,260,3215,FSW,2S-CRC,Solwezi,1015,840,979,810,
+ZWE,262,7328,MSM,Object multiplier,Bulawayo,21866,,,,
+ZWE,262,7334,MSM,Service Multiplier,Bulawayo,1235,,,,
+ZWE,262,7335,MSM,Service Multiplier,Bulawayo,610,,,,
+ZWE,262,7344,MSM,SS-PSE,Bulawayo,1010,,,,
+ZWE,262,7331,MSM,Object multiplier,Harare,10054,,,,
+ZWE,262,7339,MSM,Service Multiplier,Harare,1199,,,,
+ZWE,262,7340,MSM,Service Multiplier,Harare,7024,,,,
+ZWE,262,7346,MSM,SS-PSE,Harare,4405,,,,
+ZWE,262,7329,TGW,Object multiplier,Bulawayo,388,,,,
+ZWE,262,7336,TGW,Service Multiplier,Bulawayo,34,,,,
+ZWE,262,7337,TGW,Service Multiplier,Bulawayo,59,,,,
+ZWE,262,7345,TGW,SS-PSE,Bulawayo,56,,,,
+ZWE,262,7333,TGW,Object multiplier,Harare,5821,,,,
+ZWE,262,7342,TGW,Service Multiplier,Harare,694,,,,
+ZWE,262,7343,TGW,Service Multiplier,Harare,4067,,,,
+ZWE,262,7348,TGW,SS-PSE,Harare,2550,,,,
+CIV,272,7351,TGW,Event multiplier,Abidjan,515,72,186,26,
+CIV,272,7357,TGW,Object multiplier,Abidjan,809,200,186,46,
+BFA,314,7817,FSW,Multiple methods - mixture,Boucle du Mouhoun,2563,,,,
+BFA,314,7818,FSW,Multiple methods - mixture,Cascades,2241,,,,
+BFA,314,7819,FSW,Multiple methods - mixture,Centre,12475,,,,
+BFA,314,7820,FSW,Multiple methods - mixture,Centre Est,2173,,,,
+BFA,314,7821,FSW,Multiple methods - mixture,Centre Nord,2859,,,,
+BFA,314,7822,FSW,Multiple methods - mixture,Centre Ouest,4671,,,,
+BFA,314,7823,FSW,Multiple methods - mixture,Centre Sud,1219,,,,
+BFA,314,7824,FSW,Multiple methods - mixture,Est,1866,,,,
+BFA,314,7825,FSW,Multiple methods - mixture,Hauts Bassins,10450,,,,
+BFA,314,7826,FSW,Multiple methods - mixture,Nord,5328,,,,
+BFA,314,7827,FSW,Multiple methods - mixture,Plateau Central,1365,,,,
+BFA,314,7828,FSW,Multiple methods - mixture,Sahel,1784,,,,
+BFA,314,7829,FSW,Multiple methods - mixture,Sud Ouest,1613,,,,
+BFA,314,7804,MSM,Multiple methods - mixture,Boucle du Mouhoun,907,,,,
+BFA,314,7805,MSM,Multiple methods - mixture,Cascades,1096,,,,
+BFA,314,7806,MSM,Multiple methods - mixture,Centre,4720,,,,
+BFA,314,7807,MSM,Multiple methods - mixture,Centre Est,916,,,,
+BFA,314,7808,MSM,Multiple methods - mixture,Centre Nord,792,,,,
+BFA,314,7809,MSM,Multiple methods - mixture,Centre Ouest,1460,,,,
+BFA,314,7810,MSM,Multiple methods - mixture,Centre Sud,1096,,,,
+BFA,314,7811,MSM,Multiple methods - mixture,Est,690,,,,
+BFA,314,7812,MSM,Multiple methods - mixture,Hauts Bassins,1831,,,,
+BFA,314,7813,MSM,Multiple methods - mixture,Nord,1002,,,,
+BFA,314,7814,MSM,Multiple methods - mixture,Plateau Central,933,,,,
+BFA,314,7815,MSM,Multiple methods - mixture,Sahel,533,,,,
+BFA,314,7816,MSM,Multiple methods - mixture,Sud Ouest,938,,,,
+BFA,314,7830,PWID,Multiple methods - mixture,Boucle du Mouhoun,1062,,,,
+BFA,314,7831,PWID,Multiple methods - mixture,Cascades,1238,,,,
+BFA,314,7832,PWID,Multiple methods - mixture,Centre,4068,,,,
+BFA,314,7833,PWID,Multiple methods - mixture,Centre Est,1070,,,,
+BFA,314,7834,PWID,Multiple methods - mixture,Centre Nord,950,,,,
+BFA,314,7835,PWID,Multiple methods - mixture,Centre Ouest,1565,,,,
+BFA,314,7836,PWID,Multiple methods - mixture,Centre Sud,1238,,,,
+BFA,314,7837,PWID,Multiple methods - mixture,Est,850,,,,
+BFA,314,7838,PWID,Multiple methods - mixture,Hauts Bassins,1881,,,,
+BFA,314,7839,PWID,Multiple methods - mixture,Nord,1151,,,,
+BFA,314,7840,PWID,Multiple methods - mixture,Plateau Central,1087,,,,
+BFA,314,7841,PWID,Multiple methods - mixture,Sahel,688,,,,
+BFA,314,7842,PWID,Multiple methods - mixture,Sud Ouest,1091,,,,
+MOZ,320,7387,MSM,Service multiplier,Beira,1948,829,527,,0.352
+MOZ,320,7377,MSM,Object multiplier,Beira,3706,404,527,,0.0828
+MOZ,320,7388,MSM,Service multiplier,"Cidade de Maputo, Matola",7019,2793,530,,0.308
+MOZ,320,7380,MSM,Object multiplier,"Cidade de Maputo, Matola",6000,420,530,,0.0397
+MOZ,320,7389,MSM,Service multiplier,Nampula,7080,5014,528,,0.65
+MOZ,320,7381,MSM,Object multiplier,Nampula,2904,485,528,,0.1312
+MOZ,320,7390,MSM,Service multiplier,Quelimane,4710,2220,525,,0.3718
+MOZ,320,7382,MSM,Object multiplier,Quelimane,3449,545,525,,0.128
+MOZ,320,7391,MSM,Service multiplier,Tete,1287,562,559,,0.3539
+MOZ,320,7383,MSM,Object multiplier,Tete,2995,548,559,,0.156
+GIN,324,7567,MSM,Object multiplier,Boke,137,120,135,118,
+GIN,324,7568,MSM,Object multiplier,Conakry,916,320,770,269,
+GIN,324,7566,MSM,Service Multiplier,Conakry,644,215,770,,0.334
+GIN,324,7569,MSM,Object multiplier,Faranah,214,50,141,33,
+GIN,324,7570,MSM,Object multiplier,Kankan,377,150,191,76,
+GIN,324,7571,MSM,Object multiplier,Kindia,269,150,203,113,
+GIN,324,7572,MSM,Object multiplier,Labe,89,60,85,57,
+GIN,324,7573,MSM,Object multiplier,Mamaou,251,30,117,14,
+GIN,324,7574,MSM,Object multiplier,N'Zerokore,105,50,86,41,
+GIN,324,7412,PWID,Object Multiplier,Conakry,148,139,64,60,
+GIN,324,7415,PWID,Service Multiplier,Conakry,294,74,64,,0.252
+TCD,346,7539,FSW,Object multiplier,Abeche,484,,,,
+TCD,346,7534,FSW,Object multiplier,Ati,276,,,,
+TCD,346,7535,FSW,Object multiplier,Bongor,456,,,,
+TCD,346,7540,FSW,Object multiplier,Koumra,623,,,,
+TCD,346,7538,FSW,Object multiplier,Moundou,506,,,,
+TCD,346,7541,FSW,Object multiplier,N'Djamena,532,,,,
+TCD,346,7537,FSW,Object multiplier,Oum-hadjer,244,,,,
+TCD,346,7536,FSW,Object multiplier,Sarh,666,,,,
+ZAF,351,7878,MSM,Event multiplier,Cape Town,26909,263,,188,
+ZAF,351,7873,MSM,Unique object multiplier,Cape Town,4842,999,,269,
+ZAF,351,7856,MSM,Multiple methods - mixture,Cape Town MM,29901,,,,
+ZAF,351,7879,MSM,Event multiplier,Capricorn DM,785,96,,61,
+ZAF,351,7857,MSM,Multiple methods - mixture,Capricorn DM,5270,,,,
+ZAF,351,7883,MSM,Service Multiplier,Capricorn DM,2605,137,,23,
+ZAF,351,7875,MSM,Unique object multiplier,Capricorn DM (Polokwane),1851,161,,45,
+ZAF,351,7877,MSM,Event multiplier,Johannesburg,3380,97,,33,
+ZAF,351,7881,MSM,Service Multiplier,Johannesburg,10045,674,,102,
+ZAF,351,7872,MSM,Unique object multiplier,Johannesburg,7257,688,,63,
+ZAF,351,7855,MSM,Multiple methods - mixture,Johannesburg MM,37549,,,,
+ZAF,351,7882,MSM,Service Multiplier,Mangaung,2996,1095,,136,
+ZAF,351,7874,MSM,Unique object multiplier,Mangaung,1357,777,,192,
+ZAF,351,7859,MSM,Multiple methods - mixture,Manguang DM,3655,,,,
+ZAF,351,7860,MSM,Multiple methods - mixture,Nelson Mandela Bay Metro,5654,,,,
+ZAF,351,7880,MSM,Event multiplier,Ngaka Modiri Molema DM,769,90,,42,
+ZAF,351,7858,MSM,Multiple methods - mixture,Ngaka Modiri Molema DM,3779,,,,
+ZAF,351,7876,MSM,Unique object multiplier,Ngaka Modiri Molema DM,1541,131,,63,
+TGO,362,8004,FSW,Service Multiplier,Grand Lome,4342,1346,624,,0.31
+TGO,362,8006,FSW,Service Multiplier,Sokode,426,86,343,,0.202
+TGO,362,8005,FSW,Service Multiplier,Tsevie,600,18,451,,0.03
+TGO,362,7985,MSM,Service Multiplier,Kara,1943,68,527,,0.035
+TGO,362,7983,MSM,Service Multiplier,Lome,1191,281,315,,0.236
+TGO,362,7984,MSM,Service Multiplier,Tsevie,2750,33,460,,0.012
+TGO,362,7991,MSM,Object multiplier,Dapaong,251,215,251,,0.856
+TGO,362,7986,MSM,Object multiplier,Lome,2586,1601,315,,0.619
+TGO,362,7990,MSM,Object multiplier,Kara,1381,1087,527,,0.787
+TGO,362,7988,MSM,Object multiplier,Kpalime,350,102,350,,0.291
+TGO,362,7989,MSM,Object multiplier,Sokode,207,124,207,,0.599
+TGO,362,7987,MSM,Object multiplier,Tsevie,610,384,460,,0.63
+TGO,362,8016,PWID,Object multiplier,Aneho,4375,350,261,21,
+TGO,362,8015,PWID,Object multiplier,Grand Lome,3878,950,355,87,
+GHA,367,8051,PWID,Object multiplier,Aflao,30,,,,
+GHA,367,8050,PWID,Object multiplier,Elubo,38,,,,
+BEN,367,8054,PWID,Object multiplier,Hillacondji,416,,,,
+TGO,367,8052,PWID,Object multiplier,Kodjoviakope,179,,,,
+BEN,367,8055,PWID,Object multiplier,Krake,318,,,,
+CIV,367,8049,PWID,Object multiplier,Noe,43,,,,
+TGO,367,8053,PWID,Object multiplier,Sanvee-Condji,120,,,,
+NGA,367,8056,PWID,Object multiplier,Seme,699,,,,
+NER,374,2094,FSW,Object multiplier,Agadez,1920,638,301,100,
+NER,374,2102,FSW,Object multiplier,Maradi,2375,950,300,120,
+NER,374,6059,FSW,Object multiplier,Niamey,3586,1425,302,120,
+NER,374,8121,FSW,Object multiplier,Tahoua,1354,632,300,140,
+NER,374,8128,FSW,Object multiplier,Zinder,1699,900,302,160,
+NER,374,2103,MSM,Object multiplier,Maradi,1736,650,267,100,
+NER,374,6067,MSM,Object multiplier,Niamey,3450,1385,299,120,
+NER,374,8129,MSM,Object multiplier,Zinder,1799,680,291,110,
+SEN,380,8231,FSW,Object multiplier,Dakar,3582,831,3048,,0.232
+SEN,380,8232,FSW,Service Multiplier,Dakar,1591,576,1352,,0.362
+SEN,380,8234,MSM,Object multiplier,Dakar,1147,420,1522,,0.366
+SEN,380,8235,MSM,Service Multiplier,Dakar,1345,238,1522,,0.177

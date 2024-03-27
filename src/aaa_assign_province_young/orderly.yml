@@ -1,0 +1,94 @@
+script: aaa_assign_province_young.R
+
+artefacts:
+  # - data:
+  #     description: Extrapolated population denominators over time
+  #     filenames:
+  #       - extrapolated_populations.csv
+  - data:
+      description: Prevalence entries assigned to Naomi area_id
+      filenames:
+        - prev_assigned_province.csv
+  - data:
+      description: Prevalence error warnings for bad matches
+      filenames:
+        - prev_bad_match_error.csv
+  - data:
+      description: ART coverage entries assigned to Naomi area_id
+      filenames:
+        - art_assigned_province.csv
+  - data:
+      description: ART coverage error warnings for bad matches
+      filenames:
+        - art_bad_match_error.csv
+  - data:
+      description: 2022 admin-1 indicators for prediction
+      filenames:
+        - area_indicators.csv
+  - data:
+      description: HIV prevalence export for KP workbook
+      filenames:
+        - workbook_export_prev.csv
+  - data:
+      description: ART coverage export for KP workbook
+      filenames:
+        - workbook_export_art.csv
+  - data:
+      description: Naomi prevalence and ART extrapolated through time
+      filenames:
+        - extrapolated_naomi.csv
+  - data:
+      description: Matched admin1 prevalence for KP prevalence data
+      filenames:
+        - prev.csv
+  - data:
+      description: Matched admin1 ART coverage for KP ART data
+      filenames:
+        - art.csv
+  - data:
+      description: HIV prevalence export for data sharing
+      filenames:
+        - data_sharing_prev.csv
+  - data:
+      description: ART coverage export for data sharing
+      filenames:
+        - data_sharing_art.csv
+
+parameters:
+  iso3:
+    default: ~
+  version:
+    default: 2022
+
+global_resources:
+  resources/iso_mapping_fit.csv: iso_mapping_fit.csv
+
+packages:
+  # - naomi
+  - readr
+  - dplyr
+  - tidyr
+  - stringr
+  - sf
+  - spud
+  - countrycode
+  - stringdist
+  - ggmap
+  - osmdata
+  - purrr
+  - naomi
+
+resources:
+  - merge_cities.geojson
+  - prev_clean_sourced.csv
+  - art_clean_sourced.csv
+
+depends:
+  aaa_pull_naomi_estimates:
+    id: latest(parameter:iso3 == iso3 && parameter:version == version)
+    use:
+      depends/naomi_areas.geojson: outputs/naomi_areas.geojson
+  aaa_data_pjnz:
+    id: latest(parameter:iso3 == iso3 && parameter:version == version)
+    use:
+      depends/naomi_pjnz.zip: naomi_pjnz.zip

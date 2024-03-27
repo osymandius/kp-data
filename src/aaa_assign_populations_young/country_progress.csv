@@ -1,0 +1,34 @@
+﻿iso3,pop_assign,notes
+AGO,,
+BDI,N,"Lots of ""Urban"" and ""Rural"". Requires data review"
+BEN,,"Quite a lot of ""major cities"". "
+BFA,N,"Wiki suggests there are three area levels - we're missing the 2nd level ""province"": BOULKIEMDE is a province within centre-est, Houet within Hauts-Bassins"
+CIV,,A few unmatched towns
+CMR,,
+COD,N,Old province areas need renaming
+COG,,"""5 cities (not specified)"""
+ETH,,Orderly input not found
+GAB,N,"""5 regions"" Data review (only data avaialble!!)"
+GHA,,"""Non-RDS Sites"""
+GIN,,"""Bissoa"" doesn't exist. Was the area_name meant to read Guinea Bissau and not for GIN at all?"
+GMB,,"Recoding of ""Banjul City"" and ""Greater Banjul"" May require review"
+KEN,N,"Eldoret - key city, not captured by GPW? So many differences. Fix."
+LBR,,
+LSO,,"""Lesotho Urban"" - can't find source for what that would include"
+MLI,,
+MOZ,,
+MWI,,"""Non selected districts""
+Rural areas around cities"
+NAM,,
+NER,N,So many missing urban areas in the mapping
+NGA,N,Orderly input not found
+SEN,N,
+SLE,,
+SWZ,N,What do with the Mbabane/Manzini corridor?
+TGO,,"""Vogan"" is the capital of ""Vo"" district (which we have). But don't have city limits of Vogan in the city dictionary. 
+Similar situation for ""Tabligbo"". 
+A few ""urban areas"" too"
+TZA,,
+UGA,,
+ZMB,,"""kasumbalesa"" - town on the DRC border, near Chilalabombwe is unmatched"
+ZWE,N,Orderly input not found
